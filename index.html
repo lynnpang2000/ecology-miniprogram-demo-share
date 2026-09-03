@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>生态服务平台 · 小程序Demo</title>
+  <link rel="stylesheet" href="dist/app.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Phone Frame -->
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="0.5"/><rect x="4.5" y="5" width="3" height="6" rx="0.5"/><rect x="9" y="2.5" width="3" height="8.5" rx="0.5"/><rect x="13.5" y="0" width="3" height="11" rx="0.5"/></svg>
+            <svg width="16" height="11" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1.5 4.5a10 10 0 0 1 13 0"/><path d="M4 7.2a6.5 6.5 0 0 1 8 0"/><circle cx="8" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="16" height="8" rx="1.5" fill="currentColor"/><path d="M23.5 4v4a2 2 0 0 0 0-4z" fill="currentColor" opacity="0.5"/></svg>
+          </div>
+        </div>
+
+        <!-- Page Container -->
+        <div id="page-container" class="page-container"></div>
+
+        <!-- Page-level action bar: kept outside the scroll container -->
+        <div id="pageActionBar" class="page-action-slot hidden"></div>
+
+        <!-- Bottom Tab Bar -->
+        <div class="tab-bar" id="tabBar">
+          <div class="tab-item" data-tab="home">
+            <div class="tab-icon tab-icon-home"></div>
+            <span class="tab-label">首页</span>
+          </div>
+          <div class="tab-item active" data-tab="ecology">
+            <div class="tab-icon tab-icon-ecology"></div>
+            <span class="tab-label">生态</span>
+          </div>
+          <div class="tab-item" data-tab="activity">
+            <div class="tab-icon tab-icon-activity"></div>
+            <span class="tab-label">活动</span>
+          </div>
+          <div class="tab-item" data-tab="mine">
+            <div class="tab-icon tab-icon-mine"></div>
+            <span class="tab-label">我的</span>
+            <span class="tab-badge" id="tabBadge" style="display:none"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="demo-control-panel" id="demoControlPanel" aria-label="Demo 场景控制">
+      <div class="demo-control-head">
+        <span class="demo-control-dot"></span>
+        <div><strong>创业者端场景</strong><small>快速切换业务阶段</small></div>
+      </div>
+      <div class="demo-scene-list">
+        <div class="demo-scene-group"><span>开始</span></div>
+        <button class="demo-scene-button" type="button" data-demo-action="onboarding"><strong>新手引导</strong><span>模拟首次进入生态服务</span></button>
+        <button class="demo-scene-button" type="button" data-demo-action="wecom"><strong>企业微信二维码</strong><span>查看进度通知引导</span></button>
+        <button class="demo-scene-button" type="button" data-demo-action="fundraising-waiting"><strong>融资匹配中</strong><span>查看等待与资料管理</span></button>
+        <button class="demo-scene-button" type="button" data-demo-action="fundraising-matched"><strong>融资匹配结果</strong><span>查看投资人与匹配依据</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="new"><strong>新用户</strong><span>尚未发布需求</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="pending"><strong>等待响应</strong><span>需求已发出</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="timeout"><strong>响应超时</strong><span>超过 1 小时无人响应</span></button>
+        <div class="demo-scene-group"><span>决策</span></div>
+        <button class="demo-scene-button" type="button" data-demo-scene="choosing"><strong>选择团队</strong><span>已有团队响应</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="communicating"><strong>方案沟通</strong><span>正在沟通范围</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="plan_pending"><strong>待确认方案</strong><span>团队已发报价</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="plan_updated"><strong>方案已更新</strong><span>服务商推送新方案</span></button>
+        <div class="demo-scene-group"><span>签约</span></div>
+        <button class="demo-scene-button" type="button" data-demo-scene="contract_customer"><strong>待客户签约</strong><span>补充信息并上传协议</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="contract_provider"><strong>待服务商用印</strong><span>客户协议已上传</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="contract_review"><strong>协议审核中</strong><span>双方协议已提交平台</span></button>
+        <div class="demo-scene-group"><span>履约</span></div>
+        <button class="demo-scene-button" type="button" data-demo-scene="active"><strong>服务进行中</strong><span>方案已确认</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="acceptance"><strong>待验收</strong><span>团队已提交成果</span></button>
+        <div class="demo-scene-group"><span>结束</span></div>
+        <button class="demo-scene-button" type="button" data-demo-scene="done_pending_review"><strong>待评价</strong><span>服务已完成</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="done_reviewed"><strong>已评价</strong><span>查看评价记录</span></button>
+        <button class="demo-scene-button" type="button" data-demo-scene="cancelled"><strong>已结束</strong><span>本轮未匹配成功</span></button>
+      </div>
+      <button class="demo-reset-button" id="demoResetButton" type="button">恢复默认数据</button>
+      <div class="demo-control-state" id="demoControlState">当前：默认数据</div>
+    </aside>
+  </div>
+
+  <!-- Bundled application; classic IIFE keeps file:// double-click support. -->
+  <script src="dist/app.js"></script>
+</body>
+</html>
