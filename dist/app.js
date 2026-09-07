@@ -1732,6 +1732,8 @@
     paused: false,
     submittedAt: "",
     investorBatch: 0,
+    resultAvailableAt: "",
+    resultNoticePending: false,
     connectionInvestorId: "",
     investorConnections: {}
   };
@@ -1769,6 +1771,18 @@
     });
     return counts;
   }
+  function makeFundraisingResultsAvailable() {
+    fundraisingState.status = "matched";
+    fundraisingState.investorBatch = 0;
+    fundraisingState.resultAvailableAt = "09-03 11:05";
+    fundraisingState.resultNoticePending = true;
+    fundraisingState.investorConnections = {};
+    return fundraisingState;
+  }
+  function consumeFundraisingResultNotice() {
+    fundraisingState.resultNoticePending = false;
+    return fundraisingState;
+  }
   function resetFundraisingState() {
     fundraisingState.status = "idle";
     fundraisingState.authorized = false;
@@ -1776,6 +1790,8 @@
     fundraisingState.submittedAt = "";
     fundraisingState.excluded = "";
     fundraisingState.investorBatch = 0;
+    fundraisingState.resultAvailableAt = "";
+    fundraisingState.resultNoticePending = false;
     fundraisingState.connectionInvestorId = "";
     fundraisingState.investorConnections = {};
   }
@@ -1785,6 +1801,8 @@
     fundraisingState.paused = false;
     fundraisingState.submittedAt = status === "idle" ? "" : "09-03 10:20";
     fundraisingState.investorBatch = 0;
+    fundraisingState.resultAvailableAt = status === "matched" ? "09-03 11:05" : "";
+    fundraisingState.resultNoticePending = false;
     fundraisingState.connectionInvestorId = ["requested", "confirmed", "connecting", "connected"].includes(status) ? "i001" : "";
     if (status === "matched") fundraisingState.investorConnections = demoConnections();
     else if (["requested", "confirmed", "connecting", "connected", "declined", "withdrawn", "expired"].includes(status)) {
@@ -7353,6 +7371,29 @@
   function matchingView() {
     return '<div class="p12-page p12-matching-page">' + header("\u878D\u8D44\u5339\u914D") + '<section class="p12-matching"><div class="p12-orbit" aria-hidden="true"><span></span><i></i><b></b>' + icon("trending-up", 29) + '</div><h1>\u6B63\u5728\u5EFA\u7ACB\u5339\u914D\u6761\u4EF6</h1><p>\u6839\u636E\u9879\u76EE\u6807\u7B7E\u6838\u5BF9\u6295\u8D44\u4EBA\u7684\u5173\u6CE8\u65B9\u5411\u3001\u9636\u6BB5\u504F\u597D\u548C\u51FA\u624B\u533A\u95F4\u3002</p><div class="p12-match-checks"><span class="active">' + icon("check", 15) + '\u89E3\u6790\u9879\u76EE\u6807\u7B7E</span><span class="active">' + icon("check", 15) + "\u7B5B\u9009\u5DF2\u6838\u9A8C\u6295\u8D44\u4EBA</span><span>\u6838\u5BF9\u6295\u8D44\u504F\u597D</span></div></section></div>";
   }
+  function showMatchResultNotice() {
+    const overlay = showSheet({
+      title: "\u9996\u6279\u5339\u914D\u7ED3\u679C\u5DF2\u751F\u6210",
+      body: '<div class="p12-result-arrival"><div class="p12-result-arrival-summary"><span>' + icon("trending-up", 23) + '</span><div><strong>\u5DF2\u627E\u5230 3 \u4F4D\u5951\u5408\u7684\u6295\u8D44\u4EBA</strong><small>\u5E73\u53F0\u5DF2\u6309\u884C\u4E1A\u65B9\u5411\u3001\u878D\u8D44\u9636\u6BB5\u548C\u51FA\u624B\u533A\u95F4\u5B8C\u6210\u521D\u6B65\u7B5B\u9009\u3002</small></div></div><div class="p12-result-arrival-rule"><span>' + icon("shield", 16) + '</span><p>\u7ED3\u679C\u5C55\u793A\u5177\u4F53\u5339\u914D\u4F9D\u636E\uFF0C\u4E0D\u5C55\u793A\u5185\u90E8\u5339\u914D\u5206\u6570\u3002\u540E\u7EED\u67E5\u770B BP\u3001\u7533\u8BF7\u5EFA\u8054\u90FD\u4F1A\u5206\u522B\u901A\u77E5\u4F60\u3002</p></div><div class="p12-result-arrival-actions"><button class="btn btn-outline" id="p12ResultLater" type="button">\u7A0D\u540E\u67E5\u770B</button><button class="btn btn-primary" id="p12ResultNow" type="button">\u67E5\u770B\u672C\u6279\u6295\u8D44\u4EBA</button></div></div>'
+    });
+    overlay.querySelector("#p12ResultLater").addEventListener("click", () => {
+      overlay.remove();
+      toast("\u7ED3\u679C\u5DF2\u4FDD\u7559\uFF0C\u53EF\u968F\u65F6\u4ECE\u878D\u8D44\u8FDB\u5EA6\u67E5\u770B");
+    });
+    overlay.querySelector("#p12ResultNow").addEventListener("click", () => {
+      overlay.remove();
+      navigateTo("p12", { stage: "results" });
+    });
+  }
+  function scheduleDemoMatchResult() {
+    setTimeout(() => {
+      if (document.getElementById("page-container")?.getAttribute("data-page") !== "p12") return;
+      const current = getFundraisingState();
+      if (current.status !== "waiting" || current.paused) return;
+      makeFundraisingResultsAvailable();
+      refreshActivePage();
+    }, 2200);
+  }
   function progressCopy(state2) {
     if (state2.paused) return { iconName: "pause", title: "\u672C\u8F6E\u5339\u914D\u5DF2\u6682\u505C", desc: "\u6062\u590D\u540E\uFF0C\u5E73\u53F0\u4F1A\u7EE7\u7EED\u6839\u636E\u5F53\u524D BP \u548C\u9879\u76EE\u6807\u7B7E\u8FDB\u884C\u5339\u914D\u3002", action: "" };
     const counts = getConnectionCounts();
@@ -7402,7 +7443,8 @@
       withdrawn: ["\u6295\u8D44\u4EBA\u5DF2\u64A4\u56DE\u7533\u8BF7", "\u67E5\u770B\u5904\u7406\u8BB0\u5F55", "status-closed"],
       expired: ["\u5EFA\u8054\u7533\u8BF7\u5DF2\u8D85\u65F6", "\u67E5\u770B\u5904\u7406\u8BB0\u5F55", "status-closed"]
     };
-    return record && labels[record.status] ? { record, label: labels[record.status][0], action: labels[record.status][1], className: labels[record.status][2] } : { record: null, label: investor.accessStatus, action: "\u67E5\u770B\u8BE6\u60C5", className: "" };
+    const freshResult = state2.status === "matched" && state2.resultAvailableAt && !Object.keys(state2.investorConnections || {}).length;
+    return record && labels[record.status] ? { record, label: labels[record.status][0], action: labels[record.status][1], className: labels[record.status][2] } : { record: null, label: freshResult ? "\u672C\u6279\u65B0\u63A8\u8350 \xB7 \u5F85\u6295\u8D44\u4EBA\u67E5\u770B" : investor.accessStatus, action: "\u67E5\u770B\u8BE6\u60C5", className: freshResult ? "status-working" : "" };
   }
   function opensConnection(record) {
     return record && ["confirmed", "connecting", "connected"].includes(record.status);
@@ -7417,6 +7459,7 @@
   }
   function investorSheet(investor, state2) {
     const record = state2.investorConnections?.[investor.id];
+    const freshResult = state2.status === "matched" && state2.resultAvailableAt && !Object.keys(state2.investorConnections || {}).length;
     let action = '<div class="p12-waiting-action">' + icon("clock", 17) + "<span><strong>\u6682\u672A\u53D1\u8D77\u5EFA\u8054\u7533\u8BF7</strong><small>\u6295\u8D44\u4EBA\u67E5\u770B\u8D44\u6599\u4E0D\u4F1A\u81EA\u52A8\u5EFA\u8054\uFF1B\u6709\u660E\u786E\u610F\u5411\u540E\uFF0C\u5E73\u53F0\u4F1A\u901A\u77E5\u4F60\u5904\u7406\u3002</small></span></div>";
     if (record?.status === "requested") {
       action = '<div class="p12-connection-request"><span>' + icon("message", 18) + "</span><div><strong>\u6295\u8D44\u4EBA\u7533\u8BF7\u5EFA\u8054</strong><small>" + (record.requestedAt || investor.requestAt) + "</small><p>" + investor.requestMessage + '</p></div></div><div class="p12-sheet-actions"><button class="btn btn-outline" id="p12Decline" type="button">\u6682\u4E0D\u5EFA\u8054</button><button class="btn btn-primary" id="p12Connect" type="button">\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054</button></div>';
@@ -7427,7 +7470,7 @@
     } else if (record?.status === "expired") {
       action = '<div class="p12-terminal-state expired">' + icon("clock", 18) + "<span><strong>\u672C\u6B21\u5EFA\u8054\u7533\u8BF7\u5DF2\u8D85\u65F6</strong><small>" + (record.resolvedAt || "\u5DF2\u81EA\u52A8\u5173\u95ED") + " \xB7 \u8D85\u8FC7 72 \u5C0F\u65F6\u672A\u5B8C\u6210\u53CC\u65B9\u786E\u8BA4</small></span></div>";
     }
-    return '<div class="p12-investor-sheet"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b></h2><p>" + investor.role + "</p></div></div><h3>\u6295\u8D44\u504F\u597D</h3><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u5355\u7B14\u533A\u95F4</dt><dd>" + investor.ticket + "</dd></div><div><dt>\u5730\u57DF\u504F\u597D</dt><dd>" + investor.region + '</dd></div></dl><h3>\u5339\u914D\u4F9D\u636E</h3><div class="p12-reasons">' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><h3>\u8D44\u6599\u8BBF\u95EE</h3><div class="p12-access-record">' + icon("shield", 17) + "<span><strong>" + investor.accessStatus + "</strong><small>\u8EAB\u4EFD\u3001\u5339\u914D\u6761\u4EF6\u3001\u67E5\u770B\u610F\u613F\u548C\u4FDD\u5BC6\u72B6\u6001\u5747\u5DF2\u81EA\u52A8\u6838\u9A8C\uFF0C\u8BBF\u95EE\u8BB0\u5F55\u5DF2\u7559\u75D5\u3002</small></span></div>" + action + "</div>";
+    return '<div class="p12-investor-sheet"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b></h2><p>" + investor.role + "</p></div></div><h3>\u6295\u8D44\u504F\u597D</h3><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u5355\u7B14\u533A\u95F4</dt><dd>" + investor.ticket + "</dd></div><div><dt>\u5730\u57DF\u504F\u597D</dt><dd>" + investor.region + '</dd></div></dl><h3>\u5339\u914D\u4F9D\u636E</h3><div class="p12-reasons">' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><h3>\u8D44\u6599\u8BBF\u95EE</h3><div class="p12-access-record">' + icon("shield", 17) + "<span><strong>" + (freshResult ? "\u5F85\u6295\u8D44\u4EBA\u7533\u8BF7\u67E5\u770B\u5B8C\u6574 BP" : investor.accessStatus) + "</strong><small>" + (freshResult ? "\u5F53\u524D\u4EC5\u5B8C\u6210\u521D\u6B65\u5339\u914D\u3002\u6295\u8D44\u4EBA\u63D0\u51FA\u67E5\u770B\u7533\u8BF7\u540E\uFF0C\u5E73\u53F0\u624D\u4F1A\u6309\u6388\u6743\u89C4\u5219\u5F00\u653E\u8D44\u6599\u5E76\u7559\u75D5\u3002" : "\u8EAB\u4EFD\u3001\u5339\u914D\u6761\u4EF6\u3001\u67E5\u770B\u610F\u613F\u548C\u4FDD\u5BC6\u72B6\u6001\u5747\u5DF2\u81EA\u52A8\u6838\u9A8C\uFF0C\u8BBF\u95EE\u8BB0\u5F55\u5DF2\u7559\u75D5\u3002") + "</small></span></div>" + action + "</div>";
   }
   function connectionView(state2) {
     const investor = investors.find((item) => item.id === state2.connectionInvestorId) || investors[0];
@@ -7506,6 +7549,16 @@
           refreshActivePage();
         }, 1500);
       } else if (stage === "progress") {
+        if (state2.status === "waiting" && !state2.paused) scheduleDemoMatchResult();
+        if (state2.resultNoticePending) {
+          setTimeout(() => {
+            const current = getFundraisingState();
+            const stillOnProgress = document.getElementById("page-container")?.getAttribute("data-page") === "p12" && document.getElementById("p12ViewResults");
+            if (!stillOnProgress || !current.resultNoticePending) return;
+            consumeFundraisingResultNotice();
+            showMatchResultNotice();
+          }, 80);
+        }
         const view = document.getElementById("p12ViewResults");
         if (view) view.addEventListener("click", () => navigateTo("p12", { stage: "results" }));
         const overview = document.getElementById("p12OverviewResults");
