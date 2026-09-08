@@ -7869,6 +7869,42 @@ button:focus-visible,
   min-height: 46px;
   padding-inline: 8px;
 }
+.p12-mutual-notice {
+  display: grid;
+  gap: 16px;
+}
+.p12-mutual-notice > div:first-child {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: start;
+  gap: 11px;
+}
+.p12-mutual-notice > div:first-child > span {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #EAF7F3;
+  color: #087D63;
+}
+.p12-mutual-notice > div:first-child > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.p12-mutual-notice strong {
+  color: var(--color-text-1);
+  font-size: var(--font-md);
+}
+.p12-mutual-notice small {
+  color: var(--color-text-3);
+  font-size: var(--font-xs);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
 .p12-status-head {
   padding: 32px 22px 26px;
   background: #FFFFFF;
@@ -7948,6 +7984,9 @@ button:focus-visible,
 }
 .p12-connection-overview .pending strong {
   color: #A7510B;
+}
+.p12-connection-overview .waiting strong {
+  color: #8C5C18;
 }
 .p12-connection-overview .working strong {
   color: var(--color-primary);
@@ -8307,6 +8346,14 @@ button.p12-manage-record {
   color: #A7510B;
   font-weight: 700;
 }
+.p12-investor-actions > span.status-active {
+  color: #087D63;
+  font-weight: 700;
+}
+.p12-investor-actions > span.status-waiting {
+  color: #8C5C18;
+  font-weight: 700;
+}
 .p12-investor-actions > span.status-working {
   color: var(--color-primary);
 }
@@ -8325,6 +8372,24 @@ button.p12-manage-record {
   font-size: var(--font-xs);
   font-weight: 700;
   cursor: pointer;
+}
+.p12-investor-card-buttons {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 7px;
+}
+.p12-investor-card-buttons button {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid #DADAF3;
+  border-radius: 9px;
+  background: #FFFFFF;
+}
+.p12-investor-card-buttons button.is-primary {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #FFFFFF;
 }
 .p12-result-note {
   margin: 16px;
@@ -8389,6 +8454,32 @@ button.p12-manage-record {
 .p12-access-record small,
 .p12-waiting-action small {
   color: var(--color-text-3);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.p12-active-demand {
+  margin-top: 18px;
+  padding: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  border: 1px solid #CFE6DD;
+  border-radius: 11px;
+  background: #F1F9F6;
+  color: #087D63;
+}
+.p12-active-demand > span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.p12-active-demand strong {
+  color: #086D58;
+  font-size: var(--font-xs);
+}
+.p12-active-demand small {
+  color: #4F6D64;
   font-size: 10px;
   line-height: 1.5;
 }
@@ -8466,6 +8557,11 @@ button.p12-manage-record {
   border-color: #E6E0D6;
   background: #FAF7F2;
   color: #9A641C;
+}
+.p12-terminal-state.pending {
+  border-color: #E8D8BD;
+  background: #FBF7EF;
+  color: #8C5C18;
 }
 .p12-connect-hero {
   padding: 30px 24px 25px;
@@ -8609,6 +8705,19 @@ button.p12-manage-record {
   border-radius: 8px;
   outline: 3px solid rgba(91, 91, 214, .16);
   outline-offset: 1px;
+}
+@media (max-width: 390px) {
+  .p12-investor-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .p12-investor-card-buttons {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+  }
+  .p12-investor-card-buttons button {
+    width: 100%;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .p12-orbit span,

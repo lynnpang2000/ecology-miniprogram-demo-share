@@ -1734,14 +1734,16 @@
     investorBatch: 0,
     resultAvailableAt: "",
     resultNoticePending: false,
+    connectionNoticeInvestorId: "",
+    recommendedInvestorIds: [],
     connectionInvestorId: "",
     investorConnections: {}
   };
   function demoConnections() {
     return {
-      i001: { status: "requested", requestedAt: "09-03 13:36" },
-      i002: { status: "connecting", requestedAt: "09-03 12:10", confirmedAt: "09-03 12:28" },
-      i003: { status: "connected", requestedAt: "09-02 16:20", confirmedAt: "09-02 17:05", groupCreatedAt: "09-03 09:18" },
+      i001: { status: "requested", initiator: "investor", requestedAt: "09-03 13:36" },
+      i002: { status: "connecting", initiator: "entrepreneur", requestedAt: "09-03 12:10", confirmedAt: "09-03 12:28" },
+      i003: { status: "connected", initiator: "investor", requestedAt: "09-02 16:20", confirmedAt: "09-02 17:05", groupCreatedAt: "09-03 09:18" },
       i004: { status: "withdrawn", requestedAt: "09-02 14:12", resolvedAt: "09-02 18:30" },
       i005: { status: "expired", requestedAt: "08-30 10:15", resolvedAt: "09-02 10:15" }
     };
@@ -1765,7 +1767,7 @@
     return fundraisingState.investorConnections[investorId];
   }
   function getConnectionCounts() {
-    const counts = { requested: 0, confirmed: 0, connecting: 0, connected: 0, declined: 0, withdrawn: 0, expired: 0 };
+    const counts = { requested: 0, entrepreneur_requested: 0, confirmed: 0, connecting: 0, connected: 0, declined: 0, withdrawn: 0, expired: 0 };
     Object.values(fundraisingState.investorConnections).forEach((item) => {
       if (Object.prototype.hasOwnProperty.call(counts, item.status)) counts[item.status] += 1;
     });
@@ -1776,6 +1778,8 @@
     fundraisingState.investorBatch = 0;
     fundraisingState.resultAvailableAt = "09-03 11:05";
     fundraisingState.resultNoticePending = true;
+    fundraisingState.connectionNoticeInvestorId = "";
+    fundraisingState.recommendedInvestorIds = ["i001", "i002", "i003", "i004", "i005"];
     fundraisingState.investorConnections = {};
     return fundraisingState;
   }
@@ -1792,6 +1796,8 @@
     fundraisingState.investorBatch = 0;
     fundraisingState.resultAvailableAt = "";
     fundraisingState.resultNoticePending = false;
+    fundraisingState.connectionNoticeInvestorId = "";
+    fundraisingState.recommendedInvestorIds = [];
     fundraisingState.connectionInvestorId = "";
     fundraisingState.investorConnections = {};
   }
@@ -1803,12 +1809,15 @@
     fundraisingState.investorBatch = 0;
     fundraisingState.resultAvailableAt = status === "matched" ? "09-03 11:05" : "";
     fundraisingState.resultNoticePending = false;
-    fundraisingState.connectionInvestorId = ["requested", "confirmed", "connecting", "connected"].includes(status) ? "i001" : "";
+    fundraisingState.connectionNoticeInvestorId = "";
+    fundraisingState.recommendedInvestorIds = [];
+    fundraisingState.connectionInvestorId = ["requested", "entrepreneur_requested", "confirmed", "connecting", "connected"].includes(status) ? "i001" : "";
     if (status === "matched") fundraisingState.investorConnections = demoConnections();
-    else if (["requested", "confirmed", "connecting", "connected", "declined", "withdrawn", "expired"].includes(status)) {
+    else if (["requested", "entrepreneur_requested", "confirmed", "connecting", "connected", "declined", "withdrawn", "expired"].includes(status)) {
       fundraisingState.investorConnections = {
         i001: {
           status,
+          initiator: status === "entrepreneur_requested" ? "entrepreneur" : "investor",
           requestedAt: "09-03 13:36",
           confirmedAt: ["confirmed", "connecting", "connected"].includes(status) ? "09-03 13:52" : "",
           resolvedAt: ["declined", "withdrawn", "expired"].includes(status) ? "09-03 14:10" : "",
@@ -1821,6 +1830,7 @@
     const counts = getConnectionCounts();
     if (!fundraisingState.paused) {
       if (counts.requested) return { title: `${counts.requested} \u6761\u6295\u8D44\u4EBA\u5EFA\u8054\u7533\u8BF7\u5F85\u5904\u7406`, detail: "\u53EF\u5206\u522B\u540C\u610F\u6216\u6682\u4E0D\u5EFA\u8054", action: "\u53BB\u5904\u7406" };
+      if (counts.entrepreneur_requested) return { title: `${counts.entrepreneur_requested} \u6761\u5BF9\u63A5\u7533\u8BF7\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4`, detail: "\u786E\u8BA4\u7ED3\u679C\u4F1A\u901A\u8FC7\u5DF2\u5F00\u542F\u6E20\u9053\u901A\u77E5\u4F60", action: "\u67E5\u770B\u7533\u8BF7" };
       if (counts.confirmed) return { title: `${counts.confirmed} \u6761\u5EFA\u8054\u5F85\u7EE7\u7EED`, detail: "\u8BF7\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4", action: "\u7EE7\u7EED\u5EFA\u8054" };
       if (counts.connecting) return { title: `${counts.connecting} \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054\u4E2D`, detail: "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u521B\u5EFA\u4F01\u4E1A\u5FAE\u4FE1\u7FA4", action: "\u67E5\u770B\u8FDB\u5EA6" };
       if (counts.connected) return { title: `\u5DF2\u5B8C\u6210 ${counts.connected} \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054`, detail: "\u672C\u8F6E\u5339\u914D\u4ECD\u4F1A\u7EE7\u7EED", action: "\u67E5\u770B\u8BB0\u5F55" };
@@ -7374,7 +7384,7 @@
   function showMatchResultNotice() {
     const overlay = showSheet({
       title: "\u9996\u6279\u5339\u914D\u7ED3\u679C\u5DF2\u751F\u6210",
-      body: '<div class="p12-result-arrival"><div class="p12-result-arrival-summary"><span>' + icon("trending-up", 23) + '</span><div><strong>\u5DF2\u627E\u5230 3 \u4F4D\u5951\u5408\u7684\u6295\u8D44\u4EBA</strong><small>\u5E73\u53F0\u5DF2\u6309\u884C\u4E1A\u65B9\u5411\u3001\u878D\u8D44\u9636\u6BB5\u548C\u51FA\u624B\u533A\u95F4\u5B8C\u6210\u521D\u6B65\u7B5B\u9009\u3002</small></div></div><div class="p12-result-arrival-rule"><span>' + icon("shield", 16) + '</span><p>\u7ED3\u679C\u5C55\u793A\u5177\u4F53\u5339\u914D\u4F9D\u636E\uFF0C\u4E0D\u5C55\u793A\u5185\u90E8\u5339\u914D\u5206\u6570\u3002\u540E\u7EED\u67E5\u770B BP\u3001\u7533\u8BF7\u5EFA\u8054\u90FD\u4F1A\u5206\u522B\u901A\u77E5\u4F60\u3002</p></div><div class="p12-result-arrival-actions"><button class="btn btn-outline" id="p12ResultLater" type="button">\u7A0D\u540E\u67E5\u770B</button><button class="btn btn-primary" id="p12ResultNow" type="button">\u67E5\u770B\u672C\u6279\u6295\u8D44\u4EBA</button></div></div>'
+      body: '<div class="p12-result-arrival"><div class="p12-result-arrival-summary"><span>' + icon("trending-up", 23) + '</span><div><strong>\u5DF2\u627E\u5230 3 \u4F4D\u5951\u5408\u7684\u6295\u8D44\u4EBA</strong><small>\u4ED6\u4EEC\u5747\u5DF2\u53D1\u5E03\u6709\u6548\u7684\u201C\u6211\u8981\u627E\u9879\u76EE\u201D\u9700\u6C42\uFF0C\u5E76\u5B8C\u6210\u6295\u5411\u586B\u62A5\u3002</small></div></div><div class="p12-result-arrival-rule"><span>' + icon("shield", 16) + '</span><p>\u5E73\u53F0\u5C55\u793A\u5177\u4F53\u5339\u914D\u4F9D\u636E\uFF0C\u4E0D\u5C55\u793A\u5185\u90E8\u5339\u914D\u5206\u6570\u3002\u4F60\u53EF\u4EE5\u4E3B\u52A8\u7533\u8BF7\u5BF9\u63A5\uFF0C\u7531\u6295\u8D44\u4EBA\u9488\u5BF9\u9879\u76EE\u786E\u8BA4\u3002</p></div><div class="p12-result-arrival-actions"><button class="btn btn-outline" id="p12ResultLater" type="button">\u7A0D\u540E\u67E5\u770B</button><button class="btn btn-primary" id="p12ResultNow" type="button">\u67E5\u770B\u672C\u6279\u6295\u8D44\u4EBA</button></div></div>'
     });
     overlay.querySelector("#p12ResultLater").addEventListener("click", () => {
       overlay.remove();
@@ -7384,6 +7394,47 @@
       overlay.remove();
       navigateTo("p12", { stage: "results" });
     });
+  }
+  function requestInvestorConnection(investor) {
+    showModal({
+      title: "\u5411" + escapeHTML(investor.name) + "\u7533\u8BF7\u5BF9\u63A5\uFF1F",
+      body: "\u5E73\u53F0\u4F1A\u628A\u4F60\u7684\u8131\u654F\u9879\u76EE\u6458\u8981\u53D1\u9001\u7ED9\u8BE5\u6295\u8D44\u4EBA\u3002\u6295\u8D44\u4EBA\u9488\u5BF9\u9879\u76EE\u786E\u8BA4\u540E\uFF0C\u518D\u7531\u5E73\u53F0\u534F\u52A9\u53CC\u65B9\u5EFA\u8054\u3002",
+      cancelText: "\u518D\u770B\u770B",
+      confirmText: "\u53D1\u9001\u5BF9\u63A5\u7533\u8BF7",
+      onConfirm() {
+        updateInvestorConnection(investor.id, { status: "entrepreneur_requested", initiator: "entrepreneur", requestedAt: "\u521A\u521A" });
+        updateFundraisingState({ connectionInvestorId: investor.id });
+        refreshActivePage();
+        toast("\u5BF9\u63A5\u7533\u8BF7\u5DF2\u53D1\u9001\uFF0C\u7B49\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4");
+      }
+    });
+  }
+  function showMutualConnectionNotice(investor) {
+    const overlay = showSheet({
+      title: "\u6295\u8D44\u4EBA\u5DF2\u540C\u610F\u5BF9\u63A5",
+      body: '<div class="p12-mutual-notice"><div><span>' + icon("check-circle", 23) + "</span><div><strong>" + escapeHTML(investor.name) + '\u613F\u610F\u8FDB\u4E00\u6B65\u4EA4\u6D41</strong><small>\u53CC\u65B9\u610F\u5411\u5DF2\u786E\u8BA4\u3002\u4E0B\u4E00\u6B65\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u9080\u8BF7\u53CC\u65B9\u8FDB\u5165\u540C\u4E00\u4E2A\u7FA4\u3002</small></div></div><div class="p12-result-arrival-actions"><button class="btn btn-outline" id="p12ConnectLater" type="button">\u7A0D\u540E\u5904\u7406</button><button class="btn btn-primary" id="p12ConnectNow" type="button">\u7EE7\u7EED\u5B8C\u6210\u5EFA\u8054</button></div></div>'
+    });
+    overlay.querySelector("#p12ConnectLater").addEventListener("click", () => {
+      overlay.remove();
+      toast("\u53EF\u968F\u65F6\u4ECE\u878D\u8D44\u5339\u914D\u7ED3\u679C\u7EE7\u7EED\u5EFA\u8054");
+    });
+    overlay.querySelector("#p12ConnectNow").addEventListener("click", () => {
+      overlay.remove();
+      updateFundraisingState({ connectionInvestorId: investor.id });
+      navigateTo("p12", { stage: "connection" });
+    });
+  }
+  function scheduleDemoInvestorConfirmation() {
+    const pending = Object.entries(getFundraisingState().investorConnections || {}).find((entry) => entry[1].status === "entrepreneur_requested");
+    if (!pending) return;
+    const investorId = pending[0];
+    setTimeout(() => {
+      const current = getFundraisingState();
+      if (current.investorConnections?.[investorId]?.status !== "entrepreneur_requested") return;
+      updateInvestorConnection(investorId, { status: "confirmed", confirmedAt: "\u521A\u521A" });
+      updateFundraisingState({ connectionInvestorId: investorId, connectionNoticeInvestorId: investorId });
+      if (document.getElementById("page-container")?.getAttribute("data-page") === "p12") refreshActivePage();
+    }, 2200);
   }
   function scheduleDemoMatchResult() {
     setTimeout(() => {
@@ -7398,6 +7449,7 @@
     if (state2.paused) return { iconName: "pause", title: "\u672C\u8F6E\u5339\u914D\u5DF2\u6682\u505C", desc: "\u6062\u590D\u540E\uFF0C\u5E73\u53F0\u4F1A\u7EE7\u7EED\u6839\u636E\u5F53\u524D BP \u548C\u9879\u76EE\u6807\u7B7E\u8FDB\u884C\u5339\u914D\u3002", action: "" };
     const counts = getConnectionCounts();
     if (counts.requested) return { iconName: "bell", title: counts.requested + " \u6761\u5EFA\u8054\u7533\u8BF7\u5F85\u5904\u7406", desc: "\u6BCF\u4F4D\u6295\u8D44\u4EBA\u7684\u7533\u8BF7\u72EC\u7ACB\u5904\u7406\uFF0C\u4F60\u53EF\u4EE5\u5206\u522B\u540C\u610F\u6216\u6682\u4E0D\u5EFA\u8054\u3002", action: "\u67E5\u770B\u5E76\u5904\u7406" };
+    if (counts.entrepreneur_requested) return { iconName: "clock", title: counts.entrepreneur_requested + " \u6761\u5BF9\u63A5\u7533\u8BF7\u7B49\u5F85\u786E\u8BA4", desc: "\u9879\u76EE\u6458\u8981\u5DF2\u53D1\u9001\u7ED9\u6295\u8D44\u4EBA\uFF0C\u5BF9\u65B9\u786E\u8BA4\u540E\u4F1A\u53CA\u65F6\u901A\u77E5\u4F60\u3002", action: "\u67E5\u770B\u7533\u8BF7" };
     if (counts.confirmed) return { iconName: "message", title: counts.confirmed + " \u6761\u5EFA\u8054\u5F85\u7EE7\u7EED", desc: "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u540E\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u5206\u522B\u534F\u52A9\u521B\u5EFA\u6C9F\u901A\u7FA4\u3002", action: "\u67E5\u770B\u5EFA\u8054\u8FDB\u5EA6" };
     if (counts.connecting) return { iconName: "message", title: counts.connecting + " \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054\u4E2D", desc: "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u5904\u7406\u62C9\u7FA4\uFF0C\u5176\u4ED6\u5339\u914D\u7ED3\u679C\u4ECD\u53EF\u72EC\u7ACB\u67E5\u770B\u3002", action: "\u67E5\u770B\u5EFA\u8054\u8FDB\u5EA6" };
     if (counts.connected) return { iconName: "check-circle", title: "\u5DF2\u5B8C\u6210 " + counts.connected + " \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054", desc: "\u672C\u8F6E\u5339\u914D\u7EE7\u7EED\u8FDB\u884C\uFF0C\u65B0\u7684\u67E5\u770B\u4E0E\u5EFA\u8054\u7533\u8BF7\u4F1A\u5355\u72EC\u901A\u77E5\u3002", action: "\u67E5\u770B\u5168\u90E8\u7ED3\u679C" };
@@ -7408,20 +7460,20 @@
     const counts = getConnectionCounts();
     const connectionTotal = Object.values(counts).reduce((sum, value) => sum + value, 0);
     const matched = state2.status === "matched" || connectionTotal > 0;
-    const hasIntent = counts.requested + counts.confirmed + counts.connecting + counts.connected + counts.declined + counts.withdrawn + counts.expired > 0;
+    const hasIntent = counts.requested + counts.entrepreneur_requested + counts.confirmed + counts.connecting + counts.connected + counts.declined + counts.withdrawn + counts.expired > 0;
     const hasConnection = counts.confirmed + counts.connecting + counts.connected > 0;
     const node = (done, active, title, detail) => '<div class="' + (done ? "done" : active ? "active" : "") + '"><span>' + (done ? icon("check", 13) : "") + "</span><div><strong>" + title + "</strong><small>" + detail + "</small></div></div>";
-    return '<div class="p12-timeline">' + node(true, false, "BP\u3001\u8131\u654F\u5185\u5BB9\u4E0E\u6388\u6743\u5DF2\u786E\u8BA4", state2.submittedAt || "09-03 10:20") + node(matched, !matched && !state2.paused, matched ? "\u5DF2\u751F\u6210\u672C\u6279\u5339\u914D\u7ED3\u679C" : state2.paused ? "\u5339\u914D\u5DF2\u6682\u505C" : "\u6301\u7EED\u6838\u5BF9\u6295\u8D44\u504F\u597D", matched ? "\u4EC5\u5C55\u793A\u7B26\u5408\u6761\u4EF6\u7684\u63A8\u8350\u7ED3\u679C" : "\u7ED3\u679C\u4F1A\u6839\u636E\u6295\u8D44\u4EBA\u9700\u6C42\u6301\u7EED\u66F4\u65B0") + node(hasIntent, matched && !hasIntent, hasIntent ? "\u6295\u8D44\u4EBA\u610F\u5411\u6301\u7EED\u66F4\u65B0" : "\u7B49\u5F85\u6295\u8D44\u4EBA\u8FDB\u4E00\u6B65\u610F\u5411", hasIntent ? "\u7533\u8BF7\u3001\u64A4\u56DE\u548C\u8D85\u65F6\u5747\u6309\u6295\u8D44\u4EBA\u72EC\u7ACB\u8BB0\u5F55" : "\u67E5\u770B\u8D44\u6599\u4E0D\u4F1A\u81EA\u52A8\u53D1\u8D77\u5EFA\u8054") + node(hasConnection, hasIntent && !hasConnection, hasConnection ? "\u5E73\u53F0\u6309\u786E\u8BA4\u7ED3\u679C\u5206\u522B\u534F\u52A9\u5EFA\u8054" : "\u53CC\u65B9\u786E\u8BA4\u540E\u7531\u5E73\u53F0\u534F\u52A9\u5EFA\u8054", hasConnection ? "\u5DF2\u786E\u8BA4\u7684\u6C9F\u901A\u8F6C\u81F3\u4F01\u4E1A\u5FAE\u4FE1" : "\u5C0F\u7A0B\u5E8F\u5185\u4E0D\u5F00\u653E\u53CC\u65B9\u8054\u7CFB\u65B9\u5F0F") + "</div>";
+    return '<div class="p12-timeline">' + node(true, false, "BP\u3001\u8131\u654F\u5185\u5BB9\u4E0E\u6388\u6743\u5DF2\u786E\u8BA4", state2.submittedAt || "09-03 10:20") + node(matched, !matched && !state2.paused, matched ? "\u5DF2\u751F\u6210\u672C\u6279\u5339\u914D\u7ED3\u679C" : state2.paused ? "\u5339\u914D\u5DF2\u6682\u505C" : "\u6301\u7EED\u6838\u5BF9\u6295\u8D44\u504F\u597D", matched ? "\u4EC5\u5C55\u793A\u7B26\u5408\u6761\u4EF6\u7684\u63A8\u8350\u7ED3\u679C" : "\u7ED3\u679C\u4F1A\u6839\u636E\u6295\u8D44\u4EBA\u9700\u6C42\u6301\u7EED\u66F4\u65B0") + node(hasIntent, matched && !hasIntent, hasIntent ? "\u53CC\u65B9\u5BF9\u63A5\u610F\u5411\u6301\u7EED\u66F4\u65B0" : "\u53EF\u5411\u63A8\u8350\u6295\u8D44\u4EBA\u7533\u8BF7\u5BF9\u63A5", hasIntent ? "\u53CC\u65B9\u53D1\u8D77\u3001\u786E\u8BA4\u3001\u64A4\u56DE\u548C\u8D85\u65F6\u5747\u72EC\u7ACB\u8BB0\u5F55" : "\u5E73\u53F0\u5148\u53D1\u9001\u8131\u654F\u9879\u76EE\u6458\u8981\uFF0C\u7531\u6295\u8D44\u4EBA\u786E\u8BA4") + node(hasConnection, hasIntent && !hasConnection, hasConnection ? "\u5E73\u53F0\u6309\u786E\u8BA4\u7ED3\u679C\u5206\u522B\u534F\u52A9\u5EFA\u8054" : "\u53CC\u65B9\u786E\u8BA4\u540E\u7531\u5E73\u53F0\u534F\u52A9\u5EFA\u8054", hasConnection ? "\u5DF2\u786E\u8BA4\u7684\u6C9F\u901A\u8F6C\u81F3\u4F01\u4E1A\u5FAE\u4FE1" : "\u5C0F\u7A0B\u5E8F\u5185\u4E0D\u5F00\u653E\u53CC\u65B9\u8054\u7CFB\u65B9\u5F0F") + "</div>";
   }
   function connectionOverview() {
     const counts = getConnectionCounts();
     const total = Object.values(counts).reduce((sum, value) => sum + value, 0);
     if (!total) return "";
     const groups = [
-      ["\u5F85\u5904\u7406", counts.requested, "pending"],
+      ["\u5F85\u6211\u5904\u7406", counts.requested, "pending"],
+      ["\u7B49\u5F85\u6295\u8D44\u4EBA", counts.entrepreneur_requested, "waiting"],
       ["\u5EFA\u8054\u4E2D", counts.confirmed + counts.connecting, "working"],
-      ["\u5DF2\u5EFA\u8054", counts.connected, "complete"],
-      ["\u5DF2\u7ED3\u675F", counts.declined + counts.withdrawn + counts.expired, "closed"]
+      ["\u5DF2\u5EFA\u8054", counts.connected, "complete"]
     ];
     return '<section class="p12-connection-overview"><div><h2>\u6295\u8D44\u4EBA\u8FDB\u5C55</h2><button id="p12OverviewResults" type="button">\u67E5\u770B\u5168\u90E8</button></div><p>' + groups.map((item) => '<span class="' + item[2] + '"><strong>' + item[1] + "</strong><small>" + item[0] + "</small></span>").join("") + "</p></section>";
   }
@@ -7429,22 +7481,23 @@
     const copy = progressCopy(state2);
     const counts = getConnectionCounts();
     const hasProgress = state2.status === "matched" || Object.values(counts).some(Boolean);
-    const manageState = counts.confirmed + counts.connecting > 0 ? ["\u6301\u7EED\u5339\u914D \xB7 \u5EFA\u8054\u5904\u7406\u4E2D", "\u5E73\u53F0\u6309\u6295\u8D44\u4EBA\u5206\u522B\u8BB0\u5F55\u548C\u534F\u52A9\u5EFA\u8054"] : counts.connected > 0 ? ["\u672C\u8F6E\u6301\u7EED\u5339\u914D", "\u5DF2\u6709\u5EFA\u8054\u5B8C\u6210\uFF0C\u4ECD\u53EF\u63A5\u6536\u65B0\u7ED3\u679C"] : state2.paused ? ["\u5DF2\u6682\u505C\u5339\u914D", "\u6062\u590D\u540E\u7EE7\u7EED\u6838\u5BF9\u6295\u8D44\u504F\u597D"] : ["\u6301\u7EED\u5339\u914D\u4E2D", "\u6709\u8FDB\u5C55\u65F6\u5C06\u53CA\u65F6\u901A\u77E5\u4F60"];
+    const manageState = counts.entrepreneur_requested > 0 ? ["\u7B49\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4", "\u9879\u76EE\u6458\u8981\u5DF2\u53D1\u9001\uFF0C\u786E\u8BA4\u7ED3\u679C\u4F1A\u53CA\u65F6\u901A\u77E5"] : counts.confirmed + counts.connecting > 0 ? ["\u6301\u7EED\u5339\u914D \xB7 \u5EFA\u8054\u5904\u7406\u4E2D", "\u5E73\u53F0\u6309\u6295\u8D44\u4EBA\u5206\u522B\u8BB0\u5F55\u548C\u534F\u52A9\u5EFA\u8054"] : counts.connected > 0 ? ["\u672C\u8F6E\u6301\u7EED\u5339\u914D", "\u5DF2\u6709\u5EFA\u8054\u5B8C\u6210\uFF0C\u4ECD\u53EF\u63A5\u6536\u65B0\u7ED3\u679C"] : state2.paused ? ["\u5DF2\u6682\u505C\u5339\u914D", "\u6062\u590D\u540E\u7EE7\u7EED\u6838\u5BF9\u6295\u8D44\u504F\u597D"] : ["\u6301\u7EED\u5339\u914D\u4E2D", "\u6709\u8FDB\u5C55\u65F6\u5C06\u53CA\u65F6\u901A\u77E5\u4F60"];
     return '<div class="p12-page">' + header("\u878D\u8D44\u5339\u914D\u8FDB\u5EA6") + '<section class="p12-status-head ' + (hasProgress ? "has-result" : "") + '"><span>' + icon(copy.iconName, 26) + "</span><h1>" + copy.title + "</h1><p>" + copy.desc + "</p>" + (copy.action ? '<button class="btn btn-primary" id="p12ViewResults" type="button">' + copy.action + "</button>" : "") + "</section>" + connectionOverview() + '<section class="p12-status-list"><h2>\u672C\u8F6E\u8FDB\u5EA6</h2>' + timelineView(state2) + '</section><section class="p12-notice"><div><h2>\u8FDB\u5C55\u901A\u77E5</h2><button id="p12NoticeInfo" type="button">\u7BA1\u7406</button></div><p><span>' + icon("inbox", 16) + "\u7AD9\u5185\u6D88\u606F\u5DF2\u5F00\u542F</span><span>" + icon("message", 16) + (isWecomAdded() ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4F01\u4E1A\u5FAE\u4FE1\u5F85\u6DFB\u52A0") + '</span></p></section><section class="p12-manage"><h2>\u672C\u8F6E\u5339\u914D\u7BA1\u7406</h2><div class="p12-manage-row"><span class="p12-manage-icon">' + icon("file-text", 17) + '</span><span class="p12-manage-copy"><small>\u5F53\u524D BP</small><strong>' + escapeHTML(state2.bpName || "\u661F\u8FB0\u79D1\u6280\u5546\u4E1A\u8BA1\u5212\u4E66.pdf") + "</strong><em>" + escapeHTML(state2.bpUpdatedAt || "2026-09-03") + ' \u66F4\u65B0</em></span><button id="p12UpdateBp" type="button">\u66F4\u65B0 ' + icon("chevron-right", 14) + '</button></div><div class="p12-manage-row"><span class="p12-manage-icon">' + icon(state2.paused ? "pause" : "refresh", 17) + '</span><span class="p12-manage-copy"><small>\u5339\u914D\u72B6\u6001</small><strong>' + manageState[0] + "</strong><em>" + manageState[1] + '</em></span><button id="p12TogglePause" type="button">' + (state2.paused ? "\u6062\u590D" : "\u6682\u505C") + " " + icon("chevron-right", 14) + '</button></div><button class="p12-manage-row p12-manage-record" id="p12Logs" type="button"><span class="p12-manage-icon">' + icon("shield", 17) + '</span><span class="p12-manage-copy"><small>\u8D44\u6599\u6743\u9650</small><strong>\u6388\u6743\u4E0E\u8BBF\u95EE\u8BB0\u5F55</strong><em>\u6309\u6295\u8D44\u4EBA\u67E5\u770B\u81EA\u52A8\u6838\u9A8C\u4E0E\u8BBF\u95EE\u7559\u75D5</em></span><span class="p12-manage-link">\u67E5\u770B ' + icon("chevron-right", 14) + '</span></button><div class="p12-manage-danger"><button id="p12End" type="button">\u7ED3\u675F\u672C\u8F6E\u5339\u914D</button></div></section></div>';
   }
   function connectionMeta(investor, state2) {
     const record = state2.investorConnections?.[investor.id];
     const labels = {
-      requested: ["\u5DF2\u7533\u8BF7\u5EFA\u8054", "\u5904\u7406\u5EFA\u8054\u7533\u8BF7", "needs-action"],
-      confirmed: ["\u4F60\u5DF2\u540C\u610F\u5EFA\u8054", "\u67E5\u770B\u5EFA\u8054\u8FDB\u5EA6", "status-working"],
+      requested: ["\u6295\u8D44\u4EBA\u7533\u8BF7\u5EFA\u8054", "\u5904\u7406\u5EFA\u8054\u7533\u8BF7", "needs-action"],
+      entrepreneur_requested: ["\u5BF9\u63A5\u7533\u8BF7\u5DF2\u53D1\u9001 \xB7 \u7B49\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4", "\u67E5\u770B\u7533\u8BF7", "status-waiting"],
+      confirmed: ["\u53CC\u65B9\u5DF2\u786E\u8BA4\u5BF9\u63A5", "\u67E5\u770B\u5EFA\u8054\u8FDB\u5EA6", "status-working"],
       connecting: ["\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4", "\u67E5\u770B\u5EFA\u8054\u8FDB\u5EA6", "status-working"],
       connected: ["\u5EFA\u8054\u5DF2\u5B8C\u6210", "\u67E5\u770B\u5EFA\u8054\u8BB0\u5F55", "status-complete"],
       declined: ["\u4F60\u5DF2\u6682\u4E0D\u5EFA\u8054", "\u67E5\u770B\u5904\u7406\u8BB0\u5F55", "status-closed"],
       withdrawn: ["\u6295\u8D44\u4EBA\u5DF2\u64A4\u56DE\u7533\u8BF7", "\u67E5\u770B\u5904\u7406\u8BB0\u5F55", "status-closed"],
       expired: ["\u5EFA\u8054\u7533\u8BF7\u5DF2\u8D85\u65F6", "\u67E5\u770B\u5904\u7406\u8BB0\u5F55", "status-closed"]
     };
-    const freshResult = state2.status === "matched" && state2.resultAvailableAt && !Object.keys(state2.investorConnections || {}).length;
-    return record && labels[record.status] ? { record, label: labels[record.status][0], action: labels[record.status][1], className: labels[record.status][2] } : { record: null, label: freshResult ? "\u672C\u6279\u65B0\u63A8\u8350 \xB7 \u5F85\u6295\u8D44\u4EBA\u67E5\u770B" : investor.accessStatus, action: "\u67E5\u770B\u8BE6\u60C5", className: freshResult ? "status-working" : "" };
+    const freshResult = state2.status === "matched" && state2.recommendedInvestorIds?.includes(investor.id) && !record;
+    return record && labels[record.status] ? { record, label: labels[record.status][0], action: labels[record.status][1], className: labels[record.status][2], fresh: false } : { record: null, label: freshResult ? "\u6B63\u5728\u627E\u9879\u76EE \xB7 \u4E0E\u4F60\u7684\u9879\u76EE\u5951\u5408" : investor.accessStatus, action: "\u67E5\u770B\u8BE6\u60C5", className: freshResult ? "status-active" : "", fresh: freshResult };
   }
   function opensConnection(record) {
     return record && ["confirmed", "connecting", "connected"].includes(record.status);
@@ -7452,16 +7505,21 @@
   function resultsView(state2) {
     const batchIndex = Number(state2.investorBatch || 0) % investorBatches.length;
     const batch = investorBatches[batchIndex];
-    return '<div class="p12-page">' + header("\u5339\u914D\u5230\u7684\u6295\u8D44\u4EBA") + '<section class="p12-results-head"><div><h1>\u672C\u6279\u63A8\u8350\u7684\u6295\u8D44\u4EBA</h1><span>\u7B2C ' + (batchIndex + 1) + " \u6279 \xB7 " + batch.length + ' \u4F4D</span></div><p>\u6BCF\u6279\u6700\u591A\u5C55\u793A 5 \u4F4D\u7B26\u5408\u6761\u4EF6\u7684\u6295\u8D44\u4EBA\u3002\u5E73\u53F0\u5C55\u793A\u5177\u4F53\u5339\u914D\u4F9D\u636E\uFF0C\u4E0D\u516C\u5F00\u5185\u90E8\u5339\u914D\u5206\u6570\u3002</p></section><section class="p12-investor-list">' + batch.map((investor) => {
+    return '<div class="p12-page">' + header("\u5339\u914D\u5230\u7684\u6295\u8D44\u4EBA") + '<section class="p12-results-head"><div><h1>\u672C\u6279\u63A8\u8350\u7684\u6295\u8D44\u4EBA</h1><span>\u7B2C ' + (batchIndex + 1) + " \u6279 \xB7 " + batch.length + ' \u4F4D</span></div><p>\u4EE5\u4E0B\u6295\u8D44\u4EBA\u5DF2\u53D1\u5E03\u6709\u6548\u7684\u201C\u6211\u8981\u627E\u9879\u76EE\u201D\u9700\u6C42\u5E76\u5B8C\u6210\u6295\u5411\u586B\u62A5\u3002\u6BCF\u6279\u6700\u591A\u5C55\u793A 5 \u4F4D\uFF0C\u5E73\u53F0\u5C55\u793A\u5177\u4F53\u5339\u914D\u4F9D\u636E\uFF0C\u4E0D\u516C\u5F00\u5185\u90E8\u5339\u914D\u5206\u6570\u3002</p></section><section class="p12-investor-list">' + batch.map((investor) => {
       const meta = connectionMeta(investor, state2);
-      return '<article class="p12-investor"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + (investor.verified ? "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b>" : "") + "</h2><p>" + investor.role + '</p></div></div><p class="p12-investor-summary">' + investor.summary + "</p><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u51FA\u624B\u533A\u95F4</dt><dd>" + investor.ticket + '</dd></div></dl><div class="p12-reasons"><strong>\u4E3A\u4EC0\u4E48\u5339\u914D</strong>' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><div class="p12-investor-actions"><span class="' + meta.className + '">' + meta.label + '</span><button type="button" data-investor-id="' + investor.id + '">' + meta.action + "</button></div></article>";
-    }).join("") + '</section><button class="p12-change-batch" id="p12ChangeBatch" type="button">\u4E0D\u6EE1\u610F\uFF0C\u6362\u4E00\u6279 ' + icon("refresh", 14) + '</button><div class="p12-result-note">\u8D44\u6599\u67E5\u770B\u4E0E\u5EFA\u8054\u7533\u8BF7\u5206\u5F00\u8BB0\u5F55\u3002\u6295\u8D44\u4EBA\u67E5\u770B BP \u540E\uFF0C\u53EA\u6709\u660E\u786E\u53D1\u8D77\u5EFA\u8054\u7533\u8BF7\uFF0C\u521B\u4E1A\u8005\u7AEF\u624D\u4F1A\u51FA\u73B0\u786E\u8BA4\u64CD\u4F5C\u3002</div></div>';
+      const controls = meta.fresh ? '<div class="p12-investor-card-buttons"><button type="button" data-investor-detail="' + investor.id + '">\u67E5\u770B\u8BE6\u60C5</button><button class="is-primary" type="button" data-investor-request="' + investor.id + '">\u7533\u8BF7\u5BF9\u63A5</button></div>' : '<button type="button" data-investor-id="' + investor.id + '">' + meta.action + "</button>";
+      return '<article class="p12-investor"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + (investor.verified ? "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b>" : "") + "</h2><p>" + investor.role + '</p></div></div><p class="p12-investor-summary">' + investor.summary + "</p><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u51FA\u624B\u533A\u95F4</dt><dd>" + investor.ticket + '</dd></div></dl><div class="p12-reasons"><strong>\u4E3A\u4EC0\u4E48\u5339\u914D</strong>' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><div class="p12-investor-actions"><span class="' + meta.className + '">' + meta.label + "</span>" + controls + "</div></article>";
+    }).join("") + '</section><button class="p12-change-batch" id="p12ChangeBatch" type="button">\u4E0D\u6EE1\u610F\uFF0C\u6362\u4E00\u6279 ' + icon("refresh", 14) + '</button><div class="p12-result-note">\u63A8\u8350\u6765\u81EA\u6295\u8D44\u4EBA\u5F53\u524D\u6709\u6548\u7684\u627E\u9879\u76EE\u9700\u6C42\u3002\u4F60\u53EF\u4EE5\u4E3B\u52A8\u7533\u8BF7\u5BF9\u63A5\uFF1B\u6295\u8D44\u4EBA\u9488\u5BF9\u9879\u76EE\u786E\u8BA4\u540E\uFF0C\u518D\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u5EFA\u8054\u3002</div></div>';
   }
   function investorSheet(investor, state2) {
     const record = state2.investorConnections?.[investor.id];
-    const freshResult = state2.status === "matched" && state2.resultAvailableAt && !Object.keys(state2.investorConnections || {}).length;
+    const freshResult = state2.status === "matched" && state2.recommendedInvestorIds?.includes(investor.id) && !record;
     let action = '<div class="p12-waiting-action">' + icon("clock", 17) + "<span><strong>\u6682\u672A\u53D1\u8D77\u5EFA\u8054\u7533\u8BF7</strong><small>\u6295\u8D44\u4EBA\u67E5\u770B\u8D44\u6599\u4E0D\u4F1A\u81EA\u52A8\u5EFA\u8054\uFF1B\u6709\u660E\u786E\u610F\u5411\u540E\uFF0C\u5E73\u53F0\u4F1A\u901A\u77E5\u4F60\u5904\u7406\u3002</small></span></div>";
-    if (record?.status === "requested") {
+    if (freshResult) {
+      action = '<div class="p12-active-demand">' + icon("search", 18) + '<span><strong>\u8BE5\u6295\u8D44\u4EBA\u6B63\u5728\u5BFB\u627E\u9879\u76EE</strong><small>\u5F53\u524D\u6295\u5411\u4E0E\u9879\u76EE\u5951\u5408\u3002\u7533\u8BF7\u540E\uFF0C\u5E73\u53F0\u4F1A\u5148\u53D1\u9001\u8131\u654F\u9879\u76EE\u6458\u8981\u4F9B\u5BF9\u65B9\u786E\u8BA4\u3002</small></span></div><button class="btn btn-primary btn-block" id="p12RequestInvestor" type="button">\u7533\u8BF7\u5BF9\u63A5</button>';
+    } else if (record?.status === "entrepreneur_requested") {
+      action = '<div class="p12-terminal-state pending">' + icon("clock", 18) + "<span><strong>\u5BF9\u63A5\u7533\u8BF7\u5DF2\u53D1\u9001</strong><small>" + (record.requestedAt || "\u521A\u521A") + " \xB7 \u8131\u654F\u9879\u76EE\u6458\u8981\u5DF2\u63A8\u9001\uFF0C\u7B49\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4</small></span></div>";
+    } else if (record?.status === "requested") {
       action = '<div class="p12-connection-request"><span>' + icon("message", 18) + "</span><div><strong>\u6295\u8D44\u4EBA\u7533\u8BF7\u5EFA\u8054</strong><small>" + (record.requestedAt || investor.requestAt) + "</small><p>" + investor.requestMessage + '</p></div></div><div class="p12-sheet-actions"><button class="btn btn-outline" id="p12Decline" type="button">\u6682\u4E0D\u5EFA\u8054</button><button class="btn btn-primary" id="p12Connect" type="button">\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054</button></div>';
     } else if (record?.status === "declined") {
       action = '<div class="p12-terminal-state declined">' + icon("check-circle", 18) + "<span><strong>\u4F60\u5DF2\u9009\u62E9\u6682\u4E0D\u5EFA\u8054</strong><small>" + (record.resolvedAt || "\u5904\u7406\u7ED3\u679C\u5DF2\u8BB0\u5F55") + " \xB7 \u7ED3\u679C\u5DF2\u540C\u6B65\u7ED9\u6295\u8D44\u4EBA\u7AEF</small></span></div>";
@@ -7470,17 +7528,18 @@
     } else if (record?.status === "expired") {
       action = '<div class="p12-terminal-state expired">' + icon("clock", 18) + "<span><strong>\u672C\u6B21\u5EFA\u8054\u7533\u8BF7\u5DF2\u8D85\u65F6</strong><small>" + (record.resolvedAt || "\u5DF2\u81EA\u52A8\u5173\u95ED") + " \xB7 \u8D85\u8FC7 72 \u5C0F\u65F6\u672A\u5B8C\u6210\u53CC\u65B9\u786E\u8BA4</small></span></div>";
     }
-    return '<div class="p12-investor-sheet"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b></h2><p>" + investor.role + "</p></div></div><h3>\u6295\u8D44\u504F\u597D</h3><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u5355\u7B14\u533A\u95F4</dt><dd>" + investor.ticket + "</dd></div><div><dt>\u5730\u57DF\u504F\u597D</dt><dd>" + investor.region + '</dd></div></dl><h3>\u5339\u914D\u4F9D\u636E</h3><div class="p12-reasons">' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><h3>\u8D44\u6599\u8BBF\u95EE</h3><div class="p12-access-record">' + icon("shield", 17) + "<span><strong>" + (freshResult ? "\u5F85\u6295\u8D44\u4EBA\u7533\u8BF7\u67E5\u770B\u5B8C\u6574 BP" : investor.accessStatus) + "</strong><small>" + (freshResult ? "\u5F53\u524D\u4EC5\u5B8C\u6210\u521D\u6B65\u5339\u914D\u3002\u6295\u8D44\u4EBA\u63D0\u51FA\u67E5\u770B\u7533\u8BF7\u540E\uFF0C\u5E73\u53F0\u624D\u4F1A\u6309\u6388\u6743\u89C4\u5219\u5F00\u653E\u8D44\u6599\u5E76\u7559\u75D5\u3002" : "\u8EAB\u4EFD\u3001\u5339\u914D\u6761\u4EF6\u3001\u67E5\u770B\u610F\u613F\u548C\u4FDD\u5BC6\u72B6\u6001\u5747\u5DF2\u81EA\u52A8\u6838\u9A8C\uFF0C\u8BBF\u95EE\u8BB0\u5F55\u5DF2\u7559\u75D5\u3002") + "</small></span></div>" + action + "</div>";
+    return '<div class="p12-investor-sheet"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b></h2><p>" + investor.role + "</p></div></div><h3>\u6295\u8D44\u504F\u597D</h3><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u5355\u7B14\u533A\u95F4</dt><dd>" + investor.ticket + "</dd></div><div><dt>\u5730\u57DF\u504F\u597D</dt><dd>" + investor.region + '</dd></div></dl><h3>\u5339\u914D\u4F9D\u636E</h3><div class="p12-reasons">' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><h3>\u8D44\u6599\u8BBF\u95EE</h3><div class="p12-access-record">' + icon("shield", 17) + "<span><strong>" + (freshResult ? "\u5148\u53D1\u9001\u8131\u654F\u9879\u76EE\u6458\u8981" : investor.accessStatus) + "</strong><small>" + (freshResult ? "\u6295\u8D44\u4EBA\u786E\u8BA4\u611F\u5174\u8DA3\u540E\uFF0C\u53EF\u6309\u672C\u8F6E\u6388\u6743\u89C4\u5219\u7533\u8BF7\u67E5\u770B\u6700\u65B0\u7248\u5B8C\u6574 BP\uFF1B\u6BCF\u6B21\u8BBF\u95EE\u90FD\u4F1A\u7559\u75D5\u3002" : "\u8EAB\u4EFD\u3001\u5339\u914D\u6761\u4EF6\u3001\u67E5\u770B\u610F\u613F\u548C\u4FDD\u5BC6\u72B6\u6001\u5747\u5DF2\u81EA\u52A8\u6838\u9A8C\uFF0C\u8BBF\u95EE\u8BB0\u5F55\u5DF2\u7559\u75D5\u3002") + "</small></span></div>" + action + "</div>";
   }
   function connectionView(state2) {
     const investor = investors.find((item) => item.id === state2.connectionInvestorId) || investors[0];
     const record = state2.investorConnections?.[investor.id] || { status: "confirmed", requestedAt: investor.requestAt, confirmedAt: "09-03 13:52" };
+    const entrepreneurInitiated = record.initiator === "entrepreneur";
     const connecting = record.status === "connecting";
     const connected = record.status === "connected";
     const added = isWecomAdded() || connecting || connected;
     const title = connected ? "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB" : connecting ? "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4" : "\u7EE7\u7EED\u5B8C\u6210\u5EFA\u8054";
-    const description = connected ? "\u4F60\u548C\u6295\u8D44\u4EBA\u5DF2\u5B8C\u6210\u5EFA\u8054\u3002\u540E\u7EED\u9879\u76EE\u4EA4\u6D41\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\uFF0C\u5C0F\u7A0B\u5E8F\u4FDD\u7559\u5173\u952E\u8FDB\u5C55\u548C\u8D44\u6599\u8BBF\u95EE\u8BB0\u5F55\u3002" : connecting ? "\u5E73\u53F0\u987E\u95EE\u5DF2\u6536\u5230\u53CC\u65B9\u786E\u8BA4\uFF0C\u6B63\u5728\u9080\u8BF7\u4F60\u548C\u6295\u8D44\u4EBA\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002" : "\u4F60\u5DF2\u540C\u610F\u6295\u8D44\u4EBA\u7684\u5EFA\u8054\u7533\u8BF7\u3002\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u540E\uFF0C\u987E\u95EE\u4F1A\u9080\u8BF7\u53CC\u65B9\u8FDB\u5165\u540C\u4E00\u4E2A\u7FA4\u3002";
-    return '<div class="p12-page">' + header("\u6295\u8D44\u4EBA\u5EFA\u8054") + '<section class="p12-connect-hero ' + (connected ? "completed" : "") + '"><span>' + icon(connected ? "check-circle" : "message", 28) + "</span><h1>" + title + "</h1><p>" + description + '</p></section><section class="p12-connect-person"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><strong>" + investor.name + "</strong><small>" + investor.role + "</small></div><b>" + (connected ? "\u5DF2\u5EFA\u8054" : connecting ? "\u5EFA\u8054\u4E2D" : "\u5DF2\u786E\u8BA4") + '</b></section><section class="p12-connect-steps"><h2>\u5EFA\u8054\u8FDB\u5EA6</h2><div class="p12-timeline"><div class="done"><span>' + icon("check", 13) + "</span><div><strong>\u6295\u8D44\u4EBA\u53D1\u8D77\u5EFA\u8054\u7533\u8BF7</strong><small>" + (record.requestedAt || investor.requestAt) + '</small></div></div><div class="done"><span>' + icon("check", 13) + "</span><div><strong>\u4F60\u5DF2\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054</strong><small>" + (record.confirmedAt || "\u672C\u6B21\u786E\u8BA4\u5DF2\u7559\u75D5") + '</small></div></div><div class="' + (added ? "done" : "active") + '"><span>' + (added ? icon("check", 13) : "") + "</span><div><strong>" + (added ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + '</strong><small>\u540E\u7EED\u7531\u5E73\u53F0\u987E\u95EE\u521B\u5EFA\u4F01\u4E1A\u5FAE\u4FE1\u7FA4</small></div></div><div class="' + (connected ? "done" : connecting ? "active" : "") + '"><span>' + (connected ? icon("check", 13) : "") + "</span><div><strong>" + (connected ? "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB" : connecting ? "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4" : "\u7B49\u5F85\u5E73\u53F0\u987E\u95EE\u62C9\u7FA4") + "</strong><small>" + (connected ? record.groupCreatedAt || "09-03 14:40" : "\u7FA4\u5185\u7EE7\u7EED\u4EA4\u6D41\u9879\u76EE\u548C\u878D\u8D44\u5B89\u6392") + "</small></div></div></div></section>" + (record.status === "confirmed" ? '<section class="p12-wecom-next">' + icon("message", 20) + "<div><strong>" + (isWecomAdded() ? "\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4E0B\u4E00\u6B65\uFF1A\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + "</strong><p>" + (isWecomAdded() ? "\u5E73\u53F0\u987E\u95EE\u4F1A\u7EE7\u7EED\u5904\u7406\u62C9\u7FA4\uFF0C\u65E0\u9700\u5728\u5C0F\u7A0B\u5E8F\u5185\u7B49\u5F85\u3002" : "\u5C0F\u7A0B\u5E8F\u4E0D\u63D0\u4F9B\u53CC\u65B9\u5B9E\u65F6\u804A\u5929\u6216\u8054\u7CFB\u65B9\u5F0F\u4EA4\u6362\uFF0C\u6DFB\u52A0\u540E\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u62C9\u7FA4\u3002") + '</p></div><button class="btn btn-primary" id="p12AddWecom" type="button">' + (isWecomAdded() ? "\u901A\u77E5\u987E\u95EE\u62C9\u7FA4" : "\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801") + "</button></section>" : connecting ? '<section class="p12-connected-note working"><strong>\u5E73\u53F0\u6B63\u5728\u5904\u7406</strong><p>\u65E0\u9700\u505C\u7559\u7B49\u5F85\u3002\u5EFA\u8054\u5B8C\u6210\u540E\u4F1A\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u77ED\u4FE1\u548C\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u4F60\u3002</p></section>' : '<section class="p12-connected-note"><strong>\u5EFA\u8054\u5DF2\u5B8C\u6210</strong><p>\u672C\u8F6E\u5339\u914D\u4ECD\u4F1A\u7EE7\u7EED\u3002\u65B0\u7684\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C\u548C\u5EFA\u8054\u7533\u8BF7\u4F1A\u5355\u72EC\u901A\u77E5\u4F60\u3002</p></section>') + (connecting || connected ? '<div class="p12-connect-actions"><button class="btn btn-outline" id="p12BackResults" type="button">\u67E5\u770B\u5176\u4ED6\u6295\u8D44\u4EBA</button><button class="btn btn-primary" id="p12BackProgress" type="button">\u8FD4\u56DE\u878D\u8D44\u8FDB\u5EA6</button></div>' : "") + "</div>";
+    const description = connected ? "\u4F60\u548C\u6295\u8D44\u4EBA\u5DF2\u5B8C\u6210\u5EFA\u8054\u3002\u540E\u7EED\u9879\u76EE\u4EA4\u6D41\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\uFF0C\u5C0F\u7A0B\u5E8F\u4FDD\u7559\u5173\u952E\u8FDB\u5C55\u548C\u8D44\u6599\u8BBF\u95EE\u8BB0\u5F55\u3002" : connecting ? "\u5E73\u53F0\u987E\u95EE\u5DF2\u6536\u5230\u53CC\u65B9\u786E\u8BA4\uFF0C\u6B63\u5728\u9080\u8BF7\u4F60\u548C\u6295\u8D44\u4EBA\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002" : "\u53CC\u65B9\u5DF2\u7ECF\u786E\u8BA4\u5BF9\u63A5\u3002\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u540E\uFF0C\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u6295\u8D44\u4EBA\u8FDB\u5165\u540C\u4E00\u4E2A\u7FA4\u3002";
+    return '<div class="p12-page">' + header("\u6295\u8D44\u4EBA\u5EFA\u8054") + '<section class="p12-connect-hero ' + (connected ? "completed" : "") + '"><span>' + icon(connected ? "check-circle" : "message", 28) + "</span><h1>" + title + "</h1><p>" + description + '</p></section><section class="p12-connect-person"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><strong>" + investor.name + "</strong><small>" + investor.role + "</small></div><b>" + (connected ? "\u5DF2\u5EFA\u8054" : connecting ? "\u5EFA\u8054\u4E2D" : "\u5DF2\u786E\u8BA4") + '</b></section><section class="p12-connect-steps"><h2>\u5EFA\u8054\u8FDB\u5EA6</h2><div class="p12-timeline"><div class="done"><span>' + icon("check", 13) + "</span><div><strong>" + (entrepreneurInitiated ? "\u4F60\u5DF2\u7533\u8BF7\u5BF9\u63A5" : "\u6295\u8D44\u4EBA\u53D1\u8D77\u5EFA\u8054\u7533\u8BF7") + "</strong><small>" + (record.requestedAt || investor.requestAt) + '</small></div></div><div class="done"><span>' + icon("check", 13) + "</span><div><strong>" + (entrepreneurInitiated ? "\u6295\u8D44\u4EBA\u5DF2\u540C\u610F\u5BF9\u63A5" : "\u4F60\u5DF2\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054") + "</strong><small>" + (record.confirmedAt || "\u672C\u6B21\u786E\u8BA4\u5DF2\u7559\u75D5") + '</small></div></div><div class="' + (added ? "done" : "active") + '"><span>' + (added ? icon("check", 13) : "") + "</span><div><strong>" + (added ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + '</strong><small>\u540E\u7EED\u7531\u5E73\u53F0\u987E\u95EE\u521B\u5EFA\u4F01\u4E1A\u5FAE\u4FE1\u7FA4</small></div></div><div class="' + (connected ? "done" : connecting ? "active" : "") + '"><span>' + (connected ? icon("check", 13) : "") + "</span><div><strong>" + (connected ? "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB" : connecting ? "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4" : "\u7B49\u5F85\u5E73\u53F0\u987E\u95EE\u62C9\u7FA4") + "</strong><small>" + (connected ? record.groupCreatedAt || "09-03 14:40" : "\u7FA4\u5185\u7EE7\u7EED\u4EA4\u6D41\u9879\u76EE\u548C\u878D\u8D44\u5B89\u6392") + "</small></div></div></div></section>" + (record.status === "confirmed" ? '<section class="p12-wecom-next">' + icon("message", 20) + "<div><strong>" + (isWecomAdded() ? "\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4E0B\u4E00\u6B65\uFF1A\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + "</strong><p>" + (isWecomAdded() ? "\u5E73\u53F0\u987E\u95EE\u4F1A\u7EE7\u7EED\u5904\u7406\u62C9\u7FA4\uFF0C\u65E0\u9700\u5728\u5C0F\u7A0B\u5E8F\u5185\u7B49\u5F85\u3002" : "\u5C0F\u7A0B\u5E8F\u4E0D\u63D0\u4F9B\u53CC\u65B9\u5B9E\u65F6\u804A\u5929\u6216\u8054\u7CFB\u65B9\u5F0F\u4EA4\u6362\uFF0C\u6DFB\u52A0\u540E\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u62C9\u7FA4\u3002") + '</p></div><button class="btn btn-primary" id="p12AddWecom" type="button">' + (isWecomAdded() ? "\u901A\u77E5\u987E\u95EE\u62C9\u7FA4" : "\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801") + "</button></section>" : connecting ? '<section class="p12-connected-note working"><strong>\u5E73\u53F0\u6B63\u5728\u5904\u7406</strong><p>\u65E0\u9700\u505C\u7559\u7B49\u5F85\u3002\u5EFA\u8054\u5B8C\u6210\u540E\u4F1A\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u77ED\u4FE1\u548C\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u4F60\u3002</p></section>' : '<section class="p12-connected-note"><strong>\u5EFA\u8054\u5DF2\u5B8C\u6210</strong><p>\u672C\u8F6E\u5339\u914D\u4ECD\u4F1A\u7EE7\u7EED\u3002\u65B0\u7684\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C\u548C\u5EFA\u8054\u7533\u8BF7\u4F1A\u5355\u72EC\u901A\u77E5\u4F60\u3002</p></section>') + (connecting || connected ? '<div class="p12-connect-actions"><button class="btn btn-outline" id="p12BackResults" type="button">\u67E5\u770B\u5176\u4ED6\u6295\u8D44\u4EBA</button><button class="btn btn-primary" id="p12BackProgress" type="button">\u8FD4\u56DE\u878D\u8D44\u8FDB\u5EA6</button></div>' : "") + "</div>";
   }
   function accessLogSheet() {
     return '<div class="p12-log-list"><div><strong>\u6700\u65B0\u7248 BP \u6388\u6743\u751F\u6548</strong><small>09-03 10:20 \xB7 \u672C\u8F6E\u878D\u8D44\u5339\u914D</small></div><div><strong>\u738B\u5148\u751F\u7533\u8BF7\u5EFA\u8054</strong><small>09-03 13:36 \xB7 \u7B49\u5F85\u521B\u4E1A\u8005\u5904\u7406</small></div><div><strong>\u9648\u5973\u58EB\u8FDB\u5165\u5EFA\u8054\u5904\u7406</strong><small>09-03 12:28 \xB7 \u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4</small></div><div><strong>\u5218\u5148\u751F\u5DF2\u5B8C\u6210\u5EFA\u8054</strong><small>09-03 09:18 \xB7 \u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB</small></div><div><strong>\u5468\u5973\u58EB\u64A4\u56DE\u5EFA\u8054\u7533\u8BF7</strong><small>09-02 18:30 \xB7 \u53CC\u65B9\u7AEF\u540C\u6B65\u7ED3\u675F</small></div><div><strong>\u8D75\u5148\u751F\u5EFA\u8054\u7533\u8BF7\u8D85\u65F6</strong><small>09-02 10:15 \xB7 \u8D85\u8FC7 72 \u5C0F\u65F6\u81EA\u52A8\u5173\u95ED</small></div></div>';
@@ -7495,6 +7554,34 @@
       updateInvestorConnection(investorId, { status: "connected", groupCreatedAt: "09-03 14:40" });
       refreshActivePage();
     }, 1400);
+  }
+  function openInvestorDetails(investor) {
+    const record = getInvestorConnection(investor.id);
+    if (opensConnection(record)) {
+      updateFundraisingState({ connectionInvestorId: investor.id });
+      navigateTo("p12", { stage: "connection" });
+      return;
+    }
+    const overlay = showSheet({ title: "\u6295\u8D44\u4EBA\u8BE6\u60C5", body: investorSheet(investor, getFundraisingState()) });
+    const request = overlay.querySelector("#p12RequestInvestor");
+    if (request) request.addEventListener("click", () => {
+      overlay.remove();
+      requestInvestorConnection(investor);
+    });
+    const connect = overlay.querySelector("#p12Connect");
+    if (connect) connect.addEventListener("click", () => {
+      overlay.remove();
+      updateInvestorConnection(investor.id, { status: "confirmed", confirmedAt: "09-03 13:52" });
+      updateFundraisingState({ connectionInvestorId: investor.id });
+      navigateTo("p12", { stage: "connection" });
+    });
+    const decline = overlay.querySelector("#p12Decline");
+    if (decline) decline.addEventListener("click", () => {
+      overlay.remove();
+      updateInvestorConnection(investor.id, { status: "declined", resolvedAt: "09-03 14:10" });
+      refreshActivePage();
+      toast("\u5DF2\u540C\u6B65\u7ED9\u6295\u8D44\u4EBA\uFF1A\u672C\u8F6E\u6682\u4E0D\u5EFA\u8054");
+    });
   }
   var page12 = {
     render(params) {
@@ -7514,6 +7601,15 @@
       document.getElementById("p12Back").addEventListener("click", goBackToPrevious);
       const state2 = getFundraisingState();
       const stage = params.stage || (state2.status === "idle" ? "intro" : "progress");
+      if (state2.connectionNoticeInvestorId && ["progress", "results"].includes(stage)) {
+        setTimeout(() => {
+          const current = getFundraisingState();
+          const investor = investors.find((item) => item.id === current.connectionNoticeInvestorId);
+          if (!investor || document.getElementById("page-container")?.getAttribute("data-page") !== "p12") return;
+          updateFundraisingState({ connectionNoticeInvestorId: "" });
+          showMutualConnectionNotice(investor);
+        }, 80);
+      }
       if (stage === "intro") {
         document.getElementById("p12UseBp").addEventListener("click", () => navigateTo("p12", { stage: "confirm" }));
         document.getElementById("p12Upload").addEventListener("click", () => {
@@ -7550,6 +7646,7 @@
         }, 1500);
       } else if (stage === "progress") {
         if (state2.status === "waiting" && !state2.paused) scheduleDemoMatchResult();
+        if (getConnectionCounts().entrepreneur_requested) scheduleDemoInvestorConfirmation();
         if (state2.resultNoticePending) {
           setTimeout(() => {
             const current = getFundraisingState();
@@ -7578,30 +7675,23 @@
           goBackToPrevious();
         } }));
       } else if (stage === "results") {
+        scheduleDemoInvestorConfirmation();
         document.querySelectorAll("[data-investor-id]").forEach((button) => {
           button.addEventListener("click", function() {
             const investor = investors.find((item) => item.id === this.getAttribute("data-investor-id"));
-            const record = getInvestorConnection(investor.id);
-            if (opensConnection(record)) {
-              updateFundraisingState({ connectionInvestorId: investor.id });
-              navigateTo("p12", { stage: "connection" });
-              return;
-            }
-            const overlay = showSheet({ title: "\u6295\u8D44\u4EBA\u8BE6\u60C5", body: investorSheet(investor, getFundraisingState()) });
-            const connect = overlay.querySelector("#p12Connect");
-            if (connect) connect.addEventListener("click", () => {
-              overlay.remove();
-              updateInvestorConnection(investor.id, { status: "confirmed", confirmedAt: "09-03 13:52" });
-              updateFundraisingState({ connectionInvestorId: investor.id });
-              navigateTo("p12", { stage: "connection" });
-            });
-            const decline = overlay.querySelector("#p12Decline");
-            if (decline) decline.addEventListener("click", () => {
-              overlay.remove();
-              updateInvestorConnection(investor.id, { status: "declined", resolvedAt: "09-03 14:10" });
-              refreshActivePage();
-              toast("\u5DF2\u540C\u6B65\u7ED9\u6295\u8D44\u4EBA\uFF1A\u672C\u8F6E\u6682\u4E0D\u5EFA\u8054");
-            });
+            openInvestorDetails(investor);
+          });
+        });
+        document.querySelectorAll("[data-investor-detail]").forEach((button) => {
+          button.addEventListener("click", function() {
+            const investor = investors.find((item) => item.id === this.getAttribute("data-investor-detail"));
+            openInvestorDetails(investor);
+          });
+        });
+        document.querySelectorAll("[data-investor-request]").forEach((button) => {
+          button.addEventListener("click", function() {
+            const investor = investors.find((item) => item.id === this.getAttribute("data-investor-request"));
+            requestInvestorConnection(investor);
           });
         });
         document.getElementById("p12ChangeBatch").addEventListener("click", () => {
