@@ -4570,7 +4570,7 @@
       html += "<span><small>" + escapeHTML(item[0]) + "</small><strong>" + escapeHTML(item[1]) + "</strong></span>";
     });
     html += "</div>";
-    html += '<div class="p5-matching-progress"><span style="width:' + (activeStep + 1) / steps.length * 100 + '%"></span></div>';
+    html += '<div class="p5-matching-progress"><span style="transform:scaleX(' + (activeStep + 1) / steps.length + ')"></span></div>';
     html += '<ol class="p5-matching-steps">';
     steps.forEach((label, index) => {
       const state2 = index < activeStep ? " is-done" : index === activeStep ? " is-active" : "";
@@ -4583,7 +4583,7 @@
   }
   function updateMatchingProgress(activeStep) {
     const progress2 = document.querySelector(".p5-matching-progress span");
-    if (progress2) progress2.style.width = (activeStep + 1) / steps.length * 100 + "%";
+    if (progress2) progress2.style.transform = "scaleX(" + (activeStep + 1) / steps.length + ")";
     document.querySelectorAll("[data-matching-step]").forEach((item) => {
       const index = Number(item.getAttribute("data-matching-step"));
       item.classList.toggle("is-done", index < activeStep);
@@ -4665,16 +4665,25 @@
     const meta = demand.responseClosed ? accepted > 0 ? "\u53EF\u4EE5\u67E5\u770B\u5DF2\u54CD\u5E94\u56E2\u961F\u5E76\u8865\u5145\u57FA\u7840\u4FE1\u606F" : "\u672C\u8F6E\u6682\u65E0\u56E2\u961F\u627F\u63A5\uFF0C\u53EF\u91CD\u65B0\u53D1\u5E03\u6216\u8C03\u6574\u9700\u6C42" : accepted > 0 ? "\u53EF\u4EE5\u5148\u67E5\u770B\u56E2\u961F\u56DE\u590D\uFF0C\u5176\u4ED6\u56E2\u961F\u4ECD\u5728\u54CD\u5E94\u4E2D" : "\u672C\u8F6E\u5C06\u5728" + demand.responseDeadline + "\u622A\u6B62\uFF0C\u65E0\u9700\u505C\u7559\u5728\u5F53\u524D\u9875\u9762";
     return '<div class="p5-success-response-head"><strong>' + title + "</strong><span>" + accepted + "/" + total + ' \u5BB6</span></div><div class="p5-success-response-meta">' + meta + "</div>";
   }
+  function renderSuccessNext(demand) {
+    const accepted = (demand.accepted || []).length;
+    const responseComplete = Boolean(demand.responseClosed);
+    let html = "<h2>\u63A5\u4E0B\u6765</h2><ol>";
+    html += '<li class="' + (responseComplete || accepted ? "done" : "active") + '"><span>' + icon(responseComplete || accepted ? "check" : "clock", 14) + "</span><div><strong>\u7B49\u5F85\u56E2\u961F\u54CD\u5E94</strong><small>\u5E73\u53F0\u6301\u7EED\u6C47\u603B\u672C\u8F6E\u56E2\u961F\u53CD\u9988</small></div></li>";
+    html += '<li class="' + (accepted ? "active" : "") + '"><span>' + icon(accepted ? "message" : "file-text", 14) + "</span><div><strong>\u5E73\u53F0\u52A9\u624B\u786E\u8BA4\u57FA\u7840\u4FE1\u606F</strong><small>\u65B9\u6848\u548C\u62A5\u4EF7\u4EE5\u5361\u7247\u5F62\u5F0F\u63A8\u9001\uFF0C\u4E0D\u5F00\u653E\u771F\u4EBA\u5B9E\u65F6\u804A\u5929</small></div></li>";
+    html += "<li><span>" + icon("users", 14) + "</span><div><strong>\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4\u6DF1\u5165\u6C9F\u901A</strong><small>\u9700\u8981\u4E13\u4E1A\u4EA4\u6D41\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u5EFA\u8054</small></div></li>";
+    return html + "</ol>";
+  }
   function renderSuccessView(demand) {
     let html = '<div class="p5-success">';
-    html += '<header class="p5-success-hero"><span class="p5-success-check">' + icon("check-circle", 30) + '</span><span><div class="p5-success-title">\u9700\u6C42\u5DF2\u53D1\u5E03</div><div class="p5-success-desc">\u56E2\u961F\u54CD\u5E94\u540E\u53EF\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u8865\u5145\u57FA\u7840\u4FE1\u606F\uFF0C\u6DF1\u5165\u4EA4\u6D41\u7531\u5E73\u53F0\u987E\u95EE\u5728\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4\u3002</div></span></header>';
-    html += '<div class="p5-success-response" id="p5SuccessResponse">' + renderSuccessResponseSummary(demand) + "</div>";
-    html += '<button class="p5-wecom-card" id="p5WecomCard">' + renderWecomCard() + "</button>";
-    html += '<div class="p5-success-actions">';
-    html += '<button class="btn btn-primary" id="p5SuccessPrimary" style="flex:1">\u67E5\u770B\u9700\u6C42\u8FDB\u5EA6</button>';
-    html += '<button class="btn btn-outline" id="p5SuccessHome" style="flex:1">\u8FD4\u56DE\u751F\u6001\u9996\u9875</button>';
-    html += "</div>";
-    html += '<details class="p5-progress-details"><summary>\u67E5\u770B\u5B8C\u6574\u8FDB\u5EA6 ' + icon("chevron-right", 15) + '</summary><div class="p5-timeline-card">' + renderDemandTimeline(demand) + "</div></details>";
+    html += '<header class="p5-success-hero"><span class="p5-success-check">' + icon("check-circle", 34) + '</span><div><div class="p5-success-title">\u9700\u6C42\u5DF2\u53D1\u5E03</div><div class="p5-success-desc">\u4F60\u53EF\u4EE5\u5148\u79BB\u5F00\uFF0C\u6709\u56E2\u961F\u54CD\u5E94\u6216\u670D\u52A1\u8FDB\u5C55\u65F6\u6211\u4EEC\u4F1A\u4E3B\u52A8\u901A\u77E5\u3002</div></div></header>';
+    html += '<main class="p5-success-main"><section class="p5-success-response" id="p5SuccessResponse">' + renderSuccessResponseSummary(demand) + "</section>";
+    html += '<section class="p5-success-next" id="p5SuccessNext">' + renderSuccessNext(demand) + "</section>";
+    html += '<button class="p5-wecom-card" id="p5WecomCard">' + renderWecomCard() + "</button></main>";
+    html += '<footer class="p5-success-footer"><div class="p5-success-actions">';
+    html += '<button class="btn btn-primary btn-block" id="p5SuccessPrimary">\u67E5\u770B\u9700\u6C42\u8FDB\u5EA6</button>';
+    html += '<button class="p5-success-home" id="p5SuccessHome">\u8FD4\u56DE\u751F\u6001\u9996\u9875</button>';
+    html += '</div><details class="p5-progress-details"><summary>\u67E5\u770B\u5B8C\u6574\u8FDB\u5EA6 ' + icon("chevron-right", 15) + '</summary><div class="p5-timeline-card">' + renderDemandTimeline(demand) + "</div></details></footer>";
     html += "</div>";
     return html;
   }
@@ -5206,6 +5215,8 @@
         if (timelineCard) timelineCard.innerHTML = renderDemandTimeline(demand);
         const responseCard = document.getElementById("p5SuccessResponse");
         if (responseCard) responseCard.innerHTML = this.renderSuccessResponseSummary(demand);
+        const nextSteps = document.getElementById("p5SuccessNext");
+        if (nextSteps) nextSteps.innerHTML = renderSuccessNext(demand);
         this.refreshSuccessPrimary(demand);
         updateBadge();
       }, domainOptions2());
@@ -6343,8 +6354,8 @@
     const state2 = {
       customer_action: ["\u5F85\u4F60\u7B7E\u7F72", "\u8865\u5145\u4FE1\u606F\u3001\u7528\u5370\u5E76\u4E0A\u4F20"],
       provider_signing: ["\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370", "\u5BA2\u6237\u534F\u8BAE\u5DF2\u4E0A\u4F20"],
-      auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E2D", "\u53CC\u65B9\u5DF2\u5B8C\u6210\u7528\u5370"],
-      approved: ["\u5BA1\u6838\u901A\u8FC7", "\u670D\u52A1\u5DF2\u5F00\u59CB"]
+      auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E2D", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u8FD4\u56DE\uFF0C\u53EF\u67E5\u770B\u6587\u4EF6"],
+      approved: ["\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u670D\u52A1\u5DF2\u5F00\u59CB"]
     }[agreement.status] || ["\u534F\u8BAE\u5904\u7406\u4E2D", "\u67E5\u770B\u6700\u65B0\u72B6\u6001"];
     return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-agreement-message' + (agreement.status === "approved" ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("shield", 17) + "</span><div><strong>\u670D\u52A1\u534F\u8BAE</strong><small>" + escapeHTML(agreement.id) + '</small></div><span class="p7-structured-status">' + state2[0] + '</span></div><div class="p7-agreement-parties"><span><small>\u5BA2\u6237</small><strong>' + escapeHTML(agreement.customer) + "</strong></span><span><small>\u670D\u52A1\u65B9</small><strong>" + escapeHTML(agreement.provider) + "</strong></span></div><p>" + state2[1] + '</p><button class="btn ' + (agreement.status === "customer_action" ? "btn-primary" : "btn-outline") + ' btn-block" data-agreement-open type="button">' + (agreement.status === "customer_action" ? "\u586B\u5199\u5E76\u4E0A\u4F20\u534F\u8BAE" : "\u67E5\u770B\u534F\u8BAE\u8FDB\u5EA6") + "</button></article></div>";
   }
@@ -6636,11 +6647,14 @@
         approved: ["\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u670D\u52A1\u56E2\u961F\u5DF2\u7ECF\u5F00\u59CB\u4EA4\u4ED8\u3002"]
       }[agreement.status];
       let body = '<div class="p7-agreement-detail"><div class="p7-agreement-state"><span>' + icon("shield", 22) + "</span><div><strong>" + stateCopy[0] + "</strong><p>" + stateCopy[1] + "</p></div></div><dl><div><dt>\u534F\u8BAE\u540D\u79F0</dt><dd>" + escapeHTML(agreement.title) + "</dd></div><div><dt>\u5BA2\u6237</dt><dd>" + escapeHTML(agreement.customer) + "</dd></div><div><dt>\u670D\u52A1\u65B9</dt><dd>" + escapeHTML(agreement.provider) + "</dd></div><div><dt>\u670D\u52A1\u9879\u76EE</dt><dd>" + escapeHTML(agreement.service) + "</dd></div><div><dt>\u534F\u8BAE\u91D1\u989D</dt><dd>" + escapeHTML(agreement.amount) + '</dd></div></dl><button class="p7-template-file" id="p7AgreementTemplate" type="button">' + icon("file-text", 17) + "<span><strong>" + escapeHTML(agreement.template) + "</strong><small>\u670D\u52A1\u5546\u63D0\u4F9B\u7684\u6807\u51C6\u534F\u8BAE\u6A21\u677F</small></span>\u67E5\u770B</button>";
+      if (agreement.providerFile) body += '<button class="p7-template-file p7-returned-agreement" id="p7ReturnedAgreement" type="button">' + icon("check-circle", 17) + "<span><strong>" + escapeHTML(agreement.providerFile) + "</strong><small>\u53CC\u65B9\u5DF2\u7528\u5370 \xB7 \u670D\u52A1\u5546\u4E8E " + escapeHTML(agreement.providerUploadedAt || "\u521A\u521A") + " \u56DE\u4F20</small></span>\u67E5\u770B</button>";
       if (agreement.status === "customer_action") body += '<label class="p7-agreement-upload">' + icon("file-text", 18) + '<span id="p7AgreementUploadName">\u9009\u62E9\u5DF2\u7528\u5370\u7684\u534F\u8BAE\u626B\u63CF\u4EF6</span><input id="p7AgreementInput" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p7AgreementSubmit" type="button">\u4E0A\u4F20\u5E76\u63D0\u4EA4\u7ED9\u670D\u52A1\u5546</button>';
       else body += '<div class="p7-agreement-progress"><span class="done">\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370</span><span class="' + (["provider_signing", "auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u670D\u52A1\u5546\u7528\u5370</span><span class="' + (["auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u5E73\u53F0\u5BA1\u6838</span><span class="' + (agreement.status === "approved" ? "done" : "") + '">\u5F00\u59CB\u4EA4\u4ED8</span></div>';
       body += "</div>";
       const overlay = showSheet({ title: "\u670D\u52A1\u534F\u8BAE", body });
       overlay.querySelector("#p7AgreementTemplate").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u534F\u8BAE\u6A21\u677F\u9884\u89C8"));
+      const returnedAgreement = overlay.querySelector("#p7ReturnedAgreement");
+      if (returnedAgreement) returnedAgreement.addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u53CC\u65B9\u7528\u5370\u534F\u8BAE"));
       const input = overlay.querySelector("#p7AgreementInput");
       if (input) input.addEventListener("change", function() {
         overlay.querySelector("#p7AgreementUploadName").textContent = this.files.length ? this.files[0].name : "\u9009\u62E9\u5DF2\u7528\u5370\u7684\u534F\u8BAE\u626B\u63CF\u4EF6";
@@ -6655,7 +6669,42 @@
         closeAllModals();
         this.refreshPage();
         toast("\u534F\u8BAE\u5DF2\u4E0A\u4F20\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370");
+        this.simulateAgreementProgress(demand.id);
       });
+    },
+    simulateAgreementProgress(demandId) {
+      setTimeout(() => {
+        const demand = getDemand(demandId, store.demands);
+        if (!demand || demand.agreement?.status !== "provider_signing") return;
+        changed2(setAgreementStatus(demand, "auditing", domainOptions5()));
+        const visible = document.getElementById("page-container")?.getAttribute("data-page") === "p7" && this.state.demand?.id === demandId;
+        if (visible) {
+          this.refreshPage();
+          const overlay = showSheet({
+            title: "\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370",
+            body: '<div class="p7-agreement-returned"><span>' + icon("check-circle", 28) + '</span><strong>\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u8FD4\u56DE</strong><p>\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370\u5E76\u4E0A\u4F20\u534F\u8BAE\uFF0C\u5E73\u53F0\u6B63\u5728\u6838\u5BF9\u7B7E\u7EA6\u4E3B\u4F53\u3001\u91D1\u989D\u548C\u670D\u52A1\u8303\u56F4\u3002</p><button class="p7-template-file" id="p7ReturnedPreview" type="button">' + icon("file-text", 17) + "<span><strong>" + escapeHTML(demand.agreement.providerFile) + '</strong><small>\u53CC\u65B9\u5DF2\u7528\u5370 \xB7 \u5E73\u53F0\u5BA1\u6838\u4E2D</small></span>\u67E5\u770B</button><button class="btn btn-primary btn-block" id="p7ReturnedDone" type="button">\u77E5\u9053\u4E86</button></div>'
+          });
+          overlay.querySelector("#p7ReturnedPreview").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u53CC\u65B9\u7528\u5370\u534F\u8BAE"));
+          overlay.querySelector("#p7ReturnedDone").addEventListener("click", () => overlay.remove());
+        }
+        setTimeout(() => {
+          const current = getDemand(demandId, store.demands);
+          if (!current || current.agreement?.status !== "auditing") return;
+          changed2(setAgreementStatus(current, "approved", domainOptions5()));
+          const stillVisible = document.getElementById("page-container")?.getAttribute("data-page") === "p7" && this.state.demand?.id === demandId;
+          if (!stillVisible) return;
+          closeAllModals();
+          this.refreshPage();
+          const approved = showSheet({
+            title: "\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7",
+            body: '<div class="p7-agreement-returned approved"><span>' + icon("shield", 28) + '</span><strong>\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863</strong><p>\u534F\u8BAE\u5DF2\u901A\u8FC7\u5E73\u53F0\u8981\u7D20\u5BA1\u6838\uFF0C\u670D\u52A1\u56E2\u961F\u53EF\u4EE5\u6309\u7EA6\u5F00\u59CB\u4EA4\u4ED8\u3002</p><button class="btn btn-primary btn-block" id="p7AgreementProgress" type="button">\u67E5\u770B\u670D\u52A1\u8FDB\u5EA6</button></div>'
+          });
+          approved.querySelector("#p7AgreementProgress").addEventListener("click", () => {
+            approved.remove();
+            navigateTo("p6", { demandId, tab: "progress" });
+          });
+        }, 2800);
+      }, 1400);
     },
     openChangeOrderSheet() {
       const body = '<div class="p7-revision-sheet"><p>\u628A\u9700\u8981\u589E\u52A0\u7684\u670D\u52A1\u5185\u5BB9\u544A\u8BC9\u5E73\u53F0\u52A9\u624B\u3002\u670D\u52A1\u56E2\u961F\u8BC4\u4F30\u540E\uFF0C\u4F1A\u5728\u5C0F\u7A0B\u5E8F\u4E2D\u63A8\u9001\u589E\u9879\u5361\u7247\u3002</p><textarea id="p7ChangeNote" maxlength="200" placeholder="\u8BF4\u660E\u65B0\u589E\u9700\u6C42"></textarea><button class="btn btn-primary btn-block" id="p7SubmitChange">\u63D0\u4EA4\u7ED9\u5E73\u53F0\u52A9\u624B</button></div>';
@@ -7910,7 +7959,7 @@
   }
   function getJourney(params) {
     const key = stateKey(params);
-    if (!journeys.has(key)) journeys.set(key, { stage: "intake", intake: "", firstPaid: false, secondPaid: false });
+    if (!journeys.has(key)) journeys.set(key, { stage: "intake", intake: "", agreementStatus: "customer_action", customerAgreementFile: "", providerProgressScheduled: false, firstPaid: false, secondPaid: false });
     return journeys.get(key);
   }
   function stepIndex(stage) {
@@ -7939,8 +7988,20 @@
   function proposalView(config) {
     return '<section class="p13-stage-head"><span>' + icon("file-text", 24) + '</span><div><h1>\u670D\u52A1\u65B9\u6848\u4E0E\u5206\u9636\u6BB5\u62A5\u4EF7</h1><p>\u670D\u52A1\u8303\u56F4\u548C\u4ED8\u6B3E\u8282\u70B9\u5DF2\u7ECF\u56E2\u961F\u586B\u5199\u5E76\u7ECF\u5E73\u53F0\u5BA1\u6838\u3002</p></div></section><section class="p13-panel p13-proposal"><div class="p13-proposal-top"><div><small>\u670D\u52A1\u603B\u4EF7</small><strong>' + config.total + "</strong></div><span>\u5F85\u4F60\u786E\u8BA4</span></div><dl><div><dt>\u9884\u8BA1\u5468\u671F</dt><dd>" + escapeHTML(config.period) + '</dd></div><div><dt>\u5B98\u65B9\u53CA\u7B2C\u4E09\u65B9\u8D39\u7528</dt><dd>\u672A\u5305\u542B\uFF0C\u53D1\u751F\u65F6\u53E6\u884C\u5217\u793A</dd></div></dl><div class="p13-payment-plan"><article><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>' + config.firstAmount + "</strong><small>\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8\uFF0C\u786E\u8BA4\u5230\u8D26\u540E\u5F00\u59CB\u670D\u52A1</small></article><article><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>" + config.secondAmount + "</strong><small>" + escapeHTML(config.secondTrigger) + "</small></article></div><h3>\u4E24\u9636\u6BB5\u4EA4\u4ED8</h3>" + renderList(config.firstWork.concat(config.secondWork)) + '</section><section class="p13-risk"><span>' + icon("alert", 18) + '</span><div><strong>\u529E\u7406\u7ED3\u679C\u5B58\u5728\u4E0D\u786E\u5B9A\u6027</strong><p>\u670D\u52A1\u8D39\u6309\u7EA6\u5B9A\u9636\u6BB5\u5DE5\u4F5C\u6536\u53D6\uFF0C\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u7ED3\u679C\u4E0D\u7531\u5E73\u53F0\u548C\u670D\u52A1\u56E2\u961F\u4FDD\u8BC1\u3002\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF1B\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section><label class="p13-consent"><input id="p13RiskConsent" type="checkbox"><span>\u6211\u5DF2\u7406\u89E3\u5206\u9636\u6BB5\u4ED8\u6B3E\u3001\u7ED3\u679C\u4E0D\u627F\u8BFA\u53CA\u9000\u6B3E\u89C4\u5219</span></label><div class="p13-page-action"><button class="btn btn-primary btn-block" id="p13ConfirmProposal" type="button" disabled>\u786E\u8BA4\u65B9\u6848\u5E76\u7B7E\u7F72\u534F\u8BAE</button></div>';
   }
-  function contractView(config) {
-    return '<section class="p13-stage-head"><span>' + icon("shield", 24) + '</span><div><h1>\u7B7E\u7F72\u670D\u52A1\u534F\u8BAE</h1><p>\u534F\u8BAE\u4F1A\u5199\u660E\u4E24\u7B14\u670D\u52A1\u6B3E\u3001\u5BF9\u5E94\u6210\u679C\u3001\u6682\u505C\u6761\u4EF6\u53CA\u9000\u6B3E\u89C4\u5219\u3002</p></div></section><section class="p13-panel"><button class="p13-file-row" id="p13AgreementPreview" type="button">' + icon("file-text", 20) + "<span><strong>" + escapeHTML(config.sku) + '\u5206\u9636\u6BB5\u670D\u52A1\u534F\u8BAE.pdf</strong><small>\u670D\u52A1\u5546\u63D0\u4F9B \xB7 \u5E73\u53F0\u5DF2\u5B8C\u6210\u8981\u7D20\u5BA1\u6838</small></span><b>\u67E5\u770B</b></button><div class="p13-contract-steps"><span class="active">\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370</span><span>\u670D\u52A1\u5546\u7528\u5370</span><span>\u5E73\u53F0\u5BA1\u6838</span><span>\u534F\u8BAE\u751F\u6548</span></div><label class="p13-upload">' + icon("upload", 18) + '<span id="p13AgreementFileName">\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6</span><input id="p13AgreementFile" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p13SubmitAgreement" type="button">\u63D0\u4EA4\u534F\u8BAE\u5E76\u7B49\u5F85\u5BA1\u6838</button></section>';
+  function contractView(config, journey) {
+    const status = journey.agreementStatus || "customer_action";
+    const activeStep = { customer_action: 0, provider_signing: 1, auditing: 2, approved: 4 }[status];
+    const stepLabels = ["\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370", "\u670D\u52A1\u5546\u7528\u5370", "\u5E73\u53F0\u5BA1\u6838", "\u534F\u8BAE\u751F\u6548"];
+    const steps3 = stepLabels.map((label, index) => '<span class="' + (index < activeStep ? "done" : index === activeStep ? "active" : "") + '">' + label + "</span>").join("");
+    let action = "";
+    if (status === "customer_action") {
+      action = '<label class="p13-upload">' + icon("upload", 18) + '<span id="p13AgreementFileName">\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6</span><input id="p13AgreementFile" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p13SubmitAgreement" type="button">\u4E0A\u4F20\u5E76\u63D0\u4EA4\u7ED9\u670D\u52A1\u5546</button>';
+    } else if (status === "provider_signing") {
+      action = '<div class="p13-contract-state waiting"><span>' + icon("clock", 22) + "</span><div><strong>\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370</strong><p>\u4F60\u7684\u7528\u5370\u6587\u4EF6\u5DF2\u4E8E\u521A\u521A\u540C\u6B65\u7ED9\u670D\u52A1\u5546\u3002\u670D\u52A1\u5546\u56DE\u4F20\u540E\u4F1A\u81EA\u52A8\u63A8\u9001\u5230\u8FD9\u91CC\u3002</p></div></div>";
+    } else {
+      action = '<div class="p13-contract-state ' + (status === "approved" ? "approved" : "") + '"><span>' + icon(status === "approved" ? "check-circle" : "shield", 22) + "</span><div><strong>" + (status === "approved" ? "\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7" : "\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370") + "</strong><p>" + (status === "approved" ? "\u53CC\u65B9\u534F\u8BAE\u5DF2\u7ECF\u5F52\u6863\uFF0C\u53EF\u4EE5\u8FDB\u5165\u7B2C\u4E00\u9636\u6BB5\u4ED8\u6B3E\u3002" : "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u8FD4\u56DE\uFF0C\u5E73\u53F0\u6B63\u5728\u6838\u5BF9\u7B7E\u7EA6\u4E3B\u4F53\u3001\u91D1\u989D\u548C\u670D\u52A1\u8303\u56F4\u3002") + '</p></div></div><button class="p13-file-row p13-returned-file" id="p13ReturnedAgreement" type="button">' + icon("file-text", 19) + "<span><strong>\u53CC\u65B9\u7528\u5370\u670D\u52A1\u534F\u8BAE.pdf</strong><small>\u670D\u52A1\u5546\u56DE\u4F20 \xB7 " + (status === "approved" ? "\u5E73\u53F0\u5BA1\u6838\u901A\u8FC7" : "\u5E73\u53F0\u5BA1\u6838\u4E2D") + '</small></span><b>\u67E5\u770B</b></button><button class="btn btn-primary btn-block" id="' + (status === "approved" ? "p13ToFirstPayment" : "p13AuditResult") + '" type="button">' + (status === "approved" ? "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E" : "\u5728 Demo \u4E2D\u67E5\u770B\u5BA1\u6838\u7ED3\u679C") + "</button>";
+    }
+    return '<section class="p13-stage-head"><span>' + icon("shield", 24) + '</span><div><h1>\u7B7E\u7F72\u670D\u52A1\u534F\u8BAE</h1><p>\u534F\u8BAE\u4F1A\u5199\u660E\u4E24\u7B14\u670D\u52A1\u6B3E\u3001\u5BF9\u5E94\u6210\u679C\u3001\u6682\u505C\u6761\u4EF6\u53CA\u9000\u6B3E\u89C4\u5219\u3002</p></div></section><section class="p13-panel"><button class="p13-file-row" id="p13AgreementPreview" type="button">' + icon("file-text", 20) + "<span><strong>" + escapeHTML(config.sku) + '\u5206\u9636\u6BB5\u670D\u52A1\u534F\u8BAE.pdf</strong><small>\u670D\u52A1\u5546\u63D0\u4F9B \xB7 \u5E73\u53F0\u5DF2\u5B8C\u6210\u8981\u7D20\u5BA1\u6838</small></span><b>\u67E5\u770B</b></button><div class="p13-contract-steps">' + steps3 + "</div>" + action + "</section>";
   }
   function paymentView(config, second) {
     const amount = second ? config.secondAmount : config.firstAmount;
@@ -7962,12 +8023,13 @@
       const config = getStagedServiceConfig(params.sku);
       if (!team || !config) return '<div class="empty-state"><div class="empty-title">\u5206\u9636\u6BB5\u670D\u52A1\u4E0D\u5B58\u5728</div></div>';
       const journey = getJourney(params);
+      if (params.agreementStatus) journey.agreementStatus = params.agreementStatus;
       const stage = params.stage || journey.stage;
       this.state = { params, journey, team, config, stage };
       let body = "";
       if (stage === "intake") body = intakeView(team, config, journey);
       else if (stage === "proposal") body = proposalView(config);
-      else if (stage === "contract") body = contractView(config);
+      else if (stage === "contract") body = contractView(config, journey);
       else if (stage === "firstPayment") body = paymentView(config, false);
       else if (stage === "milestone") body = milestoneView(config);
       else if (stage === "secondPayment") body = paymentView(config, true);
@@ -8009,20 +8071,38 @@
       } else if (stage === "contract") {
         document.getElementById("p13AgreementPreview").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u534F\u8BAE\u5B89\u5168\u9884\u89C8"));
         const file = document.getElementById("p13AgreementFile");
-        file.addEventListener("change", () => {
-          document.getElementById("p13AgreementFileName").textContent = file.files.length ? file.files[0].name : "\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6";
-        });
-        document.getElementById("p13SubmitAgreement").addEventListener("click", () => {
-          if (!file.files.length) return toast("\u8BF7\u5148\u4E0A\u4F20\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6");
-          const overlay = showSheet({
-            title: "\u534F\u8BAE\u5DF2\u751F\u6548",
-            body: '<div class="p13-agreement-success"><span>' + icon("check-circle", 26) + '</span><strong>\u53CC\u65B9\u534F\u8BAE\u5DF2\u5B8C\u6210\u7528\u5370\u5E76\u901A\u8FC7\u5BA1\u6838</strong><p>\u4E0B\u4E00\u6B65\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E\uFF0C\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\u540E\u5F00\u59CB\u5DE5\u4F5C\u3002</p><button class="btn btn-primary btn-block" id="p13ToFirstPayment" type="button">\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</button></div>'
+        if (file) {
+          file.addEventListener("change", () => {
+            document.getElementById("p13AgreementFileName").textContent = file.files.length ? file.files[0].name : "\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6";
           });
-          overlay.querySelector("#p13ToFirstPayment").addEventListener("click", () => {
-            overlay.remove();
-            this.setStage("firstPayment");
+          document.getElementById("p13SubmitAgreement").addEventListener("click", () => {
+            if (!file.files.length) return toast("\u8BF7\u5148\u4E0A\u4F20\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6");
+            journey.customerAgreementFile = file.files[0].name;
+            journey.agreementStatus = "provider_signing";
+            refreshActivePage();
+            toast("\u534F\u8BAE\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370");
           });
+        }
+        const returned = document.getElementById("p13ReturnedAgreement");
+        if (returned) returned.addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u53CC\u65B9\u7528\u5370\u670D\u52A1\u534F\u8BAE"));
+        const auditResult = document.getElementById("p13AuditResult");
+        if (auditResult) auditResult.addEventListener("click", () => {
+          journey.agreementStatus = "approved";
+          refreshActivePage();
+          toast("\u534F\u8BAE\u5DF2\u901A\u8FC7\u5E73\u53F0\u5BA1\u6838");
         });
+        const toFirstPayment = document.getElementById("p13ToFirstPayment");
+        if (toFirstPayment) toFirstPayment.addEventListener("click", () => this.setStage("firstPayment"));
+        if (journey.agreementStatus === "provider_signing" && !journey.providerProgressScheduled) {
+          journey.providerProgressScheduled = true;
+          setTimeout(() => {
+            if (journey.agreementStatus !== "provider_signing") return;
+            journey.agreementStatus = "auditing";
+            journey.providerProgressScheduled = false;
+            refreshActivePage();
+            toast("\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370\uFF0C\u53CC\u65B9\u534F\u8BAE\u5DF2\u8FD4\u56DE");
+          }, 1600);
+        }
       } else if (stage === "firstPayment" || stage === "secondPayment") {
         const second = stage === "secondPayment";
         document.getElementById("p13Account").addEventListener("click", () => showSheet({ title: "\u670D\u52A1\u5546\u6536\u6B3E\u4FE1\u606F", body: '<div class="p13-account"><div><span>\u6536\u6B3E\u6237\u540D</span><strong>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</strong></div><div><span>\u5F00\u6237\u94F6\u884C</span><strong>\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C</strong></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>**** **** **** 6628</strong></div><p>\u8BF7\u4EE5\u5DF2\u7B7E\u7F72\u534F\u8BAE\u4E2D\u7684\u6B63\u5F0F\u6536\u6B3E\u4FE1\u606F\u4E3A\u51C6\u3002</p></div>' }));
@@ -8060,7 +8140,7 @@
         document.getElementById("p13ResultFile").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u4E3B\u7BA1\u673A\u6784\u7ED3\u679C\u6587\u4EF6"));
         document.getElementById("p13Support").addEventListener("click", () => toast("\u5E73\u53F0\u534F\u52A9\u7533\u8BF7\u5DF2\u63D0\u4EA4"));
         document.getElementById("p13Restart").addEventListener("click", () => {
-          journeys.set(stateKey(this.state.params), { stage: "intake", intake: "", firstPaid: false, secondPaid: false });
+          journeys.set(stateKey(this.state.params), { stage: "intake", intake: "", agreementStatus: "customer_action", customerAgreementFile: "", providerProgressScheduled: false, firstPaid: false, secondPaid: false });
           this.state.journey = journeys.get(stateKey(this.state.params));
           this.setStage("intake");
         });

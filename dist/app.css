@@ -4297,11 +4297,13 @@ button:focus-visible,
   background: var(--color-primary-light);
 }
 .p5-matching-progress span {
+  width: 100%;
   height: 100%;
   display: block;
   border-radius: inherit;
   background: var(--color-primary);
-  transition: width .36s cubic-bezier(.22, 1, .36, 1);
+  transform-origin: left center;
+  transition: transform .36s cubic-bezier(.22, 1, .36, 1);
 }
 .p5-matching-steps {
   width: 100%;
@@ -4469,50 +4471,53 @@ button:focus-visible,
   background: #F4F6F9;
 }
 .p5-success {
-  text-align: center;
-  padding: var(--space-6) var(--space-4);
-  padding: 18px 16px 26px;
+  min-height: 100%;
+  padding: 24px 16px 18px;
+  display: flex;
+  flex-direction: column;
   text-align: left;
 }
 .p5-success-hero {
-  padding: 7px 2px 18px;
+  padding: 8px 4px 22px;
   display: flex;
   align-items: flex-start;
-  gap: 11px;
+  gap: 13px;
 }
 .p5-success-check {
+  width: 46px;
+  height: 46px;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 15px;
+  background: var(--color-success-light);
   color: var(--color-success);
 }
 .p5-success-title {
-  font-size: var(--font-lg);
-  font-weight: 600;
-  color: var(--color-success);
-  margin-bottom: var(--space-2);
-  margin: 0 0 5px;
+  margin: 0 0 6px;
   color: var(--color-text-1);
-  font-size: var(--font-xl);
+  font-size: 24px;
   font-weight: 700;
+  letter-spacing: -.02em;
 }
 .p5-success-desc {
-  font-size: var(--font-sm);
-  color: var(--color-text-2);
-  line-height: var(--lh-normal);
-  margin-bottom: var(--space-4);
+  max-width: 270px;
   margin: 0;
   color: var(--color-text-2);
   font-size: var(--font-sm);
-  line-height: var(--lh-normal);
+  line-height: var(--lh-relaxed);
+}
+.p5-success-main {
+  display: grid;
+  gap: 12px;
 }
 .p5-success-response {
-  margin-bottom: 12px;
-  padding: 13px 14px;
+  padding: 15px 16px;
   border: 1px solid var(--color-border);
-  border-radius: 11px;
+  border-radius: 13px;
   background: var(--color-card);
   text-align: left;
-  margin-bottom: 10px;
-  padding: 15px 14px;
 }
 .p5-success-response-head strong {
   font-size: var(--font-base);
@@ -4523,11 +4528,88 @@ button:focus-visible,
   font-size: var(--font-sm);
   color: var(--color-text-3);
 }
+.p5-success-response-meta {
+  margin-top: 6px;
+  color: var(--color-text-2);
+  font-size: var(--font-sm);
+  line-height: var(--lh-normal);
+}
+.p5-success-next {
+  padding: 17px 16px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 13px;
+  background: #fff;
+}
+.p5-success-next h2 {
+  margin-bottom: 15px;
+  font-size: var(--font-md);
+}
+.p5-success-next ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.p5-success-next li {
+  min-height: 63px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  color: var(--color-text-3);
+}
+.p5-success-next li::after {
+  content: "";
+  width: 1px;
+  position: absolute;
+  top: 25px;
+  bottom: 0;
+  left: 11px;
+  background: var(--color-border);
+}
+.p5-success-next li:last-child::after {
+  display: none;
+}
+.p5-success-next li > span {
+  width: 23px;
+  height: 23px;
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: #fff;
+}
+.p5-success-next li.done > span {
+  border-color: var(--color-success);
+  background: var(--color-success);
+  color: #fff;
+}
+.p5-success-next li.active > span {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.p5-success-next li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.p5-success-next strong {
+  color: var(--color-text-1);
+  font-size: var(--font-sm);
+}
+.p5-success-next small {
+  color: var(--color-text-3);
+  font-size: var(--font-xs);
+  line-height: var(--lh-normal);
+}
 .p5-wecom-card {
-  margin-bottom: 12px;
-  min-height: 54px;
-  margin-bottom: 13px;
-  padding: 9px 12px;
+  min-height: 58px;
+  margin: 0;
+  padding: 10px 12px;
   border-color: #DCE4F2;
   background: #fff;
 }
@@ -4547,16 +4629,25 @@ button:focus-visible,
   color: var(--color-success);
 }
 .p5-success-actions {
-  display: flex;
-  gap: var(--space-2);
-  margin: 0 0 var(--space-3);
-  margin-bottom: 13px;
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 .p5-success-actions .btn {
   min-width: 0;
-  padding-left: 10px;
-  padding-right: 10px;
   white-space: nowrap;
+}
+.p5-success-footer {
+  margin-top: auto;
+  padding-top: 22px;
+}
+.p5-success-home {
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-2);
+  font-size: var(--font-sm);
+  cursor: pointer;
 }
 .p5-progress-details {
   border: 1px solid var(--color-border);
@@ -5757,6 +5848,30 @@ button:focus-visible,
 .p7-template-file small {
   color: var(--color-text-4);
   font-size: 10px;
+}
+.p7-returned-agreement {
+  margin-top: 9px;
+  border-color: #BFE5D4;
+  background: #F2FBF7;
+  color: var(--color-success);
+}
+.p7-agreement-returned {
+  display: grid;
+  gap: 12px;
+}
+.p7-agreement-returned > span {
+  color: var(--color-success);
+}
+.p7-agreement-returned.approved > span {
+  color: var(--color-primary);
+}
+.p7-agreement-returned > strong {
+  font-size: var(--font-lg);
+}
+.p7-agreement-returned > p {
+  color: var(--color-text-2);
+  font-size: var(--font-sm);
+  line-height: var(--lh-relaxed);
 }
 .p7-agreement-upload {
   margin: 10px 0;
@@ -9214,6 +9329,48 @@ button.p12-manage-record {
   background: var(--color-primary-light);
   color: var(--color-primary);
   font-weight: 600;
+}
+.p13-contract-steps span.done {
+  background: var(--color-success-light);
+  color: var(--color-success);
+  font-weight: 600;
+}
+.p13-contract-state {
+  margin: 15px 0 12px;
+  padding: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 10px;
+  background: #F3F6FD;
+}
+.p13-contract-state > span {
+  margin-top: 1px;
+  flex: 0 0 auto;
+  color: var(--color-primary);
+}
+.p13-contract-state.waiting > span {
+  color: #AD6412;
+}
+.p13-contract-state.approved {
+  background: var(--color-success-light);
+}
+.p13-contract-state.approved > span {
+  color: var(--color-success);
+}
+.p13-contract-state strong {
+  font-size: var(--font-sm);
+}
+.p13-contract-state p {
+  margin-top: 4px;
+  color: var(--color-text-2);
+  font-size: var(--font-xs);
+  line-height: var(--lh-relaxed);
+}
+.p13-returned-file {
+  margin-bottom: 13px;
+  border-color: #BFE5D4;
+  color: var(--color-success);
 }
 .p13-upload {
   min-height: 48px;
