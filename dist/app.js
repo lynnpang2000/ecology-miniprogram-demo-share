@@ -7959,11 +7959,11 @@
   }
   function getJourney(params) {
     const key = stateKey(params);
-    if (!journeys.has(key)) journeys.set(key, { stage: "intake", intake: "", agreementStatus: "customer_action", customerAgreementFile: "", providerProgressScheduled: false, firstPaid: false, secondPaid: false });
+    if (!journeys.has(key)) journeys.set(key, { stage: "intake", intake: "", quoteStatus: "not_submitted", quoteProgressScheduled: false, agreementStatus: "customer_action", customerAgreementFile: "", providerProgressScheduled: false, firstPaid: false, secondPaid: false });
     return journeys.get(key);
   }
   function stepIndex(stage) {
-    if (["intake", "proposal"].includes(stage)) return 0;
+    if (["intake", "providerReview", "quotationReady", "proposal"].includes(stage)) return 0;
     if (stage === "contract") return 1;
     if (["firstPayment", "milestone"].includes(stage)) return 2;
     if (stage === "secondPayment") return 3;
@@ -7985,8 +7985,14 @@
   function intakeView(team, config, journey) {
     return '<section class="p13-hero"><span>' + icon("message", 24) + '</span><h1>\u5148\u5B8C\u6210\u9879\u76EE\u8BC4\u4F30</h1><p>\u5E73\u53F0\u9700\u6C42\u52A9\u624B\u5148\u6536\u96C6\u57FA\u7840\u4FE1\u606F\u5E76\u540C\u6B65\u7ED9\u56E2\u961F\uFF1B\u6D89\u53CA\u4E13\u4E1A\u5224\u65AD\u65F6\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4\u786E\u8BA4\u3002</p></section><section class="p13-panel p13-intake"><h2>\u8865\u5145\u8BC4\u4F30\u4FE1\u606F</h2><label for="p13Intake">' + escapeHTML(config.intakeLabel) + '</label><textarea id="p13Intake" maxlength="500" rows="6" placeholder="' + escapeHTML(config.intakeExample) + '">' + escapeHTML(journey.intake || config.intakeExample) + '</textarea><div><span>\u670D\u52A1\u5546\u8BC4\u4F30\u540E\u63A8\u9001\u670D\u52A1\u8303\u56F4\u3001\u603B\u4EF7\u548C\u4E24\u7B14\u4ED8\u6B3E\u8282\u70B9</span><b id="p13Count">' + String((journey.intake || config.intakeExample).length) + '/500</b></div><button class="btn btn-primary btn-block" id="p13SubmitIntake" type="button">\u63D0\u4EA4\u8BC4\u4F30\u8D44\u6599</button></section>';
   }
-  function proposalView(config) {
-    return '<section class="p13-stage-head"><span>' + icon("file-text", 24) + '</span><div><h1>\u670D\u52A1\u65B9\u6848\u4E0E\u5206\u9636\u6BB5\u62A5\u4EF7</h1><p>\u670D\u52A1\u8303\u56F4\u548C\u4ED8\u6B3E\u8282\u70B9\u5DF2\u7ECF\u56E2\u961F\u586B\u5199\u5E76\u7ECF\u5E73\u53F0\u5BA1\u6838\u3002</p></div></section><section class="p13-panel p13-proposal"><div class="p13-proposal-top"><div><small>\u670D\u52A1\u603B\u4EF7</small><strong>' + config.total + "</strong></div><span>\u5F85\u4F60\u786E\u8BA4</span></div><dl><div><dt>\u9884\u8BA1\u5468\u671F</dt><dd>" + escapeHTML(config.period) + '</dd></div><div><dt>\u5B98\u65B9\u53CA\u7B2C\u4E09\u65B9\u8D39\u7528</dt><dd>\u672A\u5305\u542B\uFF0C\u53D1\u751F\u65F6\u53E6\u884C\u5217\u793A</dd></div></dl><div class="p13-payment-plan"><article><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>' + config.firstAmount + "</strong><small>\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8\uFF0C\u786E\u8BA4\u5230\u8D26\u540E\u5F00\u59CB\u670D\u52A1</small></article><article><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>" + config.secondAmount + "</strong><small>" + escapeHTML(config.secondTrigger) + "</small></article></div><h3>\u4E24\u9636\u6BB5\u4EA4\u4ED8</h3>" + renderList(config.firstWork.concat(config.secondWork)) + '</section><section class="p13-risk"><span>' + icon("alert", 18) + '</span><div><strong>\u529E\u7406\u7ED3\u679C\u5B58\u5728\u4E0D\u786E\u5B9A\u6027</strong><p>\u670D\u52A1\u8D39\u6309\u7EA6\u5B9A\u9636\u6BB5\u5DE5\u4F5C\u6536\u53D6\uFF0C\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u7ED3\u679C\u4E0D\u7531\u5E73\u53F0\u548C\u670D\u52A1\u56E2\u961F\u4FDD\u8BC1\u3002\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF1B\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section><label class="p13-consent"><input id="p13RiskConsent" type="checkbox"><span>\u6211\u5DF2\u7406\u89E3\u5206\u9636\u6BB5\u4ED8\u6B3E\u3001\u7ED3\u679C\u4E0D\u627F\u8BFA\u53CA\u9000\u6B3E\u89C4\u5219</span></label><div class="p13-page-action"><button class="btn btn-primary btn-block" id="p13ConfirmProposal" type="button" disabled>\u786E\u8BA4\u65B9\u6848\u5E76\u7B7E\u7F72\u534F\u8BAE</button></div>';
+  function providerReviewView(team) {
+    return '<section class="p13-stage-head p13-review-head"><span>' + icon("clock", 24) + "</span><div><h1>\u7B49\u5F85\u670D\u52A1\u5546\u8BC4\u4F30</h1><p>\u8D44\u6599\u5DF2\u63D0\u4EA4\u7ED9" + escapeHTML(team.name) + '\uFF0C\u56E2\u961F\u6B63\u5728\u786E\u8BA4\u662F\u5426\u627F\u63A5\u5E76\u6838\u5B9A\u672C\u6848\u62A5\u4EF7\u3002</p></div></section><section class="p13-panel p13-review-panel"><div class="p13-review-status"><span class="p13-review-pulse" aria-hidden="true"></span><div><strong>\u670D\u52A1\u5546\u8BC4\u4F30\u4E2D</strong><small>\u62A5\u4EF7\u786E\u8BA4\u540E\u4F1A\u81EA\u52A8\u66F4\u65B0\uFF0C\u65E0\u9700\u505C\u7559\u5728\u5F53\u524D\u9875\u9762</small></div></div><div class="p13-review-flow"><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u6848\u4EF6\u8D44\u6599\u5DF2\u63D0\u4EA4</strong><small>\u57FA\u7840\u4FE1\u606F\u5DF2\u540C\u6B65\u7ED9\u670D\u52A1\u56E2\u961F</small></p></div><div class="active"><span></span><p><strong>\u8BC4\u4F30\u627F\u63A5\u6761\u4EF6\u4E0E\u5DE5\u4F5C\u91CF</strong><small>\u56E2\u961F\u53EF\u80FD\u901A\u8FC7\u5E73\u53F0\u987E\u95EE\u8054\u7CFB\u4F60\u8865\u5145\u8D44\u6599</small></p></div><div><span></span><p><strong>\u670D\u52A1\u5546\u786E\u8BA4\u627F\u63A5\u5E76\u62A5\u4EF7</strong><small>\u5C06\u63A8\u9001\u670D\u52A1\u8303\u56F4\u3001\u603B\u4EF7\u548C\u4ED8\u6B3E\u8282\u70B9</small></p></div></div></section><section class="p13-review-notice">' + icon("bell", 17) + "<div><strong>\u8FDB\u5C55\u4F1A\u53CA\u65F6\u901A\u77E5\u4F60</strong><p>\u670D\u52A1\u5546\u63D0\u4EA4\u7ED3\u679C\u540E\uFF0C\u5E73\u53F0\u5C06\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u548C\u4F01\u4E1A\u5FAE\u4FE1\u63D0\u9192\u4F60\u3002</p></div></section>";
+  }
+  function quotationReadyView(team, config) {
+    return '<section class="p13-stage-head p13-quote-ready-head"><span>' + icon("check-circle", 24) + "</span><div><h1>\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u627F\u63A5</h1><p>" + escapeHTML(team.name) + '\u5DF2\u5B8C\u6210\u672C\u6848\u8BC4\u4F30\uFF0C\u5E76\u63D0\u4EA4\u670D\u52A1\u65B9\u6848\u4E0E\u62A5\u4EF7\u3002</p></div></section><section class="p13-panel p13-quote-ready"><div class="p13-quote-ready-title"><div><small>\u670D\u52A1\u5546\u62A5\u4EF7</small><strong>' + config.total + "</strong></div><span>\u5F85\u4F60\u67E5\u770B</span></div><dl><div><dt>\u62A5\u4EF7\u56E2\u961F</dt><dd>" + escapeHTML(team.name) + "</dd></div><div><dt>\u4ED8\u6B3E\u65B9\u5F0F</dt><dd>\u4E24\u9636\u6BB5\u4ED8\u6B3E\uFF0C\u6BCF\u9636\u6BB5 " + config.firstAmount + "</dd></div><div><dt>\u9884\u8BA1\u5468\u671F</dt><dd>" + escapeHTML(config.period) + '</dd></div></dl><div class="p13-quote-audit">' + icon("shield", 17) + '<span>\u5E73\u53F0\u5DF2\u6838\u9A8C\u670D\u52A1\u8303\u56F4\u3001\u91D1\u989D\u3001\u4ED8\u6B3E\u8282\u70B9\u7B49\u65B9\u6848\u8981\u7D20\u5B8C\u6574\u3002</span></div><button class="btn btn-primary btn-block" id="p13ViewProposal" type="button">\u67E5\u770B\u670D\u52A1\u65B9\u6848\u4E0E\u62A5\u4EF7</button></section>';
+  }
+  function proposalView(team, config) {
+    return '<section class="p13-stage-head"><span>' + icon("file-text", 24) + '</span><div><h1>\u670D\u52A1\u65B9\u6848\u4E0E\u5206\u9636\u6BB5\u62A5\u4EF7</h1><p>\u670D\u52A1\u8303\u56F4\u3001\u62A5\u4EF7\u548C\u4ED8\u6B3E\u8282\u70B9\u7531\u670D\u52A1\u5546\u786E\u8BA4\uFF0C\u5E73\u53F0\u5DF2\u6838\u9A8C\u65B9\u6848\u8981\u7D20\u5B8C\u6574\u3002</p></div></section><section class="p13-panel p13-proposal"><div class="p13-proposal-top"><div><small>\u670D\u52A1\u5546\u62A5\u4EF7</small><strong>' + config.total + "</strong></div><span>\u5F85\u4F60\u786E\u8BA4</span></div><dl><div><dt>\u62A5\u4EF7\u56E2\u961F</dt><dd>" + escapeHTML(team.name) + "</dd></div><div><dt>\u9884\u8BA1\u5468\u671F</dt><dd>" + escapeHTML(config.period) + '</dd></div><div><dt>\u5B98\u65B9\u53CA\u7B2C\u4E09\u65B9\u8D39\u7528</dt><dd>\u672A\u5305\u542B\uFF0C\u53D1\u751F\u65F6\u53E6\u884C\u5217\u793A</dd></div></dl><div class="p13-payment-plan"><article><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>' + config.firstAmount + "</strong><small>\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8\uFF0C\u786E\u8BA4\u5230\u8D26\u540E\u5F00\u59CB\u670D\u52A1</small></article><article><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>" + config.secondAmount + "</strong><small>" + escapeHTML(config.secondTrigger) + "</small></article></div><h3>\u4E24\u9636\u6BB5\u4EA4\u4ED8</h3>" + renderList(config.firstWork.concat(config.secondWork)) + '</section><section class="p13-risk"><span>' + icon("alert", 18) + '</span><div><strong>\u529E\u7406\u7ED3\u679C\u5B58\u5728\u4E0D\u786E\u5B9A\u6027</strong><p>\u670D\u52A1\u8D39\u6309\u7EA6\u5B9A\u9636\u6BB5\u5DE5\u4F5C\u6536\u53D6\uFF0C\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u7ED3\u679C\u4E0D\u7531\u5E73\u53F0\u548C\u670D\u52A1\u56E2\u961F\u4FDD\u8BC1\u3002\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF1B\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section><label class="p13-consent"><input id="p13RiskConsent" type="checkbox"><span>\u6211\u5DF2\u7406\u89E3\u5206\u9636\u6BB5\u4ED8\u6B3E\u3001\u7ED3\u679C\u4E0D\u627F\u8BFA\u53CA\u9000\u6B3E\u89C4\u5219</span></label><div class="p13-page-action"><button class="btn btn-primary btn-block" id="p13ConfirmProposal" type="button" disabled>\u786E\u8BA4\u65B9\u6848\u5E76\u7B7E\u7F72\u534F\u8BAE</button></div>';
   }
   function contractView(config, journey) {
     const status = journey.agreementStatus || "customer_action";
@@ -8028,7 +8034,9 @@
       this.state = { params, journey, team, config, stage };
       let body = "";
       if (stage === "intake") body = intakeView(team, config, journey);
-      else if (stage === "proposal") body = proposalView(config);
+      else if (stage === "providerReview") body = providerReviewView(team);
+      else if (stage === "quotationReady") body = quotationReadyView(team, config);
+      else if (stage === "proposal") body = proposalView(team, config);
       else if (stage === "contract") body = contractView(config, journey);
       else if (stage === "firstPayment") body = paymentView(config, false);
       else if (stage === "milestone") body = milestoneView(config);
@@ -8053,8 +8061,23 @@
         document.getElementById("p13SubmitIntake").addEventListener("click", () => {
           if (!input.value.trim()) return toast("\u8BF7\u5148\u8865\u5145\u9879\u76EE\u60C5\u51B5");
           journey.intake = input.value.trim();
-          this.setStage("proposal");
+          journey.quoteStatus = "reviewing";
+          this.setStage("providerReview");
         });
+      } else if (stage === "providerReview") {
+        if (!journey.quoteProgressScheduled) {
+          journey.quoteProgressScheduled = true;
+          setTimeout(() => {
+            if (journey.stage !== "providerReview") return;
+            journey.quoteStatus = "ready";
+            journey.quoteProgressScheduled = false;
+            journey.stage = "quotationReady";
+            refreshActivePage();
+            toast("\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u627F\u63A5\u5E76\u63D0\u4EA4\u62A5\u4EF7");
+          }, 1800);
+        }
+      } else if (stage === "quotationReady") {
+        document.getElementById("p13ViewProposal").addEventListener("click", () => this.setStage("proposal"));
       } else if (stage === "proposal") {
         const consent = document.getElementById("p13RiskConsent");
         const confirm = document.getElementById("p13ConfirmProposal");
@@ -8140,7 +8163,7 @@
         document.getElementById("p13ResultFile").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u4E3B\u7BA1\u673A\u6784\u7ED3\u679C\u6587\u4EF6"));
         document.getElementById("p13Support").addEventListener("click", () => toast("\u5E73\u53F0\u534F\u52A9\u7533\u8BF7\u5DF2\u63D0\u4EA4"));
         document.getElementById("p13Restart").addEventListener("click", () => {
-          journeys.set(stateKey(this.state.params), { stage: "intake", intake: "", agreementStatus: "customer_action", customerAgreementFile: "", providerProgressScheduled: false, firstPaid: false, secondPaid: false });
+          journeys.set(stateKey(this.state.params), { stage: "intake", intake: "", quoteStatus: "not_submitted", quoteProgressScheduled: false, agreementStatus: "customer_action", customerAgreementFile: "", providerProgressScheduled: false, firstPaid: false, secondPaid: false });
           this.state.journey = journeys.get(stateKey(this.state.params));
           this.setStage("intake");
         });
