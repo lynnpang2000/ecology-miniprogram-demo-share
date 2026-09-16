@@ -871,8 +871,8 @@
         "verified",
         "new"
       ],
-      "priceText": "\xA5600\u8D77",
-      "priceMode": "\u6309\u4EF6\u62A5\u4EF7",
+      "priceText": "\u8BC4\u4F30\u540E\u62A5\u4EF7",
+      "priceMode": "\u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E",
       "city": "\u5317\u4EAC",
       "district": "\u897F\u57CE\u533A",
       "avgResponse": "6\u5C0F\u65F6",
@@ -938,7 +938,7 @@
         }
       ],
       "orgName": "\u5317\u4EAC\u667A\u6743\u77E5\u8BC6\u4EA7\u6743\u4EE3\u7406\u6709\u9650\u516C\u53F8",
-      "priceSummary": "\xA5600\u8D77 \xB7 \u6309\u4EF6\u62A5\u4EF7"
+      "priceSummary": "\u6309\u9879\u76EE\u8BC4\u4F30 \xB7 \u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E"
     },
     {
       "id": "t004",
@@ -1165,8 +1165,8 @@
       "tags": [
         "verified"
       ],
-      "priceText": "\xA5500\u8D77",
-      "priceMode": "\u6309\u4EF6\u62A5\u4EF7",
+      "priceText": "\u8BC4\u4F30\u540E\u62A5\u4EF7",
+      "priceMode": "\u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E",
       "city": "\u5317\u4EAC",
       "district": "\u6D77\u6DC0\u533A",
       "avgResponse": "",
@@ -1213,7 +1213,7 @@
         }
       ],
       "orgName": "\u5317\u4EAC\u667A\u6743\u77E5\u8BC6\u4EA7\u6743\u4EE3\u7406\u6709\u9650\u516C\u53F8",
-      "priceSummary": "\xA5500\u8D77 \xB7 \u6309\u4EF6\u62A5\u4EF7"
+      "priceSummary": "\u6309\u9879\u76EE\u8BC4\u4F30 \xB7 \u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E"
     },
     {
       "id": "t007",
@@ -1320,8 +1320,8 @@
         "verified",
         "good"
       ],
-      "priceText": "\xA5500\u8D77",
-      "priceMode": "\u6309\u4EF6\u62A5\u4EF7",
+      "priceText": "\u8BC4\u4F30\u540E\u62A5\u4EF7",
+      "priceMode": "\u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E",
       "city": "\u5317\u4EAC",
       "district": "\u4E30\u53F0\u533A",
       "avgResponse": "4\u5C0F\u65F6",
@@ -1382,7 +1382,54 @@
         }
       ],
       "orgName": "\u5317\u4EAC\u660E\u5FB7\u77E5\u8BC6\u4EA7\u6743\u4EE3\u7406\u6709\u9650\u516C\u53F8",
-      "priceSummary": "\xA5500\u8D77 \xB7 \u6309\u4EF6\u62A5\u4EF7"
+      "priceSummary": "\u6309\u9879\u76EE\u8BC4\u4F30 \xB7 \u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E"
+    },
+    {
+      "id": "t009",
+      "name": "\u542F\u7B56\u653F\u7B56\u7533\u62A5\u56E2\u961F",
+      "orgShort": "\u542F\u7B56\u54A8\u8BE2",
+      "orgId": "org007",
+      "avatar": "\u542F",
+      "avatarColor": "#28786C",
+      "heroImage": "",
+      "badge": "gold",
+      "rating": 4.8,
+      "reviewCount": 12,
+      "tags": ["verified", "good"],
+      "priceText": "\u8BC4\u4F30\u540E\u62A5\u4EF7",
+      "priceMode": "\u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E",
+      "city": "\u5317\u4EAC",
+      "district": "\u6D77\u6DC0\u533A",
+      "avgResponse": "4\u5C0F\u65F6",
+      "skus": ["\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A", "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5", "\u79D1\u6280\u9879\u76EE\u7533\u62A5"],
+      "desc": "\u9762\u5411\u79D1\u6280\u4F01\u4E1A\u63D0\u4F9B\u8D44\u8D28\u8BC4\u4F30\u3001\u6750\u6599\u89C4\u5212\u4E0E\u7533\u62A5\u8DDF\u8FDB\u670D\u52A1\uFF0C\u5148\u8BC4\u4F30\u4F01\u4E1A\u6761\u4EF6\uFF0C\u518D\u786E\u8BA4\u670D\u52A1\u8303\u56F4\u548C\u4ED8\u6B3E\u8282\u70B9\u3002",
+      "volume": 36,
+      "years": 8,
+      "completedOrders": 36,
+      "totalClients": 78,
+      "certifiedCount": 3,
+      "members": [
+        { "name": "\u6797\u542F", "role": "\u9879\u76EE\u8D1F\u8D23\u4EBA", "avatar": "\u6797", "desc": "8\u5E74\u79D1\u6280\u653F\u7B56\u9879\u76EE\u670D\u52A1\u7ECF\u9A8C" }
+      ],
+      "specialties": ["\u8D44\u683C\u8BC4\u4F30", "\u7533\u62A5\u6750\u6599\u89C4\u5212", "\u9879\u76EE\u8DDF\u8FDB"],
+      "verifyItems": [
+        { "type": "strong", "label": "\u4F01\u4E1A\u54A8\u8BE2\u670D\u52A1\u80FD\u529B \xB7 \u5DF2\u6838\u9A8C", "status": "verified" }
+      ],
+      "awards": [
+        { "year": "2025", "title": "\u5E73\u53F0\u653F\u7B56\u670D\u52A1\u4F18\u9009\u56E2\u961F" }
+      ],
+      "qa": [
+        { "q": "\u63D0\u4EA4\u7533\u62A5\u540E\u4E00\u5B9A\u80FD\u901A\u8FC7\u5417\uFF1F", "a": "\u7533\u62A5\u7ED3\u679C\u7531\u4E3B\u7BA1\u673A\u6784\u8BC4\u5BA1\u51B3\u5B9A\u3002\u56E2\u961F\u4F1A\u5728\u7B7E\u7EA6\u524D\u8BC4\u4F30\u6761\u4EF6\uFF0C\u5E76\u6309\u534F\u8BAE\u5B8C\u6210\u6750\u6599\u51C6\u5907\u4E0E\u7533\u62A5\u8DDF\u8FDB\uFF0C\u4F46\u4E0D\u627F\u8BFA\u6700\u7EC8\u83B7\u6279\u3002", "tag": "\u670D\u52A1\u5546\u56DE\u7B54" }
+      ],
+      "reviews": [
+        { "user": "\u9B4F***", "rating": 5, "text": "\u524D\u671F\u8BC4\u4F30\u5F88\u7EC6\uFF0C\u6750\u6599\u6E05\u5355\u548C\u6BCF\u4E2A\u8282\u70B9\u90FD\u8BB2\u5F97\u6E05\u695A\u3002", "date": "2025-06-18" }
+      ],
+      "aiSummary": "\u5BA2\u6237\u8F83\u8BA4\u53EF\u56E2\u961F\u7684\u524D\u671F\u8BC4\u4F30\u5B8C\u6574\u5EA6\u3001\u6750\u6599\u89C4\u5212\u548C\u8FDB\u5EA6\u540C\u6B65\u3002",
+      "cases": [
+        { "dir": "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A", "items": ["\u67D0\u8F6F\u4EF6\u4F01\u4E1A\u9AD8\u4F01\u7533\u62A5\u6750\u6599\u89C4\u5212", "\u67D0\u5236\u9020\u4F01\u4E1A\u7814\u53D1\u8D44\u6599\u68B3\u7406"] }
+      ],
+      "orgName": "\u5317\u4EAC\u542F\u7B56\u4F01\u4E1A\u54A8\u8BE2\u6709\u9650\u516C\u53F8",
+      "priceSummary": "\u6309\u9879\u76EE\u8BC4\u4F30 \xB7 \u652F\u6301\u5206\u9636\u6BB5\u4ED8\u6B3E"
     }
   ];
 
@@ -1611,13 +1658,13 @@
 
   // src/core/registry.js
   var pages = /* @__PURE__ */ new Map();
-  function register(pageId, page13) {
+  function register(pageId, page14) {
     if (!pageId) throw new Error("pageId is required");
-    if (!page13 || typeof page13.render !== "function") {
+    if (!page14 || typeof page14.render !== "function") {
       throw new TypeError(`Page "${pageId}" must provide render(params)`);
     }
-    pages.set(pageId, page13);
-    return page13;
+    pages.set(pageId, page14);
+    return page14;
   }
   function get(pageId) {
     return pages.get(pageId);
@@ -1625,7 +1672,7 @@
 
   // src/core/router.js
   var pageStack = [];
-  var refreshablePages = ["p1", "p6", "p9", "p11", "p12"];
+  var refreshablePages = ["p1", "p6", "p9", "p11", "p12", "p13"];
   var connectedHost = null;
   function connectRouter(host) {
     connectedHost = host;
@@ -1668,15 +1715,15 @@
     }
   }
   function renderPage(pageId, params) {
-    const page13 = get(pageId);
-    if (page13 && typeof page13.render === "function") {
-      const html = page13.render(params);
+    const page14 = get(pageId);
+    if (page14 && typeof page14.render === "function") {
+      const html = page14.render(params);
       const container = this.setPageContent(html, pageId);
       container.classList.add("page-enter");
       setTimeout(() => {
         container.classList.remove("page-enter");
       }, 300);
-      if (typeof page13.init === "function") page13.init(params);
+      if (typeof page14.init === "function") page14.init(params);
     } else {
       this.setPageContent(
         `<div class="empty-state"><div class="empty-icon">${this.icon("wrench", 48)}</div><div class="empty-title">\u9875\u9762\u5F00\u53D1\u4E2D</div><div class="empty-desc">\u9875\u9762 ${pageId} \u5373\u5C06\u4E0A\u7EBF</div></div>`,
@@ -1706,8 +1753,8 @@
     const outerScroll = container.scrollTop;
     const inner = document.getElementById("p6-tab-content") || document.getElementById("p9-list");
     const innerScroll = inner ? inner.scrollTop : 0;
-    const page13 = get(pageId);
-    if (page13 && typeof page13.onRefresh === "function") page13.onRefresh();
+    const page14 = get(pageId);
+    if (page14 && typeof page14.onRefresh === "function") page14.onRefresh();
     this.renderPage(pageId, top.params);
     container.scrollTop = outerScroll;
     const refreshedInner = document.getElementById("p6-tab-content") || document.getElementById("p9-list");
@@ -1923,8 +1970,12 @@
       "name": "\u653F\u7B56\u7533\u62A5",
       "icon": "file-text",
       "desc": "\u9AD8\u4F01\u8BA4\u5B9A\xB7\u9879\u76EE\u7533\u62A5",
-      "locked": true,
-      "skus": []
+      "locked": false,
+      "skus": [
+        "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A",
+        "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5",
+        "\u79D1\u6280\u9879\u76EE\u7533\u62A5"
+      ]
     },
     {
       "id": "hr",
@@ -2060,6 +2111,20 @@
       "teamIds": [
         "t008"
       ]
+    },
+    {
+      "id": "org007",
+      "name": "\u5317\u4EAC\u542F\u7B56\u4F01\u4E1A\u54A8\u8BE2\u6709\u9650\u516C\u53F8",
+      "shortName": "\u542F\u7B56\u54A8\u8BE2",
+      "logo": "\u542F",
+      "establishedYear": 2018,
+      "city": "\u5317\u4EAC",
+      "district": "\u6D77\u6DC0\u533A",
+      "scale": "\u226450",
+      "fields": ["\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A", "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5", "\u79D1\u6280\u9879\u76EE\u7533\u62A5"],
+      "desc": "\u542F\u7B56\u54A8\u8BE2\u4E13\u6CE8\u79D1\u6280\u4F01\u4E1A\u653F\u7B56\u9879\u76EE\u670D\u52A1\uFF0C\u63D0\u4F9B\u8D44\u683C\u8BC4\u4F30\u3001\u7533\u62A5\u89C4\u5212\u3001\u6750\u6599\u6574\u7406\u548C\u8FDB\u5EA6\u8DDF\u8FDB\u3002",
+      "license": "\u4F01\u4E1A\u670D\u52A1\u8D44\u6599 \xB7 \u5DF2\u6838\u9A8C",
+      "teamIds": ["t009"]
     }
   ];
 
@@ -4087,7 +4152,8 @@
       html += this.renderAgentSpotlight(params.categoryId);
       html += '<div class="p2-toolbar"><strong>\u771F\u4EBA\u670D\u52A1\u56E2\u961F</strong><span class="p2-count">\u5171 ' + teams2.length + ' \u4E2A</span><div class="flex-1"></div><button class="filter-chip" id="p2FilterBtn">\u7B5B\u9009<span class="arrow">' + icon("chevron-down", 12) + "</span></button></div>";
       html += '<div id="p2CardList">' + renderTeamList(teams2) + "</div>";
-      html += '<div class="p2-price-note">\u4EE5\u4E0A\u5747\u4E3A\u53C2\u8003\u8D77\u4EF7\uFF0C\u6700\u7EC8\u4EE5\u670D\u52A1\u65B9\u6848\u4E3A\u51C6</div>';
+      const isNonstandard = params.categoryId === "ip" || params.categoryId === "policy";
+      html += '<div class="p2-price-note">' + (isNonstandard ? "\u6B64\u7C7B\u670D\u52A1\u6309\u9879\u76EE\u8BC4\u4F30\uFF0C\u56E2\u961F\u786E\u8BA4\u8303\u56F4\u540E\u63D0\u4F9B\u65B9\u6848\u4E0E\u5206\u9636\u6BB5\u62A5\u4EF7" : "\u4EE5\u4E0A\u5747\u4E3A\u53C2\u8003\u8D77\u4EF7\uFF0C\u6700\u7EC8\u4EE5\u670D\u52A1\u65B9\u6848\u4E3A\u51C6") + "</div>";
       html += '<button class="service-suggestion-link p2-suggestion" type="button" id="p2ServiceSuggestion"><span>\u6CA1\u6709\u4F60\u8981\u627E\u7684\u670D\u52A1\uFF1F</span><strong>\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42 ' + icon("arrow-right", 14) + "</strong></button>";
       return html;
     },
@@ -4226,6 +4292,68 @@
     return '<span class="stars">' + html + "</span>";
   }
 
+  // src/data/stagedServices.js
+  var intellectualPropertySkus = /* @__PURE__ */ new Set([
+    "\u5546\u6807\u6CE8\u518C",
+    "\u4E13\u5229\u7533\u8BF7",
+    "\u8457\u4F5C\u6743\u767B\u8BB0",
+    "\u5546\u6807\u9A73\u56DE\u590D\u5BA1",
+    "\u4E13\u5229\u4FB5\u6743\u5206\u6790"
+  ]);
+  var policySkus = /* @__PURE__ */ new Set([
+    "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A",
+    "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5",
+    "\u79D1\u6280\u9879\u76EE\u7533\u62A5"
+  ]);
+  var CONFIGS = {
+    ip: {
+      categoryName: "\u77E5\u8BC6\u4EA7\u6743",
+      total: "\xA512,000",
+      firstAmount: "\xA56,000",
+      secondAmount: "\xA56,000",
+      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
+      intakeLabel: "\u8BF7\u8BF4\u660E\u7533\u8BF7\u5BF9\u8C61\u3001\u6570\u91CF\u53CA\u5F53\u524D\u6750\u6599\u60C5\u51B5",
+      intakeExample: "\u8BA1\u5212\u7533\u8BF7 2 \u4EF6\u5546\u6807\uFF0C\u5DF2\u6709\u5546\u6807\u56FE\u6837\u548C\u8425\u4E1A\u6267\u7167\uFF0C\u5E0C\u671B\u5148\u5B8C\u6210\u8FD1\u4F3C\u68C0\u7D22\u3002",
+      firstWork: ["\u5B8C\u6210\u57FA\u7840\u68C0\u7D22\u4E0E\u98CE\u9669\u5206\u6790", "\u5F62\u6210\u7533\u8BF7\u7B56\u7565\u53CA\u7C7B\u522B\u5EFA\u8BAE", "\u51C6\u5907\u5E76\u5B9A\u7A3F\u7533\u8BF7\u6587\u4EF6"],
+      milestoneTitle: "\u68C0\u7D22\u5206\u6790\u4E0E\u7533\u8BF7\u6587\u4EF6\u5DF2\u5B8C\u6210",
+      milestoneDetail: "\u5BA2\u6237\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6\u540E\uFF0C\u8FDB\u5165\u6B63\u5F0F\u63D0\u4EA4\u4E0E\u5BA1\u67E5\u8DDF\u8FDB\u9636\u6BB5\u3002",
+      secondTrigger: "\u7533\u8BF7\u6587\u4EF6\u5B9A\u7A3F\u5E76\u7ECF\u5BA2\u6237\u786E\u8BA4\uFF0C\u6B63\u5F0F\u63D0\u4EA4\u524D\u652F\u4ED8",
+      secondWork: ["\u5411\u4E3B\u7BA1\u673A\u6784\u6B63\u5F0F\u63D0\u4EA4\u7533\u8BF7", "\u8DDF\u8FDB\u53D7\u7406\u53CA\u5BA1\u67E5\u8FDB\u5EA6", "\u6309\u7EA6\u5904\u7406\u4E00\u6B21\u8865\u6B63\u6216\u5BA1\u67E5\u610F\u89C1"],
+      resultTitle: "\u672C\u6B21\u7533\u8BF7\u672A\u83B7\u6838\u51C6",
+      resultDetail: "\u4E3B\u7BA1\u673A\u6784\u5DF2\u51FA\u5177\u7ED3\u679C\uFF0C\u670D\u52A1\u56E2\u961F\u5B8C\u6210\u4E86\u534F\u8BAE\u7EA6\u5B9A\u7684\u68C0\u7D22\u3001\u6750\u6599\u51C6\u5907\u3001\u63D0\u4EA4\u53CA\u8DDF\u8FDB\u5DE5\u4F5C\u3002",
+      resultFile: "\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u7ED3\u679C\u901A\u77E5.pdf"
+    },
+    policy: {
+      categoryName: "\u653F\u7B56\u7533\u62A5",
+      total: "\xA520,000",
+      firstAmount: "\xA510,000",
+      secondAmount: "\xA510,000",
+      period: "\u9884\u8BA1 2\u20144 \u4E2A\u6708\uFF0C\u4EE5\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
+      intakeLabel: "\u8BF7\u8BF4\u660E\u4F01\u4E1A\u8D44\u8D28\u3001\u6240\u5728\u5730\u533A\u548C\u610F\u5411\u7533\u62A5\u9879\u76EE",
+      intakeExample: "\u5317\u4EAC\u79D1\u6280\u4F01\u4E1A\uFF0C\u6210\u7ACB\u6EE1 2 \u5E74\uFF0C\u8BA1\u5212\u7533\u62A5\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A\uFF0C\u5DF2\u6709\u7814\u53D1\u548C\u8D22\u52A1\u8D44\u6599\u3002",
+      firstWork: ["\u5B8C\u6210\u7533\u62A5\u8D44\u683C\u4E0E\u5DEE\u8DDD\u8BC4\u4F30", "\u5F62\u6210\u7533\u62A5\u89C4\u5212\u53CA\u6750\u6599\u6E05\u5355", "\u6574\u7406\u5E76\u5B9A\u7A3F\u7533\u62A5\u6750\u6599"],
+      milestoneTitle: "\u8D44\u683C\u8BC4\u4F30\u4E0E\u7533\u62A5\u6750\u6599\u5DF2\u5B8C\u6210",
+      milestoneDetail: "\u5BA2\u6237\u786E\u8BA4\u7533\u62A5\u6750\u6599\u540E\uFF0C\u8FDB\u5165\u6B63\u5F0F\u7533\u62A5\u4E0E\u8BC4\u5BA1\u8DDF\u8FDB\u9636\u6BB5\u3002",
+      secondTrigger: "\u7533\u62A5\u6750\u6599\u5B9A\u7A3F\u5E76\u7ECF\u5BA2\u6237\u786E\u8BA4\uFF0C\u6B63\u5F0F\u7533\u62A5\u524D\u652F\u4ED8",
+      secondWork: ["\u5728\u7533\u62A5\u7A97\u53E3\u5185\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5F62\u5F0F\u5BA1\u67E5\u53CA\u8865\u5145\u6750\u6599", "\u540C\u6B65\u8BC4\u5BA1\u8FDB\u5EA6\u4E0E\u6700\u7EC8\u7ED3\u679C"],
+      resultTitle: "\u672C\u6B21\u7533\u62A5\u672A\u901A\u8FC7\u8BC4\u5BA1",
+      resultDetail: "\u4E3B\u7BA1\u673A\u6784\u5DF2\u53D1\u5E03\u8BC4\u5BA1\u7ED3\u679C\uFF0C\u670D\u52A1\u56E2\u961F\u5B8C\u6210\u4E86\u534F\u8BAE\u7EA6\u5B9A\u7684\u8BC4\u4F30\u3001\u6750\u6599\u51C6\u5907\u3001\u7533\u62A5\u53CA\u8DDF\u8FDB\u5DE5\u4F5C\u3002",
+      resultFile: "\u9879\u76EE\u8BC4\u5BA1\u7ED3\u679C\u901A\u77E5.pdf"
+    }
+  };
+  function getStagedServiceConfig(sku) {
+    if (intellectualPropertySkus.has(sku)) return { ...CONFIGS.ip, kind: "ip", sku };
+    if (policySkus.has(sku)) return { ...CONFIGS.policy, kind: "policy", sku };
+    return null;
+  }
+  function isStagedService(sku) {
+    return Boolean(getStagedServiceConfig(sku));
+  }
+  var stagedServiceSkus = Object.freeze({
+    ip: Array.from(intellectualPropertySkus),
+    policy: Array.from(policySkus)
+  });
+
   // src/services/questions.js
   function getTeamQuestions(teamId, teamList) {
     const team = getTeam(teamId, teamList);
@@ -4346,8 +4474,8 @@
   }
 
   // src/pages/p5-dialog/MatchResults.js
-  function renderMatchResults(page13, results, findTeam) {
-    const conditions = [page13.resolveSku(), page13.collected.city, page13.collected.budget].filter((item) => item && item !== "\u672A\u63D0\u4F9B");
+  function renderMatchResults(page14, results, findTeam) {
+    const conditions = [page14.resolveSku(), page14.collected.city, page14.collected.budget].filter((item) => item && item !== "\u672A\u63D0\u4F9B");
     let html = '<div class="p5-match-results">';
     html += '<section class="p5-match-summary">';
     html += '<div class="p5-match-summary-head"><span><strong>\u4E3A\u4F60\u63A8\u8350' + results.length + "\u5BB6\u670D\u52A1\u56E2\u961F</strong><small>\u7EFC\u5408\u9700\u6C42\u5951\u5408\u5EA6\u4E0E\u56E2\u961F\u670D\u52A1\u8868\u73B0\u6392\u5E8F</small></span>";
@@ -4368,8 +4496,8 @@
       if (!team) return;
       html += renderMatchCard(result, team, {
         best: index === 0,
-        checked: Boolean(page13.checkedTeams[result.teamId]),
-        sku: page13.resolveSku()
+        checked: Boolean(page14.checkedTeams[result.teamId]),
+        sku: page14.resolveSku()
       });
     });
     html += '<div class="p5-match-alternatives">';
@@ -4377,45 +4505,45 @@
     html += '<button class="p5-category-link" type="button" data-p5-match-action="category">\u90FD\u4E0D\u5408\u9002\uFF1F\u6309\u7C7B\u76EE\u67E5\u627E ' + icon("chevron-right", 13) + "</button>";
     html += "</div>";
     html += "</div>";
-    const checkedCount = Object.keys(page13.checkedTeams).filter((teamId) => page13.checkedTeams[teamId]).length;
+    const checkedCount = Object.keys(page14.checkedTeams).filter((teamId) => page14.checkedTeams[teamId]).length;
     html += '<div class="bottom-bar">';
     html += results.length ? '<button class="btn btn-primary btn-block" type="button" data-p5-match-action="submit">\u5411' + checkedCount + "\u5BB6\u56E2\u961F\u53D1\u9001\u9700\u6C42</button>" : '<button class="btn btn-outline btn-block" type="button" data-p5-match-action="summary">\u8FD4\u56DE\u8C03\u6574\u9700\u6C42</button>';
     html += "</div>";
     return html;
   }
-  function bindMatchResults(page13) {
+  function bindMatchResults(page14) {
     document.querySelectorAll(".p5-match-card").forEach((card) => {
       card.addEventListener("click", (event) => {
         if (event.target.closest("[data-p5-match-action]")) return;
-        page13.toggleCheck(card.getAttribute("data-team"));
+        page14.toggleCheck(card.getAttribute("data-team"));
       });
     });
     document.querySelectorAll('[data-p5-match-action="reason"]').forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-        page13.toggleReason(button);
+        page14.toggleReason(button);
       });
     });
     document.querySelectorAll('[data-p5-match-action="team-detail"]').forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-        page13.openMatchTeamDetail(button.closest(".p5-match-card").getAttribute("data-team"));
+        page14.openMatchTeamDetail(button.closest(".p5-match-card").getAttribute("data-team"));
       });
     });
     document.querySelectorAll('[data-p5-match-action="service-detail"]').forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-        page13.openMatchServiceDetail(button.closest(".p5-match-card").getAttribute("data-team"));
+        page14.openMatchServiceDetail(button.closest(".p5-match-card").getAttribute("data-team"));
       });
     });
     const batchButton = document.querySelector('[data-p5-match-action="batch"]');
-    if (batchButton) batchButton.addEventListener("click", () => page13.changeBatch());
+    if (batchButton) batchButton.addEventListener("click", () => page14.changeBatch());
     const categoryButton = document.querySelector('[data-p5-match-action="category"]');
-    if (categoryButton) categoryButton.addEventListener("click", () => navigateTo("p2", { categoryId: page13.params.categoryId || "law" }));
+    if (categoryButton) categoryButton.addEventListener("click", () => navigateTo("p2", { categoryId: page14.params.categoryId || "law" }));
     const summaryButton = document.querySelector('[data-p5-match-action="summary"]');
-    if (summaryButton) summaryButton.addEventListener("click", () => page13.returnToSummary());
+    if (summaryButton) summaryButton.addEventListener("click", () => page14.returnToSummary());
     const submitButton = document.querySelector('[data-p5-match-action="submit"]');
-    if (submitButton) submitButton.addEventListener("click", () => page13.showSuccess());
+    if (submitButton) submitButton.addEventListener("click", () => page14.showSuccess());
   }
 
   // src/pages/p5-dialog/MatchingProgress.js
@@ -4424,21 +4552,21 @@
     "\u7B5B\u9009\u53EF\u627F\u63A5\u7684\u670D\u52A1\u56E2\u961F",
     "\u6838\u5BF9\u76F8\u5173\u6848\u4F8B\u4E0E\u670D\u52A1\u8868\u73B0"
   ];
-  function conditionItems(page13) {
+  function conditionItems(page14) {
     const items = [
-      ["\u5339\u914D\u670D\u52A1", page13.resolveSku()],
-      ["\u6240\u5728\u5730\u533A", page13.collected.city],
-      ["\u9884\u7B97\u8303\u56F4", page13.collected.budget]
+      ["\u5339\u914D\u670D\u52A1", page14.resolveSku()],
+      ["\u6240\u5728\u5730\u533A", page14.collected.city],
+      ["\u9884\u7B97\u8303\u56F4", page14.collected.budget]
     ];
     return items.filter((item) => item[1] && item[1] !== "\u672A\u63D0\u4F9B");
   }
-  function renderMatchingProgress(page13, activeStep = 0) {
+  function renderMatchingProgress(page14, activeStep = 0) {
     let html = '<main class="p5-matching" role="status" aria-live="polite">';
     html += '<div class="p5-matching-orbit" aria-hidden="true"><span></span><span></span><span></span></div>';
     html += "<h1>\u6B63\u5728\u4E3A\u4F60\u7CBE\u51C6\u5339\u914D</h1>";
     html += '<p class="p5-matching-lead">\u7EFC\u5408\u9700\u6C42\u5951\u5408\u5EA6\u3001\u7528\u6237\u8BC4\u4EF7\u548C\u5E73\u53F0\u670D\u52A1\u8BB0\u5F55\uFF0C\u4E3A\u4F60\u7B5B\u9009\u5408\u9002\u7684\u670D\u52A1\u56E2\u961F\u3002</p>';
     html += '<div class="p5-matching-conditions">';
-    conditionItems(page13).forEach((item) => {
+    conditionItems(page14).forEach((item) => {
       html += "<span><small>" + escapeHTML(item[0]) + "</small><strong>" + escapeHTML(item[1]) + "</strong></span>";
     });
     html += "</div>";
@@ -4464,23 +4592,23 @@
   }
 
   // src/pages/p5-dialog/SummaryCard.js
-  function renderSummaryCard(page13) {
-    const collected = page13.collected;
+  function renderSummaryCard(page14) {
+    const collected = page14.collected;
     const value = (key) => collected[key] && collected[key] !== "\u672A\u63D0\u4F9B" ? collected[key] : "";
-    const sku = page13.resolveSku();
+    const sku = page14.resolveSku();
     const fieldGroups = [
       {
         title: "\u6838\u5FC3\u9700\u6C42",
-        fields: page13.summaryFields.filter((field) => ["issue", "budget", "timeline", "city"].includes(field.key))
+        fields: page14.summaryFields.filter((field) => ["issue", "budget", "timeline", "city"].includes(field.key))
       },
       {
         title: "\u8865\u5145\u4FE1\u606F",
-        fields: page13.summaryFields.filter((field) => ["skuSpecific", "extra"].includes(field.key))
+        fields: page14.summaryFields.filter((field) => ["skuSpecific", "extra"].includes(field.key))
       }
     ];
     let html = '<div class="chat-msg-row ai p5-confirmation-row"><div class="chat-avatar p5-avatar">' + icon("file-text", 18) + '</div><article class="p5-confirmation-card">';
-    if (page13.resubmitFrom) {
-      html += '<div class="p5-confirmation-note">\u5DF2\u5E26\u5165\u539F\u9700\u6C42\u300C' + page13.resubmitTitle + "\u300D\u7684\u4FE1\u606F</div>";
+    if (page14.resubmitFrom) {
+      html += '<div class="p5-confirmation-note">\u5DF2\u5E26\u5165\u539F\u9700\u6C42\u300C' + page14.resubmitTitle + "\u300D\u7684\u4FE1\u606F</div>";
     }
     html += '<div class="p5-summary-title"><span>\u672C\u6B21\u5339\u914D\u6761\u4EF6</span><small>\u8BF7\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</small></div>';
     html += '<div class="p5-summary-desc">' + user.company + "\u9700\u8981" + (sku === "\u7EFC\u5408\u670D\u52A1" ? "\u4F01\u4E1A\u670D\u52A1\u652F\u6301" : sku + "\u670D\u52A1") + "\u3002\u5E73\u53F0\u4F1A\u7EFC\u5408\u9700\u6C42\u5951\u5408\u5EA6\u4E0E\u56E2\u961F\u670D\u52A1\u8868\u73B0\u8FDB\u884C\u63A8\u8350\u3002</div>";
@@ -4492,10 +4620,10 @@
         const fieldValue = value(field.key);
         html += '<div class="p5-summary-field">';
         html += '<span class="p5-summary-field-label">' + field.label + "</span>";
-        if (page13.editMode) {
+        if (page14.editMode) {
           if (field.key === "issue") {
             html += '<select class="p5-summary-input p5-summary-select" data-field="issue">';
-            page13.getKnownSkuOptions().forEach((option) => {
+            page14.getKnownSkuOptions().forEach((option) => {
               html += '<option value="' + escapeHTML(option) + '"' + (option === fieldValue ? " selected" : "") + ">" + escapeHTML(option) + "</option>";
             });
             html += "</select>";
@@ -4511,7 +4639,7 @@
     });
     html += "</div>";
     html += '<div class="p5-confirmation-actions">';
-    if (page13.editMode) {
+    if (page14.editMode) {
       html += '<button class="btn btn-primary btn-block" type="button" data-p5-summary-action="save">\u4FDD\u5B58\u4FEE\u6539</button>';
     } else {
       html += '<button class="btn btn-outline" type="button" data-p5-summary-action="edit">\u4FEE\u6539\u4FE1\u606F</button><button class="btn btn-primary" type="button" data-p5-summary-action="match">\u786E\u8BA4\u5E76\u5F00\u59CB\u5339\u914D</button>';
@@ -4519,13 +4647,13 @@
     html += "</div></article></div>";
     return html;
   }
-  function bindSummaryCard(page13) {
+  function bindSummaryCard(page14) {
     const editButton = document.querySelector('[data-p5-summary-action="edit"]');
-    if (editButton) editButton.addEventListener("click", () => page13.toggleEdit());
+    if (editButton) editButton.addEventListener("click", () => page14.toggleEdit());
     const saveButton = document.querySelector('[data-p5-summary-action="save"]');
-    if (saveButton) saveButton.addEventListener("click", () => page13.saveSummaryEdit());
+    if (saveButton) saveButton.addEventListener("click", () => page14.saveSummaryEdit());
     const matchButton = document.querySelector('[data-p5-summary-action="match"]');
-    if (matchButton) matchButton.addEventListener("click", () => page13.showMatch());
+    if (matchButton) matchButton.addEventListener("click", () => page14.showMatch());
   }
 
   // src/pages/p5-dialog/SuccessView.js
@@ -4593,8 +4721,8 @@
     {
       number: 2,
       key: "skuSpecific",
-      question: (page13) => specificQuestions[page13.collected.issue] || "",
-      quickOptions: (page13) => specificOptions[page13.collected.issue] || ["\u5148\u8DF3\u8FC7"],
+      question: (page14) => specificQuestions[page14.collected.issue] || "",
+      quickOptions: (page14) => specificOptions[page14.collected.issue] || ["\u5148\u8DF3\u8FC7"],
       onAnswer: () => "budget"
     },
     {
@@ -4622,11 +4750,11 @@
   function getDialogStep(numberOrKey) {
     return dialogSteps.find((step) => step.number === numberOrKey || step.key === numberOrKey) || null;
   }
-  function applyStepAnswer(page13, value, skipped = false) {
-    const step = getDialogStep(page13.step);
+  function applyStepAnswer(page14, value, skipped = false) {
+    const step = getDialogStep(page14.step);
     if (!step) return "issue";
-    page13.collected[step.key] = value;
-    return step.onAnswer(page13, skipped);
+    page14.collected[step.key] = value;
+    return step.onAnswer(page14, skipped);
   }
 
   // src/pages/p5-dialog/index.js
@@ -5300,7 +5428,10 @@
     "\u4E13\u5229\u7533\u8BF7": "\u6280\u672F\u65B9\u6848\u68B3\u7406\u4E0E\u4E13\u5229\u7533\u8BF7\u652F\u6301",
     "\u8457\u4F5C\u6743\u767B\u8BB0": "\u4F5C\u54C1\u6750\u6599\u6574\u7406\u4E0E\u767B\u8BB0\u7533\u8BF7",
     "\u5546\u6807\u9A73\u56DE\u590D\u5BA1": "\u9A73\u56DE\u539F\u56E0\u5206\u6790\u4E0E\u590D\u5BA1\u6750\u6599\u51C6\u5907",
-    "\u4E13\u5229\u4FB5\u6743\u5206\u6790": "\u4FB5\u6743\u98CE\u9669\u5224\u65AD\u4E0E\u5E94\u5BF9\u5EFA\u8BAE"
+    "\u4E13\u5229\u4FB5\u6743\u5206\u6790": "\u4FB5\u6743\u98CE\u9669\u5224\u65AD\u4E0E\u5E94\u5BF9\u5EFA\u8BAE",
+    "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A": "\u8D44\u683C\u8BC4\u4F30\u3001\u7533\u62A5\u6750\u6599\u89C4\u5212\u4E0E\u8FDB\u5EA6\u8DDF\u8FDB",
+    "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5": "\u6307\u6807\u8BC4\u4F30\u3001\u6750\u6599\u6574\u7406\u4E0E\u7533\u62A5\u8DDF\u8FDB",
+    "\u79D1\u6280\u9879\u76EE\u7533\u62A5": "\u9879\u76EE\u9002\u914D\u8BC4\u4F30\u4E0E\u7533\u62A5\u6750\u6599\u51C6\u5907"
   };
   function getServiceDescription(sku) {
     return serviceDescriptions[sku] || "\u67E5\u770B\u670D\u52A1\u8303\u56F4\u3001\u4EA4\u4ED8\u5185\u5BB9\u4E0E\u529E\u7406\u8BF4\u660E";
@@ -5316,6 +5447,7 @@
       if (!team) return '<div class="empty-state"><div class="empty-icon">' + icon("help", 48) + '</div><div class="empty-title">\u56E2\u961F\u4E0D\u5B58\u5728</div></div>';
       this.state = { team, params: params || {}, introExpanded: false, verifyExpanded: false };
       const selectedSku = params.sku && team.skus.includes(params.sku) ? params.sku : team.skus[0] || "";
+      const stagedSelected = isStagedService(selectedSku);
       const selectedCategory = getCategoryForSku(selectedSku, categories) || getCategoryForTeam(team, categories);
       const selectedCategoryId = selectedCategory ? selectedCategory.id : "";
       const dimensions = getTeamRatingDimensions(team);
@@ -5345,11 +5477,11 @@
       html += renderReviews(team, dimensions);
       html += renderQA(getTeamQuestions(team.id, store.teams));
       const matchSelected = params.source === "match" && Boolean(params.matchSelected);
-      html += '<div class="bottom-bar"><button class="p3-bottom-ai" id="p3PlatformFAQ" type="button">' + icon("message", 22) + '<span class="p3-bottom-ai-label">\u5E38\u89C1\u95EE\u9898</span></button><div class="p3-bottom-price"><div class="p3-bottom-price-label">\u8D77\u4EF7</div><div class="p3-bottom-price-val">' + team.priceText + "</div></div>";
+      html += '<div class="bottom-bar"><button class="p3-bottom-ai" id="p3PlatformFAQ" type="button">' + icon("message", 22) + '<span class="p3-bottom-ai-label">\u5E38\u89C1\u95EE\u9898</span></button><div class="p3-bottom-price"><div class="p3-bottom-price-label">' + (stagedSelected ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u8D77\u4EF7") + '</div><div class="p3-bottom-price-val">' + team.priceText + "</div></div>";
       if (params.source === "match") {
         html += '<button class="btn ' + (matchSelected ? "btn-outline" : "btn-primary") + ' p3-match-select" id="p3MatchSelect" type="button">' + (matchSelected ? "\u53D6\u6D88\u9009\u62E9" : "\u9009\u62E9\u8BE5\u56E2\u961F") + "</button>";
       } else {
-        html += '<button class="btn btn-primary p3-consult-direct" id="p3ConsultDirect" type="button">\u5411\u8BE5\u56E2\u961F\u54A8\u8BE2</button>';
+        html += '<button class="btn btn-primary p3-consult-direct" id="p3ConsultDirect" type="button">' + (stagedSelected ? "\u4E86\u89E3\u670D\u52A1\u5E76\u83B7\u53D6\u65B9\u6848" : "\u5411\u8BE5\u56E2\u961F\u54A8\u8BE2") + "</button>";
       }
       html += "</div>";
       return html;
@@ -5420,7 +5552,8 @@
       const direct = document.getElementById("p3ConsultDirect");
       if (direct) direct.addEventListener("click", () => {
         const sku = this.state.params.sku && this.state.team.skus.includes(this.state.params.sku) ? this.state.params.sku : this.state.team.skus[0];
-        startDirectConsultation(this.state.team.id, sku);
+        if (isStagedService(sku)) navigateTo("p10", { teamId: this.state.team.id, sku });
+        else startDirectConsultation(this.state.team.id, sku);
       });
       const match = document.getElementById("p3MatchSelect");
       if (match) match.addEventListener("click", () => {
@@ -5570,7 +5703,7 @@
     "enter-chat": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam }),
     "add-service": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam, open: "change-order" }),
     "anon-call": ({ teamId, demand }) => anonymousCall(getTeam(teamId || demand.chosenTeam, store.teams)),
-    "confirm-acceptance": ({ demand, page: page13, options }) => showModal({
+    "confirm-acceptance": ({ demand, page: page14, options }) => showModal({
       title: "\u786E\u8BA4\u9A8C\u6536\u901A\u8FC7\uFF1F",
       body: "\u8BF7\u786E\u8BA4\u4EA4\u4ED8\u6210\u679C\u7B26\u5408\u5DF2\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u3002\u9A8C\u6536\u540E\u672C\u6B21\u670D\u52A1\u5C06\u5B8C\u6210\uFF0C\u5E76\u5F00\u653E\u8BC4\u4EF7\u5165\u53E3\u3002",
       cancelText: "\u7EE7\u7EED\u68C0\u67E5",
@@ -5578,14 +5711,14 @@
       onConfirm() {
         changed(confirmAcceptance(demand, options));
         toast("\u9A8C\u6536\u5B8C\u6210\uFF0C\u53EF\u4EE5\u8BC4\u4EF7\u4E86");
-        page13.refreshPage(demand);
+        page14.refreshPage(demand);
         updateBadge();
       }
     }),
     "go-review": ({ demand }) => navigateTo("p8", { demandId: demand.id }),
     "view-review": ({ demand }) => navigateTo("p8", { demandId: demand.id, readonly: true }),
-    "continue-cooperation": ({ demand, page: page13 }) => page13.openContinueCooperation(demand),
-    withdraw: ({ demand, page: page13, options }) => showModal({
+    "continue-cooperation": ({ demand, page: page14 }) => page14.openContinueCooperation(demand),
+    withdraw: ({ demand, page: page14, options }) => showModal({
       title: "\u786E\u8BA4\u64A4\u56DE\u9700\u6C42\uFF1F",
       body: "\u64A4\u56DE\u540E\uFF0C\u5DF2\u54CD\u5E94\u7684\u56E2\u961F\u5C06\u6536\u5230\u901A\u77E5\u3002",
       confirmText: "\u786E\u8BA4\u64A4\u56DE",
@@ -5597,7 +5730,7 @@
         addTimelineEvent(demand, "cancel", "\u9700\u6C42\u5DF2\u64A4\u56DE", "\u4F60\u4E3B\u52A8\u64A4\u56DE\u4E86\u672C\u6B21\u9700\u6C42\uFF0C\u53EF\u4FEE\u6539\u540E\u91CD\u65B0\u63D0\u4EA4", options.nowLabel);
         emitChange();
         toast("\u5DF2\u64A4\u56DE");
-        page13.refreshPage(demand);
+        page14.refreshPage(demand);
         updateBadge();
       }
     }),
@@ -5609,16 +5742,16 @@
       const tab = document.querySelector('[data-p6-tab="progress"]');
       if (tab) tab.click();
     },
-    "upload-materials": ({ demand, page: page13 }) => page13.openMaterialUpload(demand),
+    "upload-materials": ({ demand, page: page14 }) => page14.openMaterialUpload(demand),
     "open-agreement": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam, open: "agreement" }),
-    "replace-batch": ({ demand, page: page13, options }) => {
+    "replace-batch": ({ demand, page: page14, options }) => {
       const nextTeams = changed(replaceDemandTeamBatch(demand, options));
       toast(nextTeams.length ? "\u539F\u9700\u6C42\u5DF2\u53D1\u9001\u7ED9\u65B0\u7684\u4E00\u6279\u56E2\u961F" : "\u6682\u65F6\u6CA1\u6709\u66F4\u591A\u7B26\u5408\u6761\u4EF6\u7684\u56E2\u961F");
-      page13.refreshPage(demand);
+      page14.refreshPage(demand);
       if (nextTeams.length) {
         simulateResponses(demand.id, (updated) => {
           emitChange();
-          page13.refreshPage(updated);
+          page14.refreshPage(updated);
           updateBadge();
         }, options);
       }
@@ -5792,14 +5925,14 @@
     html += "</div>";
     return html;
   }
-  function renderProgressTab(demand, page13) {
+  function renderProgressTab(demand, page14) {
     let html = '<div class="p6-progress-wrap">';
-    if (["pending", "choosing", "communicating", "plan_pending"].includes(demand.status)) html += page13.renderResponseRoundSummary(demand);
+    if (["pending", "choosing", "communicating", "plan_pending"].includes(demand.status)) html += page14.renderResponseRoundSummary(demand);
     html += '<div class="p6-progress-summary">' + (demand.progress || "") + "</div>";
     html += renderDemandTimeline(demand);
-    if (demand.servicePlan && ["plan_pending", "contract_pending", "active"].includes(demand.status)) html += page13.renderPlanTab(demand);
-    if (demand.agreement && demand.status === "contract_pending") html += page13.renderAgreementSummary(demand);
-    if (demand.delivery && ["acceptance", "done"].includes(demand.status)) html += page13.renderDeliveryTab(demand);
+    if (demand.servicePlan && ["plan_pending", "contract_pending", "active"].includes(demand.status)) html += page14.renderPlanTab(demand);
+    if (demand.agreement && demand.status === "contract_pending") html += page14.renderAgreementSummary(demand);
+    if (demand.delivery && ["acceptance", "done"].includes(demand.status)) html += page14.renderDeliveryTab(demand);
     html += "</div>";
     return html;
   }
@@ -5920,13 +6053,13 @@
     html += "</div></div>";
     return html;
   }
-  function renderTeamsTab(demand, page13) {
-    if (["contract_pending", "active", "acceptance", "done"].includes(demand.status)) return page13.renderTeamTab(demand);
+  function renderTeamsTab(demand, page14) {
+    if (["contract_pending", "active", "acceptance", "done"].includes(demand.status)) return page14.renderTeamTab(demand);
     const blocks = [];
-    if ((demand.accepted || []).length) blocks.push('<section class="p6-team-group"><h3>\u5DF2\u54CD\u5E94 ' + demand.accepted.length + "</h3>" + page13.renderAcceptedTab(demand) + "</section>");
-    if ((demand.pending || []).length) blocks.push('<section class="p6-team-group"><h3>\u7B49\u5F85\u54CD\u5E94 ' + demand.pending.length + "</h3>" + page13.renderPendingTab(demand) + "</section>");
-    if ((demand.timedOut || []).length) blocks.push('<section class="p6-team-group"><h3>\u672A\u5728\u65F6\u9650\u5185\u54CD\u5E94 ' + demand.timedOut.length + "</h3>" + page13.renderTimedOutTab(demand) + "</section>");
-    if ((demand.rejected || []).length) blocks.push('<section class="p6-team-group"><h3>\u6682\u672A\u627F\u63A5 ' + demand.rejected.length + "</h3>" + page13.renderRejectedTab(demand) + "</section>");
+    if ((demand.accepted || []).length) blocks.push('<section class="p6-team-group"><h3>\u5DF2\u54CD\u5E94 ' + demand.accepted.length + "</h3>" + page14.renderAcceptedTab(demand) + "</section>");
+    if ((demand.pending || []).length) blocks.push('<section class="p6-team-group"><h3>\u7B49\u5F85\u54CD\u5E94 ' + demand.pending.length + "</h3>" + page14.renderPendingTab(demand) + "</section>");
+    if ((demand.timedOut || []).length) blocks.push('<section class="p6-team-group"><h3>\u672A\u5728\u65F6\u9650\u5185\u54CD\u5E94 ' + demand.timedOut.length + "</h3>" + page14.renderTimedOutTab(demand) + "</section>");
+    if ((demand.rejected || []).length) blocks.push('<section class="p6-team-group"><h3>\u6682\u672A\u627F\u63A5 ' + demand.rejected.length + "</h3>" + page14.renderRejectedTab(demand) + "</section>");
     if (!blocks.length) return '<div class="empty-state"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">\u6682\u65E0\u56E2\u961F\u8BB0\u5F55</div></div>';
     return '<div class="p6-teams-overview">' + blocks.join("") + "</div>";
   }
@@ -6579,22 +6712,22 @@
     html += "</div>";
     return html;
   }
-  function bindDimensionStars(page13) {
+  function bindDimensionStars(page14) {
     document.querySelectorAll(".p8-dimension-stars").forEach((group) => {
       const key = group.getAttribute("data-dimension");
       const starSpans = group.querySelectorAll("[data-star]");
       starSpans.forEach((span) => {
         span.addEventListener("click", function() {
           const star = parseInt(this.getAttribute("data-star"), 10);
-          page13.state.ratings[key] = star;
+          page14.state.ratings[key] = star;
           starSpans.forEach((item) => {
             item.classList.toggle("active", parseInt(item.getAttribute("data-star"), 10) <= star);
           });
           group.parentNode.querySelector(".p8-dimension-score").textContent = star.toFixed(1);
-          const overall = page13.getOverallRating(page13.state.ratings);
-          const complete = Object.keys(page13.state.ratings).length === page13.dimensionKeys.length;
+          const overall = page14.getOverallRating(page14.state.ratings);
+          const complete = Object.keys(page14.state.ratings).length === page14.dimensionKeys.length;
           document.getElementById("p8OverallScore").textContent = complete ? overall.toFixed(1) : "\u2014";
-          document.getElementById("p8OverallLabel").textContent = complete ? page13.getRatingLabel(overall) : "\u5F85\u8BC4\u5206";
+          document.getElementById("p8OverallLabel").textContent = complete ? page14.getRatingLabel(overall) : "\u5F85\u8BC4\u5206";
           document.getElementById("p8LowRatingHelp").classList.toggle("visible", complete && overall <= 2);
           const submitButton = document.getElementById("p8-submit");
           if (submitButton) submitButton.disabled = !complete;
@@ -6612,20 +6745,20 @@
     if (readonly) return "";
     return '<div class="p8-review-tags" id="p8ReviewTags">' + QUICK_TAGS.map((tag) => '<button type="button" data-review-tag="' + tag + '">' + tag + "</button>").join("") + '</div><label class="p8-anonymous"><input id="p8Anonymous" type="checkbox" checked><span>' + icon("shield", 16) + "</span><strong>\u533F\u540D\u8BC4\u4EF7</strong><small>\u9ED8\u8BA4\u9690\u85CF\u4F01\u4E1A\u540D\u79F0</small></label>";
   }
-  function bindTagPicker(page13) {
+  function bindTagPicker(page14) {
     document.querySelectorAll("[data-review-tag]").forEach((button) => {
       button.addEventListener("click", function() {
         const tag = this.getAttribute("data-review-tag");
-        const index = page13.state.tags.indexOf(tag);
-        if (index >= 0) page13.state.tags.splice(index, 1);
-        else page13.state.tags.push(tag);
+        const index = page14.state.tags.indexOf(tag);
+        if (index >= 0) page14.state.tags.splice(index, 1);
+        else page14.state.tags.push(tag);
         this.classList.toggle("active", index < 0);
       });
     });
     const anonymous = document.getElementById("p8Anonymous");
     if (anonymous) {
       anonymous.addEventListener("change", function() {
-        page13.state.anonymous = this.checked;
+        page14.state.anonymous = this.checked;
       });
     }
   }
@@ -7036,6 +7169,56 @@
       period: "\u901A\u5E38 3\u20144 \u5468",
       materials: ["\u516C\u53F8\u80A1\u6743\u7ED3\u6784", "\u62DF\u6FC0\u52B1\u4EBA\u5458\u4FE1\u606F", "\u5C97\u4F4D\u548C\u8D21\u732E\u8BF4\u660E", "\u672A\u6765\u878D\u8D44\u8BA1\u5212"],
       exclusions: ["\u4E2A\u4EBA\u7A0E\u52A1\u7B79\u5212", "\u5DE5\u5546\u53D8\u66F4\u4EE3\u529E", "\u52B3\u52A8\u4E89\u8BAE\u5904\u7406"]
+    },
+    "\u5546\u6807\u6CE8\u518C": {
+      intro: "\u5148\u5B8C\u6210\u5546\u6807\u68C0\u7D22\u548C\u7533\u8BF7\u65B9\u6848\u8BC4\u4F30\uFF0C\u518D\u6309\u786E\u8BA4\u7684\u7C7B\u522B\u3001\u8303\u56F4\u548C\u98CE\u9669\u5B89\u6392\u5206\u9636\u6BB5\u529E\u7406\u3002",
+      suitableFor: "\u9002\u5408\u9700\u8981\u5EFA\u7ACB\u54C1\u724C\u4FDD\u62A4\u3001\u9996\u6B21\u7533\u8BF7\u5546\u6807\u6216\u8865\u5145\u6838\u5FC3\u7C7B\u522B\u5E03\u5C40\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u7533\u8BF7\u4E3B\u4F53\u548C\u5546\u6807\u56FE\u6837\u6838\u5BF9", "\u8FD1\u4F3C\u68C0\u7D22\u4E0E\u6CE8\u518C\u98CE\u9669\u5206\u6790", "\u5546\u54C1\u6216\u670D\u52A1\u7C7B\u522B\u5EFA\u8BAE", "\u7533\u8BF7\u6587\u4EF6\u51C6\u5907\u3001\u63D0\u4EA4\u4E0E\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u5546\u6807\u68C0\u7D22\u5206\u6790", "\u7C7B\u522B\u4E0E\u7533\u8BF7\u7B56\u7565\u5EFA\u8BAE", "\u5B9A\u7A3F\u7533\u8BF7\u6587\u4EF6", "\u63D0\u4EA4\u56DE\u6267\u53CA\u5BA1\u67E5\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u57FA\u7840\u6750\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u7B7E\u7EA6\u5E76\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5BA1\u67E5\u7ED3\u679C"],
+      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
+      materials: ["\u7533\u8BF7\u4E3B\u4F53\u8BC1\u7167", "\u5546\u6807\u6587\u5B57\u6216\u56FE\u6837", "\u62DF\u4F7F\u7528\u7684\u5546\u54C1\u6216\u670D\u52A1\u8303\u56F4"],
+      exclusions: ["\u4E3B\u7BA1\u673A\u6784\u6536\u53D6\u7684\u5B98\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u590D\u5BA1\u3001\u5F02\u8BAE\u6216\u8BC9\u8BBC\u670D\u52A1"]
+    },
+    "\u4E13\u5229\u7533\u8BF7": {
+      intro: "\u57FA\u4E8E\u6280\u672F\u65B9\u6848\u5B8C\u6210\u53EF\u7533\u8BF7\u6027\u8BC4\u4F30\u3001\u6587\u4EF6\u64B0\u5199\u4E0E\u5B9A\u7A3F\uFF0C\u518D\u8FDB\u5165\u6B63\u5F0F\u63D0\u4EA4\u548C\u5BA1\u67E5\u8DDF\u8FDB\u3002",
+      suitableFor: "\u9002\u5408\u62E5\u6709\u65B0\u6280\u672F\u65B9\u6848\u3001\u4EA7\u54C1\u7ED3\u6784\u6216\u5DE5\u827A\u65B9\u6CD5\uFF0C\u9700\u8981\u8BC4\u4F30\u4E13\u5229\u4FDD\u62A4\u8DEF\u5F84\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u6280\u672F\u4EA4\u5E95\u4E0E\u7533\u8BF7\u7C7B\u578B\u8BC4\u4F30", "\u73B0\u6709\u6280\u672F\u68C0\u7D22\u53CA\u98CE\u9669\u63D0\u793A", "\u7533\u8BF7\u6587\u4EF6\u64B0\u5199\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u63D0\u4EA4\u548C\u5BA1\u67E5\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u68C0\u7D22\u6216\u53EF\u7533\u8BF7\u6027\u5206\u6790", "\u4E13\u5229\u7533\u8BF7\u6587\u4EF6", "\u6B63\u5F0F\u63D0\u4EA4\u56DE\u6267", "\u5BA1\u67E5\u610F\u89C1\u4E0E\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u6280\u672F\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5BA1\u67E5\u7ED3\u679C"],
+      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
+      materials: ["\u6280\u672F\u4EA4\u5E95\u4E66", "\u4EA7\u54C1\u56FE\u7EB8\u6216\u6D41\u7A0B\u8BF4\u660E", "\u53D1\u660E\u4EBA\u53CA\u7533\u8BF7\u4EBA\u4FE1\u606F"],
+      exclusions: ["\u4E3B\u7BA1\u673A\u6784\u6536\u53D6\u7684\u5B98\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u7B54\u590D\u3001\u590D\u5BA1\u6216\u8BC9\u8BBC\u670D\u52A1"]
+    },
+    "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A": {
+      intro: "\u5148\u6838\u9A8C\u4F01\u4E1A\u57FA\u7840\u6761\u4EF6\u548C\u8D44\u6599\u5B8C\u6574\u5EA6\uFF0C\u518D\u786E\u5B9A\u7533\u62A5\u8303\u56F4\u3001\u4E24\u9636\u6BB5\u6210\u679C\u548C\u529E\u7406\u8BA1\u5212\u3002",
+      suitableFor: "\u9002\u5408\u5177\u5907\u7814\u53D1\u6D3B\u52A8\u3001\u77E5\u8BC6\u4EA7\u6743\u548C\u79D1\u6280\u6210\u679C\u8F6C\u5316\u57FA\u7840\uFF0C\u8BA1\u5212\u7533\u62A5\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u7533\u62A5\u8D44\u683C\u4E0E\u5DEE\u8DDD\u8BC4\u4F30", "\u7814\u53D1\u53CA\u77E5\u8BC6\u4EA7\u6743\u8D44\u6599\u89C4\u5212", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u4E0E\u8BC4\u5BA1\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u8D44\u683C\u8BC4\u4F30\u62A5\u544A", "\u7533\u62A5\u6750\u6599\u6E05\u5355\u4E0E\u89C4\u5212", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
+      period: "\u9884\u8BA1 2\u20144 \u4E2A\u6708\uFF0C\u4EE5\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
+      materials: ["\u4F01\u4E1A\u8BC1\u7167\u53CA\u4EBA\u5458\u60C5\u51B5", "\u77E5\u8BC6\u4EA7\u6743\u548C\u7814\u53D1\u9879\u76EE\u8D44\u6599", "\u8D22\u52A1\u53CA\u6536\u5165\u76F8\u5173\u8D44\u6599"],
+      exclusions: ["\u5BA1\u8BA1\u3001\u9274\u8BC1\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u672A\u5728\u65B9\u6848\u4E2D\u7EA6\u5B9A\u7684\u8D44\u6599\u6574\u6539\u6216\u65B0\u589E\u9879\u76EE"]
+    },
+    "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5": {
+      intro: "\u7ED3\u5408\u4F01\u4E1A\u89C4\u6A21\u3001\u7ECF\u8425\u6307\u6807\u548C\u4E13\u4E1A\u5316\u80FD\u529B\u5B8C\u6210\u8D44\u683C\u8BC4\u4F30\uFF0C\u5E76\u6309\u7533\u62A5\u7A97\u53E3\u63A8\u8FDB\u6750\u6599\u51C6\u5907\u3002",
+      suitableFor: "\u9002\u5408\u4E3B\u8425\u4E1A\u52A1\u805A\u7126\u3001\u5177\u5907\u4E13\u4E1A\u5316\u548C\u521B\u65B0\u80FD\u529B\uFF0C\u8BA1\u5212\u7533\u62A5\u4E13\u7CBE\u7279\u65B0\u8D44\u8D28\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u4F01\u4E1A\u6761\u4EF6\u4E0E\u7533\u62A5\u53E3\u5F84\u8BC4\u4F30", "\u6307\u6807\u5DEE\u8DDD\u53CA\u8865\u5145\u6750\u6599\u5EFA\u8BAE", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u53CA\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u8D44\u683C\u8BC4\u4F30\u7ED3\u8BBA", "\u6750\u6599\u6E05\u5355\u548C\u5DEE\u8DDD\u5EFA\u8BAE", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
+      period: "\u4EE5\u5F53\u5730\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
+      materials: ["\u4F01\u4E1A\u57FA\u672C\u4FE1\u606F", "\u4E3B\u8425\u4E1A\u52A1\u53CA\u7ECF\u8425\u6570\u636E", "\u521B\u65B0\u6210\u679C\u4E0E\u8D44\u8D28\u6750\u6599"],
+      exclusions: ["\u5BA1\u8BA1\u3001\u68C0\u6D4B\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u8D44\u8D28\u8865\u529E\u6216\u957F\u671F\u8F85\u5BFC"]
+    },
+    "\u79D1\u6280\u9879\u76EE\u7533\u62A5": {
+      intro: "\u6839\u636E\u4F01\u4E1A\u6761\u4EF6\u548C\u7533\u62A5\u901A\u77E5\u8BC4\u4F30\u9002\u914D\u9879\u76EE\uFF0C\u786E\u8BA4\u6750\u6599\u8303\u56F4\u540E\u5206\u9636\u6BB5\u5B8C\u6210\u7533\u62A5\u3002",
+      suitableFor: "\u9002\u5408\u5E0C\u671B\u7533\u8BF7\u79D1\u6280\u8BA1\u5212\u3001\u4E13\u9879\u8D44\u91D1\u6216\u4EA7\u4E1A\u652F\u6301\u9879\u76EE\u7684\u79D1\u6280\u578B\u4F01\u4E1A\u3002",
+      scope: ["\u7533\u62A5\u9879\u76EE\u9002\u914D\u8BC4\u4F30", "\u7533\u62A5\u6761\u4EF6\u548C\u6750\u6599\u5DEE\u8DDD\u5206\u6790", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u53CA\u540E\u7EED\u8DDF\u8FDB"],
+      deliverables: ["\u9879\u76EE\u9002\u914D\u5EFA\u8BAE", "\u7533\u62A5\u6750\u6599\u6E05\u5355", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
+      period: "\u4EE5\u5177\u4F53\u9879\u76EE\u7533\u62A5\u901A\u77E5\u4E3A\u51C6",
+      materials: ["\u4F01\u4E1A\u53CA\u56E2\u961F\u4FE1\u606F", "\u9879\u76EE\u6280\u672F\u4E0E\u5546\u4E1A\u8D44\u6599", "\u8D22\u52A1\u53CA\u77E5\u8BC6\u4EA7\u6743\u6750\u6599"],
+      exclusions: ["\u5BA1\u8BA1\u3001\u68C0\u6D4B\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u7533\u62A5\u8303\u56F4\u4E4B\u5916\u7684\u957F\u671F\u54A8\u8BE2\u670D\u52A1"]
     }
   };
   var defaultServiceBlueprint = {
@@ -7092,14 +7275,15 @@
       const sku = params.sku || team && team.skus[0];
       if (!team || !sku) return '<div class="empty-state"><div class="empty-title">\u670D\u52A1\u4E0D\u5B58\u5728</div></div>';
       const detail = this.getBlueprint(sku);
+      const staged = getStagedServiceConfig(sku);
       const category = getCategoryForSku(sku, categories);
       const safeTeamId = escapeHTML(team.id);
       const safeSku = escapeHTML(sku);
       let html = '<div class="nav-bar"><button class="nav-back" id="p10Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u670D\u52A1\u8BE6\u60C5</div><div style="width:40px"></div></div>';
-      html += '<header class="p10-summary"><div class="p10-summary-label">' + escapeHTML(category && category.name || "\u4F01\u4E1A\u670D\u52A1") + "</div><h1>" + safeSku + "</h1><p>" + detail.intro + '</p><div class="p10-summary-meta"><strong>' + team.priceText + "</strong><span>" + team.priceMode + "</span><span>" + detail.period + "</span></div></header>";
+      html += '<header class="p10-summary"><div class="p10-summary-label">' + escapeHTML(category && category.name || "\u4F01\u4E1A\u670D\u52A1") + "</div><h1>" + safeSku + "</h1><p>" + detail.intro + '</p><div class="p10-summary-meta"><strong>' + (staged ? "\u6309\u9879\u76EE\u8BC4\u4F30\u62A5\u4EF7" : team.priceText) + "</strong><span>" + team.priceMode + "</span><span>" + detail.period + "</span></div></header>";
       html += '<button class="p10-team-row" id="p10TeamLink" type="button" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '"><span class="avatar avatar-sm" style="background:' + team.avatarColor + "20;color:" + team.avatarColor + '">' + team.avatar + "</span><span><strong>" + team.name + "</strong><small>" + team.orgShort + " \xB7 " + icon("check-circle", 12) + " \u8D44\u8D28\u5DF2\u6838\u9A8C</small></span>" + icon("chevron-right", 16) + "</button>";
-      html += '<main class="p10-content"><section><h2>\u9002\u5408\u8C01</h2><p>' + detail.suitableFor + "</p></section><section><h2>\u670D\u52A1\u5185\u5BB9</h2>" + this.renderList(detail.scope) + "</section><section><h2>\u4EA4\u4ED8\u6210\u679C</h2>" + this.renderList(detail.deliverables) + '</section><section><h2>\u670D\u52A1\u6D41\u7A0B</h2><ol class="p10-process">' + detail.process.map((step, index) => "<li><b>" + (index + 1) + "</b><span>" + step + "</span></li>").join("") + "</ol></section><section><h2>\u9700\u8981\u51C6\u5907</h2>" + this.renderList(detail.materials) + '</section><section class="p10-exclusions"><h2>\u8D39\u7528\u901A\u5E38\u4E0D\u5305\u542B</h2>' + this.renderList(detail.exclusions) + "<p>\u6700\u7EC8\u670D\u52A1\u8303\u56F4\u3001\u62A5\u4EF7\u548C\u5468\u671F\uFF0C\u4EE5\u53CC\u65B9\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002</p></section></main>";
-      html += '<div class="bottom-bar p10-bottom"><div><small>\u53C2\u8003\u8D77\u4EF7</small><strong>' + team.priceText + '</strong></div><button class="btn btn-primary" id="p10Consult" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '">\u54A8\u8BE2\u8BE5\u9879\u670D\u52A1</button></div>';
+      html += '<main class="p10-content"><section><h2>\u9002\u5408\u8C01</h2><p>' + detail.suitableFor + "</p></section><section><h2>\u670D\u52A1\u5185\u5BB9</h2>" + this.renderList(detail.scope) + "</section><section><h2>\u4EA4\u4ED8\u6210\u679C</h2>" + this.renderList(detail.deliverables) + '</section><section><h2>\u670D\u52A1\u6D41\u7A0B</h2><ol class="p10-process">' + detail.process.map((step, index) => "<li><b>" + (index + 1) + "</b><span>" + step + "</span></li>").join("") + "</ol></section><section><h2>\u9700\u8981\u51C6\u5907</h2>" + this.renderList(detail.materials) + "</section>" + (staged ? '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>\u5206\u9636\u6BB5\u4ED8\u6B3E</h2><p>\u786E\u8BA4\u524D\u4E00\u9636\u6BB5\u6210\u679C\u540E\uFF0C\u518D\u89E6\u53D1\u4E0B\u4E00\u7B14\u670D\u52A1\u6B3E\u3002</p></div><span>\u4E24\u7B14\u5404 50%</span></div><div class="p10-stage-row"><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>' + escapeHTML(staged.secondTrigger) + '</span></div><div class="p10-result-risk">' + icon("alert", 16) + "<p><strong>\u6700\u7EC8\u7ED3\u679C\u4E0D\u627F\u8BFA</strong>\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u5B58\u5728\u4E0D\u786E\u5B9A\u6027\uFF1B\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF0C\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section>" : "") + '<section class="p10-exclusions"><h2>\u8D39\u7528\u901A\u5E38\u4E0D\u5305\u542B</h2>' + this.renderList(detail.exclusions) + "<p>\u6700\u7EC8\u670D\u52A1\u8303\u56F4\u3001\u62A5\u4EF7\u548C\u5468\u671F\uFF0C\u4EE5\u53CC\u65B9\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002</p></section></main>";
+      html += '<div class="bottom-bar p10-bottom"><div><small>' + (staged ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u53C2\u8003\u8D77\u4EF7") + "</small><strong>" + (staged ? "\u8BC4\u4F30\u540E\u62A5\u4EF7" : team.priceText) + '</strong></div><button class="btn btn-primary" id="p10Consult" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '">' + (staged ? "\u54A8\u8BE2\u5E76\u83B7\u53D6\u65B9\u6848" : "\u54A8\u8BE2\u8BE5\u9879\u670D\u52A1") + "</button></div>";
       return html;
     },
     init() {
@@ -7112,7 +7296,10 @@
       });
       const consultButton = document.getElementById("p10Consult");
       if (consultButton) consultButton.addEventListener("click", () => {
-        startDirectConsultation2(consultButton.getAttribute("data-team-id"), consultButton.getAttribute("data-sku"));
+        const teamId = consultButton.getAttribute("data-team-id");
+        const sku = consultButton.getAttribute("data-sku");
+        if (getStagedServiceConfig(sku)) navigateTo("p13", { teamId, sku });
+        else startDirectConsultation2(teamId, sku);
       });
     }
   };
@@ -7714,6 +7901,173 @@
     }
   };
   register("p12", page12);
+
+  // src/pages/p13-staged-service/index.js
+  var journeys = /* @__PURE__ */ new Map();
+  var stepNames = ["\u8BC4\u4F30\u62A5\u4EF7", "\u7B7E\u7F72\u534F\u8BAE", "\u7B2C\u4E00\u9636\u6BB5", "\u7B2C\u4E8C\u9636\u6BB5", "\u529E\u7406\u7ED3\u679C"];
+  function stateKey(params) {
+    return `${params.teamId || ""}:${params.sku || ""}`;
+  }
+  function getJourney(params) {
+    const key = stateKey(params);
+    if (!journeys.has(key)) journeys.set(key, { stage: "intake", intake: "", firstPaid: false, secondPaid: false });
+    return journeys.get(key);
+  }
+  function stepIndex(stage) {
+    if (["intake", "proposal"].includes(stage)) return 0;
+    if (stage === "contract") return 1;
+    if (["firstPayment", "milestone"].includes(stage)) return 2;
+    if (stage === "secondPayment") return 3;
+    return 4;
+  }
+  function header2() {
+    return '<div class="nav-bar"><button class="nav-back" id="p13Back" type="button" aria-label="\u8FD4\u56DE">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u5206\u9636\u6BB5\u670D\u52A1</div><div class="nav-action"></div></div>';
+  }
+  function stepper(stage) {
+    const active = stepIndex(stage);
+    return '<ol class="p13-stepper" aria-label="\u670D\u52A1\u8FDB\u5EA6">' + stepNames.map((name, index) => '<li class="' + (index < active ? "done" : index === active ? "active" : "") + '"><span>' + (index < active ? icon("check", 12) : index + 1) + "</span><small>" + name + "</small></li>").join("") + "</ol>";
+  }
+  function contextCard(team, config) {
+    return '<section class="p13-context"><span style="background:' + escapeHTML(team.avatarColor) + "18;color:" + escapeHTML(team.avatarColor) + '">' + escapeHTML(team.avatar) + "</span><div><small>" + escapeHTML(config.categoryName) + " \xB7 \u6309\u9879\u76EE\u8BC4\u4F30\u62A5\u4EF7</small><strong>" + escapeHTML(config.sku) + "</strong><em>" + escapeHTML(team.name) + "</em></div><b>\u5206\u4E24\u9636\u6BB5\u4ED8\u6B3E</b></section>";
+  }
+  function renderList(items) {
+    return "<ul>" + items.map((item) => "<li>" + icon("check", 14) + "<span>" + escapeHTML(item) + "</span></li>").join("") + "</ul>";
+  }
+  function intakeView(team, config, journey) {
+    return '<section class="p13-hero"><span>' + icon("message", 24) + '</span><h1>\u5148\u5B8C\u6210\u9879\u76EE\u8BC4\u4F30</h1><p>\u5E73\u53F0\u9700\u6C42\u52A9\u624B\u5148\u6536\u96C6\u57FA\u7840\u4FE1\u606F\u5E76\u540C\u6B65\u7ED9\u56E2\u961F\uFF1B\u6D89\u53CA\u4E13\u4E1A\u5224\u65AD\u65F6\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4\u786E\u8BA4\u3002</p></section><section class="p13-panel p13-intake"><h2>\u8865\u5145\u8BC4\u4F30\u4FE1\u606F</h2><label for="p13Intake">' + escapeHTML(config.intakeLabel) + '</label><textarea id="p13Intake" maxlength="500" rows="6" placeholder="' + escapeHTML(config.intakeExample) + '">' + escapeHTML(journey.intake || config.intakeExample) + '</textarea><div><span>\u670D\u52A1\u5546\u8BC4\u4F30\u540E\u63A8\u9001\u670D\u52A1\u8303\u56F4\u3001\u603B\u4EF7\u548C\u4E24\u7B14\u4ED8\u6B3E\u8282\u70B9</span><b id="p13Count">' + String((journey.intake || config.intakeExample).length) + '/500</b></div><button class="btn btn-primary btn-block" id="p13SubmitIntake" type="button">\u63D0\u4EA4\u8BC4\u4F30\u8D44\u6599</button></section>';
+  }
+  function proposalView(config) {
+    return '<section class="p13-stage-head"><span>' + icon("file-text", 24) + '</span><div><h1>\u670D\u52A1\u65B9\u6848\u4E0E\u5206\u9636\u6BB5\u62A5\u4EF7</h1><p>\u670D\u52A1\u8303\u56F4\u548C\u4ED8\u6B3E\u8282\u70B9\u5DF2\u7ECF\u56E2\u961F\u586B\u5199\u5E76\u7ECF\u5E73\u53F0\u5BA1\u6838\u3002</p></div></section><section class="p13-panel p13-proposal"><div class="p13-proposal-top"><div><small>\u670D\u52A1\u603B\u4EF7</small><strong>' + config.total + "</strong></div><span>\u5F85\u4F60\u786E\u8BA4</span></div><dl><div><dt>\u9884\u8BA1\u5468\u671F</dt><dd>" + escapeHTML(config.period) + '</dd></div><div><dt>\u5B98\u65B9\u53CA\u7B2C\u4E09\u65B9\u8D39\u7528</dt><dd>\u672A\u5305\u542B\uFF0C\u53D1\u751F\u65F6\u53E6\u884C\u5217\u793A</dd></div></dl><div class="p13-payment-plan"><article><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>' + config.firstAmount + "</strong><small>\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8\uFF0C\u786E\u8BA4\u5230\u8D26\u540E\u5F00\u59CB\u670D\u52A1</small></article><article><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><strong>" + config.secondAmount + "</strong><small>" + escapeHTML(config.secondTrigger) + "</small></article></div><h3>\u4E24\u9636\u6BB5\u4EA4\u4ED8</h3>" + renderList(config.firstWork.concat(config.secondWork)) + '</section><section class="p13-risk"><span>' + icon("alert", 18) + '</span><div><strong>\u529E\u7406\u7ED3\u679C\u5B58\u5728\u4E0D\u786E\u5B9A\u6027</strong><p>\u670D\u52A1\u8D39\u6309\u7EA6\u5B9A\u9636\u6BB5\u5DE5\u4F5C\u6536\u53D6\uFF0C\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u7ED3\u679C\u4E0D\u7531\u5E73\u53F0\u548C\u670D\u52A1\u56E2\u961F\u4FDD\u8BC1\u3002\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF1B\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section><label class="p13-consent"><input id="p13RiskConsent" type="checkbox"><span>\u6211\u5DF2\u7406\u89E3\u5206\u9636\u6BB5\u4ED8\u6B3E\u3001\u7ED3\u679C\u4E0D\u627F\u8BFA\u53CA\u9000\u6B3E\u89C4\u5219</span></label><div class="p13-page-action"><button class="btn btn-primary btn-block" id="p13ConfirmProposal" type="button" disabled>\u786E\u8BA4\u65B9\u6848\u5E76\u7B7E\u7F72\u534F\u8BAE</button></div>';
+  }
+  function contractView(config) {
+    return '<section class="p13-stage-head"><span>' + icon("shield", 24) + '</span><div><h1>\u7B7E\u7F72\u670D\u52A1\u534F\u8BAE</h1><p>\u534F\u8BAE\u4F1A\u5199\u660E\u4E24\u7B14\u670D\u52A1\u6B3E\u3001\u5BF9\u5E94\u6210\u679C\u3001\u6682\u505C\u6761\u4EF6\u53CA\u9000\u6B3E\u89C4\u5219\u3002</p></div></section><section class="p13-panel"><button class="p13-file-row" id="p13AgreementPreview" type="button">' + icon("file-text", 20) + "<span><strong>" + escapeHTML(config.sku) + '\u5206\u9636\u6BB5\u670D\u52A1\u534F\u8BAE.pdf</strong><small>\u670D\u52A1\u5546\u63D0\u4F9B \xB7 \u5E73\u53F0\u5DF2\u5B8C\u6210\u8981\u7D20\u5BA1\u6838</small></span><b>\u67E5\u770B</b></button><div class="p13-contract-steps"><span class="active">\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370</span><span>\u670D\u52A1\u5546\u7528\u5370</span><span>\u5E73\u53F0\u5BA1\u6838</span><span>\u534F\u8BAE\u751F\u6548</span></div><label class="p13-upload">' + icon("upload", 18) + '<span id="p13AgreementFileName">\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6</span><input id="p13AgreementFile" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p13SubmitAgreement" type="button">\u63D0\u4EA4\u534F\u8BAE\u5E76\u7B49\u5F85\u5BA1\u6838</button></section>';
+  }
+  function paymentView(config, second) {
+    const amount = second ? config.secondAmount : config.firstAmount;
+    return '<section class="p13-stage-head"><span>' + icon("coins", 24) + "</span><div><h1>\u652F\u4ED8" + (second ? "\u7B2C\u4E8C" : "\u7B2C\u4E00") + "\u9636\u6BB5\u670D\u52A1\u6B3E</h1><p>" + (second ? "\u9636\u6BB5\u6210\u679C\u5DF2\u7ECF\u786E\u8BA4\uFF0C\u4ED8\u6B3E\u5230\u8D26\u540E\u56E2\u961F\u7EE7\u7EED\u6B63\u5F0F\u529E\u7406\u3002" : "\u534F\u8BAE\u5DF2\u7ECF\u53CC\u65B9\u7528\u5370\u5E76\u901A\u8FC7\u5E73\u53F0\u5BA1\u6838\uFF0C\u4ED8\u6B3E\u5230\u8D26\u540E\u56E2\u961F\u5F00\u59CB\u670D\u52A1\u3002") + '</p></div></section><section class="p13-panel p13-pay"><div class="p13-pay-amount"><small>\u672C\u6B21\u5E94\u4ED8</small><strong>' + amount + '</strong><span>\u5360\u670D\u52A1\u603B\u4EF7 50%</span></div><div class="p13-pay-row"><span>\u6536\u6B3E\u65B9</span><strong>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</strong></div><div class="p13-pay-row"><span>\u652F\u4ED8\u65B9\u5F0F</span><strong>\u7EBF\u4E0B\u5BF9\u516C\u8F6C\u8D26</strong></div><div class="p13-pay-row"><span>\u5E73\u53F0\u804C\u8D23</span><strong>\u8BB0\u5F55\u51ED\u8BC1\u53CA\u5230\u8D26\u786E\u8BA4</strong></div><div class="p13-pay-notice">' + icon("shield", 16) + '<span>\u5F53\u524D\u5E73\u53F0\u4E0D\u4EE3\u6536\u6216\u6258\u7BA1\u8D44\u91D1\uFF0C\u8BF7\u6838\u5BF9\u534F\u8BAE\u4E3B\u4F53\u540E\u76F4\u63A5\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u3002</span></div><div class="p13-pay-actions"><button class="btn btn-outline" id="p13Account" type="button">\u67E5\u770B\u6536\u6B3E\u4FE1\u606F</button><button class="btn btn-primary" id="p13UploadReceipt" type="button">\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1</button></div></section>';
+  }
+  function milestoneView(config) {
+    return '<section class="p13-stage-head"><span>' + icon("check-circle", 24) + '</span><div><h1>\u7B2C\u4E00\u9636\u6BB5\u6210\u679C\u5F85\u786E\u8BA4</h1><p>\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u7B2C\u4E00\u7B14\u6B3E\u9879\u5230\u8D26\uFF0C\u5E76\u63D0\u4EA4\u7EA6\u5B9A\u7684\u9636\u6BB5\u6210\u679C\u3002</p></div></section><section class="p13-panel p13-milestone"><div class="p13-milestone-title"><div><small>\u9636\u6BB5\u6210\u679C</small><strong>' + escapeHTML(config.milestoneTitle) + "</strong></div><span>\u5F85\u4F60\u786E\u8BA4</span></div>" + renderList(config.firstWork) + '<button class="p13-file-row" id="p13MilestoneFile" type="button">' + icon("file-text", 19) + "<span><strong>\u7B2C\u4E00\u9636\u6BB5\u6210\u679C\u6587\u4EF6.zip</strong><small>\u670D\u52A1\u5546\u63D0\u4EA4 \xB7 \u5DF2\u901A\u8FC7\u5E73\u53F0\u75C5\u6BD2\u626B\u63CF</small></span><b>\u67E5\u770B</b></button><p>" + escapeHTML(config.milestoneDetail) + '</p><div class="p13-pay-actions"><button class="btn btn-outline" id="p13Dispute" type="button">\u6210\u679C\u6709\u5F02\u8BAE</button><button class="btn btn-primary" id="p13ConfirmMilestone" type="button">\u786E\u8BA4\u9636\u6BB5\u6210\u679C</button></div></section>';
+  }
+  function processingView(config) {
+    return '<section class="p13-stage-head"><span>' + icon("clock", 24) + '</span><div><h1>\u6B63\u5F0F\u529E\u7406\u4E2D</h1><p>\u7B2C\u4E8C\u7B14\u670D\u52A1\u6B3E\u5DF2\u7531\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\uFF0C\u9879\u76EE\u5DF2\u8FDB\u5165\u4E3B\u7BA1\u673A\u6784\u5904\u7406\u9636\u6BB5\u3002</p></div></section><section class="p13-panel"><div class="p13-process-timeline"><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u4E24\u9636\u6BB5\u670D\u52A1\u6B3E\u5DF2\u786E\u8BA4</strong><small>\u4ED8\u6B3E\u51ED\u8BC1\u4E0E\u5230\u8D26\u8BB0\u5F55\u5DF2\u7559\u5B58</small></p></div><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u5DF2\u5411\u4E3B\u7BA1\u673A\u6784\u6B63\u5F0F\u63D0\u4EA4</strong><small>\u63D0\u4EA4\u56DE\u6267\u53EF\u5728\u670D\u52A1\u8BB0\u5F55\u4E2D\u67E5\u770B</small></p></div><div class="active"><span></span><p><strong>\u7B49\u5F85\u5BA1\u67E5\u6216\u8BC4\u5BA1\u7ED3\u679C</strong><small>\u7ED3\u679C\u548C\u8865\u5145\u6750\u6599\u8981\u6C42\u4F1A\u53CA\u65F6\u540C\u6B65</small></p></div></div><div class="p13-processing-note">' + icon("bell", 17) + '<span>\u6709\u8FDB\u5C55\u65F6\u5C06\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u77ED\u4FE1\u548C\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u4F60\u3002</span></div><button class="btn btn-outline btn-block" id="p13DemoResult" type="button">\u5728 Demo \u4E2D\u67E5\u770B\u7ED3\u679C\u72B6\u6001</button></section>';
+  }
+  function resultView(config) {
+    return '<section class="p13-result-head"><span>' + icon("file-text", 26) + "</span><h1>\u672C\u6B21\u670D\u52A1\u5DE5\u4F5C\u5DF2\u5B8C\u6210</h1><p>" + escapeHTML(config.resultTitle) + '</p></section><section class="p13-panel p13-result"><div class="p13-result-status"><span>\u529E\u7406\u7ED3\u679C</span><strong>\u672A\u83B7\u6279</strong></div><p>' + escapeHTML(config.resultDetail) + '</p><button class="p13-file-row" id="p13ResultFile" type="button">' + icon("file-text", 19) + "<span><strong>" + escapeHTML(config.resultFile) + '</strong><small>\u4E3B\u7BA1\u673A\u6784\u7ED3\u679C\u6587\u4EF6</small></span><b>\u67E5\u770B</b></button><div class="p13-result-rule"><strong>\u8D39\u7528\u7ED3\u7B97\u8BF4\u660E</strong><p>\u4E24\u9636\u6BB5\u5DE5\u4F5C\u5747\u5DF2\u5B8C\u6210\uFF0C\u5DF2\u652F\u4ED8\u670D\u52A1\u8D39\u4E0D\u56E0\u672C\u6B21\u7ED3\u679C\u672A\u83B7\u6279\u9000\u8FD8\u3002\u5982\u8BA4\u4E3A\u670D\u52A1\u5546\u672A\u6309\u534F\u8BAE\u5C65\u7EA6\uFF0C\u53EF\u4EE5\u7533\u8BF7\u5E73\u53F0\u534F\u52A9\u6838\u9A8C\u3002</p></div><div class="p13-result-actions"><button class="btn btn-outline" id="p13Restart" type="button">\u91CD\u65B0\u4F53\u9A8C</button><button class="btn btn-primary" id="p13Support" type="button">\u7533\u8BF7\u5E73\u53F0\u534F\u52A9</button></div></section>';
+  }
+  var page13 = {
+    state: { params: {}, journey: null, team: null, config: null, stage: "intake" },
+    render(params = {}) {
+      const team = getTeam(params.teamId, store.teams);
+      const config = getStagedServiceConfig(params.sku);
+      if (!team || !config) return '<div class="empty-state"><div class="empty-title">\u5206\u9636\u6BB5\u670D\u52A1\u4E0D\u5B58\u5728</div></div>';
+      const journey = getJourney(params);
+      const stage = params.stage || journey.stage;
+      this.state = { params, journey, team, config, stage };
+      let body = "";
+      if (stage === "intake") body = intakeView(team, config, journey);
+      else if (stage === "proposal") body = proposalView(config);
+      else if (stage === "contract") body = contractView(config);
+      else if (stage === "firstPayment") body = paymentView(config, false);
+      else if (stage === "milestone") body = milestoneView(config);
+      else if (stage === "secondPayment") body = paymentView(config, true);
+      else if (stage === "processing") body = processingView(config);
+      else body = resultView(config);
+      return '<div class="p13-page">' + header2() + stepper(stage) + contextCard(team, config) + body + "</div>";
+    },
+    setStage(stage) {
+      this.state.journey.stage = stage;
+      refreshActivePage();
+    },
+    init() {
+      showTabBar(false);
+      document.getElementById("p13Back").addEventListener("click", goBackToPrevious);
+      const { stage, journey, config } = this.state;
+      if (stage === "intake") {
+        const input = document.getElementById("p13Intake");
+        input.addEventListener("input", () => {
+          document.getElementById("p13Count").textContent = input.value.length + "/500";
+        });
+        document.getElementById("p13SubmitIntake").addEventListener("click", () => {
+          if (!input.value.trim()) return toast("\u8BF7\u5148\u8865\u5145\u9879\u76EE\u60C5\u51B5");
+          journey.intake = input.value.trim();
+          this.setStage("proposal");
+        });
+      } else if (stage === "proposal") {
+        const consent = document.getElementById("p13RiskConsent");
+        const confirm = document.getElementById("p13ConfirmProposal");
+        consent.addEventListener("change", () => {
+          confirm.disabled = !consent.checked;
+        });
+        confirm.addEventListener("click", () => showModal({
+          title: "\u786E\u8BA4\u670D\u52A1\u65B9\u6848\uFF1F",
+          body: "\u786E\u8BA4\u540E\u5C06\u8FDB\u5165\u534F\u8BAE\u7B7E\u7F72\u3002\u534F\u8BAE\u4F1A\u518D\u6B21\u5217\u660E\u4E24\u7B14\u4ED8\u6B3E\u8282\u70B9\u3001\u9636\u6BB5\u4EA4\u4ED8\u6210\u679C\u548C\u9000\u6B3E\u89C4\u5219\u3002",
+          cancelText: "\u518D\u68C0\u67E5\u4E00\u4E0B",
+          confirmText: "\u786E\u8BA4\u5E76\u7EE7\u7EED",
+          onConfirm: () => this.setStage("contract")
+        }));
+      } else if (stage === "contract") {
+        document.getElementById("p13AgreementPreview").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u534F\u8BAE\u5B89\u5168\u9884\u89C8"));
+        const file = document.getElementById("p13AgreementFile");
+        file.addEventListener("change", () => {
+          document.getElementById("p13AgreementFileName").textContent = file.files.length ? file.files[0].name : "\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6";
+        });
+        document.getElementById("p13SubmitAgreement").addEventListener("click", () => {
+          if (!file.files.length) return toast("\u8BF7\u5148\u4E0A\u4F20\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6");
+          const overlay = showSheet({
+            title: "\u534F\u8BAE\u5DF2\u751F\u6548",
+            body: '<div class="p13-agreement-success"><span>' + icon("check-circle", 26) + '</span><strong>\u53CC\u65B9\u534F\u8BAE\u5DF2\u5B8C\u6210\u7528\u5370\u5E76\u901A\u8FC7\u5BA1\u6838</strong><p>\u4E0B\u4E00\u6B65\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E\uFF0C\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\u540E\u5F00\u59CB\u5DE5\u4F5C\u3002</p><button class="btn btn-primary btn-block" id="p13ToFirstPayment" type="button">\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</button></div>'
+          });
+          overlay.querySelector("#p13ToFirstPayment").addEventListener("click", () => {
+            overlay.remove();
+            this.setStage("firstPayment");
+          });
+        });
+      } else if (stage === "firstPayment" || stage === "secondPayment") {
+        const second = stage === "secondPayment";
+        document.getElementById("p13Account").addEventListener("click", () => showSheet({ title: "\u670D\u52A1\u5546\u6536\u6B3E\u4FE1\u606F", body: '<div class="p13-account"><div><span>\u6536\u6B3E\u6237\u540D</span><strong>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</strong></div><div><span>\u5F00\u6237\u94F6\u884C</span><strong>\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C</strong></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>**** **** **** 6628</strong></div><p>\u8BF7\u4EE5\u5DF2\u7B7E\u7F72\u534F\u8BAE\u4E2D\u7684\u6B63\u5F0F\u6536\u6B3E\u4FE1\u606F\u4E3A\u51C6\u3002</p></div>' }));
+        document.getElementById("p13UploadReceipt").addEventListener("click", () => showModal({
+          title: "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u4E0A\u4F20",
+          body: "\u5E73\u53F0\u5DF2\u8BB0\u5F55\u4ED8\u6B3E\u51ED\u8BC1\uFF0C\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\u540E\u4F1A\u8FDB\u5165\u4E0B\u4E00\u9636\u6BB5\u3002Demo \u5C06\u6A21\u62DF\u5B8C\u6210\u5230\u8D26\u786E\u8BA4\u3002",
+          cancelText: "\u7A0D\u540E\u67E5\u770B",
+          confirmText: "\u67E5\u770B\u786E\u8BA4\u7ED3\u679C",
+          onConfirm: () => {
+            if (second) journey.secondPaid = true;
+            else journey.firstPaid = true;
+            this.setStage(second ? "processing" : "milestone");
+          }
+        }));
+      } else if (stage === "milestone") {
+        document.getElementById("p13MilestoneFile").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u7B2C\u4E00\u9636\u6BB5\u6210\u679C\u6587\u4EF6"));
+        document.getElementById("p13Dispute").addEventListener("click", () => {
+          const overlay = showSheet({ title: "\u63D0\u51FA\u6210\u679C\u5F02\u8BAE", body: '<div class="p13-dispute"><p>\u8BF7\u8BF4\u660E\u9700\u8981\u8865\u5145\u6216\u4FEE\u6539\u7684\u5185\u5BB9\uFF0C\u5E73\u53F0\u4F1A\u540C\u6B65\u7ED9\u670D\u52A1\u5546\u5E76\u4FDD\u7559\u8BB0\u5F55\u3002</p><textarea id="p13DisputeText" maxlength="300" rows="4" placeholder="\u8BF4\u660E\u5177\u4F53\u95EE\u9898"></textarea><button class="btn btn-primary btn-block" id="p13DisputeSubmit" type="button">\u63D0\u4EA4\u5F02\u8BAE</button></div>' });
+          overlay.querySelector("#p13DisputeSubmit").addEventListener("click", () => {
+            if (!overlay.querySelector("#p13DisputeText").value.trim()) return toast("\u8BF7\u586B\u5199\u5177\u4F53\u95EE\u9898");
+            overlay.remove();
+            toast("\u5F02\u8BAE\u5DF2\u63D0\u4EA4\uFF0C\u7B2C\u4E8C\u9636\u6BB5\u4ED8\u6B3E\u6682\u4E0D\u89E6\u53D1");
+          });
+        });
+        document.getElementById("p13ConfirmMilestone").addEventListener("click", () => showModal({
+          title: "\u786E\u8BA4\u7B2C\u4E00\u9636\u6BB5\u6210\u679C\uFF1F",
+          body: "\u786E\u8BA4\u540E\u5C06\u89E6\u53D1\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u3002\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\u540E\uFF0C\u7EE7\u7EED\u6B63\u5F0F\u63D0\u4EA4\u548C\u540E\u7EED\u8DDF\u8FDB\u3002",
+          cancelText: "\u7EE7\u7EED\u68C0\u67E5",
+          confirmText: "\u786E\u8BA4\u5E76\u8FDB\u5165\u4ED8\u6B3E",
+          onConfirm: () => this.setStage("secondPayment")
+        }));
+      } else if (stage === "processing") {
+        document.getElementById("p13DemoResult").addEventListener("click", () => this.setStage("result"));
+      } else if (stage === "result") {
+        document.getElementById("p13ResultFile").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u4E3B\u7BA1\u673A\u6784\u7ED3\u679C\u6587\u4EF6"));
+        document.getElementById("p13Support").addEventListener("click", () => toast("\u5E73\u53F0\u534F\u52A9\u7533\u8BF7\u5DF2\u63D0\u4EA4"));
+        document.getElementById("p13Restart").addEventListener("click", () => {
+          journeys.set(stateKey(this.state.params), { stage: "intake", intake: "", firstPaid: false, secondPaid: false });
+          this.state.journey = journeys.get(stateKey(this.state.params));
+          this.setStage("intake");
+        });
+      }
+    }
+  };
+  register("p13", page13);
 
   // src/main.js
   var app = {
