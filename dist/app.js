@@ -75,11 +75,11 @@
       "t001": [
         {
           "type": "system",
-          "text": "\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u5E73\u53F0\u52A9\u624B\u5C06\u534F\u52A9\u786E\u8BA4\u57FA\u7840\u9700\u6C42\u4FE1\u606F"
+          "text": "\u674E\u660E\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u5E73\u53F0\u52A9\u624B\u5C06\u534F\u52A9\u786E\u8BA4\u57FA\u7840\u9700\u6C42\u4FE1\u606F"
         },
         {
           "type": "team",
-          "text": "\u60A8\u597D\uFF01\u6211\u662F\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F\u7684\u674E\u660E\u5F8B\u5E08\u3002\u60F3\u5148\u786E\u8BA4\u4E00\u4E0B\uFF1A3\u4F4D\u5408\u4F19\u4EBA\u4E2D\u662F\u5426\u6709\u6280\u672F\u5165\u80A1\u7684\u60C5\u51B5\uFF1F"
+          "text": "\u60A8\u597D\uFF01\u6211\u662F\u674E\u660E\u56E2\u961F\u7684\u674E\u660E\u5F8B\u5E08\u3002\u60F3\u5148\u786E\u8BA4\u4E00\u4E0B\uFF1A3\u4F4D\u5408\u4F19\u4EBA\u4E2D\u662F\u5426\u6709\u6280\u672F\u5165\u80A1\u7684\u60C5\u51B5\uFF1F"
         },
         {
           "type": "user",
@@ -95,7 +95,7 @@
       "t001": [
         {
           "type": "system",
-          "text": "\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u53EF\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u8865\u5145\u9700\u6C42\u4FE1\u606F"
+          "text": "\u674E\u660E\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u53EF\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u8865\u5145\u9700\u6C42\u4FE1\u606F"
         },
         {
           "type": "team",
@@ -105,13 +105,13 @@
       "t004": [
         {
           "type": "system",
-          "text": "\u5B89\u4FE1\u6CD5\u5F8B\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u53EF\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u8865\u5145\u9700\u6C42\u4FE1\u606F"
+          "text": "\u5434\u5B89\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u53EF\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u8865\u5145\u9700\u6C42\u4FE1\u606F"
         }
       ],
       "t002": [
         {
           "type": "system",
-          "text": "\u6B63\u5927\u6CD5\u52A1\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u53EF\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u8865\u5145\u9700\u6C42\u4FE1\u606F"
+          "text": "\u8D75\u6B63\u56E2\u961F\u5DF2\u54CD\u5E94\uFF0C\u53EF\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u8865\u5145\u9700\u6C42\u4FE1\u606F"
         }
       ]
     }
@@ -212,19 +212,19 @@
         },
         {
           "kind": "accept",
-          "title": "\u6B63\u5927\u6CD5\u52A1\u56E2\u961F \u5DF2\u54CD\u5E94",
+          "title": "\u8D75\u6B63\u56E2\u961F \u5DF2\u54CD\u5E94",
           "desc": "\u62A5\u4EF7\u610F\u5411 3.5\u4E07\xB7\u57FA\u7840\u6D41\u7A0B",
           "time": "08-19 15:40"
         },
         {
           "kind": "accept",
-          "title": "\u5B89\u4FE1\u6CD5\u5F8B\u56E2\u961F \u5DF2\u54CD\u5E94",
+          "title": "\u5434\u5B89\u56E2\u961F \u5DF2\u54CD\u5E94",
           "desc": "\u62A5\u4EF7\u610F\u5411 5\u4E07\xB7\u542B\u5168\u6D41\u7A0B",
           "time": "08-20 09:10"
         },
         {
           "kind": "accept",
-          "title": "\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F \u5DF2\u54CD\u5E94",
+          "title": "\u674E\u660E\u56E2\u961F \u5DF2\u54CD\u5E94",
           "desc": "\u62A5\u4EF7\u610F\u5411 4\u4E07\xB7\u542B\u5168\u6D41\u7A0B",
           "time": "08-20 12:30"
         }
@@ -241,7 +241,7 @@
       "clientType": "\u521D\u521B\u4F01\u4E1A\xB7A\u8F6E\u524D",
       "city": "\u5317\u4EAC",
       "date": "2026-08-10",
-      "progress": "\u5DF2\u9009\u5B9A\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F\uFF0C\u670D\u52A1\u8FDB\u884C\u4E2D",
+      "progress": "\u5DF2\u9009\u5B9A\u674E\u660E\u56E2\u961F\uFF0C\u670D\u52A1\u8FDB\u884C\u4E2D",
       "desc": "3\u4F4D\u5408\u4F19\u4EBA\u80A1\u6743\u5206\u914D\uFF0C\u9700\u8003\u8651\u6280\u672F\u5165\u80A1\u548C\u671F\u6743\u6C60\u8BBE\u8BA1\u3002",
       "fields": [
         {
@@ -307,19 +307,19 @@
         },
         {
           "kind": "reject",
-          "title": "\u6B63\u5927\u6CD5\u52A1\u56E2\u961F \u6682\u672A\u627F\u63A5",
+          "title": "\u8D75\u6B63\u56E2\u961F \u6682\u672A\u627F\u63A5",
           "desc": "\u5F53\u524D\u6392\u671F\u5DF2\u6EE1\uFF0C\u5EFA\u8BAE2\u5468\u540E\u518D\u8054\u7CFB\u3002",
           "time": "08-10 18:20"
         },
         {
           "kind": "accept",
-          "title": "\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F \u5DF2\u54CD\u5E94",
+          "title": "\u674E\u660E\u56E2\u961F \u5DF2\u54CD\u5E94",
           "desc": "\u62A5\u4EF7\u610F\u5411 1.5\u4E07",
           "time": "08-11 09:30"
         },
         {
           "kind": "choose",
-          "title": "\u5DF2\u9009\u5B9A \u660E\u6CD5\u5F8B\u5E08\u56E2\u961F",
+          "title": "\u5DF2\u9009\u5B9A \u674E\u660E\u56E2\u961F",
           "desc": "\u8FDB\u5165\u5E73\u53F0\u5185\u6B63\u5F0F\u670D\u52A1",
           "time": "08-11 14:00"
         }
@@ -408,13 +408,13 @@
         },
         {
           "kind": "accept",
-          "title": "\u667A\u6743\u77E5\u8BC6\u4EA7\u6743\u56E2\u961F \u5DF2\u54CD\u5E94",
+          "title": "\u5468\u667A\u56E2\u961F \u5DF2\u54CD\u5E94",
           "desc": "\u62A5\u4EF7\u610F\u5411 4000\u5143\xB75\u4EF6",
           "time": "07-15 16:20"
         },
         {
           "kind": "choose",
-          "title": "\u5DF2\u9009\u5B9A \u667A\u6743\u77E5\u8BC6\u4EA7\u6743\u56E2\u961F",
+          "title": "\u5DF2\u9009\u5B9A \u5468\u667A\u56E2\u961F",
           "desc": "\u8FDB\u5165\u5E73\u53F0\u5185\u6B63\u5F0F\u670D\u52A1",
           "time": "07-16 09:40"
         },
@@ -471,7 +471,7 @@
         },
         {
           "kind": "reject",
-          "title": "\u901F\u6377\u5DE5\u5546\u670D\u52A1 \u6682\u672A\u627F\u63A5",
+          "title": "\u6797\u901F\u56E2\u961F \u6682\u672A\u627F\u63A5",
           "desc": "\u6CE8\u518C\u5730\u5740\u6682\u65F6\u4E0D\u8DB3\uFF0C\u5EFA\u8BAE1\u5468\u540E\u91CD\u65B0\u63D0\u4EA4\u3002",
           "time": "06-20 15:10"
         },
@@ -614,10 +614,11 @@
   var teams = [
     {
       "id": "t001",
-      "name": "\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F",
+      "name": "\u674E\u660E\u56E2\u961F",
+      "leaderName": "\u674E\u660E",
       "orgShort": "\u9526\u5929\u5F8B\u6240",
       "orgId": "org001",
-      "avatar": "\u660E",
+      "avatar": "\u674E",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": "gold",
@@ -762,10 +763,11 @@
     },
     {
       "id": "t002",
-      "name": "\u6B63\u5927\u6CD5\u52A1\u56E2\u961F",
+      "name": "\u8D75\u6B63\u56E2\u961F",
+      "leaderName": "\u8D75\u6B63",
       "orgShort": "\u6B63\u5927\u6CD5\u52A1",
       "orgId": "org002",
-      "avatar": "\u6B63",
+      "avatar": "\u8D75",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": "flagship",
@@ -858,10 +860,11 @@
     },
     {
       "id": "t003",
-      "name": "\u667A\u6743\u77E5\u8BC6\u4EA7\u6743\u56E2\u961F",
+      "name": "\u5468\u667A\u56E2\u961F",
+      "leaderName": "\u5468\u667A",
       "orgShort": "\u667A\u6743IP",
       "orgId": "org003",
-      "avatar": "\u667A",
+      "avatar": "\u5468",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": null,
@@ -942,10 +945,11 @@
     },
     {
       "id": "t004",
-      "name": "\u5B89\u4FE1\u6CD5\u5F8B\u56E2\u961F",
+      "name": "\u5434\u5B89\u56E2\u961F",
+      "leaderName": "\u5434\u5B89",
       "orgShort": "\u5B89\u4FE1\u5F8B\u6240",
       "orgId": "org001",
-      "avatar": "\u5B89",
+      "avatar": "\u5434",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": "gold",
@@ -1069,10 +1073,11 @@
     },
     {
       "id": "t005",
-      "name": "\u901F\u6377\u5DE5\u5546\u670D\u52A1",
+      "name": "\u6797\u901F\u56E2\u961F",
+      "leaderName": "\u6797\u901F",
       "orgShort": "\u901F\u6377",
       "orgId": "org004",
-      "avatar": "\u901F",
+      "avatar": "\u6797",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": null,
@@ -1153,10 +1158,11 @@
     },
     {
       "id": "t006",
-      "name": "\u534E\u4FE1\u77E5\u4EA7\u56E2\u961F",
+      "name": "\u6768\u534E\u56E2\u961F",
+      "leaderName": "\u6768\u534E",
       "orgShort": "\u534E\u4FE1",
       "orgId": "org003",
-      "avatar": "\u534E",
+      "avatar": "\u6768",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": null,
@@ -1217,10 +1223,11 @@
     },
     {
       "id": "t007",
-      "name": "\u6CFD\u8861\u8D44\u672C\u56E2\u961F",
+      "name": "\u5218\u6CFD\u56E2\u961F",
+      "leaderName": "\u5218\u6CFD",
       "orgShort": "\u6CFD\u8861\u5F8B\u6240",
       "orgId": "org005",
-      "avatar": "\u6CFD",
+      "avatar": "\u5218",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": "gold",
@@ -1307,10 +1314,11 @@
     },
     {
       "id": "t008",
-      "name": "\u660E\u5FB7\u5546\u6807\u56E2\u961F",
+      "name": "\u5468\u5FB7\u56E2\u961F",
+      "leaderName": "\u5468\u5FB7",
       "orgShort": "\u660E\u5FB7IP",
       "orgId": "org006",
-      "avatar": "\u660E",
+      "avatar": "\u5468",
       "avatarColor": "#5B5BD6",
       "heroImage": "",
       "badge": null,
@@ -1386,10 +1394,11 @@
     },
     {
       "id": "t009",
-      "name": "\u542F\u7B56\u653F\u7B56\u7533\u62A5\u56E2\u961F",
+      "name": "\u6797\u542F\u56E2\u961F",
+      "leaderName": "\u6797\u542F",
       "orgShort": "\u542F\u7B56\u54A8\u8BE2",
       "orgId": "org007",
-      "avatar": "\u542F",
+      "avatar": "\u6797",
       "avatarColor": "#28786C",
       "heroImage": "",
       "badge": "gold",
@@ -1872,31 +1881,6 @@
         }
       };
     } else fundraisingState.investorConnections = {};
-  }
-  function getFundraisingSummary() {
-    const counts = getConnectionCounts();
-    if (!fundraisingState.paused) {
-      if (counts.requested) return { title: `${counts.requested} \u6761\u6295\u8D44\u4EBA\u5EFA\u8054\u7533\u8BF7\u5F85\u5904\u7406`, detail: "\u53EF\u5206\u522B\u540C\u610F\u6216\u6682\u4E0D\u5EFA\u8054", action: "\u53BB\u5904\u7406" };
-      if (counts.entrepreneur_requested) return { title: `${counts.entrepreneur_requested} \u6761\u5BF9\u63A5\u7533\u8BF7\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4`, detail: "\u786E\u8BA4\u7ED3\u679C\u4F1A\u901A\u8FC7\u5DF2\u5F00\u542F\u6E20\u9053\u901A\u77E5\u4F60", action: "\u67E5\u770B\u7533\u8BF7" };
-      if (counts.confirmed) return { title: `${counts.confirmed} \u6761\u5EFA\u8054\u5F85\u7EE7\u7EED`, detail: "\u8BF7\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4", action: "\u7EE7\u7EED\u5EFA\u8054" };
-      if (counts.connecting) return { title: `${counts.connecting} \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054\u4E2D`, detail: "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u521B\u5EFA\u4F01\u4E1A\u5FAE\u4FE1\u7FA4", action: "\u67E5\u770B\u8FDB\u5EA6" };
-      if (counts.connected) return { title: `\u5DF2\u5B8C\u6210 ${counts.connected} \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054`, detail: "\u672C\u8F6E\u5339\u914D\u4ECD\u4F1A\u7EE7\u7EED", action: "\u67E5\u770B\u8BB0\u5F55" };
-    }
-    const labels = {
-      submitted: { title: "\u6B63\u5728\u5339\u914D\u6295\u8D44\u4EBA", detail: "\u5DF2\u5B8C\u6210\u8D44\u6599\u4E0E\u6388\u6743\u786E\u8BA4", action: "\u67E5\u770B\u878D\u8D44\u8FDB\u5EA6" },
-      matching: { title: "\u6B63\u5728\u5339\u914D\u6295\u8D44\u4EBA", detail: "\u6B63\u6838\u5BF9\u6295\u8D44\u504F\u597D\u4E0E\u9879\u76EE\u6807\u7B7E", action: "\u67E5\u770B\u878D\u8D44\u8FDB\u5EA6" },
-      waiting: { title: "\u878D\u8D44\u5339\u914D\u8FDB\u884C\u4E2D", detail: "\u6709\u65B0\u8FDB\u5C55\u65F6\u4F1A\u901A\u8FC7\u5DF2\u5F00\u542F\u6E20\u9053\u901A\u77E5\u4F60", action: "\u67E5\u770B\u878D\u8D44\u8FDB\u5EA6" },
-      matched: { title: "\u6709\u65B0\u7684\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C", detail: "\u53EF\u67E5\u770B\u672C\u6279\u63A8\u8350\u53CA\u5177\u4F53\u5339\u914D\u4F9D\u636E", action: "\u67E5\u770B\u5339\u914D\u7ED3\u679C" },
-      requested: { title: "\u6295\u8D44\u4EBA\u7533\u8BF7\u5EFA\u8054", detail: "\u8BF7\u786E\u8BA4\u662F\u5426\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054", action: "\u53BB\u5904\u7406" },
-      confirmed: { title: "\u5DF2\u540C\u610F\u6295\u8D44\u4EBA\u5EFA\u8054\u7533\u8BF7", detail: "\u8BF7\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4", action: "\u7EE7\u7EED\u5EFA\u8054" },
-      connecting: { title: "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4", detail: "\u540E\u7EED\u4EA4\u6D41\u5C06\u5728\u4F01\u4E1A\u5FAE\u4FE1\u4E2D\u8FDB\u884C", action: "\u67E5\u770B\u8FDB\u5EA6" },
-      connected: { title: "\u6295\u8D44\u4EBA\u5EFA\u8054\u5DF2\u5B8C\u6210", detail: "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB\uFF0C\u53EF\u67E5\u770B\u5EFA\u8054\u8BB0\u5F55", action: "\u67E5\u770B\u8BB0\u5F55" },
-      declined: { title: "\u5DF2\u6682\u4E0D\u5EFA\u8054", detail: "\u5904\u7406\u7ED3\u679C\u5DF2\u540C\u6B65\u7ED9\u6295\u8D44\u4EBA\u7AEF", action: "\u67E5\u770B\u8BB0\u5F55" },
-      withdrawn: { title: "\u6295\u8D44\u4EBA\u5DF2\u64A4\u56DE\u7533\u8BF7", detail: "\u672C\u6B21\u5EFA\u8054\u7533\u8BF7\u5DF2\u7ECF\u7ED3\u675F", action: "\u67E5\u770B\u8BB0\u5F55" },
-      expired: { title: "\u5EFA\u8054\u7533\u8BF7\u5DF2\u8D85\u65F6", detail: "\u672C\u6B21\u7533\u8BF7\u5DF2\u81EA\u52A8\u5173\u95ED", action: "\u67E5\u770B\u8BB0\u5F55" },
-      paused: { title: "\u878D\u8D44\u5339\u914D\u5DF2\u6682\u505C", detail: "\u6062\u590D\u540E\u5C06\u7EE7\u7EED\u5411\u5408\u9002\u6295\u8D44\u4EBA\u63A8\u8350", action: "\u7BA1\u7406\u672C\u8F6E\u5339\u914D" }
-    };
-    return labels[fundraisingState.paused ? "paused" : fundraisingState.status] || null;
   }
 
   // src/data/user.js
@@ -3052,7 +3036,7 @@
     if (!demand) return result;
     demand.status = "communicating";
     demand.candidateTeam = "t001";
-    demand.progress = "\u6B63\u5728\u4E0E\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F\u6C9F\u901A\u65B9\u6848";
+    demand.progress = "\u6B63\u5728\u4E0E\u674E\u660E\u56E2\u961F\u6C9F\u901A\u65B9\u6848";
     return result;
   }
 
@@ -3136,7 +3120,7 @@
     if (!demand) return result;
     demand.status = "plan_pending";
     demand.candidateTeam = "t001";
-    demand.progress = "\u660E\u6CD5\u5F8B\u5E08\u56E2\u961F\u5DF2\u63D0\u4EA4\u670D\u52A1\u65B9\u6848\uFF0C\u7B49\u5F85\u786E\u8BA4";
+    demand.progress = "\u674E\u660E\u56E2\u961F\u5DF2\u63D0\u4EA4\u670D\u52A1\u65B9\u6848\uFF0C\u7B49\u5F85\u786E\u8BA4";
     demand.servicePlan = {
       teamId: "t001",
       version: 1,
@@ -3513,6 +3497,94 @@
     }, 0);
   }
 
+  // src/data/homeServiceShelf.js
+  var homeServiceTabs = Object.freeze([
+    {
+      id: "fundraising",
+      label: "\u627E\u6295\u878D\u8D44\u670D\u52A1",
+      icon: "trending-up",
+      kind: "fundraising",
+      offerings: []
+    },
+    {
+      id: "law",
+      label: "\u627E\u5F8B\u5E08\u56E2\u961F",
+      icon: "scale",
+      kind: "services",
+      categoryId: "law",
+      offerings: [
+        { teamId: "t001", sku: "\u5408\u540C\u5BA1\u67E5" },
+        { teamId: "t002", sku: "\u5408\u540C\u5BA1\u67E5" },
+        { teamId: "t001", sku: "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1" },
+        { teamId: "t004", sku: "\u878D\u8D44\u4EA4\u6613" },
+        { teamId: "t007", sku: "\u80A1\u6743\u6FC0\u52B1" }
+      ]
+    },
+    {
+      id: "business",
+      label: "\u627E\u5DE5\u5546\u56E2\u961F",
+      icon: "briefcase",
+      kind: "services",
+      categoryId: "business",
+      offerings: [
+        { teamId: "t005", sku: "\u516C\u53F8\u6CE8\u518C" },
+        { teamId: "t005", sku: "\u5DE5\u5546\u53D8\u66F4" },
+        { teamId: "t005", sku: "\u516C\u53F8\u6CE8\u9500" }
+      ]
+    },
+    {
+      id: "finance",
+      label: "\u627E\u8D22\u7A0E\u56E2\u961F",
+      icon: "coins",
+      kind: "services",
+      categoryId: "finance",
+      offerings: []
+    },
+    {
+      id: "ip",
+      label: "\u627E\u77E5\u8BC6\u4EA7\u6743\u56E2\u961F",
+      icon: "shield",
+      kind: "services",
+      categoryId: "ip",
+      offerings: [
+        { teamId: "t003", sku: "\u5546\u6807\u6CE8\u518C" },
+        { teamId: "t008", sku: "\u5546\u6807\u6CE8\u518C" },
+        { teamId: "t006", sku: "\u4E13\u5229\u7533\u8BF7" },
+        { teamId: "t003", sku: "\u8457\u4F5C\u6743\u767B\u8BB0" }
+      ]
+    },
+    {
+      id: "policy",
+      label: "\u627E\u653F\u7B56\u7533\u62A5\u56E2\u961F",
+      icon: "file-text",
+      kind: "services",
+      categoryId: "policy",
+      offerings: [
+        { teamId: "t009", sku: "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A" },
+        { teamId: "t009", sku: "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5" },
+        { teamId: "t009", sku: "\u79D1\u6280\u9879\u76EE\u7533\u62A5" }
+      ]
+    },
+    {
+      id: "hr",
+      label: "\u627E\u4EBA\u529B\u8D44\u6E90\u56E2\u961F",
+      icon: "users",
+      kind: "services",
+      categoryId: "hr",
+      offerings: []
+    },
+    {
+      id: "agents",
+      label: "\u627E\u667A\u80FD\u4F53\u670D\u52A1",
+      icon: "bot",
+      kind: "agents",
+      offerings: []
+    }
+  ]);
+  function getHomeServiceTab(tabId) {
+    return homeServiceTabs.find((tab) => tab.id === tabId) || homeServiceTabs[0];
+  }
+
   // src/pages/p1-home/Onboarding.js
   function hasSeenOnboarding() {
     return readText(ecologyOnboarding.storageKey, null) === ecologyOnboarding.version;
@@ -3677,86 +3749,6 @@
     setTimeout(() => input.focus(), 0);
   }
 
-  // src/pages/p1-home/TodoBar.js
-  function latestTodo() {
-    return getLatestTodo(store.demands);
-  }
-  function renderTodoBar() {
-    const demand = latestTodo();
-    if (!demand) return "";
-    let html = '<section class="p1-todo-wrap">';
-    html += '<div class="p1-todo-head"><span class="p1-todo-head-title">\u6211\u7684\u670D\u52A1\u9700\u6C42</span>';
-    html += '<button class="p1-todo-head-more" id="p1TodoMore">\u5168\u90E8 ' + store.demands.length + " " + icon("chevron-right", 13) + "</button>";
-    html += "</div>";
-    const tone = ["pending", "choosing", "communicating", "plan_pending"].includes(demand.status) ? " matching" : demand.status === "active" ? " active-service" : demand.status === "done" ? " completed" : " attention";
-    html += '<button class="p1-todo-card' + tone + '" data-demand-id="' + demand.id + '">';
-    html += '<span class="p1-todo-main"><span class="p1-todo-title">' + demand.title + '</span><span class="p1-todo-progress">' + (demand.progress || "") + "</span></span>";
-    const action = demand.status === "done" && demand.hasReview ? "\u67E5\u770B\u8BC4\u4EF7" : TODO_STATUS_TEXT[demand.status] || "\u67E5\u770B\u8BE6\u60C5";
-    html += '<span class="p1-todo-action">' + action + "</span>" + icon("chevron-right", 16);
-    html += "</button></section>";
-    return html;
-  }
-  function bindTodoBar() {
-    const card = document.querySelector(".p1-todo-card");
-    if (card) card.addEventListener("click", function() {
-      const demand = getDemand(this.getAttribute("data-demand-id"), store.demands);
-      const target = getTodoTarget(demand);
-      navigateTo(target.page, target.params);
-    });
-    const more = document.getElementById("p1TodoMore");
-    if (more) more.addEventListener("click", () => navigateTo("p9", {}));
-  }
-
-  // src/pages/p1-home/index.js
-  var page = {
-    searchHistory: ["\u5408\u540C\u5BA1\u67E5", "\u516C\u53F8\u6CE8\u518C"],
-    render() {
-      const favoriteCount = getFavoriteTeams(store.teams).length;
-      const fundraising = getFundraisingSummary();
-      let html = "";
-      html += '<div class="p1-top"><div class="p1-search-row">';
-      html += '<button class="search-bar p1-search-trigger" id="p1SearchBar"><span class="search-icon">' + icon("search", 17) + "</span><span>\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784</span></button></div>";
-      html += '<button class="p1-publish" id="p1HeroCard"><span class="p1-publish-copy"><span class="p1-hero-title">\u8BF4\u6E05\u9700\u6C42\uFF0C\u627E\u5230\u5408\u9002\u56E2\u961F</span>';
-      html += '<span class="p1-hero-sub">\u63CF\u8FF0\u4F60\u7684\u60C5\u51B5\uFF0C\u5E73\u53F0\u5C06\u5339\u914D\u7ECF\u8FC7\u8D44\u8D28\u6838\u9A8C\u7684\u670D\u52A1\u56E2\u961F</span><span class="p1-publish-cta">\u5F00\u59CB\u53D1\u5E03 ' + icon("arrow-right", 14) + "</span></span></button></div>";
-      html += '<section class="section p1-service-section"><div class="section-header"><div><div class="section-title">\u4F01\u4E1A\u670D\u52A1</div><div class="p1-section-desc">\u8986\u76D6\u521B\u4E1A\u5E38\u89C1\u7684\u4E13\u4E1A\u670D\u52A1\u9700\u6C42</div></div>';
-      html += '<button class="p1-service-favorites" id="p1Favorites">' + icon(favoriteCount ? "star" : "star-outline", 16) + "<span>\u6211\u7684\u6536\u85CF</span>" + (favoriteCount ? "<b>" + favoriteCount + "</b>" : "") + "</button></div>";
-      html += '<div class="p1-fundraising"><button id="p1Fundraising" type="button"><span class="p1-fundraising-icon">' + icon("trending-up", 24) + '</span><span class="p1-fundraising-copy"><strong>\u6295\u878D\u8D44\u670D\u52A1</strong><small>' + (fundraising ? fundraising.title + " \xB7 " + fundraising.detail : "\u63D0\u4EA4 BP\uFF0C\u5339\u914D\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u6295\u8D44\u4EBA") + "</small><b>" + (fundraising ? fundraising.action : "\u5F00\u59CB\u878D\u8D44\u5339\u914D") + " " + icon("arrow-right", 13) + '</b></span><span class="p1-fundraising-visual" aria-hidden="true"><i></i><i></i><i></i></span></button></div>';
-      html += '<div class="p1-category-grid">';
-      categories.forEach((category) => {
-        html += '<button class="p1-category-tile' + (category.locked ? " locked" : "") + '" data-cat="' + category.id + '" data-locked="' + category.locked + '">';
-        html += '<span class="p1-cat-icon">' + icon(category.icon, 21) + "</span>";
-        html += '<span class="p1-cat-copy"><span class="p1-cat-name">' + category.name + '</span><span class="p1-cat-desc">' + category.desc + "</span></span>";
-        html += '<span class="p1-cat-tail">' + (category.locked ? "\u5373\u5C06\u4E0A\u7EBF" : icon("chevron-right", 15)) + "</span></button>";
-      });
-      html += "</div>";
-      html += '<button class="service-suggestion-link p1-suggestion" type="button" id="p1ServiceSuggestion"><span>\u6CA1\u6709\u4F60\u8981\u627E\u7684\u670D\u52A1\uFF1F</span><strong>\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42 ' + icon("arrow-right", 14) + "</strong></button></section>";
-      html += renderTodoBar();
-      html += '<div class="mb-4"></div>';
-      return html;
-    },
-    init() {
-      showTabBar(true);
-      bindTodoBar();
-      const favorites = document.getElementById("p1Favorites");
-      if (favorites) favorites.addEventListener("click", openFavorites);
-      document.getElementById("p1SearchBar").addEventListener("click", () => openSearchOverlay(page));
-      document.getElementById("p1HeroCard").addEventListener("click", () => navigateTo("p5"));
-      document.getElementById("p1Fundraising").addEventListener("click", () => navigateTo("p12"));
-      document.getElementById("p1ServiceSuggestion").addEventListener("click", () => openServiceSuggestion(""));
-      document.querySelectorAll(".p1-category-tile").forEach((tile) => {
-        tile.addEventListener("click", function() {
-          if (this.getAttribute("data-locked") === "true") {
-            showModal({ title: "\u5373\u5C06\u4E0A\u7EBF", body: "\u8BE5\u7C7B\u76EE\u4ECD\u5728\u62DB\u52DF\u670D\u52A1\u56E2\u961F\uFF0C\u5F00\u653E\u540E\u4F1A\u5728\u9996\u9875\u5C55\u793A\u3002", confirmText: "\u77E5\u9053\u4E86" });
-            return;
-          }
-          navigateTo("p2", { categoryId: this.getAttribute("data-cat") });
-        });
-      });
-      setTimeout(() => showOnboarding(false), 180);
-    }
-  };
-  register("p1", page);
-
   // src/components/tags.js
   var TAGS = {
     verified: { cls: "tag-verified", icon: "check-circle", text: "\u5DF2\u6838\u9A8C" },
@@ -3776,80 +3768,6 @@
     if (badge === "gold") return '<span class="tag tag-badge-gold">\u4F18\u9009</span>';
     if (badge === "flagship") return '<span class="tag tag-badge-flagship">\u65D7\u8230</span>';
     return "";
-  }
-
-  // src/components/teamCard.js
-  function renderTeamCard(team) {
-    const favorite = isFavoriteTeam(team.id);
-    let html = '<article class="p2-card" data-team="' + team.id + '" role="button" tabindex="0"><span class="p2-card-main">';
-    html += '<span class="p2-card-img" style="background:' + team.avatarColor + "18;color:" + team.avatarColor + '">' + team.avatar + "</span>";
-    html += '<span class="p2-card-info"><span class="p2-card-title-row"><span class="p2-card-title-copy"><span class="p2-card-name">' + team.name + "</span></span>";
-    html += '<span class="p2-card-title-actions">' + (team.badge ? renderBadge(team.badge) : "") + '<button class="p2-card-favorite' + (favorite ? " active" : "") + '" type="button" data-favorite-team="' + team.id + '" aria-label="' + (favorite ? "\u53D6\u6D88\u6536\u85CF" : "\u6536\u85CF\u56E2\u961F") + '" aria-pressed="' + favorite + '">' + icon(favorite ? "star" : "star-outline", 18) + "</button></span></span>";
-    html += '<span class="p2-card-org">' + team.orgShort + "</span>";
-    html += '<span class="p2-card-meta"><span class="p2-card-rating">' + icon("star", 14) + " " + team.rating + "</span><span>" + (team.reviewCount ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + "</span><span>\u5DF2\u5B8C\u6210" + (team.completedOrders || team.volume || 0) + "\u5355</span></span>";
-    html += '<span class="p2-card-desc">' + (team.desc || "\u56E2\u961F\u4ECB\u7ECD\u5F85\u5B8C\u5584") + '</span><span class="p2-card-tags">';
-    for (let index = 0; index < Math.min(team.skus.length, 3); index += 1) html += '<span class="sku-tag">' + team.skus[index] + "</span>";
-    if (team.skus.length > 3) html += '<span class="sku-tag p2-more-tag">+' + (team.skus.length - 3) + "</span>";
-    html += '</span><span class="p2-card-bottom"><span class="p2-card-loc">' + team.city + (team.avgResponse ? " \xB7 " + team.avgResponse + "\u5185\u54CD\u5E94" : "") + '</span><span class="p2-card-price">' + team.priceText + "</span></span>";
-    html += "</span></span></article>";
-    return html;
-  }
-  function renderTeamList(teams2) {
-    if (!teams2.length) return '<div class="empty-state"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">\u6682\u65E0\u5339\u914D\u56E2\u961F</div><div class="empty-desc">\u53EF\u4EE5\u8C03\u6574\u5173\u952E\u8BCD\u3001\u670D\u52A1\u9879\u76EE\u6216\u7B5B\u9009\u6761\u4EF6</div></div>';
-    return teams2.map(renderTeamCard).join("");
-  }
-  function bindTeamCards() {
-    document.querySelectorAll(".p2-card").forEach((card) => {
-      card.addEventListener("click", function(event) {
-        if (event.target.closest("[data-favorite-team]")) return;
-        navigateTo("p3", { teamId: this.getAttribute("data-team") });
-      });
-      card.addEventListener("keydown", function(event) {
-        if ((event.key === "Enter" || event.key === " ") && !event.target.closest("[data-favorite-team]")) {
-          event.preventDefault();
-          navigateTo("p3", { teamId: this.getAttribute("data-team") });
-        }
-      });
-    });
-    document.querySelectorAll("[data-favorite-team]").forEach((button) => {
-      button.addEventListener("click", function(event) {
-        event.stopPropagation();
-        const active = toggleFavoriteTeam(this.getAttribute("data-favorite-team"));
-        emitChange();
-        this.classList.toggle("active", active);
-        this.setAttribute("aria-pressed", active ? "true" : "false");
-        this.setAttribute("aria-label", active ? "\u53D6\u6D88\u6536\u85CF" : "\u6536\u85CF\u56E2\u961F");
-        this.innerHTML = icon(active ? "star" : "star-outline", 18);
-        toast(active ? "\u5DF2\u6536\u85CF\u8BE5\u56E2\u961F" : "\u5DF2\u53D6\u6D88\u6536\u85CF");
-      });
-    });
-  }
-  function renderOrgTeamCard(team) {
-    let html = '<div class="p4-team-card" data-team="' + team.id + '">';
-    html += '<div class="avatar avatar-sm" style="background:' + team.avatarColor + "20;color:" + team.avatarColor + '">' + team.avatar + "</div>";
-    html += '<div class="p4-team-info">';
-    html += '<div class="p4-team-name">';
-    html += team.name;
-    if (team.badge) html += renderBadge(team.badge);
-    html += renderTags(["verified"]);
-    html += "</div>";
-    html += '<div class="p4-team-meta">' + team.rating + "\u5206 \xB7 " + (team.reviewCount > 0 ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + " \xB7 " + team.city + "</div>";
-    html += '<div class="p4-team-desc">' + team.desc + "</div>";
-    html += '<div class="p4-team-services">' + team.skus.slice(0, 3).join(" \xB7 ") + "</div>";
-    html += "</div>";
-    html += '<div class="info-arrow">' + icon("chevron-right", 16) + "</div>";
-    html += "</div>";
-    return html;
-  }
-  function renderOrgTeamList(teams2) {
-    return teams2.map(renderOrgTeamCard).join("");
-  }
-  function bindOrgTeamCards() {
-    document.querySelectorAll(".p4-team-card").forEach((card) => {
-      card.addEventListener("click", function() {
-        navigateTo("p3", { teamId: this.getAttribute("data-team") });
-      });
-    });
   }
 
   // src/data/agents.js
@@ -4072,6 +3990,312 @@
   }
   function getAgent(agentId) {
     return agents.find((item) => item.id === agentId) || sortAgents(agents)[0];
+  }
+
+  // src/data/serviceBlueprints.js
+  var serviceBlueprints = {
+    "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": {
+      intro: "\u7ED3\u5408\u521B\u59CB\u56E2\u961F\u5206\u5DE5\u3001\u63A7\u5236\u6743\u5B89\u6392\u548C\u540E\u7EED\u878D\u8D44\u8BA1\u5212\uFF0C\u5F62\u6210\u53EF\u6267\u884C\u7684\u80A1\u6743\u7ED3\u6784\u65B9\u6848\u3002",
+      suitableFor: "\u9002\u5408\u6B63\u5728\u7EC4\u5EFA\u6838\u5FC3\u56E2\u961F\u3001\u51C6\u5907\u878D\u8D44\u6216\u9700\u8981\u8C03\u6574\u73B0\u6709\u80A1\u6743\u7ED3\u6784\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u68B3\u7406\u521B\u59CB\u4EBA\u4E0E\u6838\u5FC3\u6210\u5458\u7684\u8D21\u732E\u548C\u8BC9\u6C42", "\u8BBE\u8BA1\u6301\u80A1\u7ED3\u6784\u3001\u63A7\u5236\u6743\u4E0E\u51B3\u7B56\u673A\u5236", "\u8BC4\u4F30\u540E\u7EED\u878D\u8D44\u53CA\u5458\u5DE5\u6FC0\u52B1\u7684\u9884\u7559\u7A7A\u95F4", "\u5C31\u65B9\u6848\u843D\u5730\u8DEF\u5F84\u63D0\u4F9B\u6CD5\u5F8B\u5EFA\u8BAE"],
+      deliverables: ["\u80A1\u6743\u67B6\u6784\u65B9\u6848\u8BF4\u660E", "\u80A1\u6743\u6BD4\u4F8B\u4E0E\u63A7\u5236\u6743\u5EFA\u8BAE", "\u914D\u5957\u534F\u8BAE\u6216\u6761\u6B3E\u6E05\u5355", "\u65B9\u6848\u6C9F\u901A\u4E0E\u4E00\u8F6E\u8C03\u6574"],
+      process: ["\u63D0\u4EA4\u73B0\u6709\u60C5\u51B5", "\u987E\u95EE\u8BBF\u8C08", "\u5F62\u6210\u521D\u6B65\u65B9\u6848", "\u786E\u8BA4\u5E76\u4EA4\u4ED8"],
+      period: "\u901A\u5E38 2\u20143 \u5468",
+      materials: ["\u516C\u53F8\u53CA\u80A1\u4E1C\u57FA\u672C\u4FE1\u606F", "\u73B0\u6709\u80A1\u6743\u7ED3\u6784", "\u5408\u4F19\u4EBA\u5206\u5DE5\u4E0E\u51FA\u8D44\u60C5\u51B5", "\u672A\u6765\u878D\u8D44\u6216\u6FC0\u52B1\u8BA1\u5212"],
+      exclusions: ["\u5DE5\u5546\u53D8\u66F4\u4EE3\u529E", "\u7A0E\u52A1\u4E13\u9879\u610F\u89C1", "\u4E89\u8BAE\u89E3\u51B3\u6216\u8BC9\u8BBC\u670D\u52A1"]
+    },
+    "\u878D\u8D44\u4EA4\u6613": {
+      intro: "\u56F4\u7ED5\u878D\u8D44\u7ED3\u6784\u3001\u5C3D\u804C\u8C03\u67E5\u548C\u4EA4\u6613\u6587\u4EF6\uFF0C\u4E3A\u4F01\u4E1A\u63D0\u4F9B\u4ECE\u8C08\u5224\u5230\u4EA4\u5272\u7684\u6CD5\u5F8B\u652F\u6301\u3002",
+      suitableFor: "\u9002\u5408\u6B63\u5728\u63A5\u89E6\u6295\u8D44\u4EBA\u3001\u6536\u5230\u6295\u8D44\u610F\u5411\u6216\u51C6\u5907\u542F\u52A8\u65B0\u4E00\u8F6E\u878D\u8D44\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u4EA4\u6613\u7ED3\u6784\u4E0E\u5173\u952E\u6761\u6B3E\u5206\u6790", "\u914D\u5408\u6295\u8D44\u65B9\u5F00\u5C55\u6CD5\u5F8B\u5C3D\u8C03", "\u8D77\u8349\u6216\u5BA1\u9605\u6295\u8D44\u534F\u8BAE\u53CA\u914D\u5957\u6587\u4EF6", "\u53C2\u4E0E\u6838\u5FC3\u6761\u6B3E\u8C08\u5224\u4E0E\u4EA4\u5272"],
+      deliverables: ["\u5C3D\u8C03\u6750\u6599\u6E05\u5355\u4E0E\u95EE\u9898\u53CD\u9988", "\u4EA4\u6613\u7ED3\u6784\u53CA\u98CE\u9669\u63D0\u793A", "\u6295\u8D44\u534F\u8BAE\u4E0E\u914D\u5957\u6587\u4EF6", "\u7B7E\u7F72\u53CA\u4EA4\u5272\u6587\u4EF6\u5305"],
+      process: ["\u786E\u8BA4\u4EA4\u6613\u80CC\u666F", "\u5C3D\u8C03\u4E0E\u7ED3\u6784\u8BBE\u8BA1", "\u6587\u4EF6\u8C08\u5224\u4FEE\u6539", "\u7B7E\u7F72\u4EA4\u5272"],
+      period: "\u901A\u5E38 4\u20148 \u5468",
+      materials: ["\u73B0\u6709\u80A1\u6743\u7ED3\u6784\u8868", "\u516C\u53F8\u7AE0\u7A0B\u53CA\u5386\u53F2\u53D8\u66F4\u6587\u4EF6", "\u6295\u8D44\u610F\u5411\u4E66\u6216 TS \u8349\u7A3F", "\u6838\u5FC3\u4E1A\u52A1\u5408\u540C\u4E0E\u77E5\u8BC6\u4EA7\u6743\u8D44\u6599"],
+      exclusions: ["\u4E13\u9879\u8D22\u7A0E\u5BA1\u8BA1", "\u5883\u5916\u6CD5\u5F8B\u610F\u89C1", "\u8D85\u51FA\u7EA6\u5B9A\u8F6E\u6B21\u7684\u6301\u7EED\u8C08\u5224"]
+    },
+    "\u5408\u540C\u5BA1\u67E5": {
+      intro: "\u8BC6\u522B\u5408\u540C\u4E2D\u7684\u6743\u8D23\u5931\u8861\u3001\u5C65\u7EA6\u98CE\u9669\u548C\u4E89\u8BAE\u6761\u6B3E\uFF0C\u5E76\u7ED9\u51FA\u53EF\u76F4\u63A5\u6C9F\u901A\u7684\u4FEE\u6539\u5EFA\u8BAE\u3002",
+      suitableFor: "\u9002\u5408\u9700\u8981\u7B7E\u7F72\u5BA2\u6237\u3001\u4F9B\u5E94\u5546\u3001\u5408\u4F5C\u6216\u6295\u8D44\u76F8\u5173\u5408\u540C\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u6838\u5BF9\u4EA4\u6613\u80CC\u666F\u4E0E\u6838\u5FC3\u8BC9\u6C42", "\u9010\u6761\u5BA1\u67E5\u6743\u5229\u4E49\u52A1\u548C\u8FDD\u7EA6\u8D23\u4EFB", "\u6807\u8BB0\u9AD8\u98CE\u9669\u6761\u6B3E\u5E76\u8BF4\u660E\u5F71\u54CD", "\u63D0\u4F9B\u4FEE\u6539\u7A3F\u6216\u8C08\u5224\u5EFA\u8BAE"],
+      deliverables: ["\u5408\u540C\u98CE\u9669\u6E05\u5355", "\u5E26\u4FEE\u8BA2\u75D5\u8FF9\u7684\u5408\u540C\u7248\u672C", "\u91CD\u70B9\u6761\u6B3E\u6C9F\u901A\u5EFA\u8BAE", "\u4E00\u6B21\u4FEE\u6539\u590D\u6838"],
+      process: ["\u63D0\u4EA4\u5408\u540C", "\u8865\u5145\u4EA4\u6613\u80CC\u666F", "\u5B8C\u6210\u5BA1\u67E5", "\u8BB2\u89E3\u4E0E\u590D\u6838"],
+      period: "\u901A\u5E38 1\u20143 \u4E2A\u5DE5\u4F5C\u65E5",
+      materials: ["\u5F85\u5BA1\u5408\u540C\u5B8C\u6574\u7248\u672C", "\u4EA4\u6613\u80CC\u666F\u548C\u5408\u4F5C\u65B9\u5F0F", "\u6700\u5173\u6CE8\u7684\u6761\u6B3E\u6216\u98CE\u9669"],
+      exclusions: ["\u5408\u540C\u4EE3\u7B7E\u6216\u5546\u52A1\u8C08\u5224\u4EE3\u7406", "\u8BC9\u8BBC\u4EF2\u88C1\u670D\u52A1", "\u5927\u6279\u91CF\u5408\u540C\u7684\u6301\u7EED\u5BA1\u67E5"]
+    },
+    "\u80A1\u6743\u6FC0\u52B1": {
+      intro: "\u7ED3\u5408\u4EBA\u5458\u8303\u56F4\u3001\u6FC0\u52B1\u76EE\u6807\u548C\u516C\u53F8\u9636\u6BB5\uFF0C\u8BBE\u8BA1\u517C\u987E\u6FC0\u52B1\u6548\u679C\u4E0E\u63A7\u5236\u6743\u7684\u5B9E\u65BD\u65B9\u6848\u3002",
+      suitableFor: "\u9002\u5408\u5E0C\u671B\u957F\u671F\u7559\u4F4F\u6838\u5FC3\u6210\u5458\u3001\u5EFA\u7ACB\u671F\u6743\u6C60\u6216\u89C4\u8303\u65E2\u6709\u6FC0\u52B1\u5B89\u6392\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u660E\u786E\u6FC0\u52B1\u5BF9\u8C61\u4E0E\u6388\u4E88\u903B\u8F91", "\u8BBE\u8BA1\u989D\u5EA6\u3001\u6210\u719F\u671F\u548C\u9000\u51FA\u673A\u5236", "\u8BC4\u4F30\u63A7\u5236\u6743\u53CA\u878D\u8D44\u5F71\u54CD", "\u63D0\u4F9B\u5B9E\u65BD\u6587\u4EF6\u548C\u6C9F\u901A\u5EFA\u8BAE"],
+      deliverables: ["\u80A1\u6743\u6FC0\u52B1\u65B9\u6848", "\u6388\u4E88\u4E0E\u6210\u719F\u89C4\u5219", "\u6838\u5FC3\u534F\u8BAE\u6587\u4EF6", "\u5B9E\u65BD\u6C9F\u901A\u6750\u6599"],
+      process: ["\u786E\u8BA4\u6FC0\u52B1\u76EE\u6807", "\u8BBF\u8C08\u4E0E\u6D4B\u7B97", "\u65B9\u6848\u8BBE\u8BA1", "\u6587\u4EF6\u4EA4\u4ED8"],
+      period: "\u901A\u5E38 3\u20144 \u5468",
+      materials: ["\u516C\u53F8\u80A1\u6743\u7ED3\u6784", "\u62DF\u6FC0\u52B1\u4EBA\u5458\u4FE1\u606F", "\u5C97\u4F4D\u548C\u8D21\u732E\u8BF4\u660E", "\u672A\u6765\u878D\u8D44\u8BA1\u5212"],
+      exclusions: ["\u4E2A\u4EBA\u7A0E\u52A1\u7B79\u5212", "\u5DE5\u5546\u53D8\u66F4\u4EE3\u529E", "\u52B3\u52A8\u4E89\u8BAE\u5904\u7406"]
+    },
+    "\u5546\u6807\u6CE8\u518C": {
+      intro: "\u5148\u5B8C\u6210\u5546\u6807\u68C0\u7D22\u548C\u7533\u8BF7\u65B9\u6848\u8BC4\u4F30\uFF0C\u518D\u6309\u786E\u8BA4\u7684\u7C7B\u522B\u3001\u8303\u56F4\u548C\u98CE\u9669\u5B89\u6392\u5206\u9636\u6BB5\u529E\u7406\u3002",
+      suitableFor: "\u9002\u5408\u9700\u8981\u5EFA\u7ACB\u54C1\u724C\u4FDD\u62A4\u3001\u9996\u6B21\u7533\u8BF7\u5546\u6807\u6216\u8865\u5145\u6838\u5FC3\u7C7B\u522B\u5E03\u5C40\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u7533\u8BF7\u4E3B\u4F53\u548C\u5546\u6807\u56FE\u6837\u6838\u5BF9", "\u8FD1\u4F3C\u68C0\u7D22\u4E0E\u6CE8\u518C\u98CE\u9669\u5206\u6790", "\u5546\u54C1\u6216\u670D\u52A1\u7C7B\u522B\u5EFA\u8BAE", "\u7533\u8BF7\u6587\u4EF6\u51C6\u5907\u3001\u63D0\u4EA4\u4E0E\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u5546\u6807\u68C0\u7D22\u5206\u6790", "\u7C7B\u522B\u4E0E\u7533\u8BF7\u7B56\u7565\u5EFA\u8BAE", "\u5B9A\u7A3F\u7533\u8BF7\u6587\u4EF6", "\u63D0\u4EA4\u56DE\u6267\u53CA\u5BA1\u67E5\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u57FA\u7840\u6750\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u7B7E\u7EA6\u5E76\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5BA1\u67E5\u7ED3\u679C"],
+      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
+      materials: ["\u7533\u8BF7\u4E3B\u4F53\u8BC1\u7167", "\u5546\u6807\u6587\u5B57\u6216\u56FE\u6837", "\u62DF\u4F7F\u7528\u7684\u5546\u54C1\u6216\u670D\u52A1\u8303\u56F4"],
+      exclusions: ["\u4E3B\u7BA1\u673A\u6784\u6536\u53D6\u7684\u5B98\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u590D\u5BA1\u3001\u5F02\u8BAE\u6216\u8BC9\u8BBC\u670D\u52A1"]
+    },
+    "\u4E13\u5229\u7533\u8BF7": {
+      intro: "\u57FA\u4E8E\u6280\u672F\u65B9\u6848\u5B8C\u6210\u53EF\u7533\u8BF7\u6027\u8BC4\u4F30\u3001\u6587\u4EF6\u64B0\u5199\u4E0E\u5B9A\u7A3F\uFF0C\u518D\u8FDB\u5165\u6B63\u5F0F\u63D0\u4EA4\u548C\u5BA1\u67E5\u8DDF\u8FDB\u3002",
+      suitableFor: "\u9002\u5408\u62E5\u6709\u65B0\u6280\u672F\u65B9\u6848\u3001\u4EA7\u54C1\u7ED3\u6784\u6216\u5DE5\u827A\u65B9\u6CD5\uFF0C\u9700\u8981\u8BC4\u4F30\u4E13\u5229\u4FDD\u62A4\u8DEF\u5F84\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u6280\u672F\u4EA4\u5E95\u4E0E\u7533\u8BF7\u7C7B\u578B\u8BC4\u4F30", "\u73B0\u6709\u6280\u672F\u68C0\u7D22\u53CA\u98CE\u9669\u63D0\u793A", "\u7533\u8BF7\u6587\u4EF6\u64B0\u5199\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u63D0\u4EA4\u548C\u5BA1\u67E5\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u68C0\u7D22\u6216\u53EF\u7533\u8BF7\u6027\u5206\u6790", "\u4E13\u5229\u7533\u8BF7\u6587\u4EF6", "\u6B63\u5F0F\u63D0\u4EA4\u56DE\u6267", "\u5BA1\u67E5\u610F\u89C1\u4E0E\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u6280\u672F\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5BA1\u67E5\u7ED3\u679C"],
+      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
+      materials: ["\u6280\u672F\u4EA4\u5E95\u4E66", "\u4EA7\u54C1\u56FE\u7EB8\u6216\u6D41\u7A0B\u8BF4\u660E", "\u53D1\u660E\u4EBA\u53CA\u7533\u8BF7\u4EBA\u4FE1\u606F"],
+      exclusions: ["\u4E3B\u7BA1\u673A\u6784\u6536\u53D6\u7684\u5B98\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u7B54\u590D\u3001\u590D\u5BA1\u6216\u8BC9\u8BBC\u670D\u52A1"]
+    },
+    "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A": {
+      intro: "\u5148\u6838\u9A8C\u4F01\u4E1A\u57FA\u7840\u6761\u4EF6\u548C\u8D44\u6599\u5B8C\u6574\u5EA6\uFF0C\u518D\u786E\u5B9A\u7533\u62A5\u8303\u56F4\u3001\u4E24\u9636\u6BB5\u6210\u679C\u548C\u529E\u7406\u8BA1\u5212\u3002",
+      suitableFor: "\u9002\u5408\u5177\u5907\u7814\u53D1\u6D3B\u52A8\u3001\u77E5\u8BC6\u4EA7\u6743\u548C\u79D1\u6280\u6210\u679C\u8F6C\u5316\u57FA\u7840\uFF0C\u8BA1\u5212\u7533\u62A5\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u7533\u62A5\u8D44\u683C\u4E0E\u5DEE\u8DDD\u8BC4\u4F30", "\u7814\u53D1\u53CA\u77E5\u8BC6\u4EA7\u6743\u8D44\u6599\u89C4\u5212", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u4E0E\u8BC4\u5BA1\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u8D44\u683C\u8BC4\u4F30\u62A5\u544A", "\u7533\u62A5\u6750\u6599\u6E05\u5355\u4E0E\u89C4\u5212", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
+      period: "\u9884\u8BA1 2\u20144 \u4E2A\u6708\uFF0C\u4EE5\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
+      materials: ["\u4F01\u4E1A\u8BC1\u7167\u53CA\u4EBA\u5458\u60C5\u51B5", "\u77E5\u8BC6\u4EA7\u6743\u548C\u7814\u53D1\u9879\u76EE\u8D44\u6599", "\u8D22\u52A1\u53CA\u6536\u5165\u76F8\u5173\u8D44\u6599"],
+      exclusions: ["\u5BA1\u8BA1\u3001\u9274\u8BC1\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u672A\u5728\u65B9\u6848\u4E2D\u7EA6\u5B9A\u7684\u8D44\u6599\u6574\u6539\u6216\u65B0\u589E\u9879\u76EE"]
+    },
+    "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5": {
+      intro: "\u7ED3\u5408\u4F01\u4E1A\u89C4\u6A21\u3001\u7ECF\u8425\u6307\u6807\u548C\u4E13\u4E1A\u5316\u80FD\u529B\u5B8C\u6210\u8D44\u683C\u8BC4\u4F30\uFF0C\u5E76\u6309\u7533\u62A5\u7A97\u53E3\u63A8\u8FDB\u6750\u6599\u51C6\u5907\u3002",
+      suitableFor: "\u9002\u5408\u4E3B\u8425\u4E1A\u52A1\u805A\u7126\u3001\u5177\u5907\u4E13\u4E1A\u5316\u548C\u521B\u65B0\u80FD\u529B\uFF0C\u8BA1\u5212\u7533\u62A5\u4E13\u7CBE\u7279\u65B0\u8D44\u8D28\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u4F01\u4E1A\u6761\u4EF6\u4E0E\u7533\u62A5\u53E3\u5F84\u8BC4\u4F30", "\u6307\u6807\u5DEE\u8DDD\u53CA\u8865\u5145\u6750\u6599\u5EFA\u8BAE", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u53CA\u8FDB\u5EA6\u8DDF\u8FDB"],
+      deliverables: ["\u8D44\u683C\u8BC4\u4F30\u7ED3\u8BBA", "\u6750\u6599\u6E05\u5355\u548C\u5DEE\u8DDD\u5EFA\u8BAE", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
+      period: "\u4EE5\u5F53\u5730\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
+      materials: ["\u4F01\u4E1A\u57FA\u672C\u4FE1\u606F", "\u4E3B\u8425\u4E1A\u52A1\u53CA\u7ECF\u8425\u6570\u636E", "\u521B\u65B0\u6210\u679C\u4E0E\u8D44\u8D28\u6750\u6599"],
+      exclusions: ["\u5BA1\u8BA1\u3001\u68C0\u6D4B\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u8D44\u8D28\u8865\u529E\u6216\u957F\u671F\u8F85\u5BFC"]
+    },
+    "\u79D1\u6280\u9879\u76EE\u7533\u62A5": {
+      intro: "\u6839\u636E\u4F01\u4E1A\u6761\u4EF6\u548C\u7533\u62A5\u901A\u77E5\u8BC4\u4F30\u9002\u914D\u9879\u76EE\uFF0C\u786E\u8BA4\u6750\u6599\u8303\u56F4\u540E\u5206\u9636\u6BB5\u5B8C\u6210\u7533\u62A5\u3002",
+      suitableFor: "\u9002\u5408\u5E0C\u671B\u7533\u8BF7\u79D1\u6280\u8BA1\u5212\u3001\u4E13\u9879\u8D44\u91D1\u6216\u4EA7\u4E1A\u652F\u6301\u9879\u76EE\u7684\u79D1\u6280\u578B\u4F01\u4E1A\u3002",
+      scope: ["\u7533\u62A5\u9879\u76EE\u9002\u914D\u8BC4\u4F30", "\u7533\u62A5\u6761\u4EF6\u548C\u6750\u6599\u5DEE\u8DDD\u5206\u6790", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u53CA\u540E\u7EED\u8DDF\u8FDB"],
+      deliverables: ["\u9879\u76EE\u9002\u914D\u5EFA\u8BAE", "\u7533\u62A5\u6750\u6599\u6E05\u5355", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
+      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
+      period: "\u4EE5\u5177\u4F53\u9879\u76EE\u7533\u62A5\u901A\u77E5\u4E3A\u51C6",
+      materials: ["\u4F01\u4E1A\u53CA\u56E2\u961F\u4FE1\u606F", "\u9879\u76EE\u6280\u672F\u4E0E\u5546\u4E1A\u8D44\u6599", "\u8D22\u52A1\u53CA\u77E5\u8BC6\u4EA7\u6743\u6750\u6599"],
+      exclusions: ["\u5BA1\u8BA1\u3001\u68C0\u6D4B\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u7533\u62A5\u8303\u56F4\u4E4B\u5916\u7684\u957F\u671F\u54A8\u8BE2\u670D\u52A1"]
+    }
+  };
+  var defaultServiceBlueprint = {
+    intro: "\u7531\u56E2\u961F\u6839\u636E\u4F01\u4E1A\u5F53\u524D\u60C5\u51B5\u786E\u8BA4\u670D\u52A1\u8FB9\u754C\uFF0C\u5F62\u6210\u53EF\u6267\u884C\u7684\u4E13\u4E1A\u670D\u52A1\u65B9\u6848\u3002",
+    suitableFor: "\u9002\u5408\u9700\u8981\u8BE5\u9879\u4E13\u4E1A\u652F\u6301\uFF0C\u5E76\u5E0C\u671B\u5148\u660E\u786E\u8303\u56F4\u3001\u5468\u671F\u548C\u4EA4\u4ED8\u6210\u679C\u7684\u4F01\u4E1A\u3002",
+    scope: ["\u4E86\u89E3\u4F01\u4E1A\u80CC\u666F\u548C\u5177\u4F53\u76EE\u6807", "\u8BC6\u522B\u5173\u952E\u95EE\u9898\u4E0E\u670D\u52A1\u8FB9\u754C", "\u5F62\u6210\u670D\u52A1\u5EFA\u8BAE\u548C\u5B9E\u65BD\u8DEF\u5F84", "\u6309\u786E\u8BA4\u65B9\u6848\u5B8C\u6210\u4EA4\u4ED8"],
+    deliverables: ["\u670D\u52A1\u65B9\u6848\u8BF4\u660E", "\u7EA6\u5B9A\u8303\u56F4\u5185\u7684\u4E13\u4E1A\u6587\u4EF6", "\u5173\u952E\u4E8B\u9879\u6C9F\u901A\u8BB0\u5F55", "\u4E00\u6B21\u4EA4\u4ED8\u8BF4\u660E"],
+    process: ["\u63D0\u4EA4\u9700\u6C42", "\u987E\u95EE\u6C9F\u901A", "\u786E\u8BA4\u65B9\u6848", "\u5B8C\u6210\u4EA4\u4ED8"],
+    period: "\u4EE5\u53CC\u65B9\u786E\u8BA4\u65B9\u6848\u4E3A\u51C6",
+    materials: ["\u4F01\u4E1A\u57FA\u672C\u4FE1\u606F", "\u4E0E\u9700\u6C42\u76F8\u5173\u7684\u73B0\u6709\u6750\u6599", "\u671F\u671B\u5B8C\u6210\u65F6\u95F4"],
+    exclusions: ["\u672A\u5728\u670D\u52A1\u65B9\u6848\u4E2D\u660E\u786E\u7EA6\u5B9A\u7684\u65B0\u589E\u4E8B\u9879"]
+  };
+
+  // src/pages/p1-home/ServiceShelf.js
+  function serviceDescription(sku) {
+    return (serviceBlueprints[sku] || defaultServiceBlueprint).intro;
+  }
+  function renderProvider(team) {
+    return '<span class="p1-offer-provider"><b>' + escapeHTML(team.name) + '</b><i aria-hidden="true"></i><span>' + escapeHTML(team.orgName || team.orgShort) + "</span></span>";
+  }
+  function renderServiceOffering(offering, tab) {
+    const team = getTeam(offering.teamId, store.teams);
+    if (!team) return "";
+    return '<button class="p1-offer-card" type="button" data-offer-kind="service" data-team-id="' + escapeHTML(team.id) + '" data-sku="' + escapeHTML(offering.sku) + '"><span class="p1-offer-icon">' + icon(tab.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(offering.sku) + "</strong>" + renderBadge(team.badge) + '</span><span class="p1-offer-desc">' + escapeHTML(serviceDescription(offering.sku)) + "</span>" + renderProvider(team) + '</span><span class="p1-offer-aside"><strong>' + escapeHTML(team.priceText) + "</strong><span>\u67E5\u770B\u8BE6\u60C5 " + icon("chevron-right", 13) + "</span></span></button>";
+  }
+  function renderFundraisingOffering() {
+    return '<button class="p1-offer-card p1-offer-fundraising" type="button" data-offer-kind="fundraising"><span class="p1-offer-icon">' + icon("trending-up", 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>\u878D\u8D44\u5339\u914D\u670D\u52A1</strong><span class="p1-platform-badge">\u5E73\u53F0\u81EA\u8425</span></span><span class="p1-offer-desc">\u63D0\u4EA4\u6216\u66F4\u65B0BP\uFF0C\u5339\u914D\u6B63\u5728\u627E\u9879\u76EE\u4E14\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u4E2A\u4EBA\u6295\u8D44\u4EBA\u3002</span><span class="p1-offer-provider"><b>\u987E\u6668\u56E2\u961F</b><i aria-hidden="true"></i><span>\u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3</span></span></span><span class="p1-offer-aside"><strong>\u4E13\u9879\u5339\u914D</strong><span>\u5F00\u59CB\u5339\u914D ' + icon("chevron-right", 13) + "</span></span></button>";
+  }
+  function renderAgentOffering(agent) {
+    const paused = agent.status === "paused";
+    return '<button class="p1-offer-card p1-agent-offer' + (paused ? " is-paused" : "") + '" type="button" data-offer-kind="agent" data-agent-id="' + escapeHTML(agent.id) + '"' + (paused ? " disabled" : "") + '><span class="p1-offer-icon">' + icon(agent.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(agent.name) + "</strong>" + (agent.recommended ? '<span class="p1-platform-badge">\u5E73\u53F0\u63A8\u8350</span>' : "") + '</span><span class="p1-offer-desc">' + escapeHTML(agent.description) + '</span><span class="p1-offer-provider"><b>' + escapeHTML(agent.supplier.name) + '</b><i aria-hidden="true"></i><span>' + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528") + '</span></span></span><span class="p1-offer-aside"><strong>' + escapeHTML(agent.price) + "</strong><span>" + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F00\u59CB\u4F7F\u7528 " + icon("chevron-right", 13)) + "</span></span></button>";
+  }
+  function renderEmptyShelf(tab) {
+    return '<div class="p1-shelf-empty"><span>' + icon(tab.icon, 25) + '</span><div><strong>\u6682\u672A\u4E0A\u67B6\u53EF\u9009\u670D\u52A1</strong><p>\u5E73\u53F0\u6B63\u5728\u62DB\u52DF\u5E76\u6838\u9A8C\u76F8\u5173\u670D\u52A1\u56E2\u961F\uFF0C\u4F60\u4E5F\u53EF\u4EE5\u5148\u63D0\u4EA4\u5177\u4F53\u9700\u6C42\u3002</p></div><button type="button" data-offer-kind="suggest">\u63D0\u4EA4\u670D\u52A1\u5EFA\u8BAE</button></div>';
+  }
+  function renderServiceTabs(activeTabId) {
+    return '<div class="p1-shelf-tabs" id="p1ShelfTabs" role="tablist" aria-label="\u670D\u52A1\u7C7B\u578B">' + homeServiceTabs.map(
+      (tab) => '<button type="button" role="tab" aria-selected="' + String(tab.id === activeTabId) + '" class="p1-shelf-tab' + (tab.id === activeTabId ? " active" : "") + '" data-shelf-tab="' + tab.id + '">' + escapeHTML(tab.label) + "</button>"
+    ).join("") + "</div>";
+  }
+  function renderServiceShelf(activeTabId) {
+    const tab = getHomeServiceTab(activeTabId);
+    let cards = "";
+    if (tab.kind === "fundraising") cards = renderFundraisingOffering();
+    else if (tab.kind === "agents") cards = getAgentsByCategory("all").slice(0, 5).map(renderAgentOffering).join("");
+    else cards = tab.offerings.map((offering) => renderServiceOffering(offering, tab)).join("");
+    if (!cards) cards = renderEmptyShelf(tab);
+    return '<div class="p1-offer-list" id="p1OfferList" role="tabpanel">' + cards + "</div>";
+  }
+
+  // src/pages/p1-home/TodoBar.js
+  function latestTodo() {
+    return getLatestTodo(store.demands);
+  }
+  function renderTodoBar() {
+    const demand = latestTodo();
+    if (!demand) return "";
+    let html = '<section class="p1-todo-wrap">';
+    html += '<div class="p1-todo-head"><span class="p1-todo-head-title">\u6211\u7684\u670D\u52A1\u9700\u6C42</span>';
+    html += '<button class="p1-todo-head-more" id="p1TodoMore">\u5168\u90E8 ' + store.demands.length + " " + icon("chevron-right", 13) + "</button>";
+    html += "</div>";
+    const tone = ["pending", "choosing", "communicating", "plan_pending"].includes(demand.status) ? " matching" : demand.status === "active" ? " active-service" : demand.status === "done" ? " completed" : " attention";
+    html += '<button class="p1-todo-card' + tone + '" data-demand-id="' + demand.id + '">';
+    html += '<span class="p1-todo-main"><span class="p1-todo-title">' + demand.title + '</span><span class="p1-todo-progress">' + (demand.progress || "") + "</span></span>";
+    const action = demand.status === "done" && demand.hasReview ? "\u67E5\u770B\u8BC4\u4EF7" : TODO_STATUS_TEXT[demand.status] || "\u67E5\u770B\u8BE6\u60C5";
+    html += '<span class="p1-todo-action">' + action + "</span>" + icon("chevron-right", 16);
+    html += "</button></section>";
+    return html;
+  }
+  function bindTodoBar() {
+    const card = document.querySelector(".p1-todo-card");
+    if (card) card.addEventListener("click", function() {
+      const demand = getDemand(this.getAttribute("data-demand-id"), store.demands);
+      const target = getTodoTarget(demand);
+      navigateTo(target.page, target.params);
+    });
+    const more = document.getElementById("p1TodoMore");
+    if (more) more.addEventListener("click", () => navigateTo("p9", {}));
+  }
+
+  // src/pages/p1-home/index.js
+  var page = {
+    searchHistory: ["\u5408\u540C\u5BA1\u67E5", "\u516C\u53F8\u6CE8\u518C"],
+    activeShelfId: "fundraising",
+    render(params = {}) {
+      const favoriteCount = getFavoriteTeams(store.teams).length;
+      this.activeShelfId = getHomeServiceTab(params.shelf || this.activeShelfId).id;
+      let html = "";
+      html += '<div class="p1-top"><div class="p1-search-row"><button class="search-bar p1-search-trigger" id="p1SearchBar"><span class="search-icon">' + icon("search", 17) + "</span><span>\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784</span></button></div>";
+      html += '<section class="p1-brand-copy"><h1>\u521B\u4E1A\u8DEF\u4E0A\uFF0C<br>\u9760\u8C31\u670D\u52A1\u4E00\u952E\u76F4\u8FBE</h1><div class="p1-brand-proof"><span>' + icon("shield", 14) + "\u8D44\u8D28\u5168\u6838\u9A8C</span><span>" + icon("sparkles", 14) + "AI \u5148\u8BCA</span><span>" + icon("check-circle", 14) + "\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
+      html += '<button class="p1-match-card" id="p1HeroCard" type="button"><span class="p1-match-icon">' + icon("sparkles", 22) + '</span><span class="p1-match-copy"><strong>\u4E0D\u786E\u5B9A\u9700\u8981\u4EC0\u4E48\u670D\u52A1\uFF1F</strong><small>\u5148\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\uFF0CAI \u5E2E\u4F60\u5339\u914D</small></span><span class="p1-match-action">\u5F00\u59CB\u5339\u914D ' + icon("arrow-right", 14) + "</span></button></div>";
+      html += '<section class="p1-marketplace"><div class="p1-marketplace-head"><div><h2>\u627E\u670D\u52A1</h2><p>\u5148\u9009\u670D\u52A1\uFF0C\u518D\u6BD4\u8F83\u4E0D\u540C\u56E2\u961F</p></div><button class="p1-service-favorites" id="p1Favorites">' + icon(favoriteCount ? "star" : "star-outline", 16) + "<span>\u6211\u7684\u6536\u85CF</span>" + (favoriteCount ? "<b>" + favoriteCount + "</b>" : "") + "</button></div>";
+      html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId);
+      html += '<button class="service-suggestion-link p1-suggestion" type="button" id="p1ServiceSuggestion"><span>\u6CA1\u6709\u4F60\u8981\u627E\u7684\u670D\u52A1\uFF1F</span><strong>\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42 ' + icon("arrow-right", 14) + "</strong></button></section>";
+      html += renderTodoBar();
+      html += '<div class="mb-4"></div>';
+      return html;
+    },
+    init() {
+      showTabBar(true);
+      bindTodoBar();
+      const favorites = document.getElementById("p1Favorites");
+      if (favorites) favorites.addEventListener("click", openFavorites);
+      document.getElementById("p1SearchBar").addEventListener("click", () => openSearchOverlay(page));
+      document.getElementById("p1HeroCard").addEventListener("click", () => navigateTo("p5"));
+      document.getElementById("p1ServiceSuggestion").addEventListener("click", () => openServiceSuggestion(""));
+      this.bindShelf();
+      setTimeout(() => showOnboarding(false), 180);
+    },
+    bindShelf() {
+      document.querySelectorAll("[data-shelf-tab]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          this.activeShelfId = tab.getAttribute("data-shelf-tab");
+          document.querySelectorAll("[data-shelf-tab]").forEach((item) => {
+            const selected = item.getAttribute("data-shelf-tab") === this.activeShelfId;
+            item.classList.toggle("active", selected);
+            item.setAttribute("aria-selected", String(selected));
+          });
+          const list = document.getElementById("p1OfferList");
+          list.outerHTML = renderServiceShelf(this.activeShelfId);
+          const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          document.querySelector('[data-shelf-tab="' + this.activeShelfId + '"]').scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest", inline: "center" });
+          this.bindOfferingActions();
+        });
+      });
+      this.bindOfferingActions();
+    },
+    bindOfferingActions() {
+      document.querySelectorAll("[data-offer-kind]").forEach((card) => {
+        card.addEventListener("click", () => {
+          const kind = card.getAttribute("data-offer-kind");
+          if (kind === "fundraising") navigateTo("p12");
+          else if (kind === "service") navigateTo("p10", { teamId: card.getAttribute("data-team-id"), sku: card.getAttribute("data-sku") });
+          else if (kind === "agent") navigateTo("p11", { agentId: card.getAttribute("data-agent-id") });
+          else if (kind === "suggest") openServiceSuggestion("");
+        });
+      });
+    }
+  };
+  register("p1", page);
+
+  // src/components/teamCard.js
+  function renderTeamCard(team) {
+    const favorite = isFavoriteTeam(team.id);
+    let html = '<article class="p2-card" data-team="' + team.id + '" role="button" tabindex="0"><span class="p2-card-main">';
+    html += '<span class="p2-card-img" style="background:' + team.avatarColor + "18;color:" + team.avatarColor + '">' + team.avatar + "</span>";
+    html += '<span class="p2-card-info"><span class="p2-card-title-row"><span class="p2-card-title-copy"><span class="p2-card-name">' + team.name + "</span></span>";
+    html += '<span class="p2-card-title-actions">' + (team.badge ? renderBadge(team.badge) : "") + '<button class="p2-card-favorite' + (favorite ? " active" : "") + '" type="button" data-favorite-team="' + team.id + '" aria-label="' + (favorite ? "\u53D6\u6D88\u6536\u85CF" : "\u6536\u85CF\u56E2\u961F") + '" aria-pressed="' + favorite + '">' + icon(favorite ? "star" : "star-outline", 18) + "</button></span></span>";
+    html += '<span class="p2-card-org">' + team.orgShort + "</span>";
+    html += '<span class="p2-card-meta"><span class="p2-card-rating">' + icon("star", 14) + " " + team.rating + "</span><span>" + (team.reviewCount ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + "</span><span>\u5DF2\u5B8C\u6210" + (team.completedOrders || team.volume || 0) + "\u5355</span></span>";
+    html += '<span class="p2-card-desc">' + (team.desc || "\u56E2\u961F\u4ECB\u7ECD\u5F85\u5B8C\u5584") + '</span><span class="p2-card-tags">';
+    for (let index = 0; index < Math.min(team.skus.length, 3); index += 1) html += '<span class="sku-tag">' + team.skus[index] + "</span>";
+    if (team.skus.length > 3) html += '<span class="sku-tag p2-more-tag">+' + (team.skus.length - 3) + "</span>";
+    html += '</span><span class="p2-card-bottom"><span class="p2-card-loc">' + team.city + (team.avgResponse ? " \xB7 " + team.avgResponse + "\u5185\u54CD\u5E94" : "") + '</span><span class="p2-card-price">' + team.priceText + "</span></span>";
+    html += "</span></span></article>";
+    return html;
+  }
+  function renderTeamList(teams2) {
+    if (!teams2.length) return '<div class="empty-state"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">\u6682\u65E0\u5339\u914D\u56E2\u961F</div><div class="empty-desc">\u53EF\u4EE5\u8C03\u6574\u5173\u952E\u8BCD\u3001\u670D\u52A1\u9879\u76EE\u6216\u7B5B\u9009\u6761\u4EF6</div></div>';
+    return teams2.map(renderTeamCard).join("");
+  }
+  function bindTeamCards() {
+    document.querySelectorAll(".p2-card").forEach((card) => {
+      card.addEventListener("click", function(event) {
+        if (event.target.closest("[data-favorite-team]")) return;
+        navigateTo("p3", { teamId: this.getAttribute("data-team") });
+      });
+      card.addEventListener("keydown", function(event) {
+        if ((event.key === "Enter" || event.key === " ") && !event.target.closest("[data-favorite-team]")) {
+          event.preventDefault();
+          navigateTo("p3", { teamId: this.getAttribute("data-team") });
+        }
+      });
+    });
+    document.querySelectorAll("[data-favorite-team]").forEach((button) => {
+      button.addEventListener("click", function(event) {
+        event.stopPropagation();
+        const active = toggleFavoriteTeam(this.getAttribute("data-favorite-team"));
+        emitChange();
+        this.classList.toggle("active", active);
+        this.setAttribute("aria-pressed", active ? "true" : "false");
+        this.setAttribute("aria-label", active ? "\u53D6\u6D88\u6536\u85CF" : "\u6536\u85CF\u56E2\u961F");
+        this.innerHTML = icon(active ? "star" : "star-outline", 18);
+        toast(active ? "\u5DF2\u6536\u85CF\u8BE5\u56E2\u961F" : "\u5DF2\u53D6\u6D88\u6536\u85CF");
+      });
+    });
+  }
+  function renderOrgTeamCard(team) {
+    let html = '<div class="p4-team-card" data-team="' + team.id + '">';
+    html += '<div class="avatar avatar-sm" style="background:' + team.avatarColor + "20;color:" + team.avatarColor + '">' + team.avatar + "</div>";
+    html += '<div class="p4-team-info">';
+    html += '<div class="p4-team-name">';
+    html += team.name;
+    if (team.badge) html += renderBadge(team.badge);
+    html += renderTags(["verified"]);
+    html += "</div>";
+    html += '<div class="p4-team-meta">' + team.rating + "\u5206 \xB7 " + (team.reviewCount > 0 ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + " \xB7 " + team.city + "</div>";
+    html += '<div class="p4-team-desc">' + team.desc + "</div>";
+    html += '<div class="p4-team-services">' + team.skus.slice(0, 3).join(" \xB7 ") + "</div>";
+    html += "</div>";
+    html += '<div class="info-arrow">' + icon("chevron-right", 16) + "</div>";
+    html += "</div>";
+    return html;
+  }
+  function renderOrgTeamList(teams2) {
+    return teams2.map(renderOrgTeamCard).join("");
+  }
+  function bindOrgTeamCards() {
+    document.querySelectorAll(".p4-team-card").forEach((card) => {
+      card.addEventListener("click", function() {
+        navigateTo("p3", { teamId: this.getAttribute("data-team") });
+      });
+    });
   }
 
   // src/pages/p2-list/FilterSheet.js
@@ -7176,110 +7400,6 @@
     }
   };
   register("p9", page9);
-
-  // src/data/serviceBlueprints.js
-  var serviceBlueprints = {
-    "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": {
-      intro: "\u7ED3\u5408\u521B\u59CB\u56E2\u961F\u5206\u5DE5\u3001\u63A7\u5236\u6743\u5B89\u6392\u548C\u540E\u7EED\u878D\u8D44\u8BA1\u5212\uFF0C\u5F62\u6210\u53EF\u6267\u884C\u7684\u80A1\u6743\u7ED3\u6784\u65B9\u6848\u3002",
-      suitableFor: "\u9002\u5408\u6B63\u5728\u7EC4\u5EFA\u6838\u5FC3\u56E2\u961F\u3001\u51C6\u5907\u878D\u8D44\u6216\u9700\u8981\u8C03\u6574\u73B0\u6709\u80A1\u6743\u7ED3\u6784\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u68B3\u7406\u521B\u59CB\u4EBA\u4E0E\u6838\u5FC3\u6210\u5458\u7684\u8D21\u732E\u548C\u8BC9\u6C42", "\u8BBE\u8BA1\u6301\u80A1\u7ED3\u6784\u3001\u63A7\u5236\u6743\u4E0E\u51B3\u7B56\u673A\u5236", "\u8BC4\u4F30\u540E\u7EED\u878D\u8D44\u53CA\u5458\u5DE5\u6FC0\u52B1\u7684\u9884\u7559\u7A7A\u95F4", "\u5C31\u65B9\u6848\u843D\u5730\u8DEF\u5F84\u63D0\u4F9B\u6CD5\u5F8B\u5EFA\u8BAE"],
-      deliverables: ["\u80A1\u6743\u67B6\u6784\u65B9\u6848\u8BF4\u660E", "\u80A1\u6743\u6BD4\u4F8B\u4E0E\u63A7\u5236\u6743\u5EFA\u8BAE", "\u914D\u5957\u534F\u8BAE\u6216\u6761\u6B3E\u6E05\u5355", "\u65B9\u6848\u6C9F\u901A\u4E0E\u4E00\u8F6E\u8C03\u6574"],
-      process: ["\u63D0\u4EA4\u73B0\u6709\u60C5\u51B5", "\u987E\u95EE\u8BBF\u8C08", "\u5F62\u6210\u521D\u6B65\u65B9\u6848", "\u786E\u8BA4\u5E76\u4EA4\u4ED8"],
-      period: "\u901A\u5E38 2\u20143 \u5468",
-      materials: ["\u516C\u53F8\u53CA\u80A1\u4E1C\u57FA\u672C\u4FE1\u606F", "\u73B0\u6709\u80A1\u6743\u7ED3\u6784", "\u5408\u4F19\u4EBA\u5206\u5DE5\u4E0E\u51FA\u8D44\u60C5\u51B5", "\u672A\u6765\u878D\u8D44\u6216\u6FC0\u52B1\u8BA1\u5212"],
-      exclusions: ["\u5DE5\u5546\u53D8\u66F4\u4EE3\u529E", "\u7A0E\u52A1\u4E13\u9879\u610F\u89C1", "\u4E89\u8BAE\u89E3\u51B3\u6216\u8BC9\u8BBC\u670D\u52A1"]
-    },
-    "\u878D\u8D44\u4EA4\u6613": {
-      intro: "\u56F4\u7ED5\u878D\u8D44\u7ED3\u6784\u3001\u5C3D\u804C\u8C03\u67E5\u548C\u4EA4\u6613\u6587\u4EF6\uFF0C\u4E3A\u4F01\u4E1A\u63D0\u4F9B\u4ECE\u8C08\u5224\u5230\u4EA4\u5272\u7684\u6CD5\u5F8B\u652F\u6301\u3002",
-      suitableFor: "\u9002\u5408\u6B63\u5728\u63A5\u89E6\u6295\u8D44\u4EBA\u3001\u6536\u5230\u6295\u8D44\u610F\u5411\u6216\u51C6\u5907\u542F\u52A8\u65B0\u4E00\u8F6E\u878D\u8D44\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u4EA4\u6613\u7ED3\u6784\u4E0E\u5173\u952E\u6761\u6B3E\u5206\u6790", "\u914D\u5408\u6295\u8D44\u65B9\u5F00\u5C55\u6CD5\u5F8B\u5C3D\u8C03", "\u8D77\u8349\u6216\u5BA1\u9605\u6295\u8D44\u534F\u8BAE\u53CA\u914D\u5957\u6587\u4EF6", "\u53C2\u4E0E\u6838\u5FC3\u6761\u6B3E\u8C08\u5224\u4E0E\u4EA4\u5272"],
-      deliverables: ["\u5C3D\u8C03\u6750\u6599\u6E05\u5355\u4E0E\u95EE\u9898\u53CD\u9988", "\u4EA4\u6613\u7ED3\u6784\u53CA\u98CE\u9669\u63D0\u793A", "\u6295\u8D44\u534F\u8BAE\u4E0E\u914D\u5957\u6587\u4EF6", "\u7B7E\u7F72\u53CA\u4EA4\u5272\u6587\u4EF6\u5305"],
-      process: ["\u786E\u8BA4\u4EA4\u6613\u80CC\u666F", "\u5C3D\u8C03\u4E0E\u7ED3\u6784\u8BBE\u8BA1", "\u6587\u4EF6\u8C08\u5224\u4FEE\u6539", "\u7B7E\u7F72\u4EA4\u5272"],
-      period: "\u901A\u5E38 4\u20148 \u5468",
-      materials: ["\u73B0\u6709\u80A1\u6743\u7ED3\u6784\u8868", "\u516C\u53F8\u7AE0\u7A0B\u53CA\u5386\u53F2\u53D8\u66F4\u6587\u4EF6", "\u6295\u8D44\u610F\u5411\u4E66\u6216 TS \u8349\u7A3F", "\u6838\u5FC3\u4E1A\u52A1\u5408\u540C\u4E0E\u77E5\u8BC6\u4EA7\u6743\u8D44\u6599"],
-      exclusions: ["\u4E13\u9879\u8D22\u7A0E\u5BA1\u8BA1", "\u5883\u5916\u6CD5\u5F8B\u610F\u89C1", "\u8D85\u51FA\u7EA6\u5B9A\u8F6E\u6B21\u7684\u6301\u7EED\u8C08\u5224"]
-    },
-    "\u5408\u540C\u5BA1\u67E5": {
-      intro: "\u8BC6\u522B\u5408\u540C\u4E2D\u7684\u6743\u8D23\u5931\u8861\u3001\u5C65\u7EA6\u98CE\u9669\u548C\u4E89\u8BAE\u6761\u6B3E\uFF0C\u5E76\u7ED9\u51FA\u53EF\u76F4\u63A5\u6C9F\u901A\u7684\u4FEE\u6539\u5EFA\u8BAE\u3002",
-      suitableFor: "\u9002\u5408\u9700\u8981\u7B7E\u7F72\u5BA2\u6237\u3001\u4F9B\u5E94\u5546\u3001\u5408\u4F5C\u6216\u6295\u8D44\u76F8\u5173\u5408\u540C\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u6838\u5BF9\u4EA4\u6613\u80CC\u666F\u4E0E\u6838\u5FC3\u8BC9\u6C42", "\u9010\u6761\u5BA1\u67E5\u6743\u5229\u4E49\u52A1\u548C\u8FDD\u7EA6\u8D23\u4EFB", "\u6807\u8BB0\u9AD8\u98CE\u9669\u6761\u6B3E\u5E76\u8BF4\u660E\u5F71\u54CD", "\u63D0\u4F9B\u4FEE\u6539\u7A3F\u6216\u8C08\u5224\u5EFA\u8BAE"],
-      deliverables: ["\u5408\u540C\u98CE\u9669\u6E05\u5355", "\u5E26\u4FEE\u8BA2\u75D5\u8FF9\u7684\u5408\u540C\u7248\u672C", "\u91CD\u70B9\u6761\u6B3E\u6C9F\u901A\u5EFA\u8BAE", "\u4E00\u6B21\u4FEE\u6539\u590D\u6838"],
-      process: ["\u63D0\u4EA4\u5408\u540C", "\u8865\u5145\u4EA4\u6613\u80CC\u666F", "\u5B8C\u6210\u5BA1\u67E5", "\u8BB2\u89E3\u4E0E\u590D\u6838"],
-      period: "\u901A\u5E38 1\u20143 \u4E2A\u5DE5\u4F5C\u65E5",
-      materials: ["\u5F85\u5BA1\u5408\u540C\u5B8C\u6574\u7248\u672C", "\u4EA4\u6613\u80CC\u666F\u548C\u5408\u4F5C\u65B9\u5F0F", "\u6700\u5173\u6CE8\u7684\u6761\u6B3E\u6216\u98CE\u9669"],
-      exclusions: ["\u5408\u540C\u4EE3\u7B7E\u6216\u5546\u52A1\u8C08\u5224\u4EE3\u7406", "\u8BC9\u8BBC\u4EF2\u88C1\u670D\u52A1", "\u5927\u6279\u91CF\u5408\u540C\u7684\u6301\u7EED\u5BA1\u67E5"]
-    },
-    "\u80A1\u6743\u6FC0\u52B1": {
-      intro: "\u7ED3\u5408\u4EBA\u5458\u8303\u56F4\u3001\u6FC0\u52B1\u76EE\u6807\u548C\u516C\u53F8\u9636\u6BB5\uFF0C\u8BBE\u8BA1\u517C\u987E\u6FC0\u52B1\u6548\u679C\u4E0E\u63A7\u5236\u6743\u7684\u5B9E\u65BD\u65B9\u6848\u3002",
-      suitableFor: "\u9002\u5408\u5E0C\u671B\u957F\u671F\u7559\u4F4F\u6838\u5FC3\u6210\u5458\u3001\u5EFA\u7ACB\u671F\u6743\u6C60\u6216\u89C4\u8303\u65E2\u6709\u6FC0\u52B1\u5B89\u6392\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u660E\u786E\u6FC0\u52B1\u5BF9\u8C61\u4E0E\u6388\u4E88\u903B\u8F91", "\u8BBE\u8BA1\u989D\u5EA6\u3001\u6210\u719F\u671F\u548C\u9000\u51FA\u673A\u5236", "\u8BC4\u4F30\u63A7\u5236\u6743\u53CA\u878D\u8D44\u5F71\u54CD", "\u63D0\u4F9B\u5B9E\u65BD\u6587\u4EF6\u548C\u6C9F\u901A\u5EFA\u8BAE"],
-      deliverables: ["\u80A1\u6743\u6FC0\u52B1\u65B9\u6848", "\u6388\u4E88\u4E0E\u6210\u719F\u89C4\u5219", "\u6838\u5FC3\u534F\u8BAE\u6587\u4EF6", "\u5B9E\u65BD\u6C9F\u901A\u6750\u6599"],
-      process: ["\u786E\u8BA4\u6FC0\u52B1\u76EE\u6807", "\u8BBF\u8C08\u4E0E\u6D4B\u7B97", "\u65B9\u6848\u8BBE\u8BA1", "\u6587\u4EF6\u4EA4\u4ED8"],
-      period: "\u901A\u5E38 3\u20144 \u5468",
-      materials: ["\u516C\u53F8\u80A1\u6743\u7ED3\u6784", "\u62DF\u6FC0\u52B1\u4EBA\u5458\u4FE1\u606F", "\u5C97\u4F4D\u548C\u8D21\u732E\u8BF4\u660E", "\u672A\u6765\u878D\u8D44\u8BA1\u5212"],
-      exclusions: ["\u4E2A\u4EBA\u7A0E\u52A1\u7B79\u5212", "\u5DE5\u5546\u53D8\u66F4\u4EE3\u529E", "\u52B3\u52A8\u4E89\u8BAE\u5904\u7406"]
-    },
-    "\u5546\u6807\u6CE8\u518C": {
-      intro: "\u5148\u5B8C\u6210\u5546\u6807\u68C0\u7D22\u548C\u7533\u8BF7\u65B9\u6848\u8BC4\u4F30\uFF0C\u518D\u6309\u786E\u8BA4\u7684\u7C7B\u522B\u3001\u8303\u56F4\u548C\u98CE\u9669\u5B89\u6392\u5206\u9636\u6BB5\u529E\u7406\u3002",
-      suitableFor: "\u9002\u5408\u9700\u8981\u5EFA\u7ACB\u54C1\u724C\u4FDD\u62A4\u3001\u9996\u6B21\u7533\u8BF7\u5546\u6807\u6216\u8865\u5145\u6838\u5FC3\u7C7B\u522B\u5E03\u5C40\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u7533\u8BF7\u4E3B\u4F53\u548C\u5546\u6807\u56FE\u6837\u6838\u5BF9", "\u8FD1\u4F3C\u68C0\u7D22\u4E0E\u6CE8\u518C\u98CE\u9669\u5206\u6790", "\u5546\u54C1\u6216\u670D\u52A1\u7C7B\u522B\u5EFA\u8BAE", "\u7533\u8BF7\u6587\u4EF6\u51C6\u5907\u3001\u63D0\u4EA4\u4E0E\u8FDB\u5EA6\u8DDF\u8FDB"],
-      deliverables: ["\u5546\u6807\u68C0\u7D22\u5206\u6790", "\u7C7B\u522B\u4E0E\u7533\u8BF7\u7B56\u7565\u5EFA\u8BAE", "\u5B9A\u7A3F\u7533\u8BF7\u6587\u4EF6", "\u63D0\u4EA4\u56DE\u6267\u53CA\u5BA1\u67E5\u7ED3\u679C\u540C\u6B65"],
-      process: ["\u63D0\u4EA4\u57FA\u7840\u6750\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u7B7E\u7EA6\u5E76\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5BA1\u67E5\u7ED3\u679C"],
-      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
-      materials: ["\u7533\u8BF7\u4E3B\u4F53\u8BC1\u7167", "\u5546\u6807\u6587\u5B57\u6216\u56FE\u6837", "\u62DF\u4F7F\u7528\u7684\u5546\u54C1\u6216\u670D\u52A1\u8303\u56F4"],
-      exclusions: ["\u4E3B\u7BA1\u673A\u6784\u6536\u53D6\u7684\u5B98\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u590D\u5BA1\u3001\u5F02\u8BAE\u6216\u8BC9\u8BBC\u670D\u52A1"]
-    },
-    "\u4E13\u5229\u7533\u8BF7": {
-      intro: "\u57FA\u4E8E\u6280\u672F\u65B9\u6848\u5B8C\u6210\u53EF\u7533\u8BF7\u6027\u8BC4\u4F30\u3001\u6587\u4EF6\u64B0\u5199\u4E0E\u5B9A\u7A3F\uFF0C\u518D\u8FDB\u5165\u6B63\u5F0F\u63D0\u4EA4\u548C\u5BA1\u67E5\u8DDF\u8FDB\u3002",
-      suitableFor: "\u9002\u5408\u62E5\u6709\u65B0\u6280\u672F\u65B9\u6848\u3001\u4EA7\u54C1\u7ED3\u6784\u6216\u5DE5\u827A\u65B9\u6CD5\uFF0C\u9700\u8981\u8BC4\u4F30\u4E13\u5229\u4FDD\u62A4\u8DEF\u5F84\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u6280\u672F\u4EA4\u5E95\u4E0E\u7533\u8BF7\u7C7B\u578B\u8BC4\u4F30", "\u73B0\u6709\u6280\u672F\u68C0\u7D22\u53CA\u98CE\u9669\u63D0\u793A", "\u7533\u8BF7\u6587\u4EF6\u64B0\u5199\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u63D0\u4EA4\u548C\u5BA1\u67E5\u8FDB\u5EA6\u8DDF\u8FDB"],
-      deliverables: ["\u68C0\u7D22\u6216\u53EF\u7533\u8BF7\u6027\u5206\u6790", "\u4E13\u5229\u7533\u8BF7\u6587\u4EF6", "\u6B63\u5F0F\u63D0\u4EA4\u56DE\u6267", "\u5BA1\u67E5\u610F\u89C1\u4E0E\u7ED3\u679C\u540C\u6B65"],
-      process: ["\u63D0\u4EA4\u6280\u672F\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5BA1\u67E5\u7ED3\u679C"],
-      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
-      materials: ["\u6280\u672F\u4EA4\u5E95\u4E66", "\u4EA7\u54C1\u56FE\u7EB8\u6216\u6D41\u7A0B\u8BF4\u660E", "\u53D1\u660E\u4EBA\u53CA\u7533\u8BF7\u4EBA\u4FE1\u606F"],
-      exclusions: ["\u4E3B\u7BA1\u673A\u6784\u6536\u53D6\u7684\u5B98\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u7B54\u590D\u3001\u590D\u5BA1\u6216\u8BC9\u8BBC\u670D\u52A1"]
-    },
-    "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A": {
-      intro: "\u5148\u6838\u9A8C\u4F01\u4E1A\u57FA\u7840\u6761\u4EF6\u548C\u8D44\u6599\u5B8C\u6574\u5EA6\uFF0C\u518D\u786E\u5B9A\u7533\u62A5\u8303\u56F4\u3001\u4E24\u9636\u6BB5\u6210\u679C\u548C\u529E\u7406\u8BA1\u5212\u3002",
-      suitableFor: "\u9002\u5408\u5177\u5907\u7814\u53D1\u6D3B\u52A8\u3001\u77E5\u8BC6\u4EA7\u6743\u548C\u79D1\u6280\u6210\u679C\u8F6C\u5316\u57FA\u7840\uFF0C\u8BA1\u5212\u7533\u62A5\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u7533\u62A5\u8D44\u683C\u4E0E\u5DEE\u8DDD\u8BC4\u4F30", "\u7814\u53D1\u53CA\u77E5\u8BC6\u4EA7\u6743\u8D44\u6599\u89C4\u5212", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u4E0E\u8BC4\u5BA1\u8FDB\u5EA6\u8DDF\u8FDB"],
-      deliverables: ["\u8D44\u683C\u8BC4\u4F30\u62A5\u544A", "\u7533\u62A5\u6750\u6599\u6E05\u5355\u4E0E\u89C4\u5212", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
-      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
-      period: "\u9884\u8BA1 2\u20144 \u4E2A\u6708\uFF0C\u4EE5\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
-      materials: ["\u4F01\u4E1A\u8BC1\u7167\u53CA\u4EBA\u5458\u60C5\u51B5", "\u77E5\u8BC6\u4EA7\u6743\u548C\u7814\u53D1\u9879\u76EE\u8D44\u6599", "\u8D22\u52A1\u53CA\u6536\u5165\u76F8\u5173\u8D44\u6599"],
-      exclusions: ["\u5BA1\u8BA1\u3001\u9274\u8BC1\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u672A\u5728\u65B9\u6848\u4E2D\u7EA6\u5B9A\u7684\u8D44\u6599\u6574\u6539\u6216\u65B0\u589E\u9879\u76EE"]
-    },
-    "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5": {
-      intro: "\u7ED3\u5408\u4F01\u4E1A\u89C4\u6A21\u3001\u7ECF\u8425\u6307\u6807\u548C\u4E13\u4E1A\u5316\u80FD\u529B\u5B8C\u6210\u8D44\u683C\u8BC4\u4F30\uFF0C\u5E76\u6309\u7533\u62A5\u7A97\u53E3\u63A8\u8FDB\u6750\u6599\u51C6\u5907\u3002",
-      suitableFor: "\u9002\u5408\u4E3B\u8425\u4E1A\u52A1\u805A\u7126\u3001\u5177\u5907\u4E13\u4E1A\u5316\u548C\u521B\u65B0\u80FD\u529B\uFF0C\u8BA1\u5212\u7533\u62A5\u4E13\u7CBE\u7279\u65B0\u8D44\u8D28\u7684\u4F01\u4E1A\u3002",
-      scope: ["\u4F01\u4E1A\u6761\u4EF6\u4E0E\u7533\u62A5\u53E3\u5F84\u8BC4\u4F30", "\u6307\u6807\u5DEE\u8DDD\u53CA\u8865\u5145\u6750\u6599\u5EFA\u8BAE", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u53CA\u8FDB\u5EA6\u8DDF\u8FDB"],
-      deliverables: ["\u8D44\u683C\u8BC4\u4F30\u7ED3\u8BBA", "\u6750\u6599\u6E05\u5355\u548C\u5DEE\u8DDD\u5EFA\u8BAE", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
-      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
-      period: "\u4EE5\u5F53\u5730\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
-      materials: ["\u4F01\u4E1A\u57FA\u672C\u4FE1\u606F", "\u4E3B\u8425\u4E1A\u52A1\u53CA\u7ECF\u8425\u6570\u636E", "\u521B\u65B0\u6210\u679C\u4E0E\u8D44\u8D28\u6750\u6599"],
-      exclusions: ["\u5BA1\u8BA1\u3001\u68C0\u6D4B\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u672A\u7EA6\u5B9A\u7684\u8D44\u8D28\u8865\u529E\u6216\u957F\u671F\u8F85\u5BFC"]
-    },
-    "\u79D1\u6280\u9879\u76EE\u7533\u62A5": {
-      intro: "\u6839\u636E\u4F01\u4E1A\u6761\u4EF6\u548C\u7533\u62A5\u901A\u77E5\u8BC4\u4F30\u9002\u914D\u9879\u76EE\uFF0C\u786E\u8BA4\u6750\u6599\u8303\u56F4\u540E\u5206\u9636\u6BB5\u5B8C\u6210\u7533\u62A5\u3002",
-      suitableFor: "\u9002\u5408\u5E0C\u671B\u7533\u8BF7\u79D1\u6280\u8BA1\u5212\u3001\u4E13\u9879\u8D44\u91D1\u6216\u4EA7\u4E1A\u652F\u6301\u9879\u76EE\u7684\u79D1\u6280\u578B\u4F01\u4E1A\u3002",
-      scope: ["\u7533\u62A5\u9879\u76EE\u9002\u914D\u8BC4\u4F30", "\u7533\u62A5\u6761\u4EF6\u548C\u6750\u6599\u5DEE\u8DDD\u5206\u6790", "\u7533\u62A5\u6750\u6599\u6574\u7406\u4E0E\u5B9A\u7A3F", "\u6B63\u5F0F\u7533\u62A5\u53CA\u540E\u7EED\u8DDF\u8FDB"],
-      deliverables: ["\u9879\u76EE\u9002\u914D\u5EFA\u8BAE", "\u7533\u62A5\u6750\u6599\u6E05\u5355", "\u5B9A\u7A3F\u7533\u62A5\u6750\u6599", "\u63D0\u4EA4\u8BB0\u5F55\u53CA\u7ED3\u679C\u540C\u6B65"],
-      process: ["\u63D0\u4EA4\u4F01\u4E1A\u8D44\u6599", "\u56E2\u961F\u8BC4\u4F30\u5E76\u62A5\u4EF7", "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E", "\u786E\u8BA4\u7533\u62A5\u6750\u6599", "\u652F\u4ED8\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E\u5E76\u6B63\u5F0F\u7533\u62A5", "\u8DDF\u8FDB\u8BC4\u5BA1\u7ED3\u679C"],
-      period: "\u4EE5\u5177\u4F53\u9879\u76EE\u7533\u62A5\u901A\u77E5\u4E3A\u51C6",
-      materials: ["\u4F01\u4E1A\u53CA\u56E2\u961F\u4FE1\u606F", "\u9879\u76EE\u6280\u672F\u4E0E\u5546\u4E1A\u8D44\u6599", "\u8D22\u52A1\u53CA\u77E5\u8BC6\u4EA7\u6743\u6750\u6599"],
-      exclusions: ["\u5BA1\u8BA1\u3001\u68C0\u6D4B\u7B49\u7B2C\u4E09\u65B9\u8D39\u7528", "\u7533\u62A5\u8303\u56F4\u4E4B\u5916\u7684\u957F\u671F\u54A8\u8BE2\u670D\u52A1"]
-    }
-  };
-  var defaultServiceBlueprint = {
-    intro: "\u7531\u56E2\u961F\u6839\u636E\u4F01\u4E1A\u5F53\u524D\u60C5\u51B5\u786E\u8BA4\u670D\u52A1\u8FB9\u754C\uFF0C\u5F62\u6210\u53EF\u6267\u884C\u7684\u4E13\u4E1A\u670D\u52A1\u65B9\u6848\u3002",
-    suitableFor: "\u9002\u5408\u9700\u8981\u8BE5\u9879\u4E13\u4E1A\u652F\u6301\uFF0C\u5E76\u5E0C\u671B\u5148\u660E\u786E\u8303\u56F4\u3001\u5468\u671F\u548C\u4EA4\u4ED8\u6210\u679C\u7684\u4F01\u4E1A\u3002",
-    scope: ["\u4E86\u89E3\u4F01\u4E1A\u80CC\u666F\u548C\u5177\u4F53\u76EE\u6807", "\u8BC6\u522B\u5173\u952E\u95EE\u9898\u4E0E\u670D\u52A1\u8FB9\u754C", "\u5F62\u6210\u670D\u52A1\u5EFA\u8BAE\u548C\u5B9E\u65BD\u8DEF\u5F84", "\u6309\u786E\u8BA4\u65B9\u6848\u5B8C\u6210\u4EA4\u4ED8"],
-    deliverables: ["\u670D\u52A1\u65B9\u6848\u8BF4\u660E", "\u7EA6\u5B9A\u8303\u56F4\u5185\u7684\u4E13\u4E1A\u6587\u4EF6", "\u5173\u952E\u4E8B\u9879\u6C9F\u901A\u8BB0\u5F55", "\u4E00\u6B21\u4EA4\u4ED8\u8BF4\u660E"],
-    process: ["\u63D0\u4EA4\u9700\u6C42", "\u987E\u95EE\u6C9F\u901A", "\u786E\u8BA4\u65B9\u6848", "\u5B8C\u6210\u4EA4\u4ED8"],
-    period: "\u4EE5\u53CC\u65B9\u786E\u8BA4\u65B9\u6848\u4E3A\u51C6",
-    materials: ["\u4F01\u4E1A\u57FA\u672C\u4FE1\u606F", "\u4E0E\u9700\u6C42\u76F8\u5173\u7684\u73B0\u6709\u6750\u6599", "\u671F\u671B\u5B8C\u6210\u65F6\u95F4"],
-    exclusions: ["\u672A\u5728\u670D\u52A1\u65B9\u6848\u4E2D\u660E\u786E\u7EA6\u5B9A\u7684\u65B0\u589E\u4E8B\u9879"]
-  };
 
   // src/pages/p10-service/index.js
   function domainOptions6() {
