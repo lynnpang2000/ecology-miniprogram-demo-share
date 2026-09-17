@@ -33,16 +33,6 @@
       return false;
     }
   }
-  function removeValue(key) {
-    try {
-      const storage = getStorage();
-      if (!storage) return false;
-      storage.removeItem(key);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
   function readJSON(key, fallback) {
     const value = readText(key, null);
     if (value === null) return fallback;
@@ -1893,6 +1883,7 @@
     "scale": "11-50\u4EBA",
     "city": "\u5317\u4EAC",
     "district": "\u6D77\u6DC0\u533A",
+    "mobile": "138 0000 8899",
     "avatar": "\u5F20"
   };
 
@@ -4172,7 +4163,7 @@
       this.activeShelfId = getHomeServiceTab(params.shelf || this.activeShelfId).id;
       let html = "";
       html += '<div class="p1-top"><div class="p1-search-row"><button class="search-bar p1-search-trigger" id="p1SearchBar"><span class="search-icon">' + icon("search", 17) + "</span><span>\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784</span></button></div>";
-      html += '<section class="p1-brand-copy"><h1>\u521B\u4E1A\u8DEF\u4E0A\uFF0C<br>\u9760\u8C31\u670D\u52A1\u4E00\u952E\u76F4\u8FBE</h1><div class="p1-brand-proof"><span>' + icon("shield", 14) + "\u8D44\u8D28\u5168\u6838\u9A8C</span><span>" + icon("sparkles", 14) + "AI \u5148\u8BCA</span><span>" + icon("check-circle", 14) + "\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
+      html += '<section class="p1-brand-copy"><h1>\u4E13\u4E3A 0-A \u8F6E\u521B\u4E1A\u8005\u6253\u9020\u7684<br>\u751F\u6001\u670D\u52A1\u5E73\u53F0</h1><div class="p1-brand-proof"><span>' + icon("shield", 14) + "\u8D44\u8D28\u5168\u6838\u9A8C</span><span>" + icon("sparkles", 14) + "AI \u5148\u8BCA</span><span>" + icon("check-circle", 14) + "\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
       html += '<button class="p1-match-card" id="p1HeroCard" type="button"><span class="p1-match-icon">' + icon("sparkles", 22) + '</span><span class="p1-match-copy"><strong>\u4E0D\u786E\u5B9A\u9700\u8981\u4EC0\u4E48\u670D\u52A1\uFF1F</strong><small>\u5148\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\uFF0CAI \u5E2E\u4F60\u5339\u914D</small></span><span class="p1-match-action">\u5F00\u59CB\u5339\u914D ' + icon("arrow-right", 14) + "</span></button></div>";
       html += '<section class="p1-marketplace"><div class="p1-marketplace-head"><div><h2>\u627E\u670D\u52A1</h2><p>\u5148\u9009\u670D\u52A1\uFF0C\u518D\u6BD4\u8F83\u4E0D\u540C\u56E2\u961F</p></div><button class="p1-service-favorites" id="p1Favorites">' + icon(favoriteCount ? "star" : "star-outline", 16) + "<span>\u6211\u7684\u6536\u85CF</span>" + (favoriteCount ? "<b>" + favoriteCount + "</b>" : "") + "</button></div>";
       html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId);
@@ -4649,6 +4640,82 @@
     return html;
   }
 
+  // src/pages/p5-dialog/DemandWizard.js
+  var wizardSteps = Object.freeze([
+    { number: 1, label: "\u9009\u62E9\u670D\u52A1" },
+    { number: 2, label: "\u586B\u5199\u9700\u6C42" },
+    { number: 3, label: "\u786E\u8BA4\u63D0\u4EA4" }
+  ]);
+  function renderHeader(page14) {
+    return '<div class="nav-bar p5-wizard-nav"><button class="nav-back" id="p5Back" type="button" aria-label="\u8FD4\u56DE">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u53D1\u5E03\u670D\u52A1\u9700\u6C42</div><div class="p5-step-count">' + page14.wizardStep + '/3</div></div><ol class="p5-wizard-stepper" aria-label="\u9700\u6C42\u53D1\u5E03\u8FDB\u5EA6">' + wizardSteps.map((step) => {
+      const state2 = step.number < page14.wizardStep ? " done" : step.number === page14.wizardStep ? " active" : "";
+      return '<li class="' + state2.trim() + '"><span>' + (step.number < page14.wizardStep ? icon("check", 12) : step.number) + "</span><small>" + step.label + "</small></li>";
+    }).join("") + "</ol>";
+  }
+  function renderChoiceButton(value, label, selected, iconName, attribute) {
+    return '<button class="p5-choice-card' + (selected ? " selected" : "") + '" type="button" ' + attribute + '="' + escapeHTML(value) + '">' + (iconName ? '<span class="p5-choice-icon">' + icon(iconName, 20) + "</span>" : "") + "<span>" + escapeHTML(label) + "</span><i>" + (selected ? icon("check", 12) : "") + "</i></button>";
+  }
+  function renderStepOne(page14) {
+    const choices = page14.getCategoryChoices();
+    return '<section class="p5-wizard-section p5-category-step"><header class="p5-wizard-heading"><h1>\u4ECE\u54EA\u7C7B\u670D\u52A1\u5F00\u59CB\uFF1F</h1><p>\u76F4\u63A5\u9009\u62E9\u5206\u7C7B\uFF0C\u6216\u5148\u8BA9 AI \u6839\u636E\u4F60\u7684\u63CF\u8FF0\u5224\u65AD\u3002</p></header><button class="p5-ai-guide' + (page14.selectedCategoryId === "other" ? " selected" : "") + '" id="p5AiGuide" type="button"><span>' + icon("sparkles", 22) + "</span><div><strong>\u6211\u4E0D\u786E\u5B9A\uFF0CAI \u5E2E\u6211\u5224\u65AD</strong><small>\u4E0B\u4E00\u6B65\u8BF4\u6E05\u60C5\u51B5\uFF0C\u5E73\u53F0\u4F1A\u8BC6\u522B\u670D\u52A1\u65B9\u5411</small></div>" + icon("chevron-right", 18) + '</button><div class="p5-category-label">\u76F4\u63A5\u9009\u62E9\u670D\u52A1\u5206\u7C7B</div><div class="p5-category-grid">' + choices.map((choice) => renderChoiceButton(choice.id, choice.name, page14.selectedCategoryId === choice.id, choice.icon, "data-p5-category")).join("") + "</div></section>";
+  }
+  function renderPills(values, current, attribute) {
+    return '<div class="p5-option-pills">' + values.map((value) => '<button class="p5-option-pill' + (current === value ? " selected" : "") + '" type="button" ' + attribute + '="' + escapeHTML(value) + '">' + escapeHTML(value) + "</button>").join("") + "</div>";
+  }
+  function renderStepTwo(page14) {
+    const serviceOptions = page14.getServiceOptions();
+    const attachment = page14.attachmentName ? '<span class="p5-upload-file">' + icon("check-circle", 16) + "<span><strong>" + escapeHTML(page14.attachmentName) + "</strong><small>\u5DF2\u6DFB\u52A0\uFF0C\u53EF\u91CD\u65B0\u9009\u62E9</small></span></span>" : '<span class="p5-upload-empty">' + icon("upload", 19) + "<span><strong>\u4E0A\u4F20\u76F8\u5173\u6750\u6599</strong><small>\u652F\u6301 PDF\u3001Word\u3001\u56FE\u7247\uFF0C\u9009\u586B</small></span></span>";
+    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><div class="p5-selected-category"><span>' + icon(page14.getSelectedCategoryIcon(), 15) + "</span>" + escapeHTML(page14.getSelectedCategoryName()) + '<button type="button" data-p5-edit-category>\u4FEE\u6539</button></div><h1>\u628A\u9700\u6C42\u8BF4\u5177\u4F53\u4E00\u70B9</h1><p>\u4FE1\u606F\u8D8A\u5B8C\u6574\uFF0C\u63A8\u8350\u56E2\u961F\u548C\u540E\u7EED\u62A5\u4EF7\u4F1A\u8D8A\u51C6\u786E\u3002</p></header>' + (serviceOptions.length ? '<div class="p5-field-group"><div class="p5-field-label"><strong>\u5177\u4F53\u670D\u52A1</strong><small>\u9009\u586B</small></div>' + renderPills(serviceOptions, page14.collected.skuSpecific, "data-p5-sku") + "</div>" : "") + '<label class="p5-field-group p5-textarea-field"><span class="p5-field-label"><strong>\u9700\u6C42\u63CF\u8FF0</strong><small>\u5FC5\u586B</small></span><textarea id="p5NeedDescription" rows="5" maxlength="500" placeholder="\u8BF7\u63CF\u8FF0\u76EE\u524D\u7684\u60C5\u51B5\u3001\u9047\u5230\u7684\u95EE\u9898\uFF0C\u4EE5\u53CA\u5E0C\u671B\u83B7\u5F97\u7684\u7ED3\u679C">' + escapeHTML(page14.collected.extra) + '</textarea><span class="p5-field-hint">\u4F8B\u5982\uFF1A\u5DF2\u6709\u4E00\u4EFD\u5408\u4F5C\u534F\u8BAE\uFF0C\u5E0C\u671B\u5728\u672C\u5468\u5185\u5B8C\u6210\u98CE\u9669\u5BA1\u67E5</span></label><div class="p5-field-group"><div class="p5-field-label"><strong>\u671F\u671B\u65F6\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page14.timelineOptions, page14.collected.timeline, "data-p5-timeline") + '</div><div class="p5-field-group"><div class="p5-field-label"><strong>\u9884\u7B97\u533A\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page14.budgetOptions, page14.collected.budget, "data-p5-budget") + '</div><label class="p5-upload-box">' + attachment + '<input id="p5Attachment" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label></section>';
+  }
+  function renderStepThree(page14) {
+    const sku = page14.resolveSku();
+    const attachment = page14.attachmentName || "\u672A\u4E0A\u4F20";
+    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><h1>\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</h1><p>\u56E2\u961F\u54CD\u5E94\u548C\u540E\u7EED\u8FDB\u5C55\u4F1A\u901A\u8FC7\u4F60\u786E\u8BA4\u7684\u8054\u7CFB\u65B9\u5F0F\u63D0\u9192\u3002</p></header><article class="p5-review-block"><div class="p5-review-head"><strong>\u9700\u6C42\u4FE1\u606F</strong><button type="button" data-p5-edit-demand>\u8FD4\u56DE\u4FEE\u6539</button></div><dl><div><dt>\u670D\u52A1\u65B9\u5411</dt><dd>' + escapeHTML(sku) + "</dd></div><div><dt>\u671F\u671B\u65F6\u95F4</dt><dd>" + escapeHTML(page14.collected.timeline) + "</dd></div><div><dt>\u9884\u7B97\u533A\u95F4</dt><dd>" + escapeHTML(page14.collected.budget) + "</dd></div><div><dt>\u9644\u4EF6\u6750\u6599</dt><dd>" + escapeHTML(attachment) + "</dd></div></dl><p>" + escapeHTML(page14.collected.extra) + '</p></article><div class="p5-contact-block"><div class="p5-contact-title"><strong>\u786E\u8BA4\u8054\u7CFB\u65B9\u5F0F</strong><span>\u5DF2\u4ECE\u8D26\u53F7\u8D44\u6599\u5E26\u5165</span></div><label><span>\u8054\u7CFB\u4EBA</span><input id="p5ContactName" value="' + escapeHTML(page14.contactName) + '" autocomplete="name"></label><label><span>\u624B\u673A\u53F7</span><input id="p5ContactPhone" value="' + escapeHTML(page14.contactPhone) + '" inputmode="tel" autocomplete="tel"></label><label><span>\u4F01\u4E1A</span><input id="p5ContactCompany" value="' + escapeHTML(page14.contactCompany) + '"></label><label><span>\u6240\u5728\u5730\u533A</span><input id="p5ContactCity" value="' + escapeHTML(page14.collected.city) + '"></label></div><div class="p5-submit-note">' + icon("shield", 17) + "<span>\u8054\u7CFB\u65B9\u5F0F\u4EC5\u7528\u4E8E\u672C\u6B21\u670D\u52A1\u901A\u77E5\uFF0C\u4E0D\u4F1A\u76F4\u63A5\u5C55\u793A\u7ED9\u670D\u52A1\u56E2\u961F\u3002\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u534F\u52A9\u5EFA\u8054\u3002</span></div></section>";
+  }
+  function renderFooter(page14) {
+    const primary = page14.wizardStep === 3 ? "\u63D0\u4EA4\u5E76\u5F00\u59CB\u5339\u914D" : "\u7EE7\u7EED";
+    return '<div class="bottom-bar p5-wizard-footer">' + (page14.wizardStep > 1 ? '<button class="btn btn-outline" id="p5WizardPrevious" type="button">\u4E0A\u4E00\u6B65</button>' : "") + '<button class="btn btn-primary" id="p5WizardNext" type="button">' + primary + "</button></div>";
+  }
+  function renderDemandWizard(page14) {
+    const body = page14.wizardStep === 1 ? renderStepOne(page14) : page14.wizardStep === 2 ? renderStepTwo(page14) : renderStepThree(page14);
+    return '<div class="p5-wizard">' + renderHeader(page14) + '<main class="p5-wizard-main">' + body + "</main>" + renderFooter(page14) + "</div>";
+  }
+  function bindDemandWizard(page14) {
+    const back = document.getElementById("p5Back");
+    if (back) back.addEventListener("click", () => page14.goWizardBack());
+    const previous = document.getElementById("p5WizardPrevious");
+    if (previous) previous.addEventListener("click", () => page14.goWizardBack());
+    const next = document.getElementById("p5WizardNext");
+    if (next) next.addEventListener("click", () => page14.goWizardNext());
+    const aiGuide = document.getElementById("p5AiGuide");
+    if (aiGuide) aiGuide.addEventListener("click", () => page14.chooseAiGuide());
+    document.querySelectorAll("[data-p5-category]").forEach((button) => button.addEventListener("click", () => page14.selectCategory(button.getAttribute("data-p5-category"))));
+    document.querySelectorAll("[data-p5-edit-category]").forEach((button) => button.addEventListener("click", () => page14.goToWizardStep(1)));
+    document.querySelectorAll("[data-p5-edit-demand]").forEach((button) => button.addEventListener("click", () => page14.goToWizardStep(2)));
+    document.querySelectorAll("[data-p5-sku]").forEach((button) => button.addEventListener("click", () => page14.selectWizardValue("skuSpecific", button.getAttribute("data-p5-sku"))));
+    document.querySelectorAll("[data-p5-timeline]").forEach((button) => button.addEventListener("click", () => page14.selectWizardValue("timeline", button.getAttribute("data-p5-timeline"))));
+    document.querySelectorAll("[data-p5-budget]").forEach((button) => button.addEventListener("click", () => page14.selectWizardValue("budget", button.getAttribute("data-p5-budget"))));
+    const description = document.getElementById("p5NeedDescription");
+    if (description) description.addEventListener("input", () => {
+      page14.collected.extra = description.value;
+    });
+    const attachment = document.getElementById("p5Attachment");
+    if (attachment) attachment.addEventListener("change", () => page14.setAttachment(attachment.files && attachment.files[0]));
+    [
+      ["p5ContactName", "contactName"],
+      ["p5ContactPhone", "contactPhone"],
+      ["p5ContactCompany", "contactCompany"],
+      ["p5ContactCity", "city"]
+    ].forEach(([id, key]) => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      input.addEventListener("input", () => {
+        if (key === "city") page14.collected.city = input.value;
+        else page14[key] = input.value;
+      });
+    });
+  }
+
   // src/components/matchCard.js
   function renderEvidenceRows(items, tone) {
     return (items || []).map((item) => '<div class="p5-evidence-row ' + tone + '"><span class="p5-evidence-icon">' + icon(tone === "pending" ? "help" : "check", 13) + "</span><span><strong>" + escapeHTML(item.label || "") + "</strong><small>" + escapeHTML(item.text || "") + "</small></span></div>").join("");
@@ -4786,6 +4853,7 @@
   }
   function renderMatchingProgress(page14, activeStep = 0) {
     let html = '<main class="p5-matching" role="status" aria-live="polite">';
+    html += '<div class="p5-matching-submitted">\u9700\u6C42\u4FE1\u606F\u5DF2\u63D0\u4EA4</div>';
     html += '<div class="p5-matching-orbit" aria-hidden="true"><span></span><span></span><span></span></div>';
     html += "<h1>\u6B63\u5728\u4E3A\u4F60\u7CBE\u51C6\u5339\u914D</h1>";
     html += '<p class="p5-matching-lead">\u7EFC\u5408\u9700\u6C42\u5951\u5408\u5EA6\u3001\u7528\u6237\u8BC4\u4EF7\u548C\u5E73\u53F0\u670D\u52A1\u8BB0\u5F55\uFF0C\u4E3A\u4F60\u7B5B\u9009\u5408\u9002\u7684\u670D\u52A1\u56E2\u961F\u3002</p>';
@@ -4813,71 +4881,6 @@
       item.classList.toggle("is-done", index < activeStep);
       item.classList.toggle("is-active", index === activeStep);
     });
-  }
-
-  // src/pages/p5-dialog/SummaryCard.js
-  function renderSummaryCard(page14) {
-    const collected = page14.collected;
-    const value = (key) => collected[key] && collected[key] !== "\u672A\u63D0\u4F9B" ? collected[key] : "";
-    const sku = page14.resolveSku();
-    const fieldGroups = [
-      {
-        title: "\u6838\u5FC3\u9700\u6C42",
-        fields: page14.summaryFields.filter((field) => ["issue", "budget", "timeline", "city"].includes(field.key))
-      },
-      {
-        title: "\u8865\u5145\u4FE1\u606F",
-        fields: page14.summaryFields.filter((field) => ["skuSpecific", "extra"].includes(field.key))
-      }
-    ];
-    let html = '<div class="chat-msg-row ai p5-confirmation-row"><div class="chat-avatar p5-avatar">' + icon("file-text", 18) + '</div><article class="p5-confirmation-card">';
-    if (page14.resubmitFrom) {
-      html += '<div class="p5-confirmation-note">\u5DF2\u5E26\u5165\u539F\u9700\u6C42\u300C' + page14.resubmitTitle + "\u300D\u7684\u4FE1\u606F</div>";
-    }
-    html += '<div class="p5-summary-title"><span>\u672C\u6B21\u5339\u914D\u6761\u4EF6</span><small>\u8BF7\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</small></div>';
-    html += '<div class="p5-summary-desc">' + user.company + "\u9700\u8981" + (sku === "\u7EFC\u5408\u670D\u52A1" ? "\u4F01\u4E1A\u670D\u52A1\u652F\u6301" : sku + "\u670D\u52A1") + "\u3002\u5E73\u53F0\u4F1A\u7EFC\u5408\u9700\u6C42\u5951\u5408\u5EA6\u4E0E\u56E2\u961F\u670D\u52A1\u8868\u73B0\u8FDB\u884C\u63A8\u8350\u3002</div>";
-    html += '<div class="p5-summary-groups">';
-    fieldGroups.forEach((group) => {
-      const availableCount = group.fields.filter((field) => value(field.key)).length;
-      html += '<section class="p5-summary-group"><div class="p5-summary-group-head"><strong>' + group.title + "</strong><span>" + availableCount + "/" + group.fields.length + '\u9879\u5DF2\u786E\u8BA4</span></div><div class="p5-summary-fields">';
-      group.fields.forEach((field) => {
-        const fieldValue = value(field.key);
-        html += '<div class="p5-summary-field">';
-        html += '<span class="p5-summary-field-label">' + field.label + "</span>";
-        if (page14.editMode) {
-          if (field.key === "issue") {
-            html += '<select class="p5-summary-input p5-summary-select" data-field="issue">';
-            page14.getKnownSkuOptions().forEach((option) => {
-              html += '<option value="' + escapeHTML(option) + '"' + (option === fieldValue ? " selected" : "") + ">" + escapeHTML(option) + "</option>";
-            });
-            html += "</select>";
-          } else {
-            html += '<input class="p5-summary-input" data-field="' + field.key + '" value="' + escapeHTML(fieldValue) + '" placeholder="\u672A\u586B\u5199">';
-          }
-        } else {
-          html += '<span class="p5-summary-field-value' + (fieldValue ? "" : " missing") + '">' + escapeHTML(fieldValue || "\u672A\u63D0\u4F9B") + "</span>";
-        }
-        html += "</div>";
-      });
-      html += "</div></section>";
-    });
-    html += "</div>";
-    html += '<div class="p5-confirmation-actions">';
-    if (page14.editMode) {
-      html += '<button class="btn btn-primary btn-block" type="button" data-p5-summary-action="save">\u4FDD\u5B58\u4FEE\u6539</button>';
-    } else {
-      html += '<button class="btn btn-outline" type="button" data-p5-summary-action="edit">\u4FEE\u6539\u4FE1\u606F</button><button class="btn btn-primary" type="button" data-p5-summary-action="match">\u786E\u8BA4\u5E76\u5F00\u59CB\u5339\u914D</button>';
-    }
-    html += "</div></article></div>";
-    return html;
-  }
-  function bindSummaryCard(page14) {
-    const editButton = document.querySelector('[data-p5-summary-action="edit"]');
-    if (editButton) editButton.addEventListener("click", () => page14.toggleEdit());
-    const saveButton = document.querySelector('[data-p5-summary-action="save"]');
-    if (saveButton) saveButton.addEventListener("click", () => page14.saveSummaryEdit());
-    const matchButton = document.querySelector('[data-p5-summary-action="match"]');
-    if (matchButton) matchButton.addEventListener("click", () => page14.showMatch());
   }
 
   // src/pages/p5-dialog/SuccessView.js
@@ -4925,73 +4928,7 @@
     button.textContent = (demand.accepted || []).length > 0 ? "\u67E5\u770B\u54CD\u5E94\u56E2\u961F" : "\u67E5\u770B\u9700\u6C42\u8FDB\u5EA6";
   }
 
-  // src/pages/p5-dialog/steps.js
-  var issueOptions = ["\u80A1\u6743\u878D\u8D44", "\u5408\u540C\u5BA1\u67E5", "\u516C\u53F8\u6CE8\u518C/\u53D8\u66F4", "\u77E5\u8BC6\u4EA7\u6743", "\u52B3\u52A8\u5408\u89C4", "\u5176\u4ED6"];
-  var budgetOptions = ["1\u4E07\u4EE5\u4E0B", "1-3\u4E07", "3-5\u4E07", "5\u4E07\u4EE5\u4E0A", "\u4E0D\u786E\u5B9A\uFF0C\u542C\u670D\u52A1\u5546\u5EFA\u8BAE", "\u5148\u8DF3\u8FC7"];
-  var timelineOptions = ["1\u5468\u5185", "2\u5468\u5185", "1\u4E2A\u6708\u5185", "\u4E0D\u7740\u6025", "\u5148\u8DF3\u8FC7"];
-  var specificOptions = {
-    "\u80A1\u6743\u878D\u8D44": ["\u9996\u8F6E\u878D\u8D44", "\u5DF2\u6709\u5916\u90E8\u80A1\u4E1C", "\u4E0D\u786E\u5B9A", "\u5148\u8DF3\u8FC7"],
-    "\u5408\u540C\u5BA1\u67E5": ["\u5DF2\u6709\u5408\u540C\u8981\u5BA1", "\u9700\u8981\u4ECE\u5934\u8D77\u8349", "\u5176\u4ED6", "\u5148\u8DF3\u8FC7"],
-    "\u516C\u53F8\u6CE8\u518C/\u53D8\u66F4": ["\u65B0\u8BBE\u516C\u53F8", "\u5DE5\u5546\u53D8\u66F4", "\u516C\u53F8\u6CE8\u9500", "\u5176\u4ED6"],
-    "\u77E5\u8BC6\u4EA7\u6743": ["\u5546\u6807", "\u4E13\u5229", "\u8457\u4F5C\u6743", "\u5176\u4ED6", "\u5148\u8DF3\u8FC7"],
-    "\u52B3\u52A8\u5408\u89C4": ["\u5BA1\u5408\u540C/\u5236\u5EA6", "\u52B3\u52A8\u4E89\u8BAE", "\u5176\u4ED6", "\u5148\u8DF3\u8FC7"]
-  };
-  var specificQuestions = {
-    "\u80A1\u6743\u878D\u8D44": "\u662F\u9996\u8F6E\u878D\u8D44\uFF0C\u8FD8\u662F\u4E4B\u524D\u5DF2\u6709\u8FC7\u80A1\u6743\u53D8\u52A8\uFF1F",
-    "\u5408\u540C\u5BA1\u67E5": "\u662F\u5DF2\u6709\u5408\u540C\u8981\u5BA1\uFF0C\u8FD8\u662F\u9700\u8981\u4ECE\u5934\u8D77\u8349\uFF1F",
-    "\u516C\u53F8\u6CE8\u518C/\u53D8\u66F4": "\u4F60\u8981\u529E\u7406\u65B0\u8BBE\u3001\u53D8\u66F4\u8FD8\u662F\u6CE8\u9500\uFF1F",
-    "\u77E5\u8BC6\u4EA7\u6743": "\u4E3B\u8981\u6D89\u53CA\u5546\u6807\u3001\u4E13\u5229\u8FD8\u662F\u8457\u4F5C\u6743\uFF1F",
-    "\u52B3\u52A8\u5408\u89C4": "\u662F\u9700\u8981\u5BA1\u5408\u540C/\u5236\u5EA6\uFF0C\u8FD8\u662F\u5904\u7406\u52B3\u52A8\u4E89\u8BAE\uFF1F"
-  };
-  var dialogSteps = Object.freeze([
-    {
-      number: 1,
-      key: "issue",
-      question: () => "\u4F60\u8FD9\u6B21\u9700\u8981\u54EA\u65B9\u9762\u7684\u4F01\u4E1A\u670D\u52A1\uFF1F",
-      quickOptions: () => issueOptions,
-      onAnswer: (_page, skipped) => skipped ? "budget" : "skuSpecific"
-    },
-    {
-      number: 2,
-      key: "skuSpecific",
-      question: (page14) => specificQuestions[page14.collected.issue] || "",
-      quickOptions: (page14) => specificOptions[page14.collected.issue] || ["\u5148\u8DF3\u8FC7"],
-      onAnswer: () => "budget"
-    },
-    {
-      number: 3,
-      key: "budget",
-      question: () => "\u4F60\u7684\u9884\u7B97\u8303\u56F4\u5927\u6982\u662F\u591A\u5C11\uFF1F",
-      quickOptions: () => budgetOptions,
-      onAnswer: () => "timeline"
-    },
-    {
-      number: 4,
-      key: "timeline",
-      question: () => "\u671F\u671B\u4EC0\u4E48\u65F6\u5019\u5B8C\u6210\uFF1F",
-      quickOptions: () => timelineOptions,
-      onAnswer: () => "extra"
-    },
-    {
-      number: 5,
-      key: "extra",
-      question: () => "\u8FD8\u6709\u4EC0\u4E48\u60F3\u544A\u8BC9\u670D\u52A1\u56E2\u961F\u7684\uFF1F\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\u3001\u5361\u5728\u54EA\u3001\u60F3\u8FBE\u5230\u4EC0\u4E48\u6548\u679C\u3002",
-      quickOptions: () => [],
-      onAnswer: () => "summary"
-    }
-  ]);
-  function getDialogStep(numberOrKey) {
-    return dialogSteps.find((step) => step.number === numberOrKey || step.key === numberOrKey) || null;
-  }
-  function applyStepAnswer(page14, value, skipped = false) {
-    const step = getDialogStep(page14.step);
-    if (!step) return "issue";
-    page14.collected[step.key] = value;
-    return step.onAnswer(page14, skipped);
-  }
-
   // src/pages/p5-dialog/index.js
-  var DRAFT_KEY = "ecologyDemandInputDraft";
   var shellHost = { clearPageAction, mountPageAction };
   function domainOptions2() {
     return {
@@ -5009,43 +4946,17 @@
   function renderPageContent(html, pageId) {
     return setPageContent.call(shellHost, html, pageId);
   }
-  function askStep(stepKey) {
-    const step = getDialogStep(stepKey);
-    if (!step) return;
-    page3.step = step.number;
-    const question = step.question(page3);
-    if (!question) {
-      askStep("budget");
-      return;
-    }
-    page3.showTypingThen(() => page3.addMessage("ai", question));
-  }
-  function queueNextStep(nextStep) {
-    setTimeout(() => {
-      if (nextStep === "summary") page3.showSummary();
-      else askStep(nextStep);
-    }, 400);
-  }
-  function completeCurrentStep(value, skipped, addUserMessage, displayValue) {
-    if (addUserMessage) page3.addMessage("user", displayValue || value);
-    const nextStep = applyStepAnswer(page3, value, skipped);
-    queueNextStep(nextStep);
-  }
-  function bindChatContent() {
-    document.querySelectorAll("#p5QuickOptions .quick-option").forEach((option) => {
-      option.addEventListener("click", () => page3.selectQuickOption(option.getAttribute("data-val")));
-    });
-    const finishButton = document.getElementById("p5FinishExtra");
-    if (finishButton) finishButton.addEventListener("click", () => page3.finishExtra());
-    if (page3.state === "summary") bindSummaryCard(page3);
-  }
   function toggleTeamFromDetail(teamId) {
     page3.checkedTeams[teamId] = !page3.checkedTeams[teamId];
   }
   var page3 = {
-    state: "chat",
-    step: 0,
-    messages: [],
+    state: "wizard",
+    wizardStep: 1,
+    selectedCategoryId: "",
+    attachmentName: "",
+    contactName: user.name,
+    contactPhone: user.mobile || "138 0000 8899",
+    contactCompany: user.company,
     collected: {
       issue: "",
       skuSpecific: "",
@@ -5067,43 +4978,18 @@
       const resumeMatch = params && params.resumeMatch && this.state === "match";
       if (resumeMatch) return this.renderMatchHTML(this.getCurrentResults());
       this.reset(params);
-      return this.renderConversationShell();
-    },
-    renderConversationShell() {
-      let html = '<div class="nav-bar">';
-      html += '<button class="nav-back" id="p5Back">' + icon("chevron-left", 22) + "</button>";
-      html += '<div class="nav-title">\u53D1\u5E03\u9700\u6C42</div>';
-      html += '<div style="width:32px"></div>';
-      html += "</div>";
-      html += '<div id="p5ChatArea" class="p5-chat-area"></div>';
-      html += '<div id="p5InputBar" class="p5-input-bar">';
-      html += '<input type="text" id="p5Input" placeholder="\u8F93\u5165\u4F60\u7684\u56DE\u7B54\u2026">';
-      html += '<button class="p5-send-btn" id="p5Send" type="button">' + icon("send", 15) + "</button>";
-      html += "</div>";
-      return html;
-    },
-    bindConversationShell() {
-      const backButton = document.getElementById("p5Back");
-      if (backButton) backButton.addEventListener("click", goBackToPrevious);
-      const input = document.getElementById("p5Input");
-      const sendButton = document.getElementById("p5Send");
-      if (sendButton) sendButton.addEventListener("click", () => this.sendInput());
-      if (input) {
-        input.addEventListener("keydown", (event) => {
-          if (event.key === "Enter") this.sendInput();
-        });
-        input.value = readText(DRAFT_KEY, "") || "";
-        input.addEventListener("input", function() {
-          writeText(DRAFT_KEY, this.value);
-        });
+      const sourceDemand = this.params.demandId ? getDemand(this.params.demandId, store.demands) : null;
+      if (sourceDemand) {
+        this.prefillFrom(sourceDemand);
+        this.wizardStep = 3;
       }
+      return renderDemandWizard(this);
     },
     reset(params) {
       this.clearMatchingTimers();
       this.params = params || {};
-      this.state = "chat";
-      this.step = 0;
-      this.messages = [];
+      this.state = "wizard";
+      this.wizardStep = 1;
       this.collected = {
         issue: this.params.sku || "",
         skuSpecific: "",
@@ -5120,6 +5006,24 @@
       this.resubmitFrom = null;
       this.resubmitTitle = "";
       this.wecomPrompted = false;
+      this.attachmentName = "";
+      this.contactName = user.name;
+      this.contactPhone = user.mobile || "138 0000 8899";
+      this.contactCompany = user.company;
+      const knownCategoryId = this.inferCategory(this.params.sku);
+      if (this.params.sku && knownCategoryId) {
+        this.selectedCategoryId = knownCategoryId;
+        this.collected.issue = getCategory(knownCategoryId, categories)?.name || this.params.sku;
+        this.collected.skuSpecific = this.params.sku;
+        this.wizardStep = 2;
+      } else if (this.params.sku) {
+        this.selectedCategoryId = "other";
+        this.collected.issue = "\u5176\u4ED6";
+        this.collected.extra = this.params.sku;
+        this.wizardStep = 2;
+      } else {
+        this.selectedCategoryId = "";
+      }
     },
     prefillFrom(demand) {
       const get2 = (label) => {
@@ -5136,6 +5040,9 @@
       this.params.categoryId = demand.categoryId;
       this.resubmitFrom = demand.id;
       this.resubmitTitle = demand.title;
+      this.selectedCategoryId = demand.categoryId || this.inferCategory(this.collected.issue) || "other";
+      const attachment = get2("\u9644\u4EF6\u6750\u6599");
+      this.attachmentName = attachment && attachment !== "\u672A\u4E0A\u4F20" ? attachment : "";
     },
     init(params) {
       showTabBar(false);
@@ -5143,114 +5050,141 @@
         bindMatchResults(this);
         return;
       }
-      this.reset(params);
-      this.bindConversationShell();
-      const sourceDemand = this.params.demandId ? getDemand(this.params.demandId, store.demands) : null;
-      if (sourceDemand) {
-        this.prefillFrom(sourceDemand);
-        this.showSummary();
+      bindDemandWizard(this);
+    },
+    timelineOptions: ["1\u5468\u5185", "2\u5468\u5185", "1\u4E2A\u6708\u5185", "\u65F6\u95F4\u53EF\u5546\u8BAE"],
+    budgetOptions: ["1\u4E07\u4EE5\u4E0B", "1-3\u4E07", "3-5\u4E07", "5\u4E07\u4EE5\u4E0A", "\u5E0C\u671B\u56E2\u961F\u8BC4\u4F30"],
+    getCategoryChoices() {
+      return [
+        { id: "fundraising", name: "\u6295\u878D\u8D44\u670D\u52A1", icon: "trending-up" },
+        ...categories.map((category) => ({ id: category.id, name: category.name, icon: category.icon }))
+      ];
+    },
+    getSelectedCategoryName() {
+      if (this.selectedCategoryId === "other") return "AI \u667A\u80FD\u5224\u65AD";
+      const category = getCategory(this.selectedCategoryId, categories);
+      return category ? category.name : "\u5F85\u5224\u65AD";
+    },
+    getSelectedCategoryIcon() {
+      if (this.selectedCategoryId === "other") return "sparkles";
+      const choice = this.getCategoryChoices().find((item) => item.id === this.selectedCategoryId);
+      return choice ? choice.icon : "help";
+    },
+    getServiceOptions() {
+      const category = getCategory(this.selectedCategoryId, categories);
+      if (category && category.skus.length) return category.skus;
+      if (this.selectedCategoryId === "finance") return ["\u4EE3\u7406\u8BB0\u8D26", "\u7A0E\u52A1\u7B79\u5212", "\u8D22\u52A1\u5BA1\u8BA1"];
+      if (this.selectedCategoryId === "hr") return ["\u62DB\u8058\u670D\u52A1", "\u85AA\u916C\u793E\u4FDD", "\u52B3\u52A8\u7528\u5DE5"];
+      return [];
+    },
+    renderWizard() {
+      renderPageContent(renderDemandWizard(this), "p5");
+      bindDemandWizard(this);
+    },
+    selectCategory(categoryId) {
+      if (categoryId === "fundraising") {
+        navigateTo("p12");
         return;
       }
-      this.addMessage(
-        "greeting",
-        "\u4E3A\u4E86\u5E2E\u4F60\u5339\u914D\u5408\u9002\u7684\u670D\u52A1\u56E2\u961F\uFF0C\u9700\u8981\u5148\u786E\u8BA4\u51E0\u9879\u57FA\u672C\u4FE1\u606F\u3002\u5DF2\u5E26\u5165\u4F01\u4E1A\u8D44\u6599\uFF1A" + user.company + "\uFF0C" + user.city + "\u3002"
-      );
-      if (this.params.sku) {
-        this.addMessage("ai", "\u5DF2\u9009\u62E9\u201C" + this.params.sku + "\u201D\uFF0C\u63A5\u4E0B\u6765\u786E\u8BA4\u9884\u7B97\u548C\u65F6\u95F4\u3002");
-        setTimeout(() => this.askBudget(), 500);
-      } else {
-        setTimeout(() => this.askIssue(), 800);
+      const category = getCategory(categoryId, categories);
+      this.selectedCategoryId = categoryId;
+      this.params.categoryId = categoryId;
+      this.collected.issue = category ? category.name : "\u5176\u4ED6";
+      if (this.inferCategory(this.collected.skuSpecific) !== categoryId) {
+        this.collected.skuSpecific = "";
+        this.params.sku = "";
       }
+      this.renderWizard();
     },
-    addMessage(type, text) {
-      this.messages.push({ type, text });
-      this.renderChat();
+    chooseAiGuide() {
+      this.selectedCategoryId = "other";
+      this.params.categoryId = null;
+      this.collected.issue = "\u5176\u4ED6";
+      this.collected.skuSpecific = "";
+      this.wizardStep = 2;
+      this.renderWizard();
     },
-    renderChat() {
-      if (this.state !== "chat" && this.state !== "summary") return;
-      const container = document.getElementById("p5ChatArea");
-      if (!container) return;
-      let html = "";
-      this.messages.forEach((message) => {
-        if (message.type === "greeting") {
-          html += '<div class="p5-greeting"><div class="p5-greeting-text">' + message.text + "</div></div>";
-        } else if (message.type === "ai") {
-          html += '<div class="chat-msg-row ai"><div class="chat-avatar p5-avatar">' + icon("file-text", 18) + '</div><div class="chat-bubble chat-bubble-ai">' + message.text + "</div></div>";
-        } else if (message.type === "user") {
-          html += '<div class="chat-msg-row user"><div class="chat-bubble chat-bubble-user">' + message.text + "</div></div>";
-        } else if (message.type === "typing") {
-          html += '<div class="chat-msg-row ai" id="p5Typing"><div class="chat-avatar p5-avatar">' + icon("file-text", 18) + '</div><div class="p5-typing"><div class="p5-typing-dot"></div><div class="p5-typing-dot"></div><div class="p5-typing-dot"></div></div></div>';
+    selectWizardValue(key, value) {
+      this.collected[key] = value;
+      if (key === "skuSpecific") this.params.sku = value;
+      this.renderWizard();
+    },
+    setAttachment(file) {
+      if (!file) return;
+      this.attachmentName = file.name;
+      this.renderWizard();
+      toast("\u9644\u4EF6\u5DF2\u6DFB\u52A0");
+    },
+    goToWizardStep(step) {
+      this.wizardStep = step;
+      this.renderWizard();
+    },
+    goWizardBack() {
+      if (this.wizardStep > 1) {
+        this.wizardStep -= 1;
+        this.renderWizard();
+        return;
+      }
+      goBackToPrevious();
+    },
+    goWizardNext() {
+      if (this.wizardStep === 1) {
+        if (!this.selectedCategoryId) {
+          toast("\u8BF7\u5148\u9009\u62E9\u670D\u52A1\u5206\u7C7B\uFF0C\u6216\u8BA9 AI \u5E2E\u4F60\u5224\u65AD");
+          return;
         }
-      });
-      const options = this.state === "chat" ? this.getQuickOptions() : [];
-      if (options.length > 0) {
-        html += '<div class="quick-options" id="p5QuickOptions">';
-        options.forEach((option) => {
-          const escaped = escapeHTML(option);
-          html += '<div class="quick-option" data-val="' + escaped + '">' + escaped + "</div>";
-        });
-        html += "</div>";
-      }
-      if (this.state === "chat" && this.step === 5) {
-        html += '<button class="p5-finish-extra" id="p5FinishExtra" type="button">\u6CA1\u6709\u4E86\uFF0C\u5E2E\u6211\u5339\u914D\u5408\u9002\u7684\u670D\u52A1\u56E2\u961F ' + icon("arrow-right", 14) + "</button>";
-      }
-      if (this.state === "summary") html += this.renderSummaryCard();
-      container.innerHTML = html;
-      container.scrollTop = container.scrollHeight;
-      bindChatContent();
-    },
-    getQuickOptions() {
-      const step = getDialogStep(this.step);
-      return step ? step.quickOptions(this) : [];
-    },
-    showTypingThen(callback, delay) {
-      const visibleDelay = delay || 800;
-      this.addMessage("typing", "");
-      setTimeout(() => {
-        this.messages = this.messages.filter((message) => message.type !== "typing");
-        this.renderChat();
-        callback();
-      }, visibleDelay);
-    },
-    askIssue() {
-      askStep("issue");
-    },
-    askSkuSpecific() {
-      askStep("skuSpecific");
-    },
-    askBudget() {
-      askStep("budget");
-    },
-    askTimeline() {
-      askStep("timeline");
-    },
-    askExtra() {
-      askStep("extra");
-    },
-    selectQuickOption(value) {
-      if (value === "\u8DF3\u8FC7\u8FD9\u6B65" || value === "\u5148\u8DF3\u8FC7") {
-        this.skipCurrentStep();
+        this.wizardStep = 2;
+        this.renderWizard();
         return;
       }
-      completeCurrentStep(value, false, true);
+      if (this.wizardStep === 2) {
+        if (!this.collected.extra || this.collected.extra.trim().length < 8) {
+          toast("\u8BF7\u518D\u5177\u4F53\u63CF\u8FF0\u4E00\u4E0B\u4F60\u7684\u60C5\u51B5\u548C\u671F\u671B");
+          return;
+        }
+        if (!this.collected.timeline) {
+          toast("\u8BF7\u9009\u62E9\u671F\u671B\u65F6\u95F4");
+          return;
+        }
+        if (!this.collected.budget) {
+          toast("\u8BF7\u9009\u62E9\u9884\u7B97\u533A\u95F4");
+          return;
+        }
+        if (this.selectedCategoryId === "other") this.applyAiGuidance();
+        this.wizardStep = 3;
+        this.renderWizard();
+        return;
+      }
+      if (!this.contactName.trim() || !this.contactPhone.trim()) {
+        toast("\u8BF7\u786E\u8BA4\u8054\u7CFB\u4EBA\u548C\u624B\u673A\u53F7");
+        return;
+      }
+      this.state = "matching";
+      this.showMatch();
     },
-    sendInput() {
-      const input = document.getElementById("p5Input");
-      if (!input || !input.value.trim()) return;
-      const text = input.value.trim();
-      input.value = "";
-      removeValue(DRAFT_KEY);
-      this.addMessage("user", text);
-      if (getDialogStep(this.step)) completeCurrentStep(text, false, false);
-      else setTimeout(() => this.askIssue(), 400);
-    },
-    finishExtra() {
-      this.collected.extra = "\u672A\u63D0\u4F9B";
-      this.showSummary();
-    },
-    skipCurrentStep() {
-      const displayValue = this.step === 5 ? "\u8DF3\u8FC7\u8FD9\u6B65" : "\u5148\u8DF3\u8FC7";
-      completeCurrentStep("\u672A\u63D0\u4F9B", true, true, displayValue);
+    applyAiGuidance() {
+      const text = this.collected.extra;
+      const rules = [
+        { pattern: /合同|协议/, categoryId: "law", sku: "\u5408\u540C\u5BA1\u67E5" },
+        { pattern: /股权|期权/, categoryId: "law", sku: "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1" },
+        { pattern: /商标/, categoryId: "ip", sku: "\u5546\u6807\u6CE8\u518C" },
+        { pattern: /专利/, categoryId: "ip", sku: "\u4E13\u5229\u7533\u8BF7" },
+        { pattern: /著作权|版权/, categoryId: "ip", sku: "\u8457\u4F5C\u6743\u767B\u8BB0" },
+        { pattern: /注册|设立公司/, categoryId: "business", sku: "\u516C\u53F8\u6CE8\u518C" },
+        { pattern: /工商变更|变更登记/, categoryId: "business", sku: "\u5DE5\u5546\u53D8\u66F4" },
+        { pattern: /注销/, categoryId: "business", sku: "\u516C\u53F8\u6CE8\u9500" },
+        { pattern: /税务|报税|记账|审计/, categoryId: "finance", sku: "\u7A0E\u52A1\u7B79\u5212" },
+        { pattern: /高企|专精特新|政策申报/, categoryId: "policy", sku: "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A" },
+        { pattern: /招聘|社保|薪酬/, categoryId: "hr", sku: "\u62DB\u8058\u670D\u52A1" }
+      ];
+      const match = rules.find((rule) => rule.pattern.test(text));
+      if (!match) return;
+      this.selectedCategoryId = match.categoryId;
+      this.params.categoryId = match.categoryId;
+      this.params.sku = match.sku;
+      this.collected.issue = getCategory(match.categoryId, categories)?.name || "\u4F01\u4E1A\u670D\u52A1";
+      this.collected.skuSpecific = match.sku;
+      toast("AI \u5DF2\u8BC6\u522B\u4E3A\u201C" + match.sku + "\u201D");
     },
     skuMap: {
       "\u80A1\u6743\u878D\u8D44": { "\u9996\u8F6E\u878D\u8D44": "\u878D\u8D44\u4EA4\u6613", "\u5DF2\u6709\u5916\u90E8\u80A1\u4E1C": "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1", "\u4E0D\u786E\u5B9A": "\u878D\u8D44\u4EA4\u6613", "default": "\u878D\u8D44\u4EA4\u6613" },
@@ -5261,67 +5195,13 @@
     },
     resolveSku() {
       if (this.params.sku && isKnownSku(this.params.sku, categories)) return this.params.sku;
+      if (this.collected.skuSpecific && this.collected.skuSpecific !== "\u672A\u63D0\u4F9B") return this.collected.skuSpecific;
       const issue = this.collected.issue === "\u672A\u63D0\u4F9B" ? "" : this.collected.issue || "";
       const mapping = this.skuMap[issue];
       if (mapping) return mapping[this.collected.skuSpecific] || mapping.default;
       if (isKnownSku(issue, categories)) return issue;
       const raw = this.params.sku && this.params.sku !== "\u672A\u63D0\u4F9B" ? this.params.sku : "";
       return raw || issue || "\u7EFC\u5408\u670D\u52A1";
-    },
-    summaryFields: [
-      { key: "issue", label: "\u670D\u52A1\u7C7B\u578B" },
-      { key: "skuSpecific", label: "\u5173\u952E\u4FE1\u606F" },
-      { key: "budget", label: "\u9884\u7B97\u8303\u56F4" },
-      { key: "timeline", label: "\u671F\u671B\u5B8C\u6210\u65F6\u95F4" },
-      { key: "city", label: "\u5B9E\u9645\u529E\u516C\u57CE\u5E02" },
-      { key: "extra", label: "\u8865\u5145\u63CF\u8FF0" }
-    ],
-    getKnownSkuOptions() {
-      const seen = {};
-      const result = [];
-      categories.filter((category) => !category.locked).forEach((category) => {
-        (category.skus || []).forEach((sku) => {
-          if (!seen[sku]) {
-            seen[sku] = true;
-            result.push(sku);
-          }
-        });
-      });
-      return result;
-    },
-    showSummary() {
-      const resolved = this.resolveSku();
-      if (resolved && resolved !== "\u7EFC\u5408\u670D\u52A1") {
-        this.collected.issue = resolved;
-        this.params.sku = resolved;
-      }
-      this.state = "summary";
-      this.hideInputBar();
-      this.renderChat();
-    },
-    renderSummaryCard() {
-      return renderSummaryCard(this);
-    },
-    toggleEdit() {
-      this.editMode = true;
-      this.showSummary();
-    },
-    saveSummaryEdit() {
-      document.querySelectorAll(".p5-summary-input").forEach((element) => {
-        this.collected[element.getAttribute("data-field")] = element.value.trim();
-      });
-      if (this.collected.issue) this.params.sku = this.collected.issue;
-      this.editMode = false;
-      this.renderChat();
-      toast("\u5DF2\u4FDD\u5B58\u4FEE\u6539");
-    },
-    hideInputBar() {
-      const bar = document.getElementById("p5InputBar");
-      if (bar) bar.style.display = "none";
-    },
-    showInputBar() {
-      const bar = document.getElementById("p5InputBar");
-      if (bar) bar.style.display = "flex";
     },
     getCurrentResults() {
       const all = this.getAllResults();
@@ -5361,12 +5241,10 @@
     },
     returnToSummary() {
       this.clearMatchingTimers();
-      this.state = "summary";
+      this.state = "wizard";
+      this.wizardStep = 3;
       this.editMode = false;
-      renderPageContent(this.renderConversationShell(), "p5");
-      this.bindConversationShell();
-      this.renderChat();
-      this.hideInputBar();
+      this.renderWizard();
     },
     renderMatchHTML(results) {
       return renderMatchResults(this, results, (teamId) => getTeam(teamId, store.teams));
@@ -5474,7 +5352,11 @@
           { label: "\u9884\u7B97\u8303\u56F4", value: value("budget") || "\u672A\u63D0\u4F9B" },
           { label: "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", value: value("timeline") || "\u672A\u63D0\u4F9B" },
           { label: "\u5B9E\u9645\u529E\u516C\u57CE\u5E02", value: this.collected.city },
-          { label: "\u8865\u5145\u63CF\u8FF0", value: extra || "\u672A\u63D0\u4F9B" }
+          { label: "\u8865\u5145\u63CF\u8FF0", value: extra || "\u672A\u63D0\u4F9B" },
+          { label: "\u9644\u4EF6\u6750\u6599", value: this.attachmentName || "\u672A\u4E0A\u4F20" },
+          { label: "\u8054\u7CFB\u4EBA", value: this.contactName },
+          { label: "\u8054\u7CFB\u7535\u8BDD", value: this.contactPhone },
+          { label: "\u8054\u7CFB\u4F01\u4E1A", value: this.contactCompany }
         ],
         teamIds: selectedIds,
         resubmitFrom: this.resubmitFrom,
@@ -7493,7 +7375,7 @@
     }
     return sessions.get(agent.id);
   }
-  function renderHeader(title, action) {
+  function renderHeader2(title, action) {
     return '<div class="nav-bar"><button class="nav-back" id="p11Back" type="button" aria-label="\u8FD4\u56DE">' + icon("chevron-left", 22) + '</button><div class="nav-title">' + escapeHTML(title) + "</div>" + (action || '<div class="nav-action"></div>') + "</div>";
   }
   function renderAgentCard(agent) {
@@ -7503,7 +7385,7 @@
   function renderAgentList(category) {
     const visible = getAgentsByCategory(category);
     const activeCount = visible.filter((agent) => agent.status === "active").length;
-    return '<div class="p11-page">' + renderHeader("\u667A\u80FD\u4F53\u4E13\u533A", '<button class="p11-energy" id="p11Energy" type="button">' + icon("zap", 14) + walletBalance.toFixed(1) + " \u70B9</button>") + '<section class="p11-intro"><span class="p11-intro-icon">' + icon("sparkles", 25) + "</span><div><h1>\u6309\u667A\u80FD\u4F53\u9009\u62E9\u4E13\u4E1A\u80FD\u529B</h1><p>\u6BCF\u4E2A\u667A\u80FD\u4F53\u7531\u5BF9\u5E94\u4F9B\u5E94\u5546\u72EC\u7ACB\u63D0\u4F9B\uFF0C\u53EF\u5206\u522B\u54A8\u8BE2\u548C\u4ED8\u8D39\u3002</p><span>" + activeCount + ' \u4E2A\u667A\u80FD\u4F53\u5F53\u524D\u53EF\u7528</span></div></section><div class="p11-tabs" role="tablist">' + agentCategories.map((item) => '<button type="button" role="tab" aria-selected="' + (item.id === category) + '" class="p11-tab' + (item.id === category ? " active" : "") + '" data-agent-category="' + item.id + '">' + item.name + "</button>").join("") + '</div><section class="p11-list" aria-label="\u667A\u80FD\u4F53\u5217\u8868">' + visible.map(renderAgentCard).join("") + '</section><p class="p11-disclaimer">\u667A\u80FD\u4F53\u56DE\u7B54\u4EC5\u4F9B\u521D\u6B65\u53C2\u8003\u3002\u540C\u4E00\u95EE\u9898\u53EF\u4EE5\u5206\u522B\u54A8\u8BE2\u591A\u4E2A\u667A\u80FD\u4F53\uFF0C\u6BCF\u4E2A\u5165\u53E3\u72EC\u7ACB\u8BA1\u8D39\u3002</p></div>';
+    return '<div class="p11-page">' + renderHeader2("\u667A\u80FD\u4F53\u4E13\u533A", '<button class="p11-energy" id="p11Energy" type="button">' + icon("zap", 14) + walletBalance.toFixed(1) + " \u70B9</button>") + '<section class="p11-intro"><span class="p11-intro-icon">' + icon("sparkles", 25) + "</span><div><h1>\u6309\u667A\u80FD\u4F53\u9009\u62E9\u4E13\u4E1A\u80FD\u529B</h1><p>\u6BCF\u4E2A\u667A\u80FD\u4F53\u7531\u5BF9\u5E94\u4F9B\u5E94\u5546\u72EC\u7ACB\u63D0\u4F9B\uFF0C\u53EF\u5206\u522B\u54A8\u8BE2\u548C\u4ED8\u8D39\u3002</p><span>" + activeCount + ' \u4E2A\u667A\u80FD\u4F53\u5F53\u524D\u53EF\u7528</span></div></section><div class="p11-tabs" role="tablist">' + agentCategories.map((item) => '<button type="button" role="tab" aria-selected="' + (item.id === category) + '" class="p11-tab' + (item.id === category ? " active" : "") + '" data-agent-category="' + item.id + '">' + item.name + "</button>").join("") + '</div><section class="p11-list" aria-label="\u667A\u80FD\u4F53\u5217\u8868">' + visible.map(renderAgentCard).join("") + '</section><p class="p11-disclaimer">\u667A\u80FD\u4F53\u56DE\u7B54\u4EC5\u4F9B\u521D\u6B65\u53C2\u8003\u3002\u540C\u4E00\u95EE\u9898\u53EF\u4EE5\u5206\u522B\u54A8\u8BE2\u591A\u4E2A\u667A\u80FD\u4F53\uFF0C\u6BCF\u4E2A\u5165\u53E3\u72EC\u7ACB\u8BA1\u8D39\u3002</p></div>';
   }
   function shouldShowHumanCard(session) {
     if (!session.messages.some((message) => message.role === "user")) return false;
@@ -7520,7 +7402,7 @@
     ).join("");
     const pausedBanner = paused ? '<div class="p11-unavailable">' + icon("pause", 16) + "<span><strong>\u8BE5\u667A\u80FD\u4F53\u6682\u505C\u670D\u52A1</strong><small>\u5386\u53F2\u5BF9\u8BDD\u4ECD\u53EF\u67E5\u770B\uFF0C\u6062\u590D\u670D\u52A1\u540E\u53EF\u7EE7\u7EED\u53D1\u9001\u6D88\u606F\u3002</small></span></div>" : "";
     const humanCard = shouldShowHumanCard(session) ? renderHumanCard(agent) : "";
-    return '<div class="p11-page p11-chat-page">' + renderHeader(agent.name, '<button class="p11-clear" id="p11Clear" type="button">\u6E05\u7A7A</button>') + '<div class="p11-provider-bar"><span class="p11-provider-mark">' + icon("bot", 18) + "</span><span><small>\u670D\u52A1\u4F9B\u5E94\u5546</small><strong>" + escapeHTML(agent.supplier.name) + '</strong></span><span class="p11-provider-price">' + escapeHTML(agent.price) + "</span></div>" + pausedBanner + '<main class="p11-messages" id="p11Messages">' + messages + (session.typing ? '<div class="p11-message agent"><span class="p11-message-avatar">' + icon(agent.icon, 18) + '</span><div class="p11-thinking"><i></i><i></i><i></i><span>\u6B63\u5728\u5206\u6790</span></div></div>' : "") + humanCard + '</main><div class="bottom-bar p11-composer' + (paused ? " is-disabled" : "") + '"><div class="p11-prompts">' + (paused ? "" : agent.prompts.map((prompt) => '<button type="button" data-agent-prompt="' + escapeHTML(prompt) + '">' + escapeHTML(prompt) + "</button>").join("")) + '</div><div class="p11-compose-meta"><button class="p11-attach" id="p11Attach" type="button" aria-label="\u4E0A\u4F20\u6750\u6599"' + (paused ? " disabled" : "") + ">" + icon("upload", 18) + "</button><span>\u672C\u6B21\u8C03\u7528 " + escapeHTML(agent.price) + "</span><span>\u4F59\u989D " + walletBalance.toFixed(1) + ' \u70B9</span></div><div class="p11-call-rule">\u4E00\u6761\u63D0\u95EE\u548C\u4E00\u6B21\u5B8C\u6574\u56DE\u590D\u8BA1\u4E3A\u4E00\u6B21\u8C03\u7528\uFF1B\u5931\u8D25\u6216\u91CD\u8BD5\u4E0D\u6263\u8D39\u3002</div><div class="p11-compose-row"><textarea id="p11Input" rows="1" maxlength="4000" placeholder="' + (paused ? "\u8BE5\u667A\u80FD\u4F53\u6682\u505C\u670D\u52A1" : "\u63CF\u8FF0\u4F60\u7684\u95EE\u9898\u2026") + '"' + (paused ? " disabled" : "") + '></textarea><button class="p11-send" id="p11Send" type="button" aria-label="\u53D1\u9001"' + (paused ? " disabled" : "") + ">" + icon("send", 19) + "</button></div></div></div>";
+    return '<div class="p11-page p11-chat-page">' + renderHeader2(agent.name, '<button class="p11-clear" id="p11Clear" type="button">\u6E05\u7A7A</button>') + '<div class="p11-provider-bar"><span class="p11-provider-mark">' + icon("bot", 18) + "</span><span><small>\u670D\u52A1\u4F9B\u5E94\u5546</small><strong>" + escapeHTML(agent.supplier.name) + '</strong></span><span class="p11-provider-price">' + escapeHTML(agent.price) + "</span></div>" + pausedBanner + '<main class="p11-messages" id="p11Messages">' + messages + (session.typing ? '<div class="p11-message agent"><span class="p11-message-avatar">' + icon(agent.icon, 18) + '</span><div class="p11-thinking"><i></i><i></i><i></i><span>\u6B63\u5728\u5206\u6790</span></div></div>' : "") + humanCard + '</main><div class="bottom-bar p11-composer' + (paused ? " is-disabled" : "") + '"><div class="p11-prompts">' + (paused ? "" : agent.prompts.map((prompt) => '<button type="button" data-agent-prompt="' + escapeHTML(prompt) + '">' + escapeHTML(prompt) + "</button>").join("")) + '</div><div class="p11-compose-meta"><button class="p11-attach" id="p11Attach" type="button" aria-label="\u4E0A\u4F20\u6750\u6599"' + (paused ? " disabled" : "") + ">" + icon("upload", 18) + "</button><span>\u672C\u6B21\u8C03\u7528 " + escapeHTML(agent.price) + "</span><span>\u4F59\u989D " + walletBalance.toFixed(1) + ' \u70B9</span></div><div class="p11-call-rule">\u4E00\u6761\u63D0\u95EE\u548C\u4E00\u6B21\u5B8C\u6574\u56DE\u590D\u8BA1\u4E3A\u4E00\u6B21\u8C03\u7528\uFF1B\u5931\u8D25\u6216\u91CD\u8BD5\u4E0D\u6263\u8D39\u3002</div><div class="p11-compose-row"><textarea id="p11Input" rows="1" maxlength="4000" placeholder="' + (paused ? "\u8BE5\u667A\u80FD\u4F53\u6682\u505C\u670D\u52A1" : "\u63CF\u8FF0\u4F60\u7684\u95EE\u9898\u2026") + '"' + (paused ? " disabled" : "") + '></textarea><button class="p11-send" id="p11Send" type="button" aria-label="\u53D1\u9001"' + (paused ? " disabled" : "") + ">" + icon("send", 19) + "</button></div></div></div>";
   }
   function replyFor(agent) {
     const replies = {
