@@ -2583,30 +2583,6 @@
     }
     return STATUS_TEXT[demand.status] || demand.status;
   }
-  function getLatestTodo(demandList) {
-    return demandList.filter((demand) => demand.status !== "cancelled").slice().sort((left, right) => {
-      const leftPriority = TODO_PRIORITY[left.status] || 99;
-      const rightPriority = TODO_PRIORITY[right.status] || 99;
-      if (leftPriority !== rightPriority) return leftPriority - rightPriority;
-      return left.date < right.date ? 1 : -1;
-    })[0] || null;
-  }
-  function getTodoTarget(demand) {
-    if (demand.status === "choosing") return { page: "p6", params: { demandId: demand.id, tab: "accepted" } };
-    if (["communicating", "plan_pending", "contract_pending", "payment_pending", "payment_confirming"].includes(demand.status)) {
-      return {
-        page: "p7",
-        params: {
-          demandId: demand.id,
-          teamId: demand.chosenTeam || demand.candidateTeam || (demand.accepted[0] || {}).teamId,
-          open: demand.status === "contract_pending" ? "agreement" : ["payment_pending", "payment_confirming"].includes(demand.status) ? "payment" : void 0
-        }
-      };
-    }
-    if (demand.status === "acceptance") return { page: "p6", params: { demandId: demand.id, tab: "delivery" } };
-    if (demand.status === "done" && !demand.hasReview) return { page: "p8", params: { demandId: demand.id } };
-    return { page: "p6", params: { demandId: demand.id, tab: "progress" } };
-  }
   function refreshDemandStatus(demand, addEvent = addTimelineEvent) {
     if (!demand) return;
     if (["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(demand.status)) return;
@@ -3510,22 +3486,30 @@
     const afterSaleCount = orders.filter((demand) => demand.afterSale && demand.afterSale.status !== "closed").length;
     const favoriteCount = getFavoriteTeams(store.teams).length;
     const paymentCount = orders.filter((demand) => ["payment_pending", "payment_confirming"].includes(demand.status)).length;
-    const html = '<div class="mine-header"><div class="mine-avatar">' + user.avatar + '</div><div class="mine-name">' + user.name + '</div><div style="font-size:var(--font-sm);opacity:0.8;margin-top:4px">' + user.company + " \xB7 " + user.companyType + '</div></div><section class="mine-workbench"><div class="mine-workbench-head"><strong>\u6211\u7684\u670D\u52A1</strong><span>' + pendingCount + ' \u9879\u5F85\u5904\u7406</span></div><div class="mine-service-links"><button id="mineDemandEntry" type="button"><span class="mine-service-icon">' + this.icon("file-text", 21) + "</span><strong>\u6211\u7684\u670D\u52A1\u9700\u6C42</strong><small>" + totalDemands + " \u6761\u9700\u6C42</small>" + this.icon("chevron-right", 15) + '</button><button id="mineOrderEntry" type="button"><span class="mine-service-icon order">' + this.icon("briefcase", 21) + "</span><strong>\u6211\u7684\u8BA2\u5355</strong><small>" + orders.length + " \u4E2A\u670D\u52A1\u8BA2\u5355</small>" + this.icon("chevron-right", 15) + '</button></div><div class="mine-task-stats"><button id="minePendingEntry"><strong>' + pendingCount + '</strong><small>\u5F85\u6211\u5904\u7406</small></button><button id="minePaymentEntry"><strong>' + paymentCount + '</strong><small>\u4ED8\u6B3E\u4E8B\u9879</small></button><button id="mineAfterSaleEntry"><strong>' + afterSaleCount + '</strong><small>\u552E\u540E\u534F\u52A9</small></button></div></section><button class="mine-wecom" id="mineWecomEntry" type="button"><span>' + this.icon("message", 20) + "</span><div><strong>\u5E73\u53F0\u667A\u80FD\u52A9\u624B\u4F01\u4E1A\u5FAE\u4FE1</strong><small>" + (isWecomAdded() ? "\u5DF2\u6DFB\u52A0 \xB7 \u67E5\u770B\u670D\u52A1\u4E0E\u5EFA\u8054\u901A\u77E5" : "\u6DFB\u52A0\u540E\u53CA\u65F6\u63A5\u6536\u5339\u914D\u548C\u670D\u52A1\u8FDB\u5C55") + "</small></div>" + this.icon("chevron-right", 16) + '</button><div class="mine-menu"><div class="info-row" id="mineCompanyEntry"><div class="info-label">\u4F01\u4E1A\u4FE1\u606F</div><div class="info-value">\u5DF2\u5B8C\u5584</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" id="mineFavoritesEntry"><div class="info-label">\u6211\u7684\u6536\u85CF</div><div class="info-value">' + favoriteCount + ' \u4E2A\u56E2\u961F</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" id="mineMessagesEntry"><div class="info-label">\u6D88\u606F\u901A\u77E5</div><div class="info-value">\u670D\u52A1\u8FDB\u5C55\u4E0E\u63D0\u9192</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u8BBE\u7F6E</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u5E2E\u52A9\u4E0E\u53CD\u9988</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div></div><div style="text-align:center;padding:16px;font-size:var(--font-sm);color:var(--color-text-4)">\u751F\u6001\u670D\u52A1\u5E73\u53F0 v1.0 \xB7 Demo</div>';
+    const supportStatus = isWecomAdded() ? "\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4F01\u4E1A\u5FAE\u4FE1\u5F85\u6DFB\u52A0";
+    const html = '<main class="mine-page"><header class="mine-profile"><div class="mine-profile-main"><div class="mine-avatar">' + user.avatar + '</div><div class="mine-identity"><div><h1>' + user.name + "</h1><span>\u521B\u4E1A\u8005</span></div><p>" + user.companyType + " \xB7 " + user.stage + '</p></div><button class="mine-notice" id="mineSupportTop" type="button" aria-label="\u67E5\u770B\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE">' + this.icon("bell", 20) + (pendingCount ? "<i>" + pendingCount + "</i>" : "") + '</button></div><button class="mine-company-summary" id="mineCompanyEntry" type="button"><span>' + this.icon("building", 18) + "</span><div><strong>" + user.company + "</strong><small>" + user.industry + " \xB7 " + user.city + "</small></div><em>\u4F01\u4E1A\u8D44\u6599</em>" + this.icon("chevron-right", 15) + '</button></header><section class="mine-service-hub" aria-labelledby="mineServiceTitle"><div class="mine-section-head"><div><h2 id="mineServiceTitle">\u6211\u7684\u670D\u52A1</h2><p>\u9700\u6C42\u3001\u8BA2\u5355\u548C\u552E\u540E\u96C6\u4E2D\u7BA1\u7406</p></div><span>' + (pendingCount ? pendingCount + " \u9879\u5F85\u5904\u7406" : "\u6682\u65E0\u5F85\u529E") + '</span></div><div class="mine-primary-actions"><button id="mineDemandEntry" type="button"><span class="mine-primary-icon">' + this.icon("file-text", 21) + "</span><div><strong>\u670D\u52A1\u9700\u6C42</strong><small>" + totalDemands + " \u6761\u8BB0\u5F55</small></div>" + this.icon("chevron-right", 15) + '</button><button id="mineOrderEntry" type="button"><span class="mine-primary-icon order">' + this.icon("briefcase", 21) + "</span><div><strong>\u670D\u52A1\u8BA2\u5355</strong><small>" + orders.length + " \u4E2A\u8BA2\u5355</small></div>" + this.icon("chevron-right", 15) + '</button></div><div class="mine-quick-actions"><button id="minePendingEntry" type="button"><strong>' + pendingCount + '</strong><small>\u5F85\u6211\u5904\u7406</small></button><button id="minePaymentEntry" type="button"><strong>' + paymentCount + '</strong><small>\u4ED8\u6B3E\u4E8B\u9879</small></button><button id="mineAfterSaleEntry" type="button"><strong>' + afterSaleCount + '</strong><small>\u552E\u540E\u534F\u52A9</small></button><button id="mineFavoritesEntry" type="button"><strong>' + favoriteCount + '</strong><small>\u6211\u7684\u6536\u85CF</small></button></div></section><button class="mine-support-entry" id="mineSupportEntry" type="button"><span>' + this.icon("message", 20) + "</span><div><strong>\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE</strong><small>\u67E5\u770B\u670D\u52A1\u8FDB\u5C55\uFF0C\u8054\u7CFB\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1</small></div><em>" + supportStatus + "</em>" + this.icon("chevron-right", 16) + '</button><section class="mine-utility-section"><div class="mine-section-title"><h2>\u5E73\u53F0\u6743\u76CA</h2></div><div class="mine-benefit-links"><button type="button" data-mine-unavailable data-mine-message="\u62A5\u544A\u4E2D\u5FC3\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("file-text", 20) + "</span><div><strong>\u6211\u7684\u62A5\u544A</strong><small>\u67E5\u770B\u4F01\u4E1A\u5206\u6790\u4E0E\u8BCA\u65AD\u62A5\u544A</small></div>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u80FD\u91CF\u4E0E\u5151\u6362\u529F\u80FD\u5F00\u53D1\u4E2D"><span class="energy">' + this.icon("zap", 20) + "</span><div><strong>\u80FD\u91CF\u4E0E\u5151\u6362</strong><small>\u67E5\u770B\u4F59\u989D\u53CA\u53EF\u5151\u6362\u6743\u76CA</small></div>" + this.icon("chevron-right", 15) + '</button></div></section><section class="mine-utility-section"><div class="mine-section-title"><h2>\u5E38\u7528\u5DE5\u5177</h2></div><div class="mine-tool-links"><button type="button" data-mine-unavailable data-mine-message="\u53D1\u7968\u4E2D\u5FC3\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("file-text", 19) + "</span><strong>\u53D1\u7968\u4E2D\u5FC3</strong>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u610F\u89C1\u53CD\u9988\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("message", 19) + "</span><strong>\u610F\u89C1\u53CD\u9988</strong>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u534F\u8BAE\u4E0E\u89C4\u5219\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("shield", 19) + "</span><strong>\u534F\u8BAE\u4E0E\u89C4\u5219</strong>" + this.icon("chevron-right", 15) + '</button></div></section><div class="mine-version">\u751F\u6001\u670D\u52A1\u5E73\u53F0 v1.0 \xB7 Demo</div></main>';
     this.setPageContent(html, "mine");
     document.getElementById("mineDemandEntry").addEventListener("click", () => navigateTo("p9", {}));
     document.getElementById("mineOrderEntry").addEventListener("click", () => navigateTo("p9", { mode: "orders" }));
     document.getElementById("minePendingEntry").addEventListener("click", () => navigateTo("p9", { filter: "decision" }));
     document.getElementById("minePaymentEntry").addEventListener("click", () => navigateTo("p9", { mode: "orders", filter: "payment" }));
     document.getElementById("mineAfterSaleEntry").addEventListener("click", () => navigateTo("p9", { mode: "orders", filter: "after_sale" }));
-    document.getElementById("mineWecomEntry").addEventListener("click", () => openWecomGuide());
     document.getElementById("mineFavoritesEntry").addEventListener("click", openFavorites);
     document.getElementById("mineCompanyEntry").addEventListener("click", () => {
       const overlay = showSheet({ title: "\u4F01\u4E1A\u4FE1\u606F", body: '<div class="mine-company-sheet"><div><span>\u4F01\u4E1A\u540D\u79F0</span><strong>' + user.company + "</strong></div><div><span>\u4F01\u4E1A\u9636\u6BB5</span><strong>" + user.stage + "</strong></div><div><span>\u6240\u5C5E\u884C\u4E1A</span><strong>" + user.industry + "</strong></div><div><span>\u529E\u516C\u5730\u533A</span><strong>" + user.city + " \xB7 " + user.district + '</strong></div><button class="btn btn-outline btn-block" id="mineCompanyEdit" type="button">\u7F16\u8F91\u4F01\u4E1A\u4FE1\u606F</button></div>' });
       overlay.querySelector("#mineCompanyEdit").addEventListener("click", () => this.toast("\u4F01\u4E1A\u4FE1\u606F\u7F16\u8F91\u529F\u80FD\u5F00\u53D1\u4E2D"));
     });
-    document.getElementById("mineMessagesEntry").addEventListener("click", () => showSheet({ title: "\u6D88\u606F\u901A\u77E5", body: '<div class="mine-message-list"><div><span>' + this.icon("bell", 18) + "</span><p><strong>\u670D\u52A1\u8FDB\u5C55\u901A\u77E5</strong><small>\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u3001\u4EA4\u4ED8\u548C\u552E\u540E\u8FDB\u5C55\u4F1A\u96C6\u4E2D\u5C55\u793A\u5728\u8FD9\u91CC\u3002</small></p></div><div><span>" + this.icon("message", 18) + "</span><p><strong>\u4F01\u4E1A\u5FAE\u4FE1\u540C\u6B65\u63D0\u9192</strong><small>\u91CD\u8981\u8282\u70B9\u4F1A\u540C\u65F6\u901A\u8FC7\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u3002</small></p></div></div>" }));
+    const openSupportCenter = () => {
+      const overlay = showSheet({ title: "\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE", body: '<div class="mine-message-list"><div><span>' + this.icon("bell", 18) + "</span><p><strong>\u670D\u52A1\u8FDB\u5C55\u901A\u77E5</strong><small>\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u3001\u4EA4\u4ED8\u548C\u552E\u540E\u8FDB\u5C55\u96C6\u4E2D\u663E\u793A\u5728\u8FD9\u91CC\u3002</small></p></div><div><span>" + this.icon("message", 18) + '</span><p><strong>\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1</strong><small>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u6216\u5EFA\u8054\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u62C9\u7FA4\u3002</small></p></div><button class="btn btn-primary btn-block" id="mineOpenWecom" type="button">' + (isWecomAdded() ? "\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u670D\u52A1" : "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + "</button></div>" });
+      overlay.querySelector("#mineOpenWecom").addEventListener("click", () => {
+        overlay.remove();
+        openWecomGuide();
+      });
+    };
+    document.getElementById("mineSupportTop").addEventListener("click", openSupportCenter);
+    document.getElementById("mineSupportEntry").addEventListener("click", openSupportCenter);
     document.querySelectorAll("[data-mine-unavailable]").forEach((row) => {
-      row.addEventListener("click", () => this.toast("\u529F\u80FD\u5F00\u53D1\u4E2D"));
+      row.addEventListener("click", () => this.toast(row.getAttribute("data-mine-message") || "\u529F\u80FD\u5F00\u53D1\u4E2D"));
     });
     this.updateBadge();
   }
@@ -4360,36 +4344,6 @@
     return '<div class="p1-offer-list" id="p1OfferList" role="tabpanel">' + cards + "</div>";
   }
 
-  // src/pages/p1-home/TodoBar.js
-  function latestTodo() {
-    return getLatestTodo(store.demands);
-  }
-  function renderTodoBar() {
-    const demand = latestTodo();
-    if (!demand) return "";
-    let html = '<section class="p1-todo-wrap">';
-    html += '<div class="p1-todo-head"><span class="p1-todo-head-title">\u6211\u7684\u670D\u52A1\u9700\u6C42</span>';
-    html += '<button class="p1-todo-head-more" id="p1TodoMore">\u5168\u90E8 ' + store.demands.length + " " + icon("chevron-right", 13) + "</button>";
-    html += "</div>";
-    const tone = ["pending", "choosing", "communicating", "plan_pending"].includes(demand.status) ? " matching" : demand.status === "active" ? " active-service" : demand.status === "done" ? " completed" : " attention";
-    html += '<button class="p1-todo-card' + tone + '" data-demand-id="' + demand.id + '">';
-    html += '<span class="p1-todo-main"><span class="p1-todo-title">' + demand.title + '</span><span class="p1-todo-progress">' + (demand.progress || "") + "</span></span>";
-    const action = demand.status === "done" && demand.hasReview ? "\u67E5\u770B\u8BC4\u4EF7" : TODO_STATUS_TEXT[demand.status] || "\u67E5\u770B\u8BE6\u60C5";
-    html += '<span class="p1-todo-action">' + action + "</span>" + icon("chevron-right", 16);
-    html += "</button></section>";
-    return html;
-  }
-  function bindTodoBar() {
-    const card = document.querySelector(".p1-todo-card");
-    if (card) card.addEventListener("click", function() {
-      const demand = getDemand(this.getAttribute("data-demand-id"), store.demands);
-      const target = getTodoTarget(demand);
-      navigateTo(target.page, target.params);
-    });
-    const more = document.getElementById("p1TodoMore");
-    if (more) more.addEventListener("click", () => navigateTo("p9", {}));
-  }
-
   // src/pages/p1-home/index.js
   var page = {
     searchHistory: ["\u5408\u540C\u5BA1\u67E5", "\u516C\u53F8\u6CE8\u518C"],
@@ -4400,16 +4354,14 @@
       html += '<div class="p1-top"><div class="p1-search-row"><button class="search-bar p1-search-trigger" id="p1SearchBar"><span class="search-icon">' + icon("search", 17) + "</span><span>\u8BD5\u8BD5\u641C\u7D22\uFF1A\u80A1\u6743\u8BBE\u8BA1\u3001\u878D\u8D44\u534F\u8BAE\u3001\u5546\u6807\u6CE8\u518C\u2026</span></button></div>";
       html += '<section class="p1-brand-copy"><h1>\u4E13\u4E3A 0-A \u8F6E\u521B\u4E1A\u8005\u6253\u9020\u7684<br>\u751F\u6001\u670D\u52A1\u5E73\u53F0</h1><div class="p1-brand-proof"><span>' + icon("check", 14) + "100%\u8D44\u8D28\u6838\u9A8C</span><span>" + icon("check", 14) + "AI\u667A\u80FD\u5339\u914D</span><span>" + icon("check", 14) + "\u5168\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
       html += '<button class="p1-match-card" id="p1HeroCard" type="button"><span class="p1-match-icon">' + icon("sparkles", 22) + '</span><span class="p1-match-copy"><strong>\u4E0D\u786E\u5B9A\u9700\u8981\u4EC0\u4E48\u670D\u52A1\uFF1F</strong><small>\u5148\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\uFF0CAI \u5E2E\u4F60\u5339\u914D</small></span><span class="p1-match-action">\u5F00\u59CB\u5339\u914D ' + icon("arrow-right", 14) + "</span></button></div>";
-      html += '<section class="p1-marketplace"><div class="p1-marketplace-head"><div><h2>\u627E\u670D\u52A1</h2><p>\u5148\u9009\u670D\u52A1\uFF0C\u518D\u6BD4\u8F83\u4E0D\u540C\u56E2\u961F</p></div></div>';
+      html += '<section class="p1-marketplace">';
       html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId);
       html += '<button class="service-suggestion-link p1-suggestion" type="button" id="p1ServiceSuggestion"><span>\u6CA1\u6709\u4F60\u8981\u627E\u7684\u670D\u52A1\uFF1F</span><strong>\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42 ' + icon("arrow-right", 14) + "</strong></button></section>";
-      html += renderTodoBar();
       html += '<div class="mb-4"></div>';
       return html;
     },
     init() {
       showTabBar(true);
-      bindTodoBar();
       document.getElementById("p1SearchBar").addEventListener("click", () => openSearchOverlay(page));
       document.getElementById("p1HeroCard").addEventListener("click", () => navigateTo("p5"));
       document.getElementById("p1ServiceSuggestion").addEventListener("click", () => openServiceSuggestion(""));
