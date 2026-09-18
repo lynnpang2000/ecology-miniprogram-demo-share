@@ -2330,6 +2330,49 @@
     return true;
   }
 
+  // src/domain/payment.js
+  function ensurePayment(demand, options = {}) {
+    if (!demand) return null;
+    if (!demand.payment) {
+      demand.payment = {
+        status: "pending",
+        amount: demand.agreement?.amount || demand.servicePlan?.finalQuote || demand.budget || "\u4EE5\u534F\u8BAE\u4E3A\u51C6",
+        method: "\u7EBF\u4E0B\u5BF9\u516C\u8F6C\u8D26",
+        receipt: "",
+        submittedAt: "",
+        confirmedAt: ""
+      };
+    }
+    return demand.payment;
+  }
+  function submitPaymentReceipt(demand, fileName, options = {}) {
+    if (!demand) return false;
+    const payment = ensurePayment(demand, options);
+    if (payment.status !== "pending") return false;
+    const getTime = options.nowLabel || nowLabel;
+    const messages = options.chatMessages || chatMessages;
+    payment.status = "confirming";
+    payment.receipt = fileName || "\u4ED8\u6B3E\u51ED\u8BC1.pdf";
+    payment.submittedAt = getTime();
+    demand.status = "payment_confirming";
+    demand.progress = "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26";
+    appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u6B63\u5728\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\u3002" }, messages);
+    addTimelineEvent(demand, "file", "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4", payment.receipt, getTime);
+    return true;
+  }
+  function confirmPaymentReceived(demand, options = {}) {
+    if (!demand?.payment || demand.payment.status !== "confirming") return false;
+    const getTime = options.nowLabel || nowLabel;
+    const messages = options.chatMessages || chatMessages;
+    demand.payment.status = "paid";
+    demand.payment.confirmedAt = getTime();
+    demand.status = "active";
+    demand.progress = "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26\uFF0C\u670D\u52A1\u8FDB\u884C\u4E2D";
+    appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u6B3E\u9879\u5230\u8D26\uFF0C\u56E2\u961F\u5F00\u59CB\u6309\u534F\u8BAE\u7EA6\u5B9A\u4EA4\u4ED8\u3002" }, messages);
+    addTimelineEvent(demand, "check", "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26", "\u670D\u52A1\u56E2\u961F\u5F00\u59CB\u6309\u534F\u8BAE\u7EA6\u5B9A\u4EA4\u4ED8", getTime);
+    return true;
+  }
+
   // src/domain/agreement.js
   function createAgreementForDemand(demand, teamId, options = {}) {
     const teamList = options.teams || teams;
@@ -2383,10 +2426,11 @@
       addTimelineEvent(demand, "file", "\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u63D0\u4EA4\u5E73\u53F0\u5BA1\u6838", getTime);
     } else if (status === "approved") {
       demand.agreement.approvedAt = getTime();
-      demand.status = "active";
-      demand.progress = "\u670D\u52A1\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7\uFF0C\u670D\u52A1\u8FDB\u884C\u4E2D";
-      appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u670D\u52A1\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7\uFF0C\u56E2\u961F\u5DF2\u5F00\u59CB\u4EA4\u4ED8\u3002" }, messages);
-      addTimelineEvent(demand, "check", "\u670D\u52A1\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7", "\u670D\u52A1\u56E2\u961F\u5F00\u59CB\u6309\u534F\u8BAE\u7EA6\u5B9A\u4EA4\u4ED8", getTime);
+      ensurePayment(demand, options);
+      demand.status = "payment_pending";
+      demand.progress = "\u670D\u52A1\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7\uFF0C\u7B49\u5F85\u4ED8\u6B3E";
+      appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u670D\u52A1\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7\u3002\u8BF7\u6309\u534F\u8BAE\u6536\u6B3E\u4FE1\u606F\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\uFF0C\u5E76\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1\u3002" }, messages);
+      addTimelineEvent(demand, "check", "\u670D\u52A1\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7", "\u4E0B\u4E00\u6B65\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u5E76\u4E0A\u4F20\u51ED\u8BC1", getTime);
     }
     return true;
   }
@@ -2398,6 +2442,8 @@
     communicating: "\u4FE1\u606F\u786E\u8BA4",
     plan_pending: "\u5F85\u786E\u8BA4\u65B9\u6848",
     contract_pending: "\u7B7E\u7F72\u534F\u8BAE",
+    payment_pending: "\u5F85\u4ED8\u6B3E",
+    payment_confirming: "\u786E\u8BA4\u5230\u8D26\u4E2D",
     active: "\u670D\u52A1\u8FDB\u884C\u4E2D",
     acceptance: "\u5F85\u9A8C\u6536",
     done: "\u5DF2\u5B8C\u6210\xB7\u5F85\u8BC4\u4EF7",
@@ -2409,6 +2455,8 @@
     communicating: "var(--color-primary)",
     plan_pending: "var(--color-primary)",
     contract_pending: "var(--color-warning)",
+    payment_pending: "var(--color-warning)",
+    payment_confirming: "var(--color-primary)",
     active: "var(--color-success)",
     acceptance: "var(--color-warning)",
     done: "var(--color-success)",
@@ -2420,6 +2468,8 @@
     communicating: "var(--color-primary-light)",
     plan_pending: "var(--color-primary-light)",
     contract_pending: "var(--color-warning-light)",
+    payment_pending: "var(--color-warning-light)",
+    payment_confirming: "var(--color-primary-light)",
     active: "var(--color-success-light)",
     acceptance: "var(--color-warning-light)",
     done: "var(--color-success-light)",
@@ -2466,6 +2516,17 @@
       { title: "\u4EA4\u4ED8\u4E0E\u9A8C\u6536", desc: "\u56E2\u961F\u63D0\u4EA4\u6210\u679C\u540E\u7531\u4F60\u786E\u8BA4\u9A8C\u6536" },
       { title: "\u8BC4\u4EF7\u670D\u52A1", desc: "\u9A8C\u6536\u5B8C\u6210\u540E\u53EF\u4EE5\u8BC4\u4EF7" }
     ],
+    payment_pending: [
+      { title: "\u5B8C\u6210\u670D\u52A1\u4ED8\u6B3E", desc: "\u6309\u534F\u8BAE\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u5E76\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1" },
+      { title: "\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26", desc: "\u5230\u8D26\u540E\u670D\u52A1\u56E2\u961F\u5F00\u59CB\u6B63\u5F0F\u4EA4\u4ED8" },
+      { title: "\u4EA4\u4ED8\u4E0E\u9A8C\u6536", desc: "\u56E2\u961F\u63D0\u4EA4\u6210\u679C\u540E\u7531\u4F60\u786E\u8BA4\u9A8C\u6536" },
+      { title: "\u8BC4\u4EF7\u670D\u52A1", desc: "\u9A8C\u6536\u5B8C\u6210\u540E\u53EF\u4EE5\u8BC4\u4EF7" }
+    ],
+    payment_confirming: [
+      { title: "\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26", desc: "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4" },
+      { title: "\u4EA4\u4ED8\u4E0E\u9A8C\u6536", desc: "\u56E2\u961F\u63D0\u4EA4\u6210\u679C\u540E\u7531\u4F60\u786E\u8BA4\u9A8C\u6536" },
+      { title: "\u8BC4\u4EF7\u670D\u52A1", desc: "\u9A8C\u6536\u5B8C\u6210\u540E\u53EF\u4EE5\u8BC4\u4EF7" }
+    ],
     active: [
       { title: "\u56E2\u961F\u63D0\u4EA4\u6210\u679C", desc: "\u6309\u5DF2\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u5B8C\u6210\u4EA4\u4ED8" },
       { title: "\u786E\u8BA4\u9A8C\u6536", desc: "\u6838\u5BF9\u6210\u679C\u65E0\u8BEF\u540E\u786E\u8BA4" },
@@ -2483,6 +2544,8 @@
     acceptance: 1,
     plan_pending: 2,
     contract_pending: 2.5,
+    payment_pending: 2.6,
+    payment_confirming: 2.7,
     choosing: 3,
     communicating: 4,
     active: 5,
@@ -2496,6 +2559,8 @@
     communicating: "\u8865\u5145\u4FE1\u606F",
     plan_pending: "\u786E\u8BA4\u65B9\u6848",
     contract_pending: "\u7B7E\u7F72\u534F\u8BAE",
+    payment_pending: "\u5B8C\u6210\u4ED8\u6B3E",
+    payment_confirming: "\u67E5\u770B\u4ED8\u6B3E",
     active: "\u67E5\u770B\u670D\u52A1",
     acceptance: "\u786E\u8BA4\u9A8C\u6536",
     done: "\u53BB\u8BC4\u4EF7"
@@ -2503,6 +2568,8 @@
   var TODO_PRIORITY = Object.freeze({
     acceptance: 1,
     contract_pending: 2,
+    payment_pending: 2.2,
+    payment_confirming: 2.4,
     plan_pending: 3,
     choosing: 4,
     communicating: 5,
@@ -2527,13 +2594,13 @@
   }
   function getTodoTarget(demand) {
     if (demand.status === "choosing") return { page: "p6", params: { demandId: demand.id, tab: "accepted" } };
-    if (["communicating", "plan_pending", "contract_pending"].includes(demand.status)) {
+    if (["communicating", "plan_pending", "contract_pending", "payment_pending", "payment_confirming"].includes(demand.status)) {
       return {
         page: "p7",
         params: {
           demandId: demand.id,
           teamId: demand.chosenTeam || demand.candidateTeam || (demand.accepted[0] || {}).teamId,
-          open: demand.status === "contract_pending" ? "agreement" : void 0
+          open: demand.status === "contract_pending" ? "agreement" : ["payment_pending", "payment_confirming"].includes(demand.status) ? "payment" : void 0
         }
       };
     }
@@ -2543,7 +2610,7 @@
   }
   function refreshDemandStatus(demand, addEvent = addTimelineEvent) {
     if (!demand) return;
-    if (["contract_pending", "active", "acceptance", "done"].includes(demand.status)) return;
+    if (["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(demand.status)) return;
     const acceptedCount = (demand.accepted || []).length;
     const waitingCount = (demand.pending || []).filter((pending) => !pending.isTimeout).length;
     const timeoutCount = (demand.timedOut || []).length;
@@ -2581,6 +2648,8 @@
       "communicating",
       "plan_pending",
       "contract_pending",
+      "payment_pending",
+      "payment_confirming",
       "acceptance"
     ].includes(demand.status) || demand.status === "done" && !demand.hasReview);
   }
@@ -2822,9 +2891,13 @@
     const categoryList = options.categories || categories;
     const messages = options.chatMessages || chatMessages;
     const userData = options.user || user;
+    const consultation = options.consultation || {};
     const getTime = options.nowLabel || nowLabel;
     const existing = demandList.find((item) => item.directInquiry && item.targetTeamId === teamId && item.sku === sku && !["done", "cancelled"].includes(item.status));
-    if (existing) return existing;
+    if (existing) {
+      if (consultation.summary) existing.desc = consultation.summary;
+      return existing;
+    }
     const team = getTeam(teamId, teamList);
     const category = getCategoryForSku(sku, categoryList) || getCategoryForTeam(team, categoryList);
     const demand = createDemand({
@@ -2832,19 +2905,31 @@
       categoryId: category ? category.id : "law",
       categoryName: category ? category.name : "\u4F01\u4E1A\u670D\u52A1",
       sku,
-      budget: "\u6C9F\u901A\u540E\u786E\u8BA4",
-      desc: `${userData.company}\u6B63\u5728\u5411${team.name}\u54A8\u8BE2${sku}\u670D\u52A1\u3002`,
+      budget: consultation.selectedPackage?.priceText || "\u6C9F\u901A\u540E\u786E\u8BA4",
+      desc: consultation.summary || `${userData.company}\u6B63\u5728\u5411${team.name}\u54A8\u8BE2${sku}\u670D\u52A1\u3002`,
       fields: [
         { label: "\u670D\u52A1\u7C7B\u578B", value: sku },
         { label: "\u610F\u5411\u56E2\u961F", value: team.name },
-        { label: "\u9884\u7B97\u8303\u56F4", value: "\u6C9F\u901A\u540E\u786E\u8BA4" },
-        { label: "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", value: "\u53CC\u65B9\u6C9F\u901A\u540E\u786E\u8BA4" },
+        ...consultation.selectedPackage ? [
+          { label: "\u670D\u52A1\u6863\u4F4D", value: consultation.selectedPackage.name },
+          { label: "\u670D\u52A1\u4EF7\u683C", value: consultation.selectedPackage.priceText }
+        ] : [],
+        { label: "\u9700\u6C42\u8BF4\u660E", value: consultation.summary || "\u5F85\u8865\u5145" },
+        { label: "\u9884\u7B97\u8303\u56F4", value: consultation.selectedPackage?.priceText || "\u6C9F\u901A\u540E\u786E\u8BA4" },
+        { label: "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", value: consultation.urgency || "\u53CC\u65B9\u6C9F\u901A\u540E\u786E\u8BA4" },
+        { label: "\u8054\u7CFB\u65B9\u5F0F", value: consultation.contact || userData.mobile },
+        ...consultation.attachment ? [{ label: "\u76F8\u5173\u6750\u6599", value: consultation.attachment }] : [],
         { label: "\u5B9E\u9645\u529E\u516C\u57CE\u5E02", value: `${userData.city}\xB7${userData.district}` }
       ],
       teamIds: [teamId],
       targetTeamId: teamId
     }, options);
     demand.directInquiry = true;
+    if (consultation.selectedPackage) demand.selectedPackage = {
+      id: consultation.selectedPackage.id,
+      name: consultation.selectedPackage.name,
+      priceText: consultation.selectedPackage.priceText
+    };
     demand.requirementConfirmed = false;
     demand.status = "communicating";
     demand.progress = `\u6B63\u5728\u901A\u8FC7\u5E73\u53F0\u52A9\u624B\u5411${team.name}\u786E\u8BA4\u9700\u6C42`;
@@ -2904,7 +2989,7 @@
       schedule(() => {
         const current = getDemand(demandId, demandList);
         if (!current || current.status === "cancelled") return;
-        if (["contract_pending", "active", "acceptance", "done"].includes(current.status)) return;
+        if (["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(current.status)) return;
         const team = getTeam(teamId, teamList);
         const decision = decideResponse(teamId, current, index, total, options);
         if (decision.type === "timeout") {
@@ -2930,7 +3015,7 @@
     });
   }
   function closeResponseRound(demand, options = {}) {
-    if (!demand || demand.responseClosed || ["contract_pending", "active", "acceptance", "done"].includes(demand.status)) return;
+    if (!demand || demand.responseClosed || ["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(demand.status)) return;
     const getTime = options.nowLabel || nowLabel;
     const wecomStatus = options.isWecomAdded || isWecomAdded;
     demand.responseClosed = true;
@@ -3137,6 +3222,16 @@
     return result;
   }
 
+  // src/demo/scenarios/payment_pending.js
+  function paymentPendingScenario(baseline) {
+    const { result, demand } = preparePlanDraftScenario(baseline);
+    if (!demand) return result;
+    submitPlan(result, demand);
+    confirmPlan(result, demand);
+    changeAgreementStatus(result, demand, "approved");
+    return result;
+  }
+
   // src/demo/scenarios/timeout.js
   function timeoutScenario(baseline) {
     const { result, demand } = singleDemandScenario(baseline, "d001");
@@ -3171,6 +3266,7 @@
     contract_customer: "\u5F85\u5BA2\u6237\u7B7E\u7EA6",
     contract_provider: "\u5F85\u670D\u52A1\u5546\u7528\u5370",
     contract_review: "\u534F\u8BAE\u5BA1\u6838\u4E2D",
+    payment_pending: "\u5F85\u4ED8\u6B3E",
     active: "\u670D\u52A1\u8FDB\u884C\u4E2D",
     acceptance: "\u5F85\u9A8C\u6536",
     done_pending_review: "\u5DF2\u5B8C\u6210\xB7\u5F85\u8BC4\u4EF7",
@@ -3188,6 +3284,7 @@
     contract_customer: contractCustomerScenario,
     contract_provider: contractProviderScenario,
     contract_review: contractReviewScenario,
+    payment_pending: paymentPendingScenario,
     active: activeScenario,
     acceptance: acceptanceScenario,
     done_pending_review: donePendingReviewScenario,
@@ -3280,6 +3377,54 @@
     this.toast(scene ? `\u5DF2\u5207\u6362\u81F3\u201C${scenarioLabels[scene]}\u201D\u573A\u666F` : "\u5DF2\u6062\u590D\u9ED8\u8BA4\u6570\u636E");
   }
 
+  // src/services/favorites.js
+  function getFavoriteTeamIds() {
+    return readJSON(STORAGE_KEYS.favorites, []);
+  }
+  function isFavoriteTeam(teamId) {
+    return getFavoriteTeamIds().includes(teamId);
+  }
+  function toggleFavoriteTeam(teamId) {
+    const ids = getFavoriteTeamIds();
+    const index = ids.indexOf(teamId);
+    if (index >= 0) ids.splice(index, 1);
+    else ids.unshift(teamId);
+    writeJSON(STORAGE_KEYS.favorites, ids);
+    return ids.includes(teamId);
+  }
+  function getFavoriteTeams(teamList = teams) {
+    return getFavoriteTeamIds().map((id) => getTeam(id, teamList)).filter(Boolean);
+  }
+
+  // src/components/favoriteSheet.js
+  var ui2 = {
+    iconPaths,
+    iconFilled,
+    icon(name, size) {
+      return icon.call(ui2, name, size);
+    }
+  };
+  function openFavorites() {
+    const teams2 = getFavoriteTeams(store.teams);
+    let body = '<div class="favorite-team-list">';
+    if (!teams2.length) {
+      body += '<div class="favorite-team-empty">' + ui2.icon("star", 36) + "<strong>\u8FD8\u6CA1\u6709\u6536\u85CF\u56E2\u961F</strong><span>\u6D4F\u89C8\u56E2\u961F\u8BE6\u60C5\u65F6\u53EF\u4EE5\u70B9\u51FB\u53F3\u4E0A\u89D2\u201C\u6536\u85CF\u201D\u3002</span></div>";
+    } else {
+      teams2.forEach((team) => {
+        body += '<button class="favorite-team-row" type="button" data-favorite-team="' + team.id + '"><span class="avatar avatar-sm" style="background:' + (team.avatarColor || "#3A6DF0") + "20;color:" + (team.avatarColor || "#3A6DF0") + '">' + team.avatar + '</span><span class="favorite-team-copy"><strong>' + team.name + "</strong><small>" + team.orgShort + " \xB7 " + team.skus.slice(0, 2).join("\u3001") + "</small></span>" + ui2.icon("chevron-right", 16) + "</button>";
+      });
+    }
+    body += "</div>";
+    const overlay = showSheet.call(ui2, { title: "\u6536\u85CF\u7684\u56E2\u961F", body });
+    overlay.querySelectorAll("[data-favorite-team]").forEach((row) => {
+      row.addEventListener("click", function() {
+        const teamId = this.getAttribute("data-favorite-team");
+        closeAllModals();
+        navigateTo("p3", { teamId });
+      });
+    });
+  }
+
   // src/core/shell.js
   function bindTabBar() {
     const app2 = this;
@@ -3362,61 +3507,29 @@
     this.showTabBar(true);
     const pendingCount = getTodoDemands(store.demands).length;
     const totalDemands = store.demands.length;
-    const html = '<div class="mine-header"><div class="mine-avatar">' + user.avatar + '</div><div class="mine-name">' + user.name + '</div><div style="font-size:var(--font-sm);opacity:0.8;margin-top:4px">' + user.company + " \xB7 " + user.companyType + '</div></div><div class="mine-demand-entry" id="mineDemandEntry"><div class="mine-demand-icon">' + this.icon("file-text", 22) + '</div><div class="mine-demand-info"><div class="mine-demand-title">\u6211\u7684\u9700\u6C42</div><div class="mine-demand-meta">' + (totalDemands > 0 ? totalDemands + " \u4E2A" + (pendingCount > 0 ? " \xB7 " + pendingCount + " \u5F85\u5904\u7406" : "") : "\u6682\u65E0\u9700\u6C42") + '</div></div><div class="info-arrow">' + this.icon("chevron-right", 16) + "</div>" + (pendingCount > 0 ? '<span class="badge-dot"></span>' : "") + '</div><div class="mine-menu"><div class="info-row" data-mine-unavailable><div class="info-label">\u4F01\u4E1A\u4FE1\u606F</div><div class="info-value">\u5DF2\u5B8C\u5584</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u5151\u6362\u4E2D\u5FC3</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u6D88\u606F\u901A\u77E5</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u8BBE\u7F6E</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u5E2E\u52A9\u4E0E\u53CD\u9988</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div></div><div style="text-align:center;padding:16px;font-size:var(--font-sm);color:var(--color-text-4)">\u751F\u6001\u670D\u52A1\u5E73\u53F0 v1.0 \xB7 Demo</div>';
+    const orderStatuses = ["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"];
+    const orders = store.demands.filter((demand) => orderStatuses.includes(demand.status));
+    const afterSaleCount = orders.filter((demand) => demand.afterSale && demand.afterSale.status !== "closed").length;
+    const favoriteCount = getFavoriteTeams(store.teams).length;
+    const paymentCount = orders.filter((demand) => ["payment_pending", "payment_confirming"].includes(demand.status)).length;
+    const html = '<div class="mine-header"><div class="mine-avatar">' + user.avatar + '</div><div class="mine-name">' + user.name + '</div><div style="font-size:var(--font-sm);opacity:0.8;margin-top:4px">' + user.company + " \xB7 " + user.companyType + '</div></div><section class="mine-workbench"><div class="mine-workbench-head"><strong>\u6211\u7684\u670D\u52A1</strong><span>' + pendingCount + ' \u9879\u5F85\u5904\u7406</span></div><div class="mine-service-links"><button id="mineDemandEntry" type="button"><span class="mine-service-icon">' + this.icon("file-text", 21) + "</span><strong>\u6211\u7684\u670D\u52A1\u9700\u6C42</strong><small>" + totalDemands + " \u6761\u9700\u6C42</small>" + this.icon("chevron-right", 15) + '</button><button id="mineOrderEntry" type="button"><span class="mine-service-icon order">' + this.icon("briefcase", 21) + "</span><strong>\u6211\u7684\u8BA2\u5355</strong><small>" + orders.length + " \u4E2A\u670D\u52A1\u8BA2\u5355</small>" + this.icon("chevron-right", 15) + '</button></div><div class="mine-task-stats"><button id="minePendingEntry"><strong>' + pendingCount + '</strong><small>\u5F85\u6211\u5904\u7406</small></button><button id="minePaymentEntry"><strong>' + paymentCount + '</strong><small>\u4ED8\u6B3E\u4E8B\u9879</small></button><button id="mineAfterSaleEntry"><strong>' + afterSaleCount + '</strong><small>\u552E\u540E\u534F\u52A9</small></button></div></section><button class="mine-wecom" id="mineWecomEntry" type="button"><span>' + this.icon("message", 20) + "</span><div><strong>\u5E73\u53F0\u667A\u80FD\u52A9\u624B\u4F01\u4E1A\u5FAE\u4FE1</strong><small>" + (isWecomAdded() ? "\u5DF2\u6DFB\u52A0 \xB7 \u67E5\u770B\u670D\u52A1\u4E0E\u5EFA\u8054\u901A\u77E5" : "\u6DFB\u52A0\u540E\u53CA\u65F6\u63A5\u6536\u5339\u914D\u548C\u670D\u52A1\u8FDB\u5C55") + "</small></div>" + this.icon("chevron-right", 16) + '</button><div class="mine-menu"><div class="info-row" id="mineCompanyEntry"><div class="info-label">\u4F01\u4E1A\u4FE1\u606F</div><div class="info-value">\u5DF2\u5B8C\u5584</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" id="mineFavoritesEntry"><div class="info-label">\u6211\u7684\u6536\u85CF</div><div class="info-value">' + favoriteCount + ' \u4E2A\u56E2\u961F</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" id="mineMessagesEntry"><div class="info-label">\u6D88\u606F\u901A\u77E5</div><div class="info-value">\u670D\u52A1\u8FDB\u5C55\u4E0E\u63D0\u9192</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u8BBE\u7F6E</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div><div class="info-row" data-mine-unavailable><div class="info-label">\u5E2E\u52A9\u4E0E\u53CD\u9988</div><div class="info-arrow">' + this.icon("chevron-right", 16) + '</div></div></div><div style="text-align:center;padding:16px;font-size:var(--font-sm);color:var(--color-text-4)">\u751F\u6001\u670D\u52A1\u5E73\u53F0 v1.0 \xB7 Demo</div>';
     this.setPageContent(html, "mine");
     document.getElementById("mineDemandEntry").addEventListener("click", () => navigateTo("p9", {}));
+    document.getElementById("mineOrderEntry").addEventListener("click", () => navigateTo("p9", { mode: "orders" }));
+    document.getElementById("minePendingEntry").addEventListener("click", () => navigateTo("p9", { filter: "decision" }));
+    document.getElementById("minePaymentEntry").addEventListener("click", () => navigateTo("p9", { mode: "orders", filter: "payment" }));
+    document.getElementById("mineAfterSaleEntry").addEventListener("click", () => navigateTo("p9", { mode: "orders", filter: "after_sale" }));
+    document.getElementById("mineWecomEntry").addEventListener("click", () => openWecomGuide());
+    document.getElementById("mineFavoritesEntry").addEventListener("click", openFavorites);
+    document.getElementById("mineCompanyEntry").addEventListener("click", () => {
+      const overlay = showSheet({ title: "\u4F01\u4E1A\u4FE1\u606F", body: '<div class="mine-company-sheet"><div><span>\u4F01\u4E1A\u540D\u79F0</span><strong>' + user.company + "</strong></div><div><span>\u4F01\u4E1A\u9636\u6BB5</span><strong>" + user.stage + "</strong></div><div><span>\u6240\u5C5E\u884C\u4E1A</span><strong>" + user.industry + "</strong></div><div><span>\u529E\u516C\u5730\u533A</span><strong>" + user.city + " \xB7 " + user.district + '</strong></div><button class="btn btn-outline btn-block" id="mineCompanyEdit" type="button">\u7F16\u8F91\u4F01\u4E1A\u4FE1\u606F</button></div>' });
+      overlay.querySelector("#mineCompanyEdit").addEventListener("click", () => this.toast("\u4F01\u4E1A\u4FE1\u606F\u7F16\u8F91\u529F\u80FD\u5F00\u53D1\u4E2D"));
+    });
+    document.getElementById("mineMessagesEntry").addEventListener("click", () => showSheet({ title: "\u6D88\u606F\u901A\u77E5", body: '<div class="mine-message-list"><div><span>' + this.icon("bell", 18) + "</span><p><strong>\u670D\u52A1\u8FDB\u5C55\u901A\u77E5</strong><small>\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u3001\u4EA4\u4ED8\u548C\u552E\u540E\u8FDB\u5C55\u4F1A\u96C6\u4E2D\u5C55\u793A\u5728\u8FD9\u91CC\u3002</small></p></div><div><span>" + this.icon("message", 18) + "</span><p><strong>\u4F01\u4E1A\u5FAE\u4FE1\u540C\u6B65\u63D0\u9192</strong><small>\u91CD\u8981\u8282\u70B9\u4F1A\u540C\u65F6\u901A\u8FC7\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u3002</small></p></div></div>" }));
     document.querySelectorAll("[data-mine-unavailable]").forEach((row) => {
       row.addEventListener("click", () => this.toast("\u529F\u80FD\u5F00\u53D1\u4E2D"));
     });
     this.updateBadge();
-  }
-
-  // src/services/favorites.js
-  function getFavoriteTeamIds() {
-    return readJSON(STORAGE_KEYS.favorites, []);
-  }
-  function isFavoriteTeam(teamId) {
-    return getFavoriteTeamIds().includes(teamId);
-  }
-  function toggleFavoriteTeam(teamId) {
-    const ids = getFavoriteTeamIds();
-    const index = ids.indexOf(teamId);
-    if (index >= 0) ids.splice(index, 1);
-    else ids.unshift(teamId);
-    writeJSON(STORAGE_KEYS.favorites, ids);
-    return ids.includes(teamId);
-  }
-  function getFavoriteTeams(teamList = teams) {
-    return getFavoriteTeamIds().map((id) => getTeam(id, teamList)).filter(Boolean);
-  }
-
-  // src/components/favoriteSheet.js
-  var ui2 = {
-    iconPaths,
-    iconFilled,
-    icon(name, size) {
-      return icon.call(ui2, name, size);
-    }
-  };
-  function openFavorites() {
-    const teams2 = getFavoriteTeams(store.teams);
-    let body = '<div class="favorite-team-list">';
-    if (!teams2.length) {
-      body += '<div class="favorite-team-empty">' + ui2.icon("star", 36) + "<strong>\u8FD8\u6CA1\u6709\u6536\u85CF\u56E2\u961F</strong><span>\u6D4F\u89C8\u56E2\u961F\u8BE6\u60C5\u65F6\u53EF\u4EE5\u70B9\u51FB\u53F3\u4E0A\u89D2\u201C\u6536\u85CF\u201D\u3002</span></div>";
-    } else {
-      teams2.forEach((team) => {
-        body += '<button class="favorite-team-row" type="button" data-favorite-team="' + team.id + '"><span class="avatar avatar-sm" style="background:' + (team.avatarColor || "#3A6DF0") + "20;color:" + (team.avatarColor || "#3A6DF0") + '">' + team.avatar + '</span><span class="favorite-team-copy"><strong>' + team.name + "</strong><small>" + team.orgShort + " \xB7 " + team.skus.slice(0, 2).join("\u3001") + "</small></span>" + ui2.icon("chevron-right", 16) + "</button>";
-      });
-    }
-    body += "</div>";
-    const overlay = showSheet.call(ui2, { title: "\u6536\u85CF\u7684\u56E2\u961F", body });
-    overlay.querySelectorAll("[data-favorite-team]").forEach((row) => {
-      row.addEventListener("click", function() {
-        const teamId = this.getAttribute("data-favorite-team");
-        closeAllModals();
-        navigateTo("p3", { teamId });
-      });
-    });
   }
 
   // src/services/suggestions.js
@@ -3592,7 +3705,7 @@
     const overlay = document.createElement("div");
     overlay.className = "p1-onboarding-overlay";
     overlay.setAttribute("tabindex", "-1");
-    overlay.innerHTML = '<section class="p1-onboarding-dialog" role="dialog" aria-modal="true" aria-labelledby="p1OnboardingTitle"><div class="p1-onboarding-visual' + (config.imageUrl ? " has-image" : "") + '"' + visualStyle + '><button class="p1-onboarding-close" type="button" aria-label="\u5173\u95ED\u65B0\u624B\u5F15\u5BFC">' + icon("x", 18) + '</button><div class="p1-onboarding-visual-copy"><h2 id="p1OnboardingTitle">' + config.title + "</h2><p>" + config.visualSubtitle + '</p></div><div class="p1-onboarding-service-line">' + config.serviceLabels.map((label) => "<span>" + label + "</span>").join("") + '</div></div><div class="p1-onboarding-content"><p class="p1-onboarding-desc">' + config.description + '</p><div class="p1-onboarding-steps" aria-label="\u670D\u52A1\u6D41\u7A0B">' + config.steps.map((step, index) => "<span><b>" + (index + 1) + "</b>" + step + "</span>").join("") + '</div><button class="btn btn-primary btn-block p1-onboarding-primary" type="button">' + config.primaryText + '</button><button class="p1-onboarding-secondary" type="button">' + config.secondaryText + "</button></div></section>";
+    overlay.innerHTML = '<section class="p1-onboarding-dialog" role="dialog" aria-modal="true" aria-labelledby="p1OnboardingTitle"><div class="p1-onboarding-visual' + (config.imageUrl ? " has-image" : "") + '"' + visualStyle + '><button class="p1-onboarding-close" type="button" aria-label="\u5173\u95ED\u65B0\u624B\u5F15\u5BFC">' + icon("x", 18) + '</button><div class="p1-onboarding-visual-copy"><h2 id="p1OnboardingTitle">' + config.title + "</h2><p>" + config.visualSubtitle + '</p></div><div class="p1-onboarding-service-line">' + config.serviceLabels.map((label) => "<span>" + label + "</span>").join("") + '</div></div><div class="p1-onboarding-content"><p class="p1-onboarding-desc">' + config.description + '</p><div class="p1-onboarding-steps" aria-label="\u670D\u52A1\u6D41\u7A0B">' + config.steps.map((step, index) => "<span><b>" + (index + 1) + "</b>" + step + "</span>").join("") + "</div></div></section>";
     document.querySelector(".phone-screen").appendChild(overlay);
     const dismiss = (next) => {
       rememberOnboarding();
@@ -3603,8 +3716,6 @@
       }, 170);
     };
     overlay.querySelector(".p1-onboarding-close").addEventListener("click", () => dismiss());
-    overlay.querySelector(".p1-onboarding-secondary").addEventListener("click", () => dismiss());
-    overlay.querySelector(".p1-onboarding-primary").addEventListener("click", () => dismiss(() => navigateTo("p5")));
     overlay.addEventListener("click", (event) => {
       if (event.target === overlay) dismiss();
     });
@@ -3612,7 +3723,7 @@
       if (event.key === "Escape") dismiss();
     });
     setTimeout(() => {
-      overlay.querySelector(".p1-onboarding-primary").focus();
+      overlay.querySelector(".p1-onboarding-close").focus();
     }, 180);
   }
 
@@ -3625,14 +3736,18 @@
     const overlay = document.createElement("div");
     overlay.className = "p1-search-overlay";
     overlay.id = "p1SearchOverlay";
-    overlay.innerHTML = '<div class="p1-search-header"><div class="search-bar p1-search-input-wrap"><span class="search-icon">' + icon("search", 17) + '</span><input type="search" id="p1SearchInput" placeholder="\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784" autocomplete="off"></div><button class="p1-search-cancel" id="p1SearchCancel">\u53D6\u6D88</button></div><div class="p1-search-tabs is-hidden" id="p1SearchTabs"><button class="p1-search-tab active" data-type="all">\u5168\u90E8</button><button class="p1-search-tab" data-type="sku">\u670D\u52A1</button><button class="p1-search-tab" data-type="team">\u56E2\u961F</button><button class="p1-search-tab" data-type="org">\u673A\u6784</button></div><div class="p1-search-results" id="p1SearchResults"></div>';
+    overlay.innerHTML = '<div class="p1-search-header"><div class="search-bar p1-search-input-wrap"><span class="search-icon">' + icon("search", 17) + '</span><input type="search" id="p1SearchInput" placeholder="\u8BD5\u8BD5\u641C\u7D22\uFF1A\u80A1\u6743\u8BBE\u8BA1\u3001\u878D\u8D44\u534F\u8BAE\u3001\u5546\u6807\u6CE8\u518C\u2026" autocomplete="off"></div><button class="p1-search-cancel" id="p1SearchCancel">\u53D6\u6D88</button></div><div class="p1-search-tabs is-hidden" id="p1SearchTabs"><button class="p1-search-tab active" data-type="all">\u5168\u90E8</button><button class="p1-search-tab" data-type="sku">\u670D\u52A1</button><button class="p1-search-tab" data-type="team">\u56E2\u961F</button><button class="p1-search-tab" data-type="org">\u673A\u6784</button></div><div class="p1-search-controls is-hidden" id="p1SearchControls"><select id="p1SearchRegion" aria-label="\u6309\u5730\u57DF\u7B5B\u9009"><option value="all">\u5168\u56FD</option><option value="\u5317\u4EAC">\u5317\u4EAC</option><option value="\u4E0A\u6D77">\u4E0A\u6D77</option></select><select id="p1SearchSort" aria-label="\u641C\u7D22\u7ED3\u679C\u6392\u5E8F"><option value="relevance">\u7EFC\u5408\u63A8\u8350</option><option value="rating">\u8BC4\u5206\u4F18\u5148</option><option value="response">\u54CD\u5E94\u66F4\u5FEB</option></select></div><div class="p1-search-results" id="p1SearchResults"></div>';
     document.querySelector(".phone-screen").appendChild(overlay);
     const input = document.getElementById("p1SearchInput");
     const results = document.getElementById("p1SearchResults");
     const tabs = document.getElementById("p1SearchTabs");
+    const controls = document.getElementById("p1SearchControls");
+    const region = document.getElementById("p1SearchRegion");
+    const sort = document.getElementById("p1SearchSort");
     let activeType = "all";
     function renderExplore() {
       tabs.classList.add("is-hidden");
+      controls.classList.add("is-hidden");
       let html = "";
       if (state2.searchHistory.length) {
         html += '<div class="p1-search-block"><div class="p1-search-block-title">\u6700\u8FD1\u641C\u7D22</div><div class="p1-search-chips">';
@@ -3672,32 +3787,38 @@
         return;
       }
       tabs.classList.remove("is-hidden");
+      controls.classList.remove("is-hidden");
       const items = [];
+      const aliases = { "\u80A1\u6743\u8BBE\u8BA1": "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1", "\u878D\u8D44\u534F\u8BAE": "\u878D\u8D44\u4EA4\u6613", "\u80A1\u4E1C\u534F\u8BAE": "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1", "\u77E5\u8BC6\u4EA7\u6743": "\u77E5\u8BC6\u4EA7\u6743\u4FDD\u62A4" };
+      const normalizedQuery = aliases[query] || query;
       if (activeType === "all" || activeType === "sku") {
         if ("\u6295\u878D\u8D44\u670D\u52A1\u5BFB\u627E\u5339\u914D\u6295\u8D44\u4EBA\u5546\u4E1A\u8BA1\u5212\u4E66bp".includes(query)) {
           items.push({ type: "fundraising", id: "fundraising", title: "\u6295\u878D\u8D44\u670D\u52A1", meta: "\u63D0\u4EA4 BP\uFF0C\u5BFB\u627E\u504F\u597D\u5951\u5408\u7684\u6295\u8D44\u4EBA", icon: "trending-up" });
         }
         categories.forEach((category) => category.skus.forEach((sku) => {
-          if (sku.toLowerCase().includes(query) || category.name.toLowerCase().includes(query)) {
-            items.push({ type: "sku", id: sku, title: sku === "\u878D\u8D44\u4EA4\u6613" ? "\u878D\u8D44\u6CD5\u5F8B\u670D\u52A1" : sku, meta: sku === "\u878D\u8D44\u4EA4\u6613" ? "\u5C3D\u8C03\u3001\u4EA4\u6613\u6587\u4EF6\u4E0E\u8C08\u5224\u652F\u6301" : category.name, icon: category.icon });
+          if (sku.toLowerCase().includes(normalizedQuery) || category.name.toLowerCase().includes(query)) {
+            items.push({ type: "sku", id: sku, categoryId: category.id, title: sku === "\u878D\u8D44\u4EA4\u6613" ? "\u878D\u8D44\u6CD5\u5F8B\u670D\u52A1" : sku, meta: sku === "\u878D\u8D44\u4EA4\u6613" ? "\u5C3D\u8C03\u3001\u4EA4\u6613\u6587\u4EF6\u4E0E\u8C08\u5224\u652F\u6301" : category.name, icon: category.icon });
           }
         }));
       }
       if (activeType === "all" || activeType === "team") {
         store.teams.forEach((team) => {
           if ([team.name, team.orgShort, team.skus.join("")].join("").toLowerCase().includes(query)) {
-            items.push({ type: "team", id: team.id, title: team.name, meta: team.orgShort + " \xB7 " + team.skus.slice(0, 2).join("\u3001"), icon: "users" });
+            items.push({ type: "team", id: team.id, title: team.name, meta: team.orgShort + " \xB7 " + team.skus.slice(0, 2).join("\u3001"), icon: "users", city: team.city, rating: team.rating, response: parseFloat(team.avgResponse) || 99 });
           }
         });
       }
       if (activeType === "all" || activeType === "org") {
         orgs.forEach((org) => {
           if ([org.name, org.shortName, org.fields.join("")].join("").toLowerCase().includes(query)) {
-            items.push({ type: "org", id: org.id, title: org.name, meta: org.fields.slice(0, 2).join("\u3001"), icon: "building" });
+            items.push({ type: "org", id: org.id, title: org.name, meta: org.fields.slice(0, 2).join("\u3001"), icon: "building", city: org.city || "" });
           }
         });
       }
-      if (!items.length) {
+      let visibleItems = items.filter((item) => region.value === "all" || !item.city || item.city === region.value);
+      if (sort.value === "rating") visibleItems = visibleItems.sort((left, right) => (right.rating || 0) - (left.rating || 0));
+      if (sort.value === "response") visibleItems = visibleItems.sort((left, right) => (left.response || 99) - (right.response || 99));
+      if (!visibleItems.length) {
         results.innerHTML = '<div class="empty-state p1-search-empty"><div class="empty-icon">' + icon("search", 42) + '</div><div class="empty-title">\u6CA1\u6709\u627E\u5230\u76F8\u5173\u7ED3\u679C</div><div class="empty-desc">\u53EF\u4EE5\u53D1\u5E03\u9700\u6C42\u8BA9\u5E73\u53F0\u534F\u52A9\u5339\u914D\uFF0C\u4E5F\u53EF\u4EE5\u5EFA\u8BAE\u6211\u4EEC\u8865\u5145\u670D\u52A1\u7C7B\u76EE</div><button class="btn btn-primary" id="p1SearchPublish">\u53D1\u5E03\u9700\u6C42</button><button class="btn btn-outline" id="p1SearchSuggest">\u5EFA\u8BAE\u65B0\u589E\u670D\u52A1</button></div>';
         document.getElementById("p1SearchPublish").addEventListener("click", () => {
           overlay.remove();
@@ -3710,8 +3831,8 @@
         });
         return;
       }
-      results.innerHTML = '<div class="p1-search-result-list">' + items.slice(0, 20).map(
-        (item) => '<button class="p1-search-result" data-result-type="' + item.type + '" data-result-id="' + item.id + '"><span class="p1-search-result-icon">' + icon(item.icon, 18) + '</span><span class="p1-search-result-copy"><span>' + item.title + "</span><small>" + item.meta + "</small></span>" + icon("chevron-right", 15) + "</button>"
+      results.innerHTML = '<div class="p1-search-result-list">' + visibleItems.slice(0, 20).map(
+        (item) => '<button class="p1-search-result" data-result-type="' + item.type + '" data-result-id="' + item.id + '" data-result-category="' + (item.categoryId || "") + '"><span class="p1-search-result-icon">' + icon(item.icon, 18) + '</span><span class="p1-search-result-copy"><span>' + item.title + "</span><small>" + item.meta + "</small></span>" + icon("chevron-right", 15) + "</button>"
       ).join("") + "</div>";
       results.querySelectorAll(".p1-search-result").forEach((row) => {
         row.addEventListener("click", function() {
@@ -3720,7 +3841,7 @@
           rememberSearch(state2, this.querySelector(".p1-search-result-copy span").textContent);
           overlay.remove();
           if (type === "fundraising") navigateTo("p12");
-          else if (type === "sku") navigateTo("p5", { sku: id });
+          else if (type === "sku") navigateTo("p2", { categoryId: this.getAttribute("data-result-category"), sku: id });
           else if (type === "team") navigateTo("p3", { teamId: id });
           else navigateTo("p4", { orgId: id });
         });
@@ -3735,6 +3856,8 @@
       });
     });
     input.addEventListener("input", renderResults);
+    region.addEventListener("change", renderResults);
+    sort.addEventListener("change", renderResults);
     document.getElementById("p1SearchCancel").addEventListener("click", () => overlay.remove());
     renderExplore();
     setTimeout(() => input.focus(), 0);
@@ -4274,13 +4397,12 @@
     searchHistory: ["\u5408\u540C\u5BA1\u67E5", "\u516C\u53F8\u6CE8\u518C"],
     activeShelfId: "fundraising",
     render(params = {}) {
-      const favoriteCount = getFavoriteTeams(store.teams).length;
       this.activeShelfId = getHomeServiceTab(params.shelf || this.activeShelfId).id;
       let html = "";
-      html += '<div class="p1-top"><div class="p1-search-row"><button class="search-bar p1-search-trigger" id="p1SearchBar"><span class="search-icon">' + icon("search", 17) + "</span><span>\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784</span></button></div>";
+      html += '<div class="p1-top"><div class="p1-search-row"><button class="search-bar p1-search-trigger" id="p1SearchBar"><span class="search-icon">' + icon("search", 17) + "</span><span>\u8BD5\u8BD5\u641C\u7D22\uFF1A\u80A1\u6743\u8BBE\u8BA1\u3001\u878D\u8D44\u534F\u8BAE\u3001\u5546\u6807\u6CE8\u518C\u2026</span></button></div>";
       html += '<section class="p1-brand-copy"><h1>\u4E13\u4E3A 0-A \u8F6E\u521B\u4E1A\u8005\u6253\u9020\u7684<br>\u751F\u6001\u670D\u52A1\u5E73\u53F0</h1><div class="p1-brand-proof"><span>' + icon("check", 14) + "100%\u8D44\u8D28\u6838\u9A8C</span><span>" + icon("check", 14) + "AI\u667A\u80FD\u5339\u914D</span><span>" + icon("check", 14) + "\u5168\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
       html += '<button class="p1-match-card" id="p1HeroCard" type="button"><span class="p1-match-icon">' + icon("sparkles", 22) + '</span><span class="p1-match-copy"><strong>\u4E0D\u786E\u5B9A\u9700\u8981\u4EC0\u4E48\u670D\u52A1\uFF1F</strong><small>\u5148\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\uFF0CAI \u5E2E\u4F60\u5339\u914D</small></span><span class="p1-match-action">\u5F00\u59CB\u5339\u914D ' + icon("arrow-right", 14) + "</span></button></div>";
-      html += '<section class="p1-marketplace"><div class="p1-marketplace-head"><div><h2>\u627E\u670D\u52A1</h2><p>\u5148\u9009\u670D\u52A1\uFF0C\u518D\u6BD4\u8F83\u4E0D\u540C\u56E2\u961F</p></div><button class="p1-service-favorites" id="p1Favorites">' + icon(favoriteCount ? "star" : "star-outline", 16) + "<span>\u6211\u7684\u6536\u85CF</span>" + (favoriteCount ? "<b>" + favoriteCount + "</b>" : "") + "</button></div>";
+      html += '<section class="p1-marketplace"><div class="p1-marketplace-head"><div><h2>\u627E\u670D\u52A1</h2><p>\u5148\u9009\u670D\u52A1\uFF0C\u518D\u6BD4\u8F83\u4E0D\u540C\u56E2\u961F</p></div></div>';
       html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId);
       html += '<button class="service-suggestion-link p1-suggestion" type="button" id="p1ServiceSuggestion"><span>\u6CA1\u6709\u4F60\u8981\u627E\u7684\u670D\u52A1\uFF1F</span><strong>\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42 ' + icon("arrow-right", 14) + "</strong></button></section>";
       html += renderTodoBar();
@@ -4290,8 +4412,6 @@
     init() {
       showTabBar(true);
       bindTodoBar();
-      const favorites = document.getElementById("p1Favorites");
-      if (favorites) favorites.addEventListener("click", openFavorites);
       document.getElementById("p1SearchBar").addEventListener("click", () => openSearchOverlay(page));
       document.getElementById("p1HeroCard").addEventListener("click", () => navigateTo("p5"));
       document.getElementById("p1ServiceSuggestion").addEventListener("click", () => openServiceSuggestion(""));
@@ -4412,7 +4532,7 @@
       return icon.call(ui4, name, size);
     }
   };
-  var DEFAULT_FILTERS = Object.freeze({ city: "all", price: "all", rating: "all", badge: "all" });
+  var DEFAULT_FILTERS = Object.freeze({ city: "all", price: "all", rating: "all", response: "all", specialty: "all" });
   function createDefaultFilters() {
     return { ...DEFAULT_FILTERS };
   }
@@ -4421,7 +4541,7 @@
     const group = (title, key, options) => '<div class="p2-filter-group"><div class="p2-filter-title">' + title + '</div><div class="p2-filter-options">' + options.map(
       (item) => '<button class="p2-filter-option' + (filters[key] === item.key ? " selected" : "") + '" data-filter-key="' + key + '" data-filter-value="' + item.key + '">' + item.label + "</button>"
     ).join("") + "</div></div>";
-    const body = '<div class="p2-filter-sheet">' + group("\u6240\u5728\u57CE\u5E02", "city", [{ key: "all", label: "\u4E0D\u9650" }, { key: "\u5317\u4EAC", label: "\u5317\u4EAC" }, { key: "\u4E0A\u6D77", label: "\u4E0A\u6D77" }]) + group("\u8D77\u6B65\u4EF7\u683C", "price", [{ key: "all", label: "\u4E0D\u9650" }, { key: "under1000", label: "1000\u5143\u4EE5\u4E0B" }, { key: "1000to3000", label: "1000-3000\u5143" }, { key: "over3000", label: "3000\u5143\u4EE5\u4E0A" }]) + group("\u56E2\u961F\u8BC4\u5206", "rating", [{ key: "all", label: "\u4E0D\u9650" }, { key: "4.8", label: "4.8\u5206\u4EE5\u4E0A" }]) + group("\u56E2\u961F\u6807\u8BC6", "badge", [{ key: "all", label: "\u4E0D\u9650" }, { key: "gold", label: "\u4F18\u9009" }, { key: "flagship", label: "\u65D7\u8230" }]) + '<div class="p2-filter-actions"><button class="btn btn-outline" id="p2FilterReset">\u91CD\u7F6E</button><button class="btn btn-primary" id="p2FilterApply">\u5E94\u7528\u7B5B\u9009</button></div></div>';
+    const body = '<div class="p2-filter-sheet">' + group("\u6240\u5728\u57CE\u5E02", "city", [{ key: "all", label: "\u4E0D\u9650" }, { key: "\u5317\u4EAC", label: "\u5317\u4EAC" }, { key: "\u4E0A\u6D77", label: "\u4E0A\u6D77" }]) + group("\u8D77\u6B65\u4EF7\u683C", "price", [{ key: "all", label: "\u4E0D\u9650" }, { key: "under1000", label: "1000\u5143\u4EE5\u4E0B" }, { key: "1000to3000", label: "1000-3000\u5143" }, { key: "over3000", label: "3000\u5143\u4EE5\u4E0A" }]) + group("\u56E2\u961F\u8BC4\u5206", "rating", [{ key: "all", label: "\u4E0D\u9650" }, { key: "4.8", label: "4.8\u5206\u4EE5\u4E0A" }]) + group("\u54CD\u5E94\u65F6\u95F4", "response", [{ key: "all", label: "\u4E0D\u9650" }, { key: "within4", label: "4\u5C0F\u65F6\u5185" }, { key: "within24", label: "24\u5C0F\u65F6\u5185" }]) + group("\u884C\u4E1A\u4E13\u957F", "specialty", [{ key: "all", label: "\u4E0D\u9650" }, { key: "tech", label: "\u79D1\u6280\u4E0ETMT" }, { key: "startup", label: "\u521D\u521B\u4F01\u4E1A" }, { key: "compliance", label: "\u5408\u89C4\u6CBB\u7406" }]) + '<div class="p2-filter-actions"><button class="btn btn-outline" id="p2FilterReset">\u91CD\u7F6E</button><button class="btn btn-primary" id="p2FilterApply">\u5E94\u7528\u7B5B\u9009</button></div></div>';
     showSheet.call(ui4, { title: "\u7B5B\u9009\u56E2\u961F", body });
     document.querySelectorAll(".p2-filter-option").forEach((option) => {
       option.addEventListener("click", function() {
@@ -4460,6 +4580,11 @@
     const value = parseFloat(String(text || "").replace(/[^0-9.]/g, "")) || 0;
     return String(text).includes("\u4E07") ? value * 1e4 : value;
   }
+  function getTeamPrice(team, selectedSkus) {
+    const sku = selectedSkus[0];
+    const config = sku ? getServicePackageConfig(team.id, sku) : null;
+    return config ? Math.min(...config.plans.map((plan) => plan.price)) : parsePrice(team.priceText);
+  }
   var page2 = {
     state: { categoryId: "", query: "", activeSkus: [], filters: null },
     render(params) {
@@ -4469,14 +4594,14 @@
       this.state = {
         categoryId: params.categoryId,
         query: "",
-        activeSkus: [],
+        activeSkus: params.sku && skus.includes(params.sku) ? [params.sku] : [],
         filters: createDefaultFilters()
       };
-      let html = '<div class="nav-bar"><button class="nav-back" id="p2Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">' + (category ? category.name : "\u670D\u52A1\u56E2\u961F") + '</div><div class="nav-action"></div></div>';
+      let html = '<div class="nav-bar"><button class="nav-back" id="p2Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">' + (params.sku || (category ? category.name : "\u670D\u52A1\u56E2\u961F")) + '</div><div class="nav-action"></div></div>';
       html += '<div class="p2-search-wrap"><label class="search-bar p2-search-field"><span class="search-icon">' + icon("search", 16) + '</span><input id="p2SearchInput" type="search" placeholder="\u641C\u7D22\u56E2\u961F\u6216\u670D\u52A1\u9879\u76EE" autocomplete="off"></label></div>';
       if (skus.length) {
         html += '<div class="p2-quick-tags" id="p2QuickTags">';
-        for (let index = 0; index < Math.min(skus.length, 6); index += 1) html += '<button class="sku-tag" data-sku="' + skus[index] + '">' + skus[index] + "</button>";
+        for (let index = 0; index < Math.min(skus.length, 6); index += 1) html += '<button class="sku-tag' + (this.state.activeSkus.includes(skus[index]) ? " active" : "") + '" data-sku="' + skus[index] + '">' + skus[index] + "</button>";
         html += "</div>";
       }
       html += this.renderAgentSpotlight(params.categoryId);
@@ -4504,12 +4629,18 @@
       return getTeamsByCategory(state2.categoryId, store.teams).filter((team) => {
         if (state2.activeSkus.length && !team.skus.some((sku) => state2.activeSkus.includes(sku))) return false;
         if (state2.filters.city !== "all" && team.city !== state2.filters.city) return false;
-        const price = parsePrice(team.priceText);
+        const price = getTeamPrice(team, state2.activeSkus);
         if (state2.filters.price === "under1000" && price >= 1e3) return false;
         if (state2.filters.price === "1000to3000" && (price < 1e3 || price > 3e3)) return false;
         if (state2.filters.price === "over3000" && price <= 3e3) return false;
         if (state2.filters.rating === "4.8" && team.rating < 4.8) return false;
-        if (state2.filters.badge !== "all" && team.badge !== state2.filters.badge) return false;
+        const responseHours = Number.parseInt(team.avgResponse, 10) || 99;
+        if (state2.filters.response === "within4" && responseHours > 4) return false;
+        if (state2.filters.response === "within24" && responseHours > 24) return false;
+        const specialtyText = [team.desc, ...team.specialties || [], ...team.skus].join("");
+        if (state2.filters.specialty === "tech" && !/科技|TMT|互联网|软件|智能/.test(specialtyText)) return false;
+        if (state2.filters.specialty === "startup" && !/初创|创业|融资|股权/.test(specialtyText)) return false;
+        if (state2.filters.specialty === "compliance" && !/合规|治理|劳动|合同/.test(specialtyText)) return false;
         if (!state2.query) return true;
         return [team.name, team.orgShort, team.desc, team.skus.join("")].join("").toLowerCase().includes(state2.query.toLowerCase());
       });
@@ -4609,6 +4740,41 @@
         });
       });
     });
+  }
+
+  // src/components/directConsultationSheet.js
+  function maskedMobile(value) {
+    const digits = String(value || "").replace(/\s/g, "");
+    if (digits.length < 7) return digits;
+    return digits.slice(0, 3) + "****" + digits.slice(-4);
+  }
+  function openDirectConsultationSheet({ team, sku, selectedPackage, user: user2, onSubmit }) {
+    const packageLine = selectedPackage ? "<div><span>\u670D\u52A1\u6863\u4F4D</span><strong>" + escapeHTML(selectedPackage.name + " \xB7 " + selectedPackage.priceText) + "</strong></div>" : "";
+    const body = '<div class="direct-consultation"><div class="direct-consultation-context"><span>' + icon("file-text", 19) + "</span><div><small>\u672C\u6B21\u54A8\u8BE2</small><strong>" + escapeHTML(sku) + "</strong><em>" + escapeHTML(team.name + " \xB7 " + team.orgShort) + '</em></div></div><div class="direct-consultation-summary">' + packageLine + '<div><span>\u6C9F\u901A\u65B9\u5F0F</span><strong>\u5E73\u53F0\u52A9\u624B\u786E\u8BA4\u4FE1\u606F\uFF0C\u6DF1\u5165\u6C9F\u901A\u7531\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4</strong></div></div><label><span>\u8BF7\u7B80\u5355\u8BF4\u660E\u4F60\u73B0\u5728\u9047\u5230\u7684\u95EE\u9898 <b>\u5FC5\u586B</b></span><textarea id="directConsultationSummary" rows="4" maxlength="300" placeholder="\u4F8B\u5982\uFF1A\u51C6\u5907\u5F15\u5165\u4E00\u4F4D\u8054\u5408\u521B\u59CB\u4EBA\uFF0C\u9700\u8981\u91CD\u65B0\u8BBE\u8BA1\u80A1\u6743\u6BD4\u4F8B\u548C\u63A7\u5236\u6743\u5B89\u6392\u3002"></textarea></label><div class="direct-consultation-grid"><label><span>\u5E0C\u671B\u4EC0\u4E48\u65F6\u5019\u5B8C\u6210</span><select id="directConsultationUrgency"><option>1\u5468\u5185</option><option selected>2\u20144\u5468</option><option>1\u20142\u4E2A\u6708</option><option>\u6682\u4E0D\u786E\u5B9A</option></select></label><label><span>\u8054\u7CFB\u65B9\u5F0F\u786E\u8BA4</span><input id="directConsultationContact" value="' + escapeHTML(maskedMobile(user2.mobile)) + '"></label></div><label class="direct-consultation-file"><span>' + icon("upload", 17) + '<strong id="directConsultationFileName">\u4E0A\u4F20\u76F8\u5173\u6750\u6599\uFF08\u9009\u586B\uFF09</strong></span><input id="directConsultationFile" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label><p class="direct-consultation-note">\u63D0\u4EA4\u540E\u5C06\u751F\u6210\u670D\u52A1\u9700\u6C42\u5355\u3002\u670D\u52A1\u56E2\u961F\u786E\u8BA4\u8303\u56F4\u5E76\u63A8\u9001\u65B9\u6848\u540E\uFF0C\u4F60\u518D\u51B3\u5B9A\u662F\u5426\u7B7E\u7EA6\u3002</p><button class="btn btn-primary btn-block" id="directConsultationSubmit" type="button">\u63D0\u4EA4\u54A8\u8BE2</button></div>';
+    const overlay = showSheet({ title: "\u786E\u8BA4\u54A8\u8BE2\u9700\u6C42", body });
+    const summary = overlay.querySelector("#directConsultationSummary");
+    const file = overlay.querySelector("#directConsultationFile");
+    const fileName = overlay.querySelector("#directConsultationFileName");
+    file.addEventListener("change", () => {
+      fileName.textContent = file.files.length ? file.files[0].name : "\u4E0A\u4F20\u76F8\u5173\u6750\u6599\uFF08\u9009\u586B\uFF09";
+    });
+    overlay.querySelector("#directConsultationSubmit").addEventListener("click", () => {
+      const value = summary.value.trim();
+      if (!value) {
+        summary.classList.add("is-error");
+        summary.focus();
+        return;
+      }
+      overlay.remove();
+      onSubmit({
+        summary: value,
+        urgency: overlay.querySelector("#directConsultationUrgency").value,
+        contact: overlay.querySelector("#directConsultationContact").value.trim(),
+        attachment: file.files.length ? file.files[0].name : "",
+        selectedPackage: selectedPackage || null
+      });
+    });
+    setTimeout(() => summary.focus(), 80);
   }
 
   // src/components/stars.js
@@ -5569,19 +5735,6 @@
     showSheet({ title: group.dir + "\u6848\u4F8B", body });
   }
 
-  // src/pages/p3-detail/sheets/FAQSheet.js
-  var FAQ = [
-    ["\u5E73\u53F0\u5982\u4F55\u4FDD\u969C\u6211\u7684\u4FE1\u606F\u5B89\u5168\uFF1F", "\u9700\u6C42\u53D1\u51FA\u540E\u7531\u5E73\u53F0\u4EE3\u4E3A\u8F6C\u63A5\u6C9F\u901A\uFF0C\u4F60\u7684\u8054\u7CFB\u65B9\u5F0F\u4E0D\u4F1A\u76F4\u63A5\u5C55\u793A\u7ED9\u670D\u52A1\u56E2\u961F\u3002"],
-    ["\u9875\u9762\u4E0A\u7684\u4EF7\u683C\u662F\u6700\u7EC8\u62A5\u4EF7\u5417\uFF1F", "\u9875\u9762\u4EF7\u683C\u4E3A\u8D77\u4EF7\u6216\u53C2\u8003\u4EF7\uFF0C\u6700\u7EC8\u62A5\u4EF7\u4EE5\u53CC\u65B9\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002"],
-    ["\u4EC0\u4E48\u65F6\u5019\u8FDB\u5165\u670D\u52A1\uFF1F", "\u786E\u8BA4\u670D\u52A1\u65B9\u6848\u3001\u5B8C\u6210\u53CC\u65B9\u534F\u8BAE\u5E76\u901A\u8FC7\u5E73\u53F0\u5BA1\u6838\u540E\uFF0C\u56E2\u961F\u5F00\u59CB\u4EA4\u4ED8\u3002"]
-  ];
-  function openFAQSheet() {
-    showSheet({
-      title: "\u5E73\u53F0\u5E38\u89C1\u95EE\u9898",
-      body: FAQ.map((item) => '<div class="p3-faq-item"><strong>Q\uFF1A' + item[0] + "</strong><p>A\uFF1A" + item[1] + "</p></div>").join("")
-    });
-  }
-
   // src/pages/p3-detail/sheets/QuestionSheet.js
   function openQuestionSheet(team, onSubmitted) {
     const overlay = showSheet({
@@ -5640,9 +5793,16 @@
       return;
     }
     const serviceName = sku || team.skus[0];
-    const demand = getOrCreateDirectConsultation(teamId, serviceName, domainOptions3());
-    emitChange();
-    navigateTo("p7", { demandId: demand.id, teamId, sku: serviceName, direct: true });
+    openDirectConsultationSheet({
+      team,
+      sku: serviceName,
+      user,
+      onSubmit(consultation) {
+        const demand = getOrCreateDirectConsultation(teamId, serviceName, { ...domainOptions3(), consultation });
+        emitChange();
+        navigateTo("p7", { demandId: demand.id, teamId, sku: serviceName, direct: true });
+      }
+    });
   }
   var serviceDescriptions = {
     "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": "\u80A1\u6743\u6BD4\u4F8B\u3001\u63A7\u5236\u6743\u4E0E\u671F\u6743\u6C60\u8BBE\u8BA1",
@@ -5686,13 +5846,13 @@
       const selectedCategoryId = selectedCategory ? selectedCategory.id : "";
       const dimensions = getTeamRatingDimensions(team);
       let html = "";
-      html += '<div class="nav-bar"><button class="nav-back" id="p3Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u56E2\u961F\u8BE6\u60C5</div><button class="p3-favorite-action" id="p3Favorite" type="button" aria-pressed="' + isFavoriteTeam(team.id) + '">' + this.renderFavoriteContent(team.id) + "</button></div>";
+      html += '<div class="nav-bar"><button class="nav-back" id="p3Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u56E2\u961F\u8BE6\u60C5</div><div class="nav-action"></div></div>';
       html += '<div class="p3-gallery-wrap">' + renderEntityGallery(team, "team") + '<div class="p3-gallery-identity"><div class="p3-hero-name">' + team.name + (team.badge ? " " + renderBadge(team.badge) : "") + '</div><div class="p3-hero-sub">' + team.orgShort + " \xB7 " + team.city + "\xB7" + team.district + " \xB7 " + icon("check-circle", 13) + " \u8D44\u8D28\u5DF2\u6838\u9A8C</div></div></div>";
-      html += '<div class="anchor-bar" id="p3AnchorBar"><div class="anchor-item active" data-anchor="overview">\u56E2\u961F</div><div class="anchor-item" data-anchor="services">\u670D\u52A1</div><div class="anchor-item" data-anchor="verify">\u8D44\u8D28</div><div class="anchor-item" data-anchor="reviews">\u8BC4\u4EF7</div></div>';
-      html += '<div class="p3-info-card" id="p3-overview"><div class="p3-top-rating">' + renderStars(team.rating) + "<span>" + (team.reviewCount > 0 ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + '</span></div><div class="p3-top-meta"><span>' + icon("price-tag", 14) + " " + selectedPriceLabel + " \xB7 " + (selectedPackageConfig ? "\u4E09\u6863\u660E\u7801\u6807\u4EF7" : team.priceMode) + "</span>" + (team.avgResponse ? "<span>" + icon("zap", 14) + " \u5747\u54CD\u5E94" + team.avgResponse + "</span>" : "") + "</div></div>";
+      html += '<div class="anchor-bar p3-tab-bar" id="p3AnchorBar"><button class="anchor-item active" data-tab="overview">\u6982\u89C8</button><button class="anchor-item" data-tab="services">\u670D\u52A1</button><button class="anchor-item" data-tab="cases">\u6848\u4F8B</button><button class="anchor-item" data-tab="reviews">\u8BC4\u4EF7</button></div>';
+      html += '<div class="p3-info-card" id="p3-overview"><div class="p3-top-rating">' + renderStars(team.rating) + "<span>" + (team.reviewCount > 0 ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + '</span></div><div class="p3-top-meta"><span>' + icon("price-tag", 14) + " " + selectedPriceLabel + " \xB7 " + (selectedPackageConfig ? "\u4E09\u6863\u660E\u7801\u6807\u4EF7" : team.priceMode) + "</span>" + (team.avgResponse ? "<span>" + icon("zap", 14) + " \u5E73\u5747" + team.avgResponse + "\u5185\u54CD\u5E94</span>" : "") + '</div><div class="p3-core-services"><span>\u6838\u5FC3\u670D\u52A1</span>' + team.skus.slice(0, 4).map((sku) => '<button type="button" class="p3-core-service" data-team="' + team.id + '" data-category="' + ((getCategoryForSku(sku, categories) || {}).id || selectedCategoryId) + '" data-sku="' + escapeHTML(sku) + '">' + escapeHTML(sku) + "</button>").join("") + "</div></div>";
+      html += '<div class="p3-tab-panel active" data-panel="overview">';
       html += renderIntro(team);
       html += renderMembers(team);
-      html += renderCases(team, (category, title) => this.getCaseDetail(category, title));
       html += '<section class="p3-section"><div class="p3-section-pad"><div class="section-title">\u6240\u5C5E\u673A\u6784</div><button class="p3-org-link" id="p3OrgLink" type="button"><span><strong>' + team.orgName + "</strong><small>" + team.orgShort + "</small></span>" + icon("chevron-right", 16) + "</button></div></section>";
       if (team.awards && team.awards.length) {
         html += '<section class="p3-section p3-awards-section"><div class="p3-section-pad"><div class="section-title">\u8363\u8A89\u5956\u9879</div><div class="p3-award-list">';
@@ -5701,6 +5861,10 @@
         });
         html += "</div></div></section>";
       }
+      html += renderVerify(team);
+      html += renderQA(getTeamQuestions(team.id, store.teams));
+      html += "</div>";
+      html += '<div class="p3-tab-panel" data-panel="services">';
       html += '<section class="p3-section" id="p3-services"><div class="p3-section-pad"><div class="section-title">\u53EF\u63D0\u4F9B\u670D\u52A1</div>';
       team.skus.forEach((sku) => {
         const serviceCategory = getCategoryForSku(sku, categories);
@@ -5708,11 +5872,13 @@
         html += '<button class="p3-sku-row" type="button" data-team="' + team.id + '" data-category="' + (serviceCategory ? serviceCategory.id : selectedCategoryId) + '" data-sku="' + escapeHTML(sku) + '"><span class="p3-sku-icon">' + icon(serviceCategory ? serviceCategory.icon : "briefcase", 18) + '</span><span class="p3-sku-copy"><strong>' + sku + "</strong><small>" + getServiceDescription(sku) + '</small></span><span class="p3-sku-price"><strong>' + escapeHTML(priceLabel) + "</strong><small>\u67E5\u770B\u6863\u4F4D " + icon("chevron-right", 13) + "</small></span></button>";
       });
       html += "</div></section>";
-      html += renderVerify(team);
+      html += "</div>";
+      html += '<div class="p3-tab-panel" data-panel="cases">' + renderCases(team, (category, title) => this.getCaseDetail(category, title)) + "</div>";
+      html += '<div class="p3-tab-panel" data-panel="reviews">';
       html += renderReviews(team, dimensions);
-      html += renderQA(getTeamQuestions(team.id, store.teams));
+      html += "</div>";
       const matchSelected = params.source === "match" && Boolean(params.matchSelected);
-      html += '<div class="bottom-bar"><button class="p3-bottom-ai" id="p3PlatformFAQ" type="button">' + icon("message", 22) + '<span class="p3-bottom-ai-label">\u5E38\u89C1\u95EE\u9898</span></button><div class="p3-bottom-price"><div class="p3-bottom-price-label">' + (stagedSelected ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u4EF7\u683C\u533A\u95F4") + '</div><div class="p3-bottom-price-val">' + selectedPriceLabel + "</div></div>";
+      html += '<div class="bottom-bar"><button class="p3-bottom-ai p3-bottom-favorite' + (isFavoriteTeam(team.id) ? " active" : "") + '" id="p3Favorite" type="button" aria-pressed="' + isFavoriteTeam(team.id) + '">' + this.renderFavoriteContent(team.id) + '</button><div class="p3-bottom-price"><div class="p3-bottom-price-label">' + (stagedSelected ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u4EF7\u683C\u533A\u95F4") + '</div><div class="p3-bottom-price-val">' + selectedPriceLabel + "</div></div>";
       if (params.source === "match") {
         html += '<button class="btn ' + (matchSelected ? "btn-outline" : "btn-primary") + ' p3-match-select" id="p3MatchSelect" type="button">' + (matchSelected ? "\u53D6\u6D88\u9009\u62E9" : "\u9009\u62E9\u8BE5\u56E2\u961F") + "</button>";
       } else {
@@ -5730,8 +5896,11 @@
         item.addEventListener("click", function() {
           document.querySelectorAll("#p3AnchorBar .anchor-item").forEach((node) => node.classList.remove("active"));
           this.classList.add("active");
-          const target = document.getElementById("p3-" + this.getAttribute("data-anchor"));
-          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+          const tab = this.getAttribute("data-tab");
+          document.querySelectorAll(".p3-tab-panel").forEach((panel) => panel.classList.toggle("active", panel.getAttribute("data-panel") === tab));
+          const viewport = document.getElementById("page-container");
+          const overview = document.getElementById("p3-overview");
+          if (viewport && overview) viewport.scrollTo({ top: Math.max(0, overview.offsetTop - 48), behavior: "smooth" });
         });
       });
       const introToggle = document.getElementById("p3IntroToggle");
@@ -5754,7 +5923,7 @@
       });
       const orgLink = document.getElementById("p3OrgLink");
       if (orgLink) orgLink.addEventListener("click", () => navigateTo("p4", { orgId: this.state.team.orgId }));
-      document.querySelectorAll(".p3-sku-row").forEach((button) => {
+      document.querySelectorAll(".p3-sku-row, .p3-core-service").forEach((button) => {
         button.addEventListener("click", () => navigateTo("p10", {
           teamId: button.getAttribute("data-team"),
           categoryId: button.getAttribute("data-category"),
@@ -5782,8 +5951,6 @@
           }
         });
       }
-      const faqButton = document.getElementById("p3PlatformFAQ");
-      if (faqButton) faqButton.addEventListener("click", () => this.openPlatformFAQ());
       const direct = document.getElementById("p3ConsultDirect");
       if (direct) direct.addEventListener("click", () => {
         const sku = this.state.params.sku && this.state.team.skus.includes(this.state.params.sku) ? this.state.params.sku : this.state.team.skus[0];
@@ -5813,9 +5980,6 @@
     },
     openQuestionSheet() {
       openQuestionSheet(this.state.team, refreshActivePage);
-    },
-    openPlatformFAQ() {
-      openFAQSheet();
     }
   };
   register("p3", page4);
@@ -5892,6 +6056,22 @@
   };
   register("p4", page5);
 
+  // src/domain/afterSale.js
+  function createAfterSale(demand, input, options = {}) {
+    if (!demand || demand.afterSale) return null;
+    const getTime = options.nowLabel || nowLabel;
+    demand.afterSale = {
+      id: `AS-${demand.id.toUpperCase()}`,
+      type: input.type,
+      description: input.description,
+      attachment: input.attachment || "",
+      status: "submitted",
+      submittedAt: getTime()
+    };
+    addTimelineEvent(demand, "shield", "\u5DF2\u7533\u8BF7\u5E73\u53F0\u552E\u540E\u534F\u52A9", input.type, getTime);
+    return demand.afterSale;
+  }
+
   // src/components/anonymousCall.js
   function anonymousCall(team) {
     const name = team ? team.name : "\u670D\u52A1\u56E2\u961F";
@@ -5953,6 +6133,7 @@
     "go-review": ({ demand }) => navigateTo("p8", { demandId: demand.id }),
     "view-review": ({ demand }) => navigateTo("p8", { demandId: demand.id, readonly: true }),
     "continue-cooperation": ({ demand, page: page14 }) => page14.openContinueCooperation(demand),
+    "after-sale": ({ demand, page: page14 }) => page14.openAfterSale(demand),
     withdraw: ({ demand, page: page14, options }) => showModal({
       title: "\u786E\u8BA4\u64A4\u56DE\u9700\u6C42\uFF1F",
       body: "\u64A4\u56DE\u540E\uFF0C\u5DF2\u54CD\u5E94\u7684\u56E2\u961F\u5C06\u6536\u5230\u901A\u77E5\u3002",
@@ -5979,6 +6160,7 @@
     },
     "upload-materials": ({ demand, page: page14 }) => page14.openMaterialUpload(demand),
     "open-agreement": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam, open: "agreement" }),
+    "open-payment": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam, open: "payment" }),
     "replace-batch": ({ demand, page: page14, options }) => {
       const nextTeams = changed(replaceDemandTeamBatch(demand, options));
       toast(nextTeams.length ? "\u539F\u9700\u6C42\u5DF2\u53D1\u9001\u7ED9\u65B0\u7684\u4E00\u6279\u56E2\u961F" : "\u6682\u65F6\u6CA1\u6709\u66F4\u591A\u7B26\u5408\u6761\u4EF6\u7684\u56E2\u961F");
@@ -6022,6 +6204,10 @@
       iconColor = "var(--color-warning)";
       const agreementStatus = demand.agreement && demand.agreement.status;
       text = agreementStatus === "provider_signing" ? "\u5BA2\u6237\u534F\u8BAE\u5DF2\u4E0A\u4F20\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370" : agreementStatus === "auditing" ? "\u53CC\u65B9\u534F\u8BAE\u5DF2\u63D0\u4EA4\uFF0C\u5E73\u53F0\u5BA1\u6838\u4E2D" : "\u670D\u52A1\u65B9\u6848\u5DF2\u786E\u8BA4\uFF0C\u8BF7\u7B7E\u7F72\u670D\u52A1\u534F\u8BAE";
+    } else if (status === "payment_pending" || status === "payment_confirming") {
+      iconName = status === "payment_pending" ? "coins" : "clock";
+      iconColor = status === "payment_pending" ? "var(--color-warning)" : "var(--color-primary)";
+      text = status === "payment_pending" ? "\u534F\u8BAE\u5DF2\u7ECF\u751F\u6548\uFF0C\u8BF7\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u5E76\u4E0A\u4F20\u51ED\u8BC1" : "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26";
     } else if (status === "active") {
       iconName = "check-circle";
       iconColor = "var(--color-success)";
@@ -6128,6 +6314,20 @@
     }[agreement.status] || ["\u534F\u8BAE\u5904\u7406\u4E2D", "\u8BF7\u5728\u670D\u52A1\u8BB0\u5F55\u4E2D\u67E5\u770B\u6700\u65B0\u72B6\u6001"];
     return '<div class="p6-agreement-summary"><span>' + icon("shield", 20) + "</span><div><strong>" + copy[0] + "</strong><small>" + copy[1] + '</small></div><button data-p6-action="open-agreement" data-team-id="' + agreement.teamId + '">\u67E5\u770B\u534F\u8BAE</button></div>';
   }
+  function renderPaymentSummary(demand) {
+    const payment = demand.payment;
+    if (!payment) return "";
+    const confirming = payment.status === "confirming";
+    return '<div class="p6-agreement-summary"><span>' + icon(confirming ? "clock" : payment.status === "paid" ? "check-circle" : "coins", 20) + "</span><div><strong>" + (confirming ? "\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26" : payment.status === "paid" ? "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26" : "\u5F85\u652F\u4ED8\u670D\u52A1\u6B3E") + "</strong><small>" + escapeHTML(payment.amount) + " \xB7 " + escapeHTML(payment.method) + '</small></div><button data-p6-action="open-payment" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u4ED8\u6B3E</button></div>';
+  }
+  function renderAfterSaleSummary(demand) {
+    if (!["active", "acceptance", "done"].includes(demand.status) && !demand.afterSale) return "";
+    if (!demand.afterSale) {
+      return '<div class="p6-after-sale-entry"><span>' + icon("shield", 19) + '</span><div><strong>\u670D\u52A1\u9047\u5230\u95EE\u9898\uFF1F</strong><small>\u5E73\u53F0\u53EF\u4F9D\u636E\u534F\u8BAE\u3001\u4ED8\u6B3E\u548C\u4EA4\u4ED8\u8BB0\u5F55\u534F\u52A9\u6838\u9A8C</small></div><button data-p6-action="after-sale">\u7533\u8BF7\u552E\u540E</button></div>';
+    }
+    const status = { submitted: "\u5E73\u53F0\u6838\u9A8C\u4E2D", supplement: "\u5F85\u8865\u5145\u6750\u6599", processing: "\u534F\u8C03\u5904\u7406\u4E2D", closed: "\u5DF2\u5173\u95ED" }[demand.afterSale.status] || "\u5904\u7406\u4E2D";
+    return '<div class="p6-after-sale-entry active"><span>' + icon("shield", 19) + "</span><div><strong>\u552E\u540E\u534F\u52A9 \xB7 " + status + "</strong><small>" + escapeHTML(demand.afterSale.type) + " \xB7 " + escapeHTML(demand.afterSale.submittedAt) + '</small></div><button data-p6-action="after-sale">\u67E5\u770B</button></div>';
+  }
   function renderPlanTab(demand) {
     const plan = demand.servicePlan;
     if (!plan) return '<div class="empty-state"><div class="empty-icon">' + icon("file-text", 48) + '</div><div class="empty-title">\u670D\u52A1\u65B9\u6848\u5C1A\u672A\u786E\u8BA4</div></div>';
@@ -6165,9 +6365,11 @@
     if (["pending", "choosing", "communicating", "plan_pending"].includes(demand.status)) html += page14.renderResponseRoundSummary(demand);
     html += '<div class="p6-progress-summary">' + (demand.progress || "") + "</div>";
     html += renderDemandTimeline(demand);
-    if (demand.servicePlan && ["plan_pending", "contract_pending", "active"].includes(demand.status)) html += page14.renderPlanTab(demand);
-    if (demand.agreement && demand.status === "contract_pending") html += page14.renderAgreementSummary(demand);
+    if (demand.servicePlan && ["plan_pending", "contract_pending", "payment_pending", "payment_confirming", "active"].includes(demand.status)) html += page14.renderPlanTab(demand);
+    if (demand.agreement && ["contract_pending", "payment_pending", "payment_confirming"].includes(demand.status)) html += page14.renderAgreementSummary(demand);
+    if (demand.payment && ["payment_pending", "payment_confirming", "active"].includes(demand.status)) html += page14.renderPaymentSummary(demand);
     if (demand.delivery && ["acceptance", "done"].includes(demand.status)) html += page14.renderDeliveryTab(demand);
+    html += renderAfterSaleSummary(demand);
     html += "</div>";
     return html;
   }
@@ -6350,6 +6552,8 @@
     },
     renderResponseRoundSummary,
     renderAgreementSummary,
+    renderPaymentSummary,
+    renderAfterSaleSummary,
     renderPlanTab,
     renderDeliveryTab,
     renderResponseBlocks,
@@ -6387,6 +6591,9 @@
       } else if (status === "contract_pending") {
         html += '<button class="btn btn-outline" style="flex:1" data-p6-action="enter-chat" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u786E\u8BA4\u8BB0\u5F55</button>';
         html += '<button class="btn btn-primary" style="flex:1" data-p6-action="open-agreement" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u670D\u52A1\u534F\u8BAE</button>';
+      } else if (status === "payment_pending" || status === "payment_confirming") {
+        html += '<button class="btn btn-outline" style="flex:1" data-p6-action="enter-chat" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u670D\u52A1\u8BB0\u5F55</button>';
+        html += '<button class="btn btn-primary" style="flex:1" data-p6-action="open-payment" data-team-id="' + demand.chosenTeam + '">' + (status === "payment_pending" ? "\u5B8C\u6210\u4ED8\u6B3E" : "\u67E5\u770B\u4ED8\u6B3E\u8BB0\u5F55") + "</button>";
       } else if (status === "active") {
         html += '<button class="btn btn-outline" style="flex:1" data-p6-action="add-service" data-team-id="' + demand.chosenTeam + '">\u670D\u52A1\u589E\u9879</button>';
         html += '<button class="btn btn-primary" style="flex:1" data-p6-action="enter-chat" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u670D\u52A1\u8BB0\u5F55</button>';
@@ -6509,6 +6716,28 @@
         this.refreshPage(demand);
       });
     },
+    openAfterSale(demand) {
+      if (demand.afterSale) {
+        const status = { submitted: "\u5E73\u53F0\u6838\u9A8C\u4E2D", supplement: "\u5F85\u8865\u5145\u6750\u6599", processing: "\u534F\u8C03\u5904\u7406\u4E2D", closed: "\u5DF2\u5173\u95ED" }[demand.afterSale.status] || "\u5904\u7406\u4E2D";
+        showSheet({ title: "\u552E\u540E\u534F\u52A9\u8BB0\u5F55", body: '<div class="p6-after-sale-sheet"><div class="p6-after-sale-state"><span>' + icon("shield", 22) + "</span><div><strong>" + status + "</strong><small>" + escapeHTML(demand.afterSale.id) + " \xB7 " + escapeHTML(demand.afterSale.submittedAt) + "</small></div></div><dl><div><dt>\u95EE\u9898\u7C7B\u578B</dt><dd>" + escapeHTML(demand.afterSale.type) + "</dd></div><div><dt>\u95EE\u9898\u8BF4\u660E</dt><dd>" + escapeHTML(demand.afterSale.description) + "</dd></div></dl><p>\u5E73\u53F0\u4F1A\u4F9D\u636E\u670D\u52A1\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u548C\u4EA4\u4ED8\u8BB0\u5F55\u534F\u52A9\u53CC\u65B9\u6838\u9A8C\u4E0E\u6C9F\u901A\u3002\u9000\u6B3E\u6216\u8865\u507F\u6309\u7167\u53CC\u65B9\u534F\u8BAE\u6267\u884C\u3002</p></div>" });
+        return;
+      }
+      const body = '<div class="p6-after-sale-form"><label><span>\u95EE\u9898\u7C7B\u578B</span><select id="p6AfterSaleType"><option>\u4EA4\u4ED8\u5EF6\u671F</option><option>\u4EA4\u4ED8\u5185\u5BB9\u4E0E\u7EA6\u5B9A\u4E0D\u7B26</option><option>\u670D\u52A1\u5546\u672A\u6309\u65F6\u54CD\u5E94</option><option>\u534F\u8BAE\u6216\u4ED8\u6B3E\u95EE\u9898</option><option>\u53D1\u7968\u95EE\u9898</option><option>\u5176\u4ED6\u95EE\u9898</option></select></label><label><span>\u95EE\u9898\u8BF4\u660E</span><textarea id="p6AfterSaleDesc" rows="4" maxlength="300" placeholder="\u8BF7\u8BF4\u660E\u5B9E\u9645\u60C5\u51B5\u548C\u5E0C\u671B\u5E73\u53F0\u534F\u52A9\u5904\u7406\u7684\u4E8B\u9879"></textarea></label><label class="p6-after-sale-upload"><span>' + icon("upload", 17) + '<strong id="p6AfterSaleFileName">\u4E0A\u4F20\u8BC1\u660E\u6750\u6599\uFF08\u9009\u586B\uFF09</strong></span><input id="p6AfterSaleFile" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><p>\u5E73\u53F0\u8D1F\u8D23\u534F\u52A9\u6838\u9A8C\u4E0E\u6C9F\u901A\uFF0C\u5177\u4F53\u9000\u6B3E\u6216\u8865\u507F\u6309\u7167\u53CC\u65B9\u534F\u8BAE\u6267\u884C\u3002</p><button class="btn btn-primary btn-block" id="p6AfterSaleSubmit">\u63D0\u4EA4\u552E\u540E\u7533\u8BF7</button></div>';
+      const overlay = showSheet({ title: "\u7533\u8BF7\u552E\u540E\u534F\u52A9", body });
+      const file = overlay.querySelector("#p6AfterSaleFile");
+      file.addEventListener("change", () => {
+        overlay.querySelector("#p6AfterSaleFileName").textContent = file.files.length ? file.files[0].name : "\u4E0A\u4F20\u8BC1\u660E\u6750\u6599\uFF08\u9009\u586B\uFF09";
+      });
+      overlay.querySelector("#p6AfterSaleSubmit").addEventListener("click", () => {
+        const description = overlay.querySelector("#p6AfterSaleDesc").value.trim();
+        if (!description) return toast("\u8BF7\u586B\u5199\u95EE\u9898\u8BF4\u660E");
+        createAfterSale(demand, { type: overlay.querySelector("#p6AfterSaleType").value, description, attachment: file.files.length ? file.files[0].name : "" }, domainOptions4());
+        emitChange();
+        overlay.remove();
+        toast("\u552E\u540E\u7533\u8BF7\u5DF2\u63D0\u4EA4\uFF0C\u5E73\u53F0\u5C06\u534F\u52A9\u6838\u9A8C");
+        this.refreshPage(demand);
+      });
+    },
     refreshPage(demand) {
       renderPageContent2(this.render({ demandId: demand.id }), "p6");
       this.init({ demandId: demand.id });
@@ -6579,7 +6808,7 @@
       customer_action: ["\u5F85\u4F60\u7B7E\u7F72", "\u8865\u5145\u4FE1\u606F\u3001\u7528\u5370\u5E76\u4E0A\u4F20"],
       provider_signing: ["\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370", "\u5BA2\u6237\u534F\u8BAE\u5DF2\u4E0A\u4F20"],
       auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E2D", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u8FD4\u56DE\uFF0C\u53EF\u67E5\u770B\u6587\u4EF6"],
-      approved: ["\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u670D\u52A1\u5DF2\u5F00\u59CB"]
+      approved: ["\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u7B49\u5F85\u4ED8\u6B3E"]
     }[agreement.status] || ["\u534F\u8BAE\u5904\u7406\u4E2D", "\u67E5\u770B\u6700\u65B0\u72B6\u6001"];
     return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-agreement-message' + (agreement.status === "approved" ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("shield", 17) + "</span><div><strong>\u670D\u52A1\u534F\u8BAE</strong><small>" + escapeHTML(agreement.id) + '</small></div><span class="p7-structured-status">' + state2[0] + '</span></div><div class="p7-agreement-parties"><span><small>\u5BA2\u6237</small><strong>' + escapeHTML(agreement.customer) + "</strong></span><span><small>\u670D\u52A1\u65B9</small><strong>" + escapeHTML(agreement.provider) + "</strong></span></div><p>" + state2[1] + '</p><button class="btn ' + (agreement.status === "customer_action" ? "btn-primary" : "btn-outline") + ' btn-block" data-agreement-open type="button">' + (agreement.status === "customer_action" ? "\u586B\u5199\u5E76\u4E0A\u4F20\u534F\u8BAE" : "\u67E5\u770B\u534F\u8BAE\u8FDB\u5EA6") + "</button></article></div>";
   }
@@ -6599,6 +6828,18 @@
     const confirmed = Boolean(current.confirmedAt) && latest;
     const status = confirmed ? "\u5DF2\u786E\u8BA4" : latest ? "\u5F85\u4F60\u786E\u8BA4" : "\u5DF2\u66F4\u65B0";
     return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-plan-message' + (!latest ? " superseded" : "") + (confirmed ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("file-text", 17) + "</span><div><strong>\u670D\u52A1\u65B9\u6848</strong><small>" + escapeHTML(plan.submittedAt || "") + '</small></div><span class="p7-structured-status">' + status + "</span></div>" + (plan.changeSummary && latest ? '<div class="p7-plan-change-note">' + icon("refresh", 14) + "<span>" + escapeHTML(plan.changeSummary) + "</span></div>" : "") + '<div class="p7-plan-message-service"><span><small>\u5339\u914D\u670D\u52A1</small><strong>' + escapeHTML(demand.sku) + '</strong></span><button type="button" data-plan-service>\u67E5\u770B\u670D\u52A1\u8BE6\u60C5 ' + icon("chevron-right", 13) + '</button></div><div class="p7-plan-message-metrics"><span><small>\u670D\u52A1\u62A5\u4EF7</small><strong>' + escapeHTML(plan.finalQuote) + "</strong></span><span><small>\u9884\u8BA1\u5468\u671F</small><strong>" + escapeHTML(plan.period) + "</strong></span></div><p>" + escapeHTML(plan.scope) + '</p><div class="p7-card-actions"><button class="btn btn-outline" data-plan-view="' + Number(plan.version || 1) + '">\u67E5\u770B\u5B8C\u6574\u65B9\u6848</button>' + (!confirmed && latest ? '<button class="btn btn-primary" data-plan-confirm>\u786E\u8BA4\u65B9\u6848</button>' : "") + "</div></article></div>";
+  }
+
+  // src/pages/p7-chat/messageCards/PaymentCard.js
+  function renderPaymentCard(demand) {
+    const payment = demand.payment;
+    if (!payment) return "";
+    const copy = {
+      pending: ["\u5F85\u4ED8\u6B3E", "\u534F\u8BAE\u5DF2\u751F\u6548\uFF0C\u8BF7\u5411\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53\u4ED8\u6B3E"],
+      confirming: ["\u786E\u8BA4\u5230\u8D26\u4E2D", "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4"],
+      paid: ["\u5DF2\u5230\u8D26", "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u6536\u6B3E\uFF0C\u670D\u52A1\u6B63\u5F0F\u5F00\u59CB"]
+    }[payment.status] || ["\u4ED8\u6B3E\u5904\u7406\u4E2D", "\u67E5\u770B\u4ED8\u6B3E\u8BB0\u5F55"];
+    return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-payment-card' + (payment.status === "paid" ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("coins", 17) + "</span><div><strong>\u670D\u52A1\u4ED8\u6B3E</strong><small>" + escapeHTML(payment.method) + '</small></div><span class="p7-structured-status">' + copy[0] + '</span></div><div class="p7-payment-amount"><small>\u534F\u8BAE\u91D1\u989D</small><strong>' + escapeHTML(payment.amount) + "</strong></div><p>" + copy[1] + '</p><button class="btn ' + (payment.status === "pending" ? "btn-primary" : "btn-outline") + ' btn-block" data-payment-open type="button">' + (payment.status === "pending" ? "\u67E5\u770B\u6536\u6B3E\u4FE1\u606F\u5E76\u4ED8\u6B3E" : "\u67E5\u770B\u4ED8\u6B3E\u8BB0\u5F55") + "</button></article></div>";
   }
 
   // src/pages/p7-chat/messageCards/RequirementCard.js
@@ -6664,7 +6905,7 @@
       return Boolean(getAcceptedRecord(demand, teamId));
     },
     isFormalService(demand, teamId) {
-      return ["contract_pending", "active", "acceptance", "done"].includes(demand.status) && demand.chosenTeam === teamId;
+      return ["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(demand.status) && demand.chosenTeam === teamId;
     },
     getPlan(version) {
       return version ? getServicePlanVersion(this.state.demand, this.state.team.id, version, domainOptions5()) : getServicePlan(this.state.demand, this.state.team.id, domainOptions5());
@@ -6721,6 +6962,7 @@
       });
       html += this.renderRequirementCard(demand, team);
       if (demand.agreement && !renderedAgreement) html += this.renderAgreementCard(demand);
+      html += renderPaymentCard(demand);
       html += this.renderWecomMessage(demand);
       html += '</div><div class="p7-composer"><div class="p7-quick-replies" aria-label="\u5FEB\u6377\u63D0\u95EE">' + quickReplies.map(
         (text) => '<button type="button" data-quick-reply="' + escapeHTML(text) + '">' + escapeHTML(text) + "</button>"
@@ -6742,6 +6984,7 @@
       document.querySelectorAll("[data-plan-confirm]").forEach((button) => button.addEventListener("click", () => this.confirmPlan()));
       document.querySelectorAll("[data-plan-service]").forEach((button) => button.addEventListener("click", () => navigateTo("p10", { teamId: team.id, categoryId: demand.categoryId, sku: demand.sku })));
       document.querySelectorAll("[data-agreement-open]").forEach((button) => button.addEventListener("click", () => this.openAgreement()));
+      document.querySelectorAll("[data-payment-open]").forEach((button) => button.addEventListener("click", () => this.openPayment()));
       document.querySelectorAll("[data-wecom-open]").forEach((button) => button.addEventListener("click", () => openWecomGuide("serviceConnection")));
       document.querySelectorAll("[data-change-chat]").forEach((button) => button.addEventListener("click", () => this.fillSuggestion("\u6211\u60F3\u7EE7\u7EED\u786E\u8BA4\u8FD9\u9879\u589E\u9879\u7684\u8303\u56F4\u3001\u8D39\u7528\u548C\u5DE5\u671F\u3002")));
       document.querySelectorAll("[data-change-confirm]").forEach((button) => button.addEventListener("click", () => this.confirmChangeOrder(button.getAttribute("data-change-confirm"))));
@@ -6761,6 +7004,7 @@
       if (area) area.scrollTop = area.scrollHeight;
       if (params.open === "plan") setTimeout(() => this.openPlan(), 80);
       if (params.open === "agreement") setTimeout(() => this.openAgreement(), 80);
+      if (params.open === "payment") setTimeout(() => this.openPayment(), 80);
       if (params.open === "change-order") setTimeout(() => this.openChangeOrderSheet(), 80);
       updateBadge();
     },
@@ -6868,12 +7112,12 @@
         customer_action: ["\u5F85\u4F60\u7B7E\u7F72", "\u8BF7\u4E0B\u8F7D\u670D\u52A1\u5546\u63D0\u4F9B\u7684\u534F\u8BAE\u6A21\u677F\uFF0C\u8865\u5145\u4F01\u4E1A\u4FE1\u606F\u5E76\u5B8C\u6210\u7528\u5370\uFF0C\u518D\u4E0A\u4F20\u626B\u63CF\u4EF6\u3002"],
         provider_signing: ["\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370", "\u4F60\u4E0A\u4F20\u7684\u534F\u8BAE\u5DF2\u540C\u6B65\u7ED9\u670D\u52A1\u5546\uFF0C\u670D\u52A1\u5546\u7528\u5370\u540E\u4F1A\u63D0\u4EA4\u5E73\u53F0\u5BA1\u6838\u3002"],
         auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E2D", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u63D0\u4EA4\u5E73\u53F0\uFF0C\u5BA1\u6838\u901A\u8FC7\u540E\u670D\u52A1\u56E2\u961F\u5F00\u59CB\u4EA4\u4ED8\u3002"],
-        approved: ["\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u670D\u52A1\u56E2\u961F\u5DF2\u7ECF\u5F00\u59CB\u4EA4\u4ED8\u3002"]
+        approved: ["\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u8BF7\u6309\u534F\u8BAE\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u3002"]
       }[agreement.status];
       let body = '<div class="p7-agreement-detail"><div class="p7-agreement-state"><span>' + icon("shield", 22) + "</span><div><strong>" + stateCopy[0] + "</strong><p>" + stateCopy[1] + "</p></div></div><dl><div><dt>\u534F\u8BAE\u540D\u79F0</dt><dd>" + escapeHTML(agreement.title) + "</dd></div><div><dt>\u5BA2\u6237</dt><dd>" + escapeHTML(agreement.customer) + "</dd></div><div><dt>\u670D\u52A1\u65B9</dt><dd>" + escapeHTML(agreement.provider) + "</dd></div><div><dt>\u670D\u52A1\u9879\u76EE</dt><dd>" + escapeHTML(agreement.service) + "</dd></div><div><dt>\u534F\u8BAE\u91D1\u989D</dt><dd>" + escapeHTML(agreement.amount) + '</dd></div></dl><button class="p7-template-file" id="p7AgreementTemplate" type="button">' + icon("file-text", 17) + "<span><strong>" + escapeHTML(agreement.template) + "</strong><small>\u670D\u52A1\u5546\u63D0\u4F9B\u7684\u6807\u51C6\u534F\u8BAE\u6A21\u677F</small></span>\u67E5\u770B</button>";
       if (agreement.providerFile) body += '<button class="p7-template-file p7-returned-agreement" id="p7ReturnedAgreement" type="button">' + icon("check-circle", 17) + "<span><strong>" + escapeHTML(agreement.providerFile) + "</strong><small>\u53CC\u65B9\u5DF2\u7528\u5370 \xB7 \u670D\u52A1\u5546\u4E8E " + escapeHTML(agreement.providerUploadedAt || "\u521A\u521A") + " \u56DE\u4F20</small></span>\u67E5\u770B</button>";
       if (agreement.status === "customer_action") body += '<label class="p7-agreement-upload">' + icon("file-text", 18) + '<span id="p7AgreementUploadName">\u9009\u62E9\u5DF2\u7528\u5370\u7684\u534F\u8BAE\u626B\u63CF\u4EF6</span><input id="p7AgreementInput" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p7AgreementSubmit" type="button">\u4E0A\u4F20\u5E76\u63D0\u4EA4\u7ED9\u670D\u52A1\u5546</button>';
-      else body += '<div class="p7-agreement-progress"><span class="done">\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370</span><span class="' + (["provider_signing", "auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u670D\u52A1\u5546\u7528\u5370</span><span class="' + (["auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u5E73\u53F0\u5BA1\u6838</span><span class="' + (agreement.status === "approved" ? "done" : "") + '">\u5F00\u59CB\u4EA4\u4ED8</span></div>';
+      else body += '<div class="p7-agreement-progress"><span class="done">\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370</span><span class="' + (["provider_signing", "auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u670D\u52A1\u5546\u7528\u5370</span><span class="' + (["auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u5E73\u53F0\u5BA1\u6838</span><span class="' + (agreement.status === "approved" ? "done" : "") + '">\u534F\u8BAE\u751F\u6548</span></div>';
       body += "</div>";
       const overlay = showSheet({ title: "\u670D\u52A1\u534F\u8BAE", body });
       overlay.querySelector("#p7AgreementTemplate").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u534F\u8BAE\u6A21\u677F\u9884\u89C8"));
@@ -6921,14 +7165,47 @@
           this.refreshPage();
           const approved = showSheet({
             title: "\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7",
-            body: '<div class="p7-agreement-returned approved"><span>' + icon("shield", 28) + '</span><strong>\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863</strong><p>\u534F\u8BAE\u5DF2\u901A\u8FC7\u5E73\u53F0\u8981\u7D20\u5BA1\u6838\uFF0C\u670D\u52A1\u56E2\u961F\u53EF\u4EE5\u6309\u7EA6\u5F00\u59CB\u4EA4\u4ED8\u3002</p><button class="btn btn-primary btn-block" id="p7AgreementProgress" type="button">\u67E5\u770B\u670D\u52A1\u8FDB\u5EA6</button></div>'
+            body: '<div class="p7-agreement-returned approved"><span>' + icon("shield", 28) + '</span><strong>\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863</strong><p>\u534F\u8BAE\u5DF2\u901A\u8FC7\u5E73\u53F0\u8981\u7D20\u5BA1\u6838\u3002\u4E0B\u4E00\u6B65\u5411\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53\u4ED8\u6B3E\u5E76\u4E0A\u4F20\u51ED\u8BC1\u3002</p><button class="btn btn-primary btn-block" id="p7AgreementProgress" type="button">\u8FDB\u5165\u4ED8\u6B3E</button></div>'
           });
           approved.querySelector("#p7AgreementProgress").addEventListener("click", () => {
             approved.remove();
-            navigateTo("p6", { demandId, tab: "progress" });
+            this.openPayment();
           });
         }, 2800);
       }, 1400);
+    },
+    openPayment() {
+      const demand = this.state.demand;
+      const payment = demand.payment;
+      if (!payment) return toast("\u4ED8\u6B3E\u4FE1\u606F\u5C1A\u672A\u751F\u6210");
+      let action = "";
+      if (payment.status === "pending") {
+        action = '<div class="p7-payment-account"><div><span>\u6536\u6B3E\u65B9</span><strong>' + escapeHTML(demand.agreement.provider) + '</strong></div><div><span>\u5F00\u6237\u94F6\u884C</span><strong>\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C</strong></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>**** **** **** 6628</strong></div></div><label class="p7-agreement-upload">' + icon("upload", 18) + '<span id="p7PaymentFileName">\u9009\u62E9\u4ED8\u6B3E\u51ED\u8BC1</span><input id="p7PaymentInput" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p7PaymentSubmit" type="button">\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1</button>';
+      } else {
+        action = '<div class="p7-payment-result ' + payment.status + '">' + icon(payment.status === "paid" ? "check-circle" : "clock", 21) + "<span><strong>" + (payment.status === "paid" ? "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26" : "\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26") + "</strong><small>" + escapeHTML(payment.receipt || "\u4ED8\u6B3E\u8BB0\u5F55\u5DF2\u7559\u5B58") + "</small></span></div>";
+      }
+      const overlay = showSheet({ title: "\u670D\u52A1\u4ED8\u6B3E", body: '<div class="p7-payment-sheet"><div class="p7-payment-total"><small>\u672C\u6B21\u5E94\u4ED8</small><strong>' + escapeHTML(payment.amount) + "</strong><span>\u8D44\u91D1\u76F4\u63A5\u652F\u4ED8\u7ED9\u670D\u52A1\u5546\uFF0C\u5E73\u53F0\u4E0D\u6258\u7BA1</span></div>" + action + "</div>" });
+      const input = overlay.querySelector("#p7PaymentInput");
+      if (input) input.addEventListener("change", function() {
+        overlay.querySelector("#p7PaymentFileName").textContent = this.files.length ? this.files[0].name : "\u9009\u62E9\u4ED8\u6B3E\u51ED\u8BC1";
+      });
+      const submit = overlay.querySelector("#p7PaymentSubmit");
+      if (submit) submit.addEventListener("click", () => {
+        if (!input.files.length) return toast("\u8BF7\u5148\u9009\u62E9\u4ED8\u6B3E\u51ED\u8BC1");
+        changed2(submitPaymentReceipt(demand, input.files[0].name, domainOptions5()));
+        overlay.remove();
+        this.refreshPage();
+        toast("\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26");
+        setTimeout(() => {
+          const current = getDemand(demand.id, store.demands);
+          if (!current || current.payment?.status !== "confirming") return;
+          changed2(confirmPaymentReceived(current, domainOptions5()));
+          if (document.getElementById("page-container")?.getAttribute("data-page") === "p7") {
+            this.refreshPage();
+            toast("\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26\uFF0C\u670D\u52A1\u6B63\u5F0F\u5F00\u59CB");
+          }
+        }, 1600);
+      });
     },
     openChangeOrderSheet() {
       const body = '<div class="p7-revision-sheet"><p>\u628A\u9700\u8981\u589E\u52A0\u7684\u670D\u52A1\u5185\u5BB9\u544A\u8BC9\u5E73\u53F0\u52A9\u624B\u3002\u670D\u52A1\u56E2\u961F\u8BC4\u4F30\u540E\uFF0C\u4F1A\u5728\u5C0F\u7A0B\u5E8F\u4E2D\u63A8\u9001\u589E\u9879\u5361\u7247\u3002</p><textarea id="p7ChangeNote" maxlength="200" placeholder="\u8BF4\u660E\u65B0\u589E\u9700\u6C42"></textarea><button class="btn btn-primary btn-block" id="p7SubmitChange">\u63D0\u4EA4\u7ED9\u5E73\u53F0\u52A9\u624B</button></div>';
@@ -7233,6 +7510,8 @@
     if (demand.status === "communicating") return { label: "\u8865\u5145\u4FE1\u606F", action: "chat" };
     if (demand.status === "plan_pending") return { label: "\u786E\u8BA4\u670D\u52A1\u65B9\u6848", action: "chat" };
     if (demand.status === "contract_pending") return { label: "\u7B7E\u7F72\u670D\u52A1\u534F\u8BAE", action: "agreement" };
+    if (demand.status === "payment_pending") return { label: "\u5B8C\u6210\u4ED8\u6B3E", action: "payment" };
+    if (demand.status === "payment_confirming") return { label: "\u67E5\u770B\u4ED8\u6B3E\u8BB0\u5F55", action: "payment" };
     if (demand.status === "active") return { label: "\u67E5\u770B\u670D\u52A1\u8FDB\u5EA6", action: "progress" };
     if (demand.status === "acceptance") return { label: "\u786E\u8BA4\u9A8C\u6536", action: "delivery" };
     if (demand.status === "done" && demand.hasReview) return { label: "\u67E5\u770B\u8BC4\u4EF7", action: "review-readonly" };
@@ -7257,7 +7536,7 @@
     if (demand.status !== "done") html += '<div class="p9-card-progress">' + (demand.progress || "") + "</div>";
     html += '<div class="p9-card-meta">' + demand.categoryName + " \xB7 " + demand.sku + "<span>" + demand.date + "</span></div>";
     if (summary.length) html += '<div class="p9-card-resp">' + summary.join(" \xB7 ") + "</div>";
-    const primaryActions = ["review", "accepted", "chat", "agreement", "delivery"];
+    const primaryActions = ["review", "accepted", "chat", "agreement", "payment", "delivery"];
     html += '<div class="p9-card-action"><button class="btn btn-sm ' + (primaryActions.includes(action.action) ? "btn-primary" : "btn-outline") + '" data-p9-action="' + action.action + '" data-demand-id="' + demand.id + '">' + action.label + "</button></div>";
     html += "</article>";
     return html;
@@ -7271,6 +7550,20 @@
     service: "\u6CA1\u6709\u6B63\u5728\u8FDB\u884C\u7684\u670D\u52A1",
     ended: "\u8FD8\u6CA1\u6709\u5DF2\u7ED3\u675F\u7684\u670D\u52A1\u9700\u6C42"
   };
+  var ORDER_EMPTY_DESCRIPTIONS = {
+    all: "\u8FD8\u6CA1\u6709\u8FDB\u5165\u7B7E\u7EA6\u6216\u5C65\u7EA6\u9636\u6BB5\u7684\u8BA2\u5355",
+    payment: "\u76EE\u524D\u6CA1\u6709\u5F85\u4ED8\u6B3E\u8BA2\u5355",
+    service: "\u76EE\u524D\u6CA1\u6709\u670D\u52A1\u4E2D\u7684\u8BA2\u5355",
+    after_sale: "\u76EE\u524D\u6CA1\u6709\u552E\u540E\u534F\u52A9\u8BB0\u5F55",
+    ended: "\u8FD8\u6CA1\u6709\u5DF2\u5B8C\u6210\u7684\u8BA2\u5355"
+  };
+  var ORDER_FILTERS = Object.freeze([
+    Object.freeze({ key: "all", label: "\u5168\u90E8\u8BA2\u5355" }),
+    Object.freeze({ key: "payment", label: "\u5F85\u4ED8\u6B3E" }),
+    Object.freeze({ key: "service", label: "\u670D\u52A1\u4E2D" }),
+    Object.freeze({ key: "after_sale", label: "\u552E\u540E" }),
+    Object.freeze({ key: "ended", label: "\u5DF2\u5B8C\u6210" })
+  ]);
   function byPriorityThenDate(left, right) {
     const priorityDifference = (PRIORITY[left.status] || 99) - (PRIORITY[right.status] || 99);
     if (priorityDifference) return priorityDifference;
@@ -7278,21 +7571,30 @@
     return left.date < right.date ? 1 : -1;
   }
   var page9 = {
-    state: { activeFilter: "all" },
+    state: { activeFilter: "all", mode: "demands" },
     statusFilters: STATUS_FILTERS,
     statusTextMap: STATUS_TEXT,
     emptyDescMap: EMPTY_DESCRIPTIONS,
     getFilteredDemands(filter) {
       let filtered;
+      if (this.state.mode === "orders") {
+        const orders = store.demands.filter((demand) => ["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(demand.status));
+        if (filter === "payment") filtered = orders.filter((demand) => ["payment_pending", "payment_confirming"].includes(demand.status));
+        else if (filter === "service") filtered = orders.filter((demand) => ["active", "acceptance"].includes(demand.status));
+        else if (filter === "after_sale") filtered = orders.filter((demand) => Boolean(demand.afterSale));
+        else if (filter === "ended") filtered = orders.filter((demand) => demand.status === "done");
+        else filtered = orders;
+        return filtered.slice().sort(byPriorityThenDate);
+      }
       if (filter === "all") filtered = store.demands;
-      else if (filter === "decision") filtered = store.demands.filter((demand) => ["choosing", "communicating", "plan_pending", "contract_pending", "acceptance"].includes(demand.status));
+      else if (filter === "decision") filtered = store.demands.filter((demand) => ["choosing", "communicating", "plan_pending", "contract_pending", "payment_pending", "payment_confirming", "acceptance"].includes(demand.status));
       else if (filter === "service") filtered = store.demands.filter((demand) => demand.status === "active");
       else if (filter === "ended") filtered = store.demands.filter((demand) => ["done", "cancelled"].includes(demand.status));
       else filtered = store.demands.filter((demand) => demand.status === filter);
       return filtered.slice().sort(byPriorityThenDate);
     },
     needsAttention(demand) {
-      return ["choosing", "communicating", "plan_pending", "contract_pending", "acceptance"].includes(demand.status) || demand.status === "done" && !demand.hasReview;
+      return ["choosing", "communicating", "plan_pending", "contract_pending", "payment_pending", "payment_confirming", "acceptance"].includes(demand.status) || demand.status === "done" && !demand.hasReview;
     },
     getActionForStatus(demand) {
       return getDemandAction(demand);
@@ -7301,7 +7603,8 @@
     renderList(filter) {
       const demands2 = this.getFilteredDemands(filter);
       if (!demands2.length) {
-        return '<div class="empty-state p9-empty"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">\u6682\u65E0\u9700\u6C42</div><div class="empty-desc">' + this.emptyDescMap[filter] + '</div><button class="btn btn-primary" data-p9-action="new-demand">\u53D1\u5E03\u9700\u6C42</button></div>';
+        const descriptions = this.state.mode === "orders" ? ORDER_EMPTY_DESCRIPTIONS : this.emptyDescMap;
+        return '<div class="empty-state p9-empty"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">' + (this.state.mode === "orders" ? "\u6682\u65E0\u8BA2\u5355" : "\u6682\u65E0\u9700\u6C42") + '</div><div class="empty-desc">' + (descriptions[filter] || descriptions.all) + '</div><button class="btn btn-primary" data-p9-action="new-demand">\u53D1\u5E03\u9700\u6C42</button></div>';
       }
       if (filter !== "all") return demands2.map(renderDemandCard).join("");
       const attention = demands2.filter((demand) => this.needsAttention(demand));
@@ -7319,15 +7622,17 @@
       this.state.keepFilter = this.state.activeFilter;
     },
     render(params) {
+      this.state.mode = params.mode === "orders" ? "orders" : "demands";
+      const filters = this.state.mode === "orders" ? ORDER_FILTERS : this.statusFilters;
       const initialFilter = params.filter || this.state.keepFilter || "all";
       this.state.keepFilter = null;
       this.state.activeFilter = initialFilter;
-      let html = '<div class="p9-page"><div class="nav-bar"><button class="nav-back" id="p9Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u6211\u7684\u670D\u52A1\u9700\u6C42</div><div style="min-width:32px"></div></div>';
+      let html = '<div class="p9-page"><div class="nav-bar"><button class="nav-back" id="p9Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">' + (this.state.mode === "orders" ? "\u6211\u7684\u8BA2\u5355" : "\u6211\u7684\u670D\u52A1\u9700\u6C42") + '</div><div style="min-width:32px"></div></div>';
       if (!isWecomAdded()) {
         html += '<button class="p9-wecom-entry" id="p9WecomEntry" type="button"><span class="p9-wecom-icon">' + icon("bell", 18) + "</span><span><strong>\u6DFB\u52A0\u4F01\u4E1A\u5FAE\u4FE1</strong><small>\u53CA\u65F6\u63A5\u6536\u56E2\u961F\u54CD\u5E94\u548C\u670D\u52A1\u8FDB\u5EA6\u901A\u77E5</small></span>" + icon("chevron-right", 17) + "</button>";
       }
       html += '<div class="p9-status-tabs">';
-      this.statusFilters.forEach((filter) => {
+      filters.forEach((filter) => {
         html += '<button class="p9-status-tab' + (filter.key === initialFilter ? " active" : "") + '" data-p9-filter="' + filter.key + '">' + filter.label + "</button>";
       });
       html += '</div><div id="p9-list" class="p9-list">' + this.renderList(initialFilter) + "</div></div>";
@@ -7373,6 +7678,10 @@
       }
       if (action === "agreement") {
         navigateTo("p7", { demandId: demand.id, teamId: demand.chosenTeam, open: "agreement" });
+        return;
+      }
+      if (action === "payment") {
+        navigateTo("p7", { demandId: demand.id, teamId: demand.chosenTeam, open: "payment" });
         return;
       }
       const tab = action === "accepted" ? "accepted" : action === "delivery" ? "delivery" : action === "progress" ? "progress" : "content";
@@ -7469,24 +7778,27 @@
       return;
     }
     const serviceName = sku || team.skus[0];
-    const demand = getOrCreateDirectConsultation(teamId, serviceName, domainOptions6());
     const packageConfig = getServicePackageConfig(teamId, serviceName);
     const selectedPackage = getDefaultPackage(packageConfig, planId);
-    if (selectedPackage) {
-      demand.selectedPackage = {
-        id: selectedPackage.id,
-        name: selectedPackage.name,
-        priceText: selectedPackage.priceText
-      };
-      demand.budget = selectedPackage.priceText;
-      setDemandField(demand, "\u9884\u7B97\u8303\u56F4", selectedPackage.priceText);
-      setDemandField(demand, "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", selectedPackage.period);
-      setDemandField(demand, "\u670D\u52A1\u6863\u4F4D", selectedPackage.name);
-      setDemandField(demand, "\u670D\u52A1\u4EF7\u683C", selectedPackage.priceText);
-      setDemandField(demand, "\u670D\u52A1\u8FB9\u754C", selectedPackage.boundary);
-    }
-    emitChange();
-    navigateTo("p7", { demandId: demand.id, teamId, sku: serviceName, planId: selectedPackage ? selectedPackage.id : "", direct: true });
+    openDirectConsultationSheet({
+      team,
+      sku: serviceName,
+      selectedPackage,
+      user,
+      onSubmit(consultation) {
+        const demand = getOrCreateDirectConsultation(teamId, serviceName, { ...domainOptions6(), consultation });
+        if (selectedPackage) {
+          demand.budget = selectedPackage.priceText;
+          setDemandField(demand, "\u9884\u7B97\u8303\u56F4", selectedPackage.priceText);
+          setDemandField(demand, "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", consultation.urgency || selectedPackage.period);
+          setDemandField(demand, "\u670D\u52A1\u6863\u4F4D", selectedPackage.name);
+          setDemandField(demand, "\u670D\u52A1\u4EF7\u683C", selectedPackage.priceText);
+          setDemandField(demand, "\u670D\u52A1\u8FB9\u754C", selectedPackage.boundary);
+        }
+        emitChange();
+        navigateTo("p7", { demandId: demand.id, teamId, sku: serviceName, planId: selectedPackage ? selectedPackage.id : "", direct: true });
+      }
+    });
   }
   var page10 = {
     state: { team: null, sku: "", packageConfig: null, selectedPackage: null },
@@ -7725,6 +8037,8 @@
       summary: "\u5173\u6CE8 AI \u5728\u4F01\u4E1A\u670D\u52A1\u573A\u666F\u4E2D\u7684\u843D\u5730\uFF0C\u504F\u597D\u5DF2\u6709\u4ED8\u8D39\u9A8C\u8BC1\u3001\u56E2\u961F\u5177\u5907\u884C\u4E1A\u7ECF\u9A8C\u7684\u9879\u76EE\u3002",
       reasons: ["\u5173\u6CE8\u4F01\u4E1A\u670D\u52A1\u4E0E AI \u5E94\u7528\uFF0C\u548C\u9879\u76EE\u8D5B\u9053\u4E00\u81F4", "\u504F\u597D Pre-A \u9636\u6BB5\uFF0C\u8986\u76D6\u672C\u8F6E\u878D\u8D44\u9636\u6BB5", "\u5355\u7B14\u51FA\u624B\u533A\u95F4\u8986\u76D6\u672C\u8F6E\u878D\u8D44\u89C4\u6A21"],
       accessStatus: "\u5B8C\u6574 BP \u5DF2\u67E5\u770B \xB7 09-03 11:12",
+      responseRate: "\u8FD130\u5929\u56DE\u590D\u7387 86%",
+      cases: ["\u4F01\u4E1A\u670D\u52A1\u9879\u76EE Pre-A \u8F6E", "AI \u5E94\u7528\u9879\u76EE\u5929\u4F7F\u8F6E"],
       requestAt: "09-03 13:36",
       requestMessage: "\u9879\u76EE\u65B9\u5411\u4E0E\u6211\u5173\u6CE8\u7684\u4F01\u4E1A\u670D\u52A1\u8D5B\u9053\u5951\u5408\uFF0C\u5E0C\u671B\u8FDB\u4E00\u6B65\u4E86\u89E3\u4EA7\u54C1\u7559\u5B58\u548C\u672C\u8F6E\u8D44\u91D1\u4F7F\u7528\u8BA1\u5212\u3002"
     },
@@ -7740,6 +8054,8 @@
       summary: "\u957F\u671F\u5173\u6CE8\u534F\u4F5C\u5DE5\u5177\u4E0E\u6548\u7387\u8F6F\u4EF6\uFF0C\u91CD\u89C6\u4EA7\u54C1\u7559\u5B58\u548C\u521B\u59CB\u56E2\u961F\u7684\u6267\u884C\u901F\u5EA6\u3002",
       reasons: ["\u6295\u8D44\u65B9\u5411\u8986\u76D6\u534F\u4F5C\u5DE5\u5177\u4E0E\u6548\u7387\u8F6F\u4EF6", "\u9879\u76EE\u9636\u6BB5\u5904\u4E8E\u5176\u5E38\u89C1\u51FA\u624B\u8303\u56F4", "\u4EA7\u54C1\u5DF2\u6709\u521D\u6B65\u5546\u4E1A\u9A8C\u8BC1"],
       accessStatus: "\u5B8C\u6574 BP \u5DF2\u67E5\u770B \xB7 09-03 11:40",
+      responseRate: "\u8FD130\u5929\u56DE\u590D\u7387 78%",
+      cases: ["\u534F\u4F5C\u8F6F\u4EF6\u79CD\u5B50\u8F6E", "\u6548\u7387\u5DE5\u5177 Pre-A \u8F6E"],
       requestAt: "09-03 12:10",
       requestMessage: "\u5E0C\u671B\u8FDB\u4E00\u6B65\u4E86\u89E3\u4EA7\u54C1\u7559\u5B58\u3001\u7EED\u8D39\u60C5\u51B5\u548C\u672A\u6765\u5341\u4E8C\u4E2A\u6708\u7684\u9500\u552E\u8BA1\u5212\u3002"
     },
@@ -7755,6 +8071,8 @@
       summary: "\u6709\u4F01\u4E1A\u8F6F\u4EF6\u521B\u4E1A\u4E0E\u6295\u8D44\u7ECF\u5386\uFF0C\u5173\u6CE8\u4EA7\u54C1\u5546\u4E1A\u5316\u6548\u7387\u548C\u56E2\u961F\u7684\u884C\u4E1A\u7406\u89E3\u3002",
       reasons: ["\u4F01\u4E1A\u8F6F\u4EF6\u7ECF\u9A8C\u4E0E\u9879\u76EE\u5E94\u7528\u573A\u666F\u76F8\u5173", "\u51FA\u624B\u9636\u6BB5\u8986\u76D6\u672C\u8F6E\u878D\u8D44\u8F6E\u6B21", "\u5173\u6CE8\u5317\u4EAC\u53CA\u6838\u5FC3\u57CE\u5E02\u9879\u76EE"],
       accessStatus: "\u5B8C\u6574 BP \u5DF2\u67E5\u770B \xB7 09-02 15:50",
+      responseRate: "\u8FD130\u5929\u56DE\u590D\u7387 91%",
+      cases: ["\u4F01\u4E1A\u8F6F\u4EF6 A \u8F6E", "\u77E5\u8BC6\u7BA1\u7406 Pre-A \u8F6E"],
       requestAt: "09-02 16:20",
       requestMessage: "\u9879\u76EE\u4E0E\u6211\u7684\u4F01\u4E1A\u8F6F\u4EF6\u7ECF\u9A8C\u76F8\u5173\uFF0C\u5E0C\u671B\u548C\u56E2\u961F\u8FDB\u4E00\u6B65\u4EA4\u6D41\u5546\u4E1A\u5316\u8DEF\u5F84\u3002"
     },
@@ -7770,6 +8088,8 @@
       summary: "\u5173\u6CE8\u53EF\u5FEB\u901F\u9A8C\u8BC1\u4EF7\u503C\u7684 AI \u5E94\u7528\uFF0C\u504F\u597D\u6709\u660E\u786E\u4ED8\u8D39\u573A\u666F\u548C\u590D\u8D2D\u8DEF\u5F84\u7684\u56E2\u961F\u3002",
       reasons: ["AI \u5E94\u7528\u65B9\u5411\u4E0E\u9879\u76EE\u6807\u7B7E\u4E00\u81F4", "\u9636\u6BB5\u504F\u597D\u8986\u76D6\u672C\u8F6E\u878D\u8D44", "\u5173\u6CE8\u5DF2\u6709\u4ED8\u8D39\u9A8C\u8BC1\u7684\u4EA7\u54C1"],
       accessStatus: "\u5B8C\u6574 BP \u5DF2\u67E5\u770B \xB7 09-02 13:40",
+      responseRate: "\u8FD130\u5929\u56DE\u590D\u7387 72%",
+      cases: ["AI \u751F\u4EA7\u529B\u5DE5\u5177\u5929\u4F7F\u8F6E"],
       requestAt: "09-02 14:12",
       requestMessage: "\u66FE\u5E0C\u671B\u4E86\u89E3\u4ED8\u8D39\u5BA2\u6237\u7ED3\u6784\uFF0C\u540E\u7EED\u56E0\u6295\u8D44\u8282\u594F\u8C03\u6574\u64A4\u56DE\u4E86\u5EFA\u8054\u7533\u8BF7\u3002"
     },
@@ -7785,6 +8105,8 @@
       summary: "\u504F\u597D\u5177\u5907\u6301\u7EED\u6536\u5165\u548C\u6E05\u6670\u5BA2\u6237\u753B\u50CF\u7684 SaaS \u9879\u76EE\uFF0C\u4E5F\u5173\u6CE8 AI \u5E26\u6765\u7684\u4EA7\u54C1\u6548\u7387\u63D0\u5347\u3002",
       reasons: ["SaaS \u4E0E\u534F\u4F5C\u5E73\u53F0\u65B9\u5411\u9AD8\u5EA6\u76F8\u5173", "\u5730\u57DF\u504F\u597D\u8986\u76D6\u9879\u76EE\u6240\u5728\u5730", "\u51FA\u624B\u533A\u95F4\u8986\u76D6\u672C\u8F6E\u9700\u6C42"],
       accessStatus: "\u5B8C\u6574 BP \u5DF2\u67E5\u770B \xB7 08-30 09:40",
+      responseRate: "\u8FD130\u5929\u56DE\u590D\u7387 81%",
+      cases: ["SaaS \u5E73\u53F0 Pre-A \u8F6E", "\u534F\u4F5C\u4EA7\u54C1 A \u8F6E"],
       requestAt: "08-30 10:15",
       requestMessage: "\u5E0C\u671B\u4EA4\u6D41\u672C\u8F6E\u878D\u8D44\u5B89\u6392\uFF0C\u672C\u6B21\u7533\u8BF7\u56E0\u8D85\u8FC7\u5904\u7406\u65F6\u9650\u81EA\u52A8\u5173\u95ED\u3002"
     }
@@ -7909,12 +8231,20 @@
     ];
     return '<section class="p12-connection-overview"><div><h2>\u6295\u8D44\u4EBA\u8FDB\u5C55</h2><button id="p12OverviewResults" type="button">\u67E5\u770B\u5168\u90E8</button></div><p>' + groups.map((item) => '<span class="' + item[2] + '"><strong>' + item[1] + "</strong><small>" + item[0] + "</small></span>").join("") + "</p></section>";
   }
+  function fundraisingFunnel(state2) {
+    const counts = getConnectionCounts();
+    const recommended = state2.recommendedInvestorIds?.length || (state2.status === "matched" ? investors.length : 0);
+    const viewed = recommended ? Math.max(Object.keys(state2.investorConnections || {}).length, Math.min(3, recommended)) : 0;
+    const interested = counts.requested + counts.entrepreneur_requested + counts.confirmed + counts.connecting + counts.connected;
+    const connected = counts.connected;
+    return '<section class="p12-funnel" aria-label="\u672C\u8F6E\u878D\u8D44\u5339\u914D\u6570\u636E"><div><strong>' + recommended + "</strong><span>\u5DF2\u63A8\u8350</span></div><i></i><div><strong>" + viewed + "</strong><span>\u5DF2\u67E5\u770B</span></div><i></i><div><strong>" + interested + "</strong><span>\u6709\u5174\u8DA3</span></div><i></i><div><strong>" + connected + "</strong><span>\u5DF2\u5EFA\u8054</span></div></section>";
+  }
   function progressView(state2) {
     const copy = progressCopy(state2);
     const counts = getConnectionCounts();
     const hasProgress = state2.status === "matched" || Object.values(counts).some(Boolean);
     const manageState = counts.entrepreneur_requested > 0 ? ["\u7B49\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4", "\u9879\u76EE\u6458\u8981\u5DF2\u53D1\u9001\uFF0C\u786E\u8BA4\u7ED3\u679C\u4F1A\u53CA\u65F6\u901A\u77E5"] : counts.confirmed + counts.connecting > 0 ? ["\u6301\u7EED\u5339\u914D \xB7 \u5EFA\u8054\u5904\u7406\u4E2D", "\u5E73\u53F0\u6309\u6295\u8D44\u4EBA\u5206\u522B\u8BB0\u5F55\u548C\u534F\u52A9\u5EFA\u8054"] : counts.connected > 0 ? ["\u672C\u8F6E\u6301\u7EED\u5339\u914D", "\u5DF2\u6709\u5EFA\u8054\u5B8C\u6210\uFF0C\u4ECD\u53EF\u63A5\u6536\u65B0\u7ED3\u679C"] : state2.paused ? ["\u5DF2\u6682\u505C\u5339\u914D", "\u6062\u590D\u540E\u7EE7\u7EED\u6838\u5BF9\u6295\u8D44\u504F\u597D"] : ["\u6301\u7EED\u5339\u914D\u4E2D", "\u6709\u8FDB\u5C55\u65F6\u5C06\u53CA\u65F6\u901A\u77E5\u4F60"];
-    return '<div class="p12-page">' + header("\u878D\u8D44\u5339\u914D\u8FDB\u5EA6") + '<section class="p12-status-head ' + (hasProgress ? "has-result" : "") + '"><span>' + icon(copy.iconName, 26) + "</span><h1>" + copy.title + "</h1><p>" + copy.desc + "</p>" + (copy.action ? '<button class="btn btn-primary" id="p12ViewResults" type="button">' + copy.action + "</button>" : "") + "</section>" + connectionOverview() + '<section class="p12-status-list"><h2>\u672C\u8F6E\u8FDB\u5EA6</h2>' + timelineView(state2) + '</section><section class="p12-notice"><div><h2>\u8FDB\u5C55\u901A\u77E5</h2><button id="p12NoticeInfo" type="button">\u7BA1\u7406</button></div><p><span>' + icon("inbox", 16) + "\u7AD9\u5185\u6D88\u606F\u5DF2\u5F00\u542F</span><span>" + icon("message", 16) + (isWecomAdded() ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4F01\u4E1A\u5FAE\u4FE1\u5F85\u6DFB\u52A0") + '</span></p></section><section class="p12-manage"><h2>\u672C\u8F6E\u5339\u914D\u7BA1\u7406</h2><div class="p12-manage-row"><span class="p12-manage-icon">' + icon("file-text", 17) + '</span><span class="p12-manage-copy"><small>\u5F53\u524D BP</small><strong>' + escapeHTML(state2.bpName || "\u661F\u8FB0\u79D1\u6280\u5546\u4E1A\u8BA1\u5212\u4E66.pdf") + "</strong><em>" + escapeHTML(state2.bpUpdatedAt || "2026-09-03") + ' \u66F4\u65B0</em></span><button id="p12UpdateBp" type="button">\u66F4\u65B0 ' + icon("chevron-right", 14) + '</button></div><div class="p12-manage-row"><span class="p12-manage-icon">' + icon(state2.paused ? "pause" : "refresh", 17) + '</span><span class="p12-manage-copy"><small>\u5339\u914D\u72B6\u6001</small><strong>' + manageState[0] + "</strong><em>" + manageState[1] + '</em></span><button id="p12TogglePause" type="button">' + (state2.paused ? "\u6062\u590D" : "\u6682\u505C") + " " + icon("chevron-right", 14) + '</button></div><button class="p12-manage-row p12-manage-record" id="p12Logs" type="button"><span class="p12-manage-icon">' + icon("shield", 17) + '</span><span class="p12-manage-copy"><small>\u8D44\u6599\u6743\u9650</small><strong>\u6388\u6743\u4E0E\u8BBF\u95EE\u8BB0\u5F55</strong><em>\u6309\u6295\u8D44\u4EBA\u67E5\u770B\u81EA\u52A8\u6838\u9A8C\u4E0E\u8BBF\u95EE\u7559\u75D5</em></span><span class="p12-manage-link">\u67E5\u770B ' + icon("chevron-right", 14) + '</span></button><div class="p12-manage-danger"><button id="p12End" type="button">\u7ED3\u675F\u672C\u8F6E\u5339\u914D</button></div></section></div>';
+    return '<div class="p12-page">' + header("\u878D\u8D44\u5339\u914D\u8FDB\u5EA6") + '<section class="p12-status-head ' + (hasProgress ? "has-result" : "") + '"><span>' + icon(copy.iconName, 26) + "</span><h1>" + copy.title + "</h1><p>" + copy.desc + "</p>" + (copy.action ? '<button class="btn btn-primary" id="p12ViewResults" type="button">' + copy.action + "</button>" : "") + "</section>" + fundraisingFunnel(state2) + connectionOverview() + '<section class="p12-status-list"><h2>\u672C\u8F6E\u8FDB\u5EA6</h2>' + timelineView(state2) + '</section><section class="p12-notice"><div><h2>\u8FDB\u5C55\u901A\u77E5</h2><button id="p12NoticeInfo" type="button">\u7BA1\u7406</button></div><p><span>' + icon("inbox", 16) + "\u7AD9\u5185\u6D88\u606F\u5DF2\u5F00\u542F</span><span>" + icon("message", 16) + (isWecomAdded() ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4F01\u4E1A\u5FAE\u4FE1\u5F85\u6DFB\u52A0") + '</span></p></section><section class="p12-manage"><h2>\u672C\u8F6E\u5339\u914D\u7BA1\u7406</h2><div class="p12-manage-row"><span class="p12-manage-icon">' + icon("file-text", 17) + '</span><span class="p12-manage-copy"><small>\u5F53\u524D BP</small><strong>' + escapeHTML(state2.bpName || "\u661F\u8FB0\u79D1\u6280\u5546\u4E1A\u8BA1\u5212\u4E66.pdf") + "</strong><em>" + escapeHTML(state2.bpUpdatedAt || "2026-09-03") + ' \u66F4\u65B0</em></span><button id="p12UpdateBp" type="button">\u66F4\u65B0 ' + icon("chevron-right", 14) + '</button></div><div class="p12-manage-row"><span class="p12-manage-icon">' + icon(state2.paused ? "pause" : "refresh", 17) + '</span><span class="p12-manage-copy"><small>\u5339\u914D\u72B6\u6001</small><strong>' + manageState[0] + "</strong><em>" + manageState[1] + '</em></span><button id="p12TogglePause" type="button">' + (state2.paused ? "\u6062\u590D" : "\u6682\u505C") + " " + icon("chevron-right", 14) + '</button></div><button class="p12-manage-row p12-manage-record" id="p12Logs" type="button"><span class="p12-manage-icon">' + icon("shield", 17) + '</span><span class="p12-manage-copy"><small>\u8D44\u6599\u6743\u9650</small><strong>\u6388\u6743\u4E0E\u8BBF\u95EE\u8BB0\u5F55</strong><em>\u6309\u6295\u8D44\u4EBA\u67E5\u770B\u81EA\u52A8\u6838\u9A8C\u4E0E\u8BBF\u95EE\u7559\u75D5</em></span><span class="p12-manage-link">\u67E5\u770B ' + icon("chevron-right", 14) + '</span></button><div class="p12-manage-danger"><button id="p12End" type="button">\u7ED3\u675F\u672C\u8F6E\u5339\u914D</button></div></section></div>';
   }
   function connectionMeta(investor, state2) {
     const record = state2.investorConnections?.[investor.id];
@@ -7937,7 +8267,7 @@
   function resultsView(state2) {
     const batchIndex = Number(state2.investorBatch || 0) % investorBatches.length;
     const batch = investorBatches[batchIndex];
-    return '<div class="p12-page">' + header("\u5339\u914D\u5230\u7684\u6295\u8D44\u4EBA") + '<section class="p12-results-head"><div><h1>\u672C\u6279\u63A8\u8350\u7684\u6295\u8D44\u4EBA</h1><span>\u7B2C ' + (batchIndex + 1) + " \u6279 \xB7 " + batch.length + ' \u4F4D</span></div><p>\u4EE5\u4E0B\u6295\u8D44\u4EBA\u5DF2\u53D1\u5E03\u6709\u6548\u7684\u201C\u6211\u8981\u627E\u9879\u76EE\u201D\u9700\u6C42\u5E76\u5B8C\u6210\u6295\u5411\u586B\u62A5\u3002\u6BCF\u6279\u6700\u591A\u5C55\u793A 5 \u4F4D\uFF0C\u5E73\u53F0\u5C55\u793A\u5177\u4F53\u5339\u914D\u4F9D\u636E\uFF0C\u4E0D\u516C\u5F00\u5185\u90E8\u5339\u914D\u5206\u6570\u3002</p></section><section class="p12-investor-list">' + batch.map((investor) => {
+    return '<div class="p12-page">' + header("\u5339\u914D\u5230\u7684\u6295\u8D44\u4EBA") + '<section class="p12-results-head"><div><h1>\u672C\u6279\u63A8\u8350\u7684\u6295\u8D44\u4EBA</h1><span>\u7B2C ' + (batchIndex + 1) + " \u6279 \xB7 " + batch.length + " \u4F4D</span></div><p>\u4EE5\u4E0B\u6295\u8D44\u4EBA\u5DF2\u53D1\u5E03\u6709\u6548\u7684\u201C\u6211\u8981\u627E\u9879\u76EE\u201D\u9700\u6C42\u5E76\u5B8C\u6210\u6295\u5411\u586B\u62A5\u3002\u6BCF\u6279\u6700\u591A\u5C55\u793A 5 \u4F4D\uFF0C\u5E73\u53F0\u5C55\u793A\u5177\u4F53\u5339\u914D\u4F9D\u636E\uFF0C\u4E0D\u516C\u5F00\u5185\u90E8\u5339\u914D\u5206\u6570\u3002</p></section>" + fundraisingFunnel(state2) + '<section class="p12-investor-list">' + batch.map((investor) => {
       const meta = connectionMeta(investor, state2);
       const controls = meta.fresh ? '<div class="p12-investor-card-buttons"><button type="button" data-investor-detail="' + investor.id + '">\u67E5\u770B\u8BE6\u60C5</button><button class="is-primary" type="button" data-investor-request="' + investor.id + '">\u7533\u8BF7\u5BF9\u63A5</button></div>' : '<button type="button" data-investor-id="' + investor.id + '">' + meta.action + "</button>";
       return '<article class="p12-investor"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + (investor.verified ? "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b>" : "") + "</h2><p>" + investor.role + '</p></div></div><p class="p12-investor-summary">' + investor.summary + "</p><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u51FA\u624B\u533A\u95F4</dt><dd>" + investor.ticket + '</dd></div></dl><div class="p12-reasons"><strong>\u4E3A\u4EC0\u4E48\u5339\u914D</strong>' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><div class="p12-investor-actions"><span class="' + meta.className + '">' + meta.label + "</span>" + controls + "</div></article>";
@@ -7960,7 +8290,7 @@
     } else if (record?.status === "expired") {
       action = '<div class="p12-terminal-state expired">' + icon("clock", 18) + "<span><strong>\u672C\u6B21\u5EFA\u8054\u7533\u8BF7\u5DF2\u8D85\u65F6</strong><small>" + (record.resolvedAt || "\u5DF2\u81EA\u52A8\u5173\u95ED") + " \xB7 \u8D85\u8FC7 72 \u5C0F\u65F6\u672A\u5B8C\u6210\u53CC\u65B9\u786E\u8BA4</small></span></div>";
     }
-    return '<div class="p12-investor-sheet"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b></h2><p>" + investor.role + "</p></div></div><h3>\u6295\u8D44\u504F\u597D</h3><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u5355\u7B14\u533A\u95F4</dt><dd>" + investor.ticket + "</dd></div><div><dt>\u5730\u57DF\u504F\u597D</dt><dd>" + investor.region + '</dd></div></dl><h3>\u5339\u914D\u4F9D\u636E</h3><div class="p12-reasons">' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><h3>\u8D44\u6599\u8BBF\u95EE</h3><div class="p12-access-record">' + icon("shield", 17) + "<span><strong>" + (freshResult ? "\u5148\u53D1\u9001\u8131\u654F\u9879\u76EE\u6458\u8981" : investor.accessStatus) + "</strong><small>" + (freshResult ? "\u6295\u8D44\u4EBA\u786E\u8BA4\u611F\u5174\u8DA3\u540E\uFF0C\u53EF\u6309\u672C\u8F6E\u6388\u6743\u89C4\u5219\u7533\u8BF7\u67E5\u770B\u6700\u65B0\u7248\u5B8C\u6574 BP\uFF1B\u6BCF\u6B21\u8BBF\u95EE\u90FD\u4F1A\u7559\u75D5\u3002" : "\u8EAB\u4EFD\u3001\u5339\u914D\u6761\u4EF6\u3001\u67E5\u770B\u610F\u613F\u548C\u4FDD\u5BC6\u72B6\u6001\u5747\u5DF2\u81EA\u52A8\u6838\u9A8C\uFF0C\u8BBF\u95EE\u8BB0\u5F55\u5DF2\u7559\u75D5\u3002") + "</small></span></div>" + action + "</div>";
+    return '<div class="p12-investor-sheet"><div class="p12-investor-head"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><h2>" + investor.name + "<b>" + icon("check-circle", 13) + "\u8EAB\u4EFD\u5DF2\u6838\u9A8C</b></h2><p>" + investor.role + '</p><small class="p12-response-rate">' + investor.responseRate + "</small></div></div><h3>\u6295\u8D44\u504F\u597D</h3><dl><div><dt>\u5173\u6CE8\u65B9\u5411</dt><dd>" + investor.focus + "</dd></div><div><dt>\u504F\u597D\u9636\u6BB5</dt><dd>" + investor.stage + "</dd></div><div><dt>\u5355\u7B14\u533A\u95F4</dt><dd>" + investor.ticket + "</dd></div><div><dt>\u5730\u57DF\u504F\u597D</dt><dd>" + investor.region + '</dd></div></dl><h3>\u4EE3\u8868\u6295\u8D44\u6848\u4F8B</h3><div class="p12-case-tags">' + investor.cases.map((item) => "<span>" + item + "</span>").join("") + '</div><h3>\u5339\u914D\u4F9D\u636E</h3><div class="p12-reasons">' + investor.reasons.map((reason) => "<span>" + icon("check", 14) + reason + "</span>").join("") + '</div><h3>\u8D44\u6599\u8BBF\u95EE</h3><div class="p12-access-record">' + icon("shield", 17) + "<span><strong>" + (freshResult ? "\u5148\u53D1\u9001\u8131\u654F\u9879\u76EE\u6458\u8981" : investor.accessStatus) + "</strong><small>" + (freshResult ? "\u6295\u8D44\u4EBA\u786E\u8BA4\u611F\u5174\u8DA3\u540E\uFF0C\u53EF\u6309\u672C\u8F6E\u6388\u6743\u89C4\u5219\u7533\u8BF7\u67E5\u770B\u6700\u65B0\u7248\u5B8C\u6574 BP\uFF1B\u6BCF\u6B21\u8BBF\u95EE\u90FD\u4F1A\u7559\u75D5\u3002" : "\u8EAB\u4EFD\u3001\u5339\u914D\u6761\u4EF6\u3001\u67E5\u770B\u610F\u613F\u548C\u4FDD\u5BC6\u72B6\u6001\u5747\u5DF2\u81EA\u52A8\u6838\u9A8C\uFF0C\u8BBF\u95EE\u8BB0\u5F55\u5DF2\u7559\u75D5\u3002") + "</small></span></div>" + action + "</div>";
   }
   function connectionView(state2) {
     const investor = investors.find((item) => item.id === state2.connectionInvestorId) || investors[0];
