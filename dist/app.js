@@ -4087,6 +4087,120 @@
     exclusions: ["\u672A\u5728\u670D\u52A1\u65B9\u6848\u4E2D\u660E\u786E\u7EA6\u5B9A\u7684\u65B0\u589E\u4E8B\u9879"]
   };
 
+  // src/data/servicePackages.js
+  var packageCatalog = {
+    "\u5408\u540C\u5BA1\u67E5": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u5355\u4EFD 10 \u9875\u4EE5\u5185\u7684\u4E2D\u6587\u5E38\u89C4\u5546\u4E1A\u5408\u540C\uFF0C\u4E0D\u542B\u82F1\u6587\u5408\u540C\u3001\u4EA4\u6613\u8C08\u5224\u548C\u4E13\u9879\u5C3D\u8C03\u3002",
+      prices: [800, 1800, 3800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5FEB\u901F\u8BC6\u522B\u4E00\u4EFD\u5E38\u89C4\u5408\u540C\u7684\u5173\u952E\u98CE\u9669\u3002", suitableFor: "\u6761\u6B3E\u76F8\u5BF9\u6807\u51C6\u3001\u5E0C\u671B\u7B7E\u7F72\u524D\u505A\u4E00\u6B21\u98CE\u9669\u6392\u67E5", period: "1 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u95EE\u9898\u7B54\u7591", includes: ["\u9AD8\u98CE\u9669\u6761\u6B3E\u6807\u6CE8", "\u98CE\u9669\u6E05\u5355\u4E0E\u4FEE\u6539\u5EFA\u8BAE", "15 \u5206\u949F\u7EBF\u4E0A\u8BB2\u89E3"], boundary: "\u5355\u4EFD\u4E2D\u6587\u5408\u540C\uFF0C10 \u9875\u4EE5\u5185\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u5B8C\u6210\u9010\u6761\u5BA1\u67E5\uFF0C\u5E76\u4EA4\u4ED8\u53EF\u76F4\u63A5\u4F7F\u7528\u7684\u4FEE\u6539\u7A3F\u3002", suitableFor: "\u5408\u540C\u91D1\u989D\u8F83\u9AD8\uFF0C\u6216\u9700\u8981\u4E0E\u5BF9\u65B9\u8FDB\u4E00\u6B65\u6C9F\u901A\u6761\u6B3E", period: "2 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u4FEE\u6539\u590D\u6838", includes: ["\u9010\u6761\u6743\u8D23\u4E0E\u8FDD\u7EA6\u8D23\u4EFB\u5BA1\u67E5", "\u5E26\u4FEE\u8BA2\u75D5\u8FF9\u7684\u5408\u540C\u7248\u672C", "\u91CD\u70B9\u6761\u6B3E\u8C08\u5224\u5EFA\u8BAE", "30 \u5206\u949F\u7EBF\u4E0A\u8BB2\u89E3"], boundary: "\u5355\u4EFD\u4E2D\u6587\u5408\u540C\uFF0C30 \u9875\u4EE5\u5185\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u7ED3\u5408\u4EA4\u6613\u80CC\u666F\u5B8C\u6210\u5BA1\u67E5\uFF0C\u5E76\u652F\u6301\u4E00\u8F6E\u6761\u6B3E\u534F\u5546\u3002", suitableFor: "\u4EA4\u6613\u7ED3\u6784\u590D\u6742\u3001\u5B58\u5728\u591A\u65B9\u4E3B\u4F53\u6216\u91CD\u8981\u5C65\u7EA6\u5B89\u6392", period: "3\u20145 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u6B21\u4FEE\u6539\u590D\u6838", includes: ["\u4EA4\u6613\u80CC\u666F\u4E0E\u5C65\u7EA6\u8DEF\u5F84\u68B3\u7406", "\u5168\u91CF\u98CE\u9669\u5BA1\u67E5\u53CA\u4FEE\u6539\u7A3F", "\u4E00\u8F6E\u5BF9\u5916\u6761\u6B3E\u6C9F\u901A\u652F\u6301", "\u7B7E\u7F72\u7248\u672C\u590D\u6838"], boundary: "\u5355\u4EFD\u5408\u540C\uFF0C50 \u9875\u4EE5\u5185\uFF1B\u4E0D\u542B\u4E13\u9879\u5C3D\u8C03\u3002" }
+      ]
+    },
+    "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E 2 \u4F4D\u4EE5\u5185\u521B\u59CB\u80A1\u4E1C\u3001\u65E0\u4EE3\u6301\u53CA\u5386\u53F2\u80A1\u6743\u4E89\u8BAE\u7684\u521D\u521B\u4F01\u4E1A\u3002",
+      prices: [3e3, 5800, 8800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5B8C\u6210\u521D\u521B\u56E2\u961F\u7684\u80A1\u6743\u6BD4\u4F8B\u4E0E\u63A7\u5236\u6743\u5EFA\u8BAE\u3002", suitableFor: "\u56E2\u961F\u7ED3\u6784\u7B80\u5355\uFF0C\u51C6\u5907\u8BBE\u7ACB\u516C\u53F8\u6216\u9996\u6B21\u5206\u914D\u80A1\u6743", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u65B9\u6848\u8C03\u6574", includes: ["\u521B\u59CB\u4EBA\u60C5\u51B5\u8BBF\u8C08", "\u80A1\u6743\u6BD4\u4F8B\u6D4B\u7B97", "\u63A7\u5236\u6743\u98CE\u9669\u63D0\u793A", "\u80A1\u6743\u7ED3\u6784\u65B9\u6848\u8BF4\u660E"], boundary: "2 \u4F4D\u4EE5\u5185\u521B\u59CB\u80A1\u4E1C\uFF0C\u4E0D\u542B\u534F\u8BAE\u8D77\u8349\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u517C\u987E\u63A7\u5236\u6743\u3001\u878D\u8D44\u7A7A\u95F4\u4E0E\u5408\u4F19\u4EBA\u7EA6\u675F\u673A\u5236\u3002", suitableFor: "\u5DF2\u6709\u6838\u5FC3\u56E2\u961F\uFF0C\u51C6\u5907\u878D\u8D44\u6216\u5E0C\u671B\u8865\u9F50\u5408\u4F19\u89C4\u5219", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u65B9\u6848\u8C03\u6574", includes: ["\u521B\u59CB\u56E2\u961F\u6DF1\u5EA6\u8BBF\u8C08", "\u80A1\u6743\u4E0E\u63A7\u5236\u6743\u65B9\u6848", "\u671F\u6743\u6C60\u9884\u7559\u5EFA\u8BAE", "\u5408\u4F19\u4EBA\u534F\u8BAE\u6838\u5FC3\u6761\u6B3E"], boundary: "5 \u4F4D\u4EE5\u5185\u80A1\u4E1C\uFF0C\u542B\u4E00\u4EFD\u6838\u5FC3\u534F\u8BAE\u6846\u67B6\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u5904\u7406\u590D\u6742\u5386\u53F2\u5B89\u6392\uFF0C\u5E76\u4EA4\u4ED8\u53EF\u843D\u5730\u7684\u6574\u5957\u6587\u4EF6\u3002", suitableFor: "\u5B58\u5728\u4EE3\u6301\u3001\u5386\u53F2\u80A1\u6743\u53D8\u52A8\u6216\u591A\u5C42\u6301\u80A1\u5B89\u6392", period: "2\u20143 \u5468", revision: "3 \u8F6E\u65B9\u6848\u8C03\u6574", includes: ["\u5386\u53F2\u80A1\u6743\u95EE\u9898\u6838\u67E5", "\u591A\u65B9\u6848\u6D4B\u7B97\u4E0E\u5BF9\u6BD4", "\u63A7\u5236\u6743\u53CA\u878D\u8D44\u5F71\u54CD\u5206\u6790", "\u914D\u5957\u534F\u8BAE\u6587\u4EF6\u8D77\u8349"], boundary: "\u4E0D\u542B\u5DE5\u5546\u3001\u7A0E\u52A1\u529E\u7406\u53CA\u4E89\u8BAE\u89E3\u51B3\u3002" }
+      ]
+    },
+    "\u878D\u8D44\u4EA4\u6613": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u5DF2\u6709\u660E\u786E TS\u3001\u5355\u4E00\u5883\u5185\u6295\u8D44\u65B9\u4E14\u4EA4\u6613\u7ED3\u6784\u8F83\u7B80\u5355\u7684\u878D\u8D44\u9879\u76EE\u3002",
+      prices: [8e3, 18e3, 32e3],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5BA1\u9605\u6838\u5FC3\u4EA4\u6613\u6587\u4EF6\u5E76\u63D0\u793A\u5173\u952E\u98CE\u9669\u3002", suitableFor: "\u5DF2\u6536\u5230 TS\uFF0C\u5E0C\u671B\u5FEB\u901F\u5224\u65AD\u6838\u5FC3\u6761\u6B3E", period: "5\u20147 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u6587\u4EF6\u4FEE\u6539", includes: ["TS \u6838\u5FC3\u6761\u6B3E\u5BA1\u9605", "\u4EA4\u6613\u7ED3\u6784\u98CE\u9669\u63D0\u793A", "\u6295\u8D44\u534F\u8BAE\u5BA1\u9605", "\u7B7E\u7F72\u4E8B\u9879\u6E05\u5355"], boundary: "\u5355\u4E00\u6295\u8D44\u65B9\uFF0C\u4E0D\u542B\u6CD5\u5F8B\u5C3D\u8C03\u4E0E\u8C08\u5224\u51FA\u5E2D\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u8986\u76D6\u4ECE\u7ED3\u6784\u8BBE\u8BA1\u5230\u534F\u8BAE\u5B9A\u7A3F\u7684\u4E3B\u8981\u73AF\u8282\u3002", suitableFor: "\u5DF2\u8FDB\u5165\u6B63\u5F0F\u878D\u8D44\u6D41\u7A0B\uFF0C\u9700\u8981\u6587\u4EF6\u4E0E\u8C08\u5224\u652F\u6301", period: "3\u20145 \u5468", revision: "3 \u8F6E\u6587\u4EF6\u4FEE\u6539", includes: ["\u4EA4\u6613\u7ED3\u6784\u4E0E\u6761\u6B3E\u8BBE\u8BA1", "\u5C3D\u8C03\u6750\u6599\u51C6\u5907\u652F\u6301", "\u5168\u5957\u4EA4\u6613\u6587\u4EF6\u8D77\u8349\u6216\u5BA1\u9605", "\u4E24\u8F6E\u6838\u5FC3\u6761\u6B3E\u8C08\u5224\u652F\u6301"], boundary: "\u5883\u5185\u5355\u8F6E\u878D\u8D44\uFF0C2 \u5BB6\u4EE5\u5185\u6295\u8D44\u65B9\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u63D0\u4F9B\u590D\u6742\u878D\u8D44\u4EA4\u6613\u7684\u5168\u6D41\u7A0B\u6CD5\u5F8B\u987E\u95EE\u652F\u6301\u3002", suitableFor: "\u591A\u65B9\u6295\u8D44\u3001\u5386\u53F2\u95EE\u9898\u8F83\u591A\u6216\u4EA4\u6613\u5B89\u6392\u590D\u6742", period: "4\u20148 \u5468", revision: "\u6309\u7EA6\u5B9A\u8F6E\u6B21\u652F\u6301", includes: ["\u4E13\u9879\u95EE\u9898\u6838\u67E5\u4E0E\u6574\u6539\u5EFA\u8BAE", "\u590D\u6742\u4EA4\u6613\u7ED3\u6784\u8BBE\u8BA1", "\u591A\u65B9\u6587\u4EF6\u8C08\u5224\u4E0E\u4FEE\u6539", "\u7B7E\u7F72\u4EA4\u5272\u5168\u6D41\u7A0B\u652F\u6301"], boundary: "\u4E0D\u542B\u4E13\u9879\u8D22\u7A0E\u5BA1\u8BA1\u53CA\u5883\u5916\u6CD5\u5F8B\u610F\u89C1\u3002" }
+      ]
+    },
+    "\u80A1\u6743\u6FC0\u52B1": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E 10 \u4EBA\u4EE5\u5185\u6FC0\u52B1\u5BF9\u8C61\u3001\u5355\u4E00\u671F\u6743\u6C60\u53CA\u5E38\u89C4\u56DB\u5E74\u6210\u719F\u673A\u5236\u3002",
+      prices: [4800, 8800, 15e3],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5EFA\u7ACB\u57FA\u7840\u671F\u6743\u6C60\u548C\u6388\u4E88\u89C4\u5219\u3002", suitableFor: "\u9996\u6B21\u5F00\u5C55\u6FC0\u52B1\u3001\u4EBA\u5458\u8303\u56F4\u8F83\u5C0F\u7684\u56E2\u961F", period: "7 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u8C03\u6574", includes: ["\u6FC0\u52B1\u76EE\u6807\u8BBF\u8C08", "\u671F\u6743\u6C60\u4E0E\u989D\u5EA6\u5EFA\u8BAE", "\u6210\u719F\u671F\u53CA\u9000\u51FA\u89C4\u5219", "\u57FA\u7840\u65B9\u6848\u8BF4\u660E"], boundary: "10 \u4EBA\u4EE5\u5185\uFF0C\u4E0D\u542B\u5B8C\u6574\u534F\u8BAE\u8D77\u8349\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u5F62\u6210\u65B9\u6848\u3001\u6D4B\u7B97\u53CA\u6838\u5FC3\u534F\u8BAE\u6587\u4EF6\u3002", suitableFor: "\u51C6\u5907\u6B63\u5F0F\u5B9E\u65BD\u80A1\u6743\u6FC0\u52B1\u7684\u6210\u957F\u578B\u56E2\u961F", period: "2\u20143 \u5468", revision: "2 \u8F6E\u8C03\u6574", includes: ["\u4EBA\u5458\u5206\u5C42\u4E0E\u989D\u5EA6\u6D4B\u7B97", "\u6FC0\u52B1\u65B9\u6848\u53CA\u5B9E\u65BD\u8DEF\u5F84", "\u6388\u4E88\u534F\u8BAE\u4E0E\u914D\u5957\u6587\u4EF6", "\u7BA1\u7406\u5C42\u5B9E\u65BD\u6C9F\u901A"], boundary: "30 \u4EBA\u4EE5\u5185\uFF0C\u5355\u4E00\u6301\u80A1\u6216\u671F\u6743\u6A21\u5F0F\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u89E3\u51B3\u591A\u5C42\u7EA7\u6FC0\u52B1\u548C\u878D\u8D44\u8854\u63A5\u95EE\u9898\u3002", suitableFor: "\u6FC0\u52B1\u5BF9\u8C61\u8F83\u591A\u3001\u5B58\u5728\u591A\u8F6E\u6388\u4E88\u6216\u878D\u8D44\u5B89\u6392", period: "3\u20144 \u5468", revision: "3 \u8F6E\u8C03\u6574", includes: ["\u591A\u6279\u6B21\u6FC0\u52B1\u673A\u5236\u8BBE\u8BA1", "\u878D\u8D44\u7A00\u91CA\u4E0E\u63A7\u5236\u6743\u6D4B\u7B97", "\u5B8C\u6574\u534F\u8BAE\u6587\u4EF6\u5305", "\u843D\u5730\u6267\u884C\u8F85\u5BFC"], boundary: "\u4E0D\u542B\u4E2A\u4EBA\u7A0E\u52A1\u7B79\u5212\u53CA\u5DE5\u5546\u4EE3\u529E\u3002" }
+      ]
+    },
+    "\u52B3\u52A8\u5408\u89C4": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E 20 \u4EBA\u4EE5\u5185\u56E2\u961F\u7684\u6807\u51C6\u52B3\u52A8\u5408\u540C\u53CA\u57FA\u7840\u7528\u5DE5\u5236\u5EA6\u68C0\u67E5\u3002",
+      prices: [1200, 3e3, 6800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u6392\u67E5\u52B3\u52A8\u5408\u540C\u548C\u57FA\u7840\u7528\u5DE5\u98CE\u9669\u3002", suitableFor: "\u56E2\u961F\u89C4\u6A21\u8F83\u5C0F\uFF0C\u5E0C\u671B\u5FEB\u901F\u5B8C\u6210\u57FA\u7840\u5408\u89C4\u68C0\u67E5", period: "3 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u7B54\u7591", includes: ["\u52B3\u52A8\u5408\u540C\u6A21\u677F\u5BA1\u67E5", "\u9AD8\u9891\u7528\u5DE5\u98CE\u9669\u6E05\u5355", "\u57FA\u7840\u6574\u6539\u5EFA\u8BAE"], boundary: "20 \u4EBA\u4EE5\u5185\uFF0C\u4E0D\u542B\u4E89\u8BAE\u4E2A\u6848\u5904\u7406\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u5B8C\u5584\u5408\u540C\u3001\u5236\u5EA6\u53CA\u5458\u5DE5\u7BA1\u7406\u6D41\u7A0B\u3002", suitableFor: "\u56E2\u961F\u5FEB\u901F\u6269\u5F20\uFF0C\u9700\u8981\u5EFA\u7ACB\u89C4\u8303\u7528\u5DE5\u4F53\u7CFB", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u6587\u4EF6\u4FEE\u6539", includes: ["\u52B3\u52A8\u5408\u540C\u4E0E\u9644\u4EF6\u4FEE\u8BA2", "\u5458\u5DE5\u624B\u518C\u6838\u5FC3\u5236\u5EA6\u5BA1\u67E5", "\u5165\u8F6C\u8C03\u79BB\u6D41\u7A0B\u5EFA\u8BAE", "\u7BA1\u7406\u5C42\u5408\u89C4\u57F9\u8BAD"], boundary: "50 \u4EBA\u4EE5\u5185\uFF0C\u8986\u76D6\u5E38\u89C4\u52B3\u52A8\u7528\u5DE5\u5236\u5EA6\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u9488\u5BF9\u590D\u6742\u7528\u5DE5\u573A\u666F\u5F00\u5C55\u4E13\u9879\u6574\u6539\u3002", suitableFor: "\u5B58\u5728\u5386\u53F2\u7528\u5DE5\u95EE\u9898\u3001\u88C1\u5458\u6216\u591A\u5730\u7528\u5DE5\u5B89\u6392", period: "2\u20143 \u5468", revision: "\u6309\u4E13\u9879\u65B9\u6848\u7EA6\u5B9A", includes: ["\u7528\u5DE5\u73B0\u72B6\u4E13\u9879\u6838\u67E5", "\u5386\u53F2\u98CE\u9669\u5206\u7EA7\u6574\u6539", "\u590D\u6742\u4EBA\u5458\u5904\u7406\u65B9\u6848", "\u5168\u5957\u5236\u5EA6\u6587\u4EF6\u4F18\u5316"], boundary: "\u4E0D\u542B\u4EF2\u88C1\u8BC9\u8BBC\u4EE3\u7406\u3002" }
+      ]
+    },
+    "\u516C\u53F8\u6CE8\u518C": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u666E\u901A\u5185\u8D44\u6709\u9650\u516C\u53F8\u30012 \u4F4D\u4EE5\u5185\u81EA\u7136\u4EBA\u80A1\u4E1C\u53CA\u5E38\u89C4\u7ECF\u8425\u8303\u56F4\u3002",
+      prices: [600, 1200, 2500],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5B8C\u6210\u666E\u901A\u5185\u8D44\u516C\u53F8\u7684\u8BBE\u7ACB\u767B\u8BB0\u3002", suitableFor: "\u80A1\u4E1C\u7ED3\u6784\u7B80\u5355\u3001\u5DF2\u6709\u660E\u786E\u516C\u53F8\u4FE1\u606F", period: "5\u20147 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u6750\u6599\u6821\u5BF9", includes: ["\u540D\u79F0\u53CA\u7ECF\u8425\u8303\u56F4\u5EFA\u8BAE", "\u8BBE\u7ACB\u6750\u6599\u51C6\u5907", "\u5DE5\u5546\u767B\u8BB0\u63D0\u4EA4", "\u6267\u7167\u9886\u53D6\u6307\u5F15"], boundary: "2 \u4F4D\u4EE5\u5185\u81EA\u7136\u4EBA\u80A1\u4E1C\uFF0C\u4E0D\u542B\u5730\u5740\u4E0E\u523B\u7AE0\u8D39\u7528\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u8865\u9F50\u8BBE\u7ACB\u540E\u7684\u5E38\u7528\u57FA\u7840\u4E8B\u9879\u3002", suitableFor: "\u5E0C\u671B\u4E00\u6B21\u5B8C\u6210\u516C\u53F8\u8BBE\u7ACB\u548C\u57FA\u7840\u5F00\u529E\u4E8B\u9879", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u6B21\u6750\u6599\u6821\u5BF9", includes: ["\u57FA\u7840\u7248\u5168\u90E8\u5185\u5BB9", "\u516C\u53F8\u7AE0\u7A0B\u5B9A\u5236", "\u523B\u7AE0\u53CA\u94F6\u884C\u5F00\u6237\u6307\u5F15", "\u7A0E\u52A1\u62A5\u5230\u534F\u52A9"], boundary: "\u666E\u901A\u5185\u8D44\u6709\u9650\u516C\u53F8\uFF0C\u4E0D\u542B\u8BB8\u53EF\u8BC1\u529E\u7406\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u9488\u5BF9\u590D\u6742\u80A1\u4E1C\u6216\u7279\u6B8A\u7ECF\u8425\u5B89\u6392\u63D0\u4F9B\u5168\u7A0B\u652F\u6301\u3002", suitableFor: "\u6CD5\u4EBA\u80A1\u4E1C\u3001\u591A\u4EBA\u6301\u80A1\u6216\u7ECF\u8425\u8303\u56F4\u8F83\u590D\u6742", period: "10\u201415 \u4E2A\u5DE5\u4F5C\u65E5", revision: "\u6309\u529E\u7406\u9700\u8981\u8C03\u6574", includes: ["\u8BBE\u7ACB\u65B9\u6848\u524D\u7F6E\u68B3\u7406", "\u590D\u6742\u7AE0\u7A0B\u53CA\u6CBB\u7406\u6761\u6B3E", "\u5168\u7A0B\u6750\u6599\u4EE3\u529E", "\u5F00\u529E\u4E8B\u9879\u8DDF\u8FDB"], boundary: "\u7279\u6B8A\u8BB8\u53EF\u53CA\u5B9E\u9645\u5730\u5740\u8D39\u7528\u53E6\u8BA1\u3002" }
+      ]
+    },
+    "\u5DE5\u5546\u53D8\u66F4": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u5355\u4E00\u4E8B\u9879\u3001\u6750\u6599\u9F50\u5168\u4E14\u65E0\u5386\u53F2\u767B\u8BB0\u5F02\u5E38\u7684\u666E\u901A\u5DE5\u5546\u53D8\u66F4\u3002",
+      prices: [800, 1500, 3e3],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u529E\u7406\u4E00\u9879\u5E38\u89C4\u5DE5\u5546\u4FE1\u606F\u53D8\u66F4\u3002", suitableFor: "\u5730\u5740\u3001\u7ECF\u8425\u8303\u56F4\u6216\u6CD5\u5B9A\u4EE3\u8868\u4EBA\u7B49\u5355\u9879\u53D8\u66F4", period: "5\u20147 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u6750\u6599\u6821\u5BF9", includes: ["\u53D8\u66F4\u4E8B\u9879\u6838\u5BF9", "\u51B3\u8BAE\u53CA\u7533\u8BF7\u6750\u6599", "\u5DE5\u5546\u53D8\u66F4\u63D0\u4EA4", "\u7ED3\u679C\u9886\u53D6\u6307\u5F15"], boundary: "\u4EC5\u542B\u4E00\u9879\u53D8\u66F4\uFF0C\u4E0D\u542B\u80A1\u6743\u8F6C\u8BA9\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u4E00\u6B21\u5904\u7406\u591A\u9879\u5DE5\u5546\u53D8\u66F4\u53CA\u914D\u5957\u6587\u4EF6\u3002", suitableFor: "\u9700\u8981\u540C\u6B65\u8C03\u6574\u80A1\u4E1C\u3001\u7AE0\u7A0B\u6216\u591A\u9879\u767B\u8BB0\u4FE1\u606F", period: "7\u201412 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u6B21\u6750\u6599\u6821\u5BF9", includes: ["\u591A\u9879\u53D8\u66F4\u65B9\u6848\u68B3\u7406", "\u7AE0\u7A0B\u53CA\u51B3\u8BAE\u6587\u4EF6", "\u5DE5\u5546\u53D8\u66F4\u4EE3\u529E", "\u7A0E\u52A1\u4E0E\u94F6\u884C\u4FE1\u606F\u66F4\u65B0\u6307\u5F15"], boundary: "\u542B 3 \u9879\u4EE5\u5185\u5E38\u89C4\u53D8\u66F4\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u5904\u7406\u5386\u53F2\u7455\u75B5\u548C\u590D\u6742\u80A1\u6743\u53D8\u66F4\u3002", suitableFor: "\u5B58\u5728\u5386\u53F2\u767B\u8BB0\u95EE\u9898\u6216\u590D\u6742\u80A1\u6743\u8F6C\u8BA9\u5B89\u6392", period: "2\u20144 \u5468", revision: "\u6309\u529E\u7406\u9700\u8981\u8C03\u6574", includes: ["\u5386\u53F2\u767B\u8BB0\u6838\u67E5", "\u590D\u6742\u53D8\u66F4\u8DEF\u5F84\u8BBE\u8BA1", "\u5168\u5957\u6CD5\u5F8B\u53CA\u767B\u8BB0\u6587\u4EF6", "\u4E3B\u7BA1\u90E8\u95E8\u6C9F\u901A\u8DDF\u8FDB"], boundary: "\u7A0E\u8D39\u3001\u8BC4\u4F30\u53CA\u516C\u8BC1\u8D39\u7528\u53E6\u8BA1\u3002" }
+      ]
+    },
+    "\u516C\u53F8\u6CE8\u9500": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u65E0\u503A\u6743\u503A\u52A1\u3001\u7A0E\u52A1\u6B63\u5E38\u4E14\u7B26\u5408\u7B80\u6613\u6CE8\u9500\u6761\u4EF6\u7684\u4F01\u4E1A\u3002",
+      prices: [1500, 3e3, 6e3],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u529E\u7406\u7B26\u5408\u6761\u4EF6\u4F01\u4E1A\u7684\u7B80\u6613\u6CE8\u9500\u3002", suitableFor: "\u672A\u7ECF\u8425\u6216\u503A\u6743\u503A\u52A1\u5DF2\u6E05\u7406\u7684\u4F01\u4E1A", period: "3\u20145 \u5468", revision: "\u6309\u529E\u7406\u8981\u6C42\u8865\u6B63", includes: ["\u6CE8\u9500\u6761\u4EF6\u6838\u9A8C", "\u516C\u793A\u53CA\u7533\u8BF7\u6750\u6599", "\u5DE5\u5546\u6CE8\u9500\u63D0\u4EA4", "\u7ED3\u679C\u9886\u53D6\u6307\u5F15"], boundary: "\u4EC5\u9650\u7B80\u6613\u6CE8\u9500\uFF0C\u4E0D\u542B\u7A0E\u52A1\u5F02\u5E38\u5904\u7406\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u8986\u76D6\u7A0E\u52A1\u6E05\u7B97\u548C\u666E\u901A\u6CE8\u9500\u4E3B\u8981\u73AF\u8282\u3002", suitableFor: "\u6B63\u5E38\u7ECF\u8425\u540E\u505C\u6B62\uFF0C\u9700\u8981\u5B8C\u6574\u529E\u7406\u6CE8\u9500", period: "2\u20143 \u4E2A\u6708", revision: "\u6309\u529E\u7406\u8981\u6C42\u8865\u6B63", includes: ["\u6CE8\u9500\u8DEF\u5F84\u68B3\u7406", "\u7A0E\u52A1\u6E05\u7B97\u534F\u52A9", "\u5DE5\u5546\u6CE8\u9500\u4EE3\u529E", "\u94F6\u884C\u4E0E\u793E\u4FDD\u6CE8\u9500\u6307\u5F15"], boundary: "\u4E0D\u542B\u5386\u53F2\u6B20\u7A0E\u3001\u7F5A\u6B3E\u53CA\u5BA1\u8BA1\u8D39\u7528\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u5904\u7406\u5F02\u5E38\u72B6\u6001\u548C\u5386\u53F2\u9057\u7559\u95EE\u9898\u3002", suitableFor: "\u5B58\u5728\u7A0E\u52A1\u3001\u5E74\u62A5\u6216\u767B\u8BB0\u5F02\u5E38\u7684\u4F01\u4E1A", period: "3\u20146 \u4E2A\u6708", revision: "\u6309\u4E13\u9879\u65B9\u6848\u6267\u884C", includes: ["\u5F02\u5E38\u539F\u56E0\u6838\u67E5", "\u6574\u6539\u4E0E\u6E05\u7B97\u65B9\u6848", "\u591A\u90E8\u95E8\u6CE8\u9500\u8DDF\u8FDB", "\u5168\u6D41\u7A0B\u8FDB\u5EA6\u7BA1\u7406"], boundary: "\u884C\u653F\u7F5A\u6B3E\u3001\u7B2C\u4E09\u65B9\u5BA1\u8BA1\u7B49\u8D39\u7528\u53E6\u8BA1\u3002" }
+      ]
+    },
+    "\u77E5\u8BC6\u4EA7\u6743\u4FDD\u62A4": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u5355\u4E00\u77E5\u8BC6\u4EA7\u6743\u7C7B\u578B\u3001\u6743\u5C5E\u6750\u6599\u6E05\u6670\u7684\u521D\u6B65\u4FDD\u62A4\u89C4\u5212\u3002",
+      prices: [1800, 3800, 7800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5B8C\u6210\u73B0\u6709\u77E5\u8BC6\u4EA7\u6743\u7684\u57FA\u7840\u76D8\u70B9\u3002", suitableFor: "\u9996\u6B21\u68B3\u7406\u5546\u6807\u3001\u8457\u4F5C\u6743\u6216\u5546\u4E1A\u79D8\u5BC6", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u7B54\u7591", includes: ["\u6743\u5229\u6E05\u5355\u76D8\u70B9", "\u57FA\u7840\u98CE\u9669\u8BC6\u522B", "\u4FDD\u62A4\u4F18\u5148\u7EA7\u5EFA\u8BAE"], boundary: "\u5355\u4E00\u4E1A\u52A1\u7EBF\uFF0C\u4E0D\u542B\u7533\u8BF7\u4EE3\u7406\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u5F62\u6210\u4E0E\u4E1A\u52A1\u5339\u914D\u7684\u77E5\u8BC6\u4EA7\u6743\u4FDD\u62A4\u65B9\u6848\u3002", suitableFor: "\u5DF2\u6709\u4EA7\u54C1\u548C\u54C1\u724C\uFF0C\u9700\u8981\u5EFA\u7ACB\u7CFB\u7EDF\u4FDD\u62A4\u8DEF\u5F84", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u8C03\u6574", includes: ["\u54C1\u724C\u4E0E\u6280\u672F\u8D44\u4EA7\u76D8\u70B9", "\u6838\u5FC3\u6743\u5229\u98CE\u9669\u68C0\u7D22", "\u4FDD\u62A4\u4E0E\u7533\u8BF7\u8DEF\u5F84\u8BBE\u8BA1", "\u5185\u90E8\u7BA1\u7406\u6A21\u677F"], boundary: "\u4E0D\u542B\u5B98\u65B9\u8D39\u7528\u53CA\u4E89\u8BAE\u7A0B\u5E8F\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u9488\u5BF9\u878D\u8D44\u6216\u91CD\u70B9\u4E1A\u52A1\u5F00\u5C55\u4E13\u9879\u6838\u67E5\u3002", suitableFor: "\u51C6\u5907\u878D\u8D44\u3001\u5408\u4F5C\u6216\u9762\u4E34\u6F5C\u5728\u4FB5\u6743\u98CE\u9669", period: "2\u20143 \u5468", revision: "\u6309\u4E13\u9879\u65B9\u6848\u7EA6\u5B9A", includes: ["\u6743\u5C5E\u94FE\u6761\u4E13\u9879\u6838\u67E5", "\u6838\u5FC3\u8D44\u4EA7\u98CE\u9669\u5206\u6790", "\u6574\u6539\u4E0E\u534F\u8BAE\u6587\u4EF6", "\u7BA1\u7406\u5C42\u4E13\u9879\u6C47\u62A5"], boundary: "\u8BC9\u8BBC\u3001\u65E0\u6548\u53CA\u884C\u653F\u7A0B\u5E8F\u53E6\u884C\u62A5\u4EF7\u3002" }
+      ]
+    }
+  };
+  var teamPriceOverrides = {
+    "t002:\u5408\u540C\u5BA1\u67E5": [1200, 2600, 5200],
+    "t002:\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": [3800, 6800, 9800],
+    "t002:\u52B3\u52A8\u5408\u89C4": [1500, 3200, 6800],
+    "t004:\u5408\u540C\u5BA1\u67E5": [1e3, 2400, 4800],
+    "t004:\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": [4500, 7800, 12800],
+    "t004:\u878D\u8D44\u4EA4\u6613": [12e3, 22e3, 38e3],
+    "t007:\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": [5e3, 8800, 15e3],
+    "t007:\u80A1\u6743\u6FC0\u52B1": [6800, 12e3, 2e4]
+  };
+  function formatPrice(value) {
+    return "\xA5" + Number(value).toLocaleString("zh-CN");
+  }
+  function getServicePackageConfig(teamId, sku) {
+    const source = packageCatalog[sku];
+    if (!source) return null;
+    const prices = teamPriceOverrides[teamId + ":" + sku] || source.prices;
+    const plans = source.plans.map((plan, index) => ({ ...plan, price: prices[index], priceText: formatPrice(prices[index]) }));
+    return {
+      sku,
+      basis: source.basis,
+      plans,
+      rangeText: formatPrice(Math.min(...prices)) + "\u2013" + formatPrice(Math.max(...prices))
+    };
+  }
+  function getServicePriceLabel(teamId, sku, fallback = "\u4EF7\u683C\u5F85\u786E\u8BA4") {
+    const config = getServicePackageConfig(teamId, sku);
+    return config ? config.rangeText : fallback;
+  }
+
   // src/pages/p1-home/ServiceShelf.js
   function serviceDescription(sku) {
     return (serviceBlueprints[sku] || defaultServiceBlueprint).intro;
@@ -4097,7 +4211,8 @@
   function renderServiceOffering(offering, tab) {
     const team = getTeam(offering.teamId, store.teams);
     if (!team) return "";
-    return '<button class="p1-offer-card" type="button" data-offer-kind="service" data-team-id="' + escapeHTML(team.id) + '" data-sku="' + escapeHTML(offering.sku) + '"><span class="p1-offer-icon">' + icon(tab.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(offering.sku) + "</strong>" + renderBadge(team.badge) + '</span><span class="p1-offer-desc">' + escapeHTML(serviceDescription(offering.sku)) + "</span>" + renderProvider(team) + '</span><span class="p1-offer-aside"><strong>' + escapeHTML(team.priceText) + "</strong><span>\u67E5\u770B\u8BE6\u60C5 " + icon("chevron-right", 13) + "</span></span></button>";
+    const priceLabel = getServicePriceLabel(team.id, offering.sku, team.priceText);
+    return '<button class="p1-offer-card" type="button" data-offer-kind="service" data-team-id="' + escapeHTML(team.id) + '" data-sku="' + escapeHTML(offering.sku) + '"><span class="p1-offer-icon">' + icon(tab.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(offering.sku) + "</strong>" + renderBadge(team.badge) + '</span><span class="p1-offer-desc">' + escapeHTML(serviceDescription(offering.sku)) + "</span>" + renderProvider(team) + '</span><span class="p1-offer-aside"><strong>' + escapeHTML(priceLabel) + "</strong><span>\u67E5\u770B\u8BE6\u60C5 " + icon("chevron-right", 13) + "</span></span></button>";
   }
   function renderFundraisingOffering() {
     return '<button class="p1-offer-card p1-offer-fundraising" type="button" data-offer-kind="fundraising"><span class="p1-offer-icon">' + icon("trending-up", 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>\u878D\u8D44\u5339\u914D\u670D\u52A1</strong><span class="p1-platform-badge">\u5E73\u53F0\u81EA\u8425</span></span><span class="p1-offer-desc">\u63D0\u4EA4\u6216\u66F4\u65B0BP\uFF0C\u5339\u914D\u6B63\u5728\u627E\u9879\u76EE\u4E14\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u4E2A\u4EBA\u6295\u8D44\u4EBA\u3002</span><span class="p1-offer-provider"><b>\u987E\u6668\u56E2\u961F</b><i aria-hidden="true"></i><span>\u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3</span></span></span><span class="p1-offer-aside"><strong>\u4E13\u9879\u5339\u914D</strong><span>\u5F00\u59CB\u5339\u914D ' + icon("chevron-right", 13) + "</span></span></button>";
@@ -4163,7 +4278,7 @@
       this.activeShelfId = getHomeServiceTab(params.shelf || this.activeShelfId).id;
       let html = "";
       html += '<div class="p1-top"><div class="p1-search-row"><button class="search-bar p1-search-trigger" id="p1SearchBar"><span class="search-icon">' + icon("search", 17) + "</span><span>\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784</span></button></div>";
-      html += '<section class="p1-brand-copy"><h1>\u4E13\u4E3A 0-A \u8F6E\u521B\u4E1A\u8005\u6253\u9020\u7684<br>\u751F\u6001\u670D\u52A1\u5E73\u53F0</h1><div class="p1-brand-proof"><span>' + icon("shield", 14) + "\u8D44\u8D28\u5168\u6838\u9A8C</span><span>" + icon("sparkles", 14) + "AI \u5148\u8BCA</span><span>" + icon("check-circle", 14) + "\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
+      html += '<section class="p1-brand-copy"><h1>\u4E13\u4E3A 0-A \u8F6E\u521B\u4E1A\u8005\u6253\u9020\u7684<br>\u751F\u6001\u670D\u52A1\u5E73\u53F0</h1><div class="p1-brand-proof"><span>' + icon("check", 14) + "100%\u8D44\u8D28\u6838\u9A8C</span><span>" + icon("check", 14) + "AI\u667A\u80FD\u5339\u914D</span><span>" + icon("check", 14) + "\u5168\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
       html += '<button class="p1-match-card" id="p1HeroCard" type="button"><span class="p1-match-icon">' + icon("sparkles", 22) + '</span><span class="p1-match-copy"><strong>\u4E0D\u786E\u5B9A\u9700\u8981\u4EC0\u4E48\u670D\u52A1\uFF1F</strong><small>\u5148\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\uFF0CAI \u5E2E\u4F60\u5339\u914D</small></span><span class="p1-match-action">\u5F00\u59CB\u5339\u914D ' + icon("arrow-right", 14) + "</span></button></div>";
       html += '<section class="p1-marketplace"><div class="p1-marketplace-head"><div><h2>\u627E\u670D\u52A1</h2><p>\u5148\u9009\u670D\u52A1\uFF0C\u518D\u6BD4\u8F83\u4E0D\u540C\u56E2\u961F</p></div><button class="p1-service-favorites" id="p1Favorites">' + icon(favoriteCount ? "star" : "star-outline", 16) + "<span>\u6211\u7684\u6536\u85CF</span>" + (favoriteCount ? "<b>" + favoriteCount + "</b>" : "") + "</button></div>";
       html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId);
@@ -5565,6 +5680,8 @@
       this.state = { team, params: params || {}, introExpanded: false, verifyExpanded: false };
       const selectedSku = params.sku && team.skus.includes(params.sku) ? params.sku : team.skus[0] || "";
       const stagedSelected = isStagedService(selectedSku);
+      const selectedPackageConfig = getServicePackageConfig(team.id, selectedSku);
+      const selectedPriceLabel = getServicePriceLabel(team.id, selectedSku, team.priceText);
       const selectedCategory = getCategoryForSku(selectedSku, categories) || getCategoryForTeam(team, categories);
       const selectedCategoryId = selectedCategory ? selectedCategory.id : "";
       const dimensions = getTeamRatingDimensions(team);
@@ -5572,7 +5689,7 @@
       html += '<div class="nav-bar"><button class="nav-back" id="p3Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u56E2\u961F\u8BE6\u60C5</div><button class="p3-favorite-action" id="p3Favorite" type="button" aria-pressed="' + isFavoriteTeam(team.id) + '">' + this.renderFavoriteContent(team.id) + "</button></div>";
       html += '<div class="p3-gallery-wrap">' + renderEntityGallery(team, "team") + '<div class="p3-gallery-identity"><div class="p3-hero-name">' + team.name + (team.badge ? " " + renderBadge(team.badge) : "") + '</div><div class="p3-hero-sub">' + team.orgShort + " \xB7 " + team.city + "\xB7" + team.district + " \xB7 " + icon("check-circle", 13) + " \u8D44\u8D28\u5DF2\u6838\u9A8C</div></div></div>";
       html += '<div class="anchor-bar" id="p3AnchorBar"><div class="anchor-item active" data-anchor="overview">\u56E2\u961F</div><div class="anchor-item" data-anchor="services">\u670D\u52A1</div><div class="anchor-item" data-anchor="verify">\u8D44\u8D28</div><div class="anchor-item" data-anchor="reviews">\u8BC4\u4EF7</div></div>';
-      html += '<div class="p3-info-card" id="p3-overview"><div class="p3-top-rating">' + renderStars(team.rating) + "<span>" + (team.reviewCount > 0 ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + '</span></div><div class="p3-top-meta"><span>' + icon("price-tag", 14) + " " + team.priceText + " \xB7 " + team.priceMode + "</span>" + (team.avgResponse ? "<span>" + icon("zap", 14) + " \u5747\u54CD\u5E94" + team.avgResponse + "</span>" : "") + "</div></div>";
+      html += '<div class="p3-info-card" id="p3-overview"><div class="p3-top-rating">' + renderStars(team.rating) + "<span>" + (team.reviewCount > 0 ? team.reviewCount + "\u6761\u8BC4\u4EF7" : "\u6682\u65E0\u8BC4\u4EF7") + '</span></div><div class="p3-top-meta"><span>' + icon("price-tag", 14) + " " + selectedPriceLabel + " \xB7 " + (selectedPackageConfig ? "\u4E09\u6863\u660E\u7801\u6807\u4EF7" : team.priceMode) + "</span>" + (team.avgResponse ? "<span>" + icon("zap", 14) + " \u5747\u54CD\u5E94" + team.avgResponse + "</span>" : "") + "</div></div>";
       html += renderIntro(team);
       html += renderMembers(team);
       html += renderCases(team, (category, title) => this.getCaseDetail(category, title));
@@ -5587,14 +5704,15 @@
       html += '<section class="p3-section" id="p3-services"><div class="p3-section-pad"><div class="section-title">\u53EF\u63D0\u4F9B\u670D\u52A1</div>';
       team.skus.forEach((sku) => {
         const serviceCategory = getCategoryForSku(sku, categories);
-        html += '<button class="p3-sku-row" type="button" data-team="' + team.id + '" data-category="' + (serviceCategory ? serviceCategory.id : selectedCategoryId) + '" data-sku="' + escapeHTML(sku) + '"><span class="p3-sku-icon">' + icon(serviceCategory ? serviceCategory.icon : "briefcase", 18) + '</span><span class="p3-sku-copy"><strong>' + sku + "</strong><small>" + getServiceDescription(sku) + '</small></span><span class="p3-sku-price"><strong>' + team.priceText + "</strong><small>\u67E5\u770B\u8BE6\u60C5 " + icon("chevron-right", 13) + "</small></span></button>";
+        const priceLabel = getServicePriceLabel(team.id, sku, team.priceText);
+        html += '<button class="p3-sku-row" type="button" data-team="' + team.id + '" data-category="' + (serviceCategory ? serviceCategory.id : selectedCategoryId) + '" data-sku="' + escapeHTML(sku) + '"><span class="p3-sku-icon">' + icon(serviceCategory ? serviceCategory.icon : "briefcase", 18) + '</span><span class="p3-sku-copy"><strong>' + sku + "</strong><small>" + getServiceDescription(sku) + '</small></span><span class="p3-sku-price"><strong>' + escapeHTML(priceLabel) + "</strong><small>\u67E5\u770B\u6863\u4F4D " + icon("chevron-right", 13) + "</small></span></button>";
       });
       html += "</div></section>";
       html += renderVerify(team);
       html += renderReviews(team, dimensions);
       html += renderQA(getTeamQuestions(team.id, store.teams));
       const matchSelected = params.source === "match" && Boolean(params.matchSelected);
-      html += '<div class="bottom-bar"><button class="p3-bottom-ai" id="p3PlatformFAQ" type="button">' + icon("message", 22) + '<span class="p3-bottom-ai-label">\u5E38\u89C1\u95EE\u9898</span></button><div class="p3-bottom-price"><div class="p3-bottom-price-label">' + (stagedSelected ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u8D77\u4EF7") + '</div><div class="p3-bottom-price-val">' + team.priceText + "</div></div>";
+      html += '<div class="bottom-bar"><button class="p3-bottom-ai" id="p3PlatformFAQ" type="button">' + icon("message", 22) + '<span class="p3-bottom-ai-label">\u5E38\u89C1\u95EE\u9898</span></button><div class="p3-bottom-price"><div class="p3-bottom-price-label">' + (stagedSelected ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u4EF7\u683C\u533A\u95F4") + '</div><div class="p3-bottom-price-val">' + selectedPriceLabel + "</div></div>";
       if (params.source === "match") {
         html += '<button class="btn ' + (matchSelected ? "btn-outline" : "btn-primary") + ' p3-match-select" id="p3MatchSelect" type="button">' + (matchSelected ? "\u53D6\u6D88\u9009\u62E9" : "\u9009\u62E9\u8BE5\u56E2\u961F") + "</button>";
       } else {
@@ -7283,6 +7401,52 @@
   };
   register("p9", page9);
 
+  // src/pages/p10-service/PackageSelector.js
+  function getDefaultPackage(config, requestedId) {
+    if (!config) return null;
+    return config.plans.find((plan) => plan.id === requestedId) || config.plans.find((plan) => plan.recommended) || config.plans[0];
+  }
+  function renderPlanCard2(plan, selectedId) {
+    const selected = plan.id === selectedId;
+    return '<article class="p10-package-card' + (selected ? " selected" : "") + '" data-p10-package-card="' + plan.id + '"><button class="p10-package-choice" type="button" data-p10-package="' + plan.id + '" aria-expanded="' + selected + '"><span class="p10-package-radio">' + (selected ? icon("check", 12) : "") + '</span><span class="p10-package-name"><span><strong>' + escapeHTML(plan.name) + "</strong>" + (plan.recommended ? "<b>\u63A8\u8350</b>" : "") + "</span><small>" + escapeHTML(plan.intro) + '</small></span><span class="p10-package-price"><strong>' + escapeHTML(plan.priceText) + '</strong><small>\u56FA\u5B9A\u670D\u52A1\u4EF7</small></span></button><div class="p10-package-detail"' + (selected ? "" : " hidden") + "><p><strong>\u9002\u5408\uFF1A</strong>" + escapeHTML(plan.suitableFor) + "</p><ul>" + plan.includes.map((item) => "<li>" + escapeHTML(item) + "</li>").join("") + '</ul><div class="p10-package-meta"><span>' + icon("clock", 14) + escapeHTML(plan.period) + "</span><span>" + icon("refresh", 14) + escapeHTML(plan.revision) + '</span></div><div class="p10-package-boundary">' + icon("shield", 15) + "<span><strong>\u670D\u52A1\u8FB9\u754C</strong>" + escapeHTML(plan.boundary) + "</span></div></div></article>";
+  }
+  function renderPackageSelector(config, selectedId) {
+    if (!config) return "";
+    return '<section class="p10-packages" aria-labelledby="p10PackageTitle"><div class="p10-package-heading"><h2 id="p10PackageTitle">\u9009\u62E9\u670D\u52A1\u6863\u4F4D</h2><p>\u5404\u6863\u4EF7\u683C\u3001\u4EA4\u4ED8\u5185\u5BB9\u548C\u670D\u52A1\u8FB9\u754C\u5747\u5DF2\u5217\u660E\uFF0C\u786E\u8BA4\u524D\u4ECD\u53EF\u4E0E\u56E2\u961F\u6C9F\u901A\u8C03\u6574\u3002</p></div><div class="p10-package-list">' + config.plans.map((plan) => renderPlanCard2(plan, selectedId)).join("") + "</div></section>";
+  }
+  function updatePackageSelection(config, selectedId) {
+    const selected = getDefaultPackage(config, selectedId);
+    if (!selected) return null;
+    document.querySelectorAll("[data-p10-package-card]").forEach((card) => {
+      const active = card.getAttribute("data-p10-package-card") === selected.id;
+      card.classList.toggle("selected", active);
+      const button = card.querySelector("[data-p10-package]");
+      const radio = card.querySelector(".p10-package-radio");
+      const detail = card.querySelector(".p10-package-detail");
+      if (button) button.setAttribute("aria-expanded", String(active));
+      if (radio) radio.innerHTML = active ? icon("check", 12) : "";
+      if (detail) detail.hidden = !active;
+    });
+    const name = document.querySelector(".p10-bottom-plan-name");
+    const price = document.querySelector(".p10-bottom-plan-price");
+    const consult = document.getElementById("p10Consult");
+    if (name) name.textContent = selected.name;
+    if (price) price.textContent = selected.priceText;
+    if (consult) {
+      consult.setAttribute("data-plan-id", selected.id);
+      consult.textContent = "\u9009\u62E9" + selected.name + "\u5E76\u54A8\u8BE2";
+    }
+    return selected;
+  }
+  function bindPackageSelector(config, onSelect) {
+    document.querySelectorAll("[data-p10-package]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const plan = updatePackageSelection(config, button.getAttribute("data-p10-package"));
+        if (plan && typeof onSelect === "function") onSelect(plan);
+      });
+    });
+  }
+
   // src/pages/p10-service/index.js
   function domainOptions6() {
     return {
@@ -7293,7 +7457,12 @@
       user
     };
   }
-  function startDirectConsultation2(teamId, sku) {
+  function setDemandField(demand, label, value) {
+    const field = (demand.fields || []).find((item) => item.label === label);
+    if (field) field.value = value;
+    else demand.fields.push({ label, value });
+  }
+  function startDirectConsultation2(teamId, sku, planId) {
     const team = getTeam(teamId, store.teams);
     if (!team) {
       toast("\u6682\u65F6\u65E0\u6CD5\u627E\u5230\u8BE5\u56E2\u961F");
@@ -7301,10 +7470,26 @@
     }
     const serviceName = sku || team.skus[0];
     const demand = getOrCreateDirectConsultation(teamId, serviceName, domainOptions6());
+    const packageConfig = getServicePackageConfig(teamId, serviceName);
+    const selectedPackage = getDefaultPackage(packageConfig, planId);
+    if (selectedPackage) {
+      demand.selectedPackage = {
+        id: selectedPackage.id,
+        name: selectedPackage.name,
+        priceText: selectedPackage.priceText
+      };
+      demand.budget = selectedPackage.priceText;
+      setDemandField(demand, "\u9884\u7B97\u8303\u56F4", selectedPackage.priceText);
+      setDemandField(demand, "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", selectedPackage.period);
+      setDemandField(demand, "\u670D\u52A1\u6863\u4F4D", selectedPackage.name);
+      setDemandField(demand, "\u670D\u52A1\u4EF7\u683C", selectedPackage.priceText);
+      setDemandField(demand, "\u670D\u52A1\u8FB9\u754C", selectedPackage.boundary);
+    }
     emitChange();
-    navigateTo("p7", { demandId: demand.id, teamId, sku: serviceName, direct: true });
+    navigateTo("p7", { demandId: demand.id, teamId, sku: serviceName, planId: selectedPackage ? selectedPackage.id : "", direct: true });
   }
   var page10 = {
+    state: { team: null, sku: "", packageConfig: null, selectedPackage: null },
     getBlueprint(sku) {
       if (serviceBlueprints[sku]) return serviceBlueprints[sku];
       return {
@@ -7327,14 +7512,18 @@
       if (!team || !sku) return '<div class="empty-state"><div class="empty-title">\u670D\u52A1\u4E0D\u5B58\u5728</div></div>';
       const detail = this.getBlueprint(sku);
       const staged = getStagedServiceConfig(sku);
+      const packageConfig = staged ? null : getServicePackageConfig(team.id, sku);
+      const selectedPackage = getDefaultPackage(packageConfig, params.planId);
+      this.state = { team, sku, packageConfig, selectedPackage };
       const category = getCategoryForSku(sku, categories);
       const safeTeamId = escapeHTML(team.id);
       const safeSku = escapeHTML(sku);
       let html = '<div class="nav-bar"><button class="nav-back" id="p10Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u670D\u52A1\u8BE6\u60C5</div><div style="width:40px"></div></div>';
-      html += '<header class="p10-summary"><div class="p10-summary-label">' + escapeHTML(category && category.name || "\u4F01\u4E1A\u670D\u52A1") + "</div><h1>" + safeSku + "</h1><p>" + detail.intro + '</p><div class="p10-summary-meta"><strong>' + (staged ? "\u6309\u9879\u76EE\u8BC4\u4F30\u62A5\u4EF7" : team.priceText) + "</strong><span>" + team.priceMode + "</span><span>" + detail.period + "</span></div></header>";
+      html += '<header class="p10-summary"><div class="p10-summary-label">' + escapeHTML(category && category.name || "\u4F01\u4E1A\u670D\u52A1") + "</div><h1>" + safeSku + "</h1><p>" + detail.intro + '</p><div class="p10-summary-meta"><strong>' + (staged ? "\u6309\u9879\u76EE\u8BC4\u4F30\u62A5\u4EF7" : packageConfig ? packageConfig.rangeText : team.priceText) + "</strong><span>" + (packageConfig ? "\u4E09\u6863\u660E\u7801\u6807\u4EF7" : team.priceMode) + "</span><span>" + detail.period + "</span></div>" + (packageConfig ? '<div class="p10-price-basis"><strong>\u57FA\u7840\u7248\u9002\u7528\u524D\u63D0</strong><span>' + escapeHTML(packageConfig.basis) + "</span></div>" : "") + "</header>";
       html += '<button class="p10-team-row" id="p10TeamLink" type="button" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '"><span class="avatar avatar-sm" style="background:' + team.avatarColor + "20;color:" + team.avatarColor + '">' + team.avatar + "</span><span><strong>" + team.name + "</strong><small>" + team.orgShort + " \xB7 " + icon("check-circle", 12) + " \u8D44\u8D28\u5DF2\u6838\u9A8C</small></span>" + icon("chevron-right", 16) + "</button>";
+      html += renderPackageSelector(packageConfig, selectedPackage ? selectedPackage.id : "");
       html += '<main class="p10-content"><section><h2>\u9002\u5408\u8C01</h2><p>' + detail.suitableFor + "</p></section><section><h2>\u670D\u52A1\u5185\u5BB9</h2>" + this.renderList(detail.scope) + "</section><section><h2>\u4EA4\u4ED8\u6210\u679C</h2>" + this.renderList(detail.deliverables) + '</section><section><h2>\u670D\u52A1\u6D41\u7A0B</h2><ol class="p10-process">' + detail.process.map((step, index) => "<li><b>" + (index + 1) + "</b><span>" + step + "</span></li>").join("") + "</ol></section><section><h2>\u9700\u8981\u51C6\u5907</h2>" + this.renderList(detail.materials) + "</section>" + (staged ? '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>\u5206\u9636\u6BB5\u4ED8\u6B3E</h2><p>\u786E\u8BA4\u524D\u4E00\u9636\u6BB5\u6210\u679C\u540E\uFF0C\u518D\u89E6\u53D1\u4E0B\u4E00\u7B14\u670D\u52A1\u6B3E\u3002</p></div><span>\u4E24\u7B14\u5404 50%</span></div><div class="p10-stage-row"><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>' + escapeHTML(staged.secondTrigger) + '</span></div><div class="p10-result-risk">' + icon("alert", 16) + "<p><strong>\u6700\u7EC8\u7ED3\u679C\u4E0D\u627F\u8BFA</strong>\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u5B58\u5728\u4E0D\u786E\u5B9A\u6027\uFF1B\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF0C\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section>" : "") + '<section class="p10-exclusions"><h2>\u8D39\u7528\u901A\u5E38\u4E0D\u5305\u542B</h2>' + this.renderList(detail.exclusions) + "<p>\u6700\u7EC8\u670D\u52A1\u8303\u56F4\u3001\u62A5\u4EF7\u548C\u5468\u671F\uFF0C\u4EE5\u53CC\u65B9\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002</p></section></main>";
-      html += '<div class="bottom-bar p10-bottom"><div><small>' + (staged ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u53C2\u8003\u8D77\u4EF7") + "</small><strong>" + (staged ? "\u8BC4\u4F30\u540E\u62A5\u4EF7" : team.priceText) + '</strong></div><button class="btn btn-primary" id="p10Consult" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '">' + (staged ? "\u54A8\u8BE2\u5E76\u83B7\u53D6\u65B9\u6848" : "\u54A8\u8BE2\u8BE5\u9879\u670D\u52A1") + "</button></div>";
+      html += '<div class="bottom-bar p10-bottom"><div><small class="p10-bottom-plan-name">' + (staged ? "\u62A5\u4EF7\u65B9\u5F0F" : selectedPackage ? selectedPackage.name : "\u53C2\u8003\u4EF7\u683C") + '</small><strong class="p10-bottom-plan-price">' + (staged ? "\u8BC4\u4F30\u540E\u62A5\u4EF7" : selectedPackage ? selectedPackage.priceText : team.priceText) + '</strong></div><button class="btn btn-primary" id="p10Consult" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '" data-plan-id="' + (selectedPackage ? selectedPackage.id : "") + '">' + (staged ? "\u54A8\u8BE2\u5E76\u83B7\u53D6\u65B9\u6848" : selectedPackage ? "\u9009\u62E9" + selectedPackage.name + "\u5E76\u54A8\u8BE2" : "\u7ACB\u5373\u54A8\u8BE2") + "</button></div>";
       return html;
     },
     init() {
@@ -7345,12 +7534,17 @@
       if (teamLink) teamLink.addEventListener("click", () => {
         navigateTo("p3", { teamId: teamLink.getAttribute("data-team-id"), sku: teamLink.getAttribute("data-sku") });
       });
+      if (this.state.packageConfig) {
+        bindPackageSelector(this.state.packageConfig, (plan) => {
+          this.state.selectedPackage = plan;
+        });
+      }
       const consultButton = document.getElementById("p10Consult");
       if (consultButton) consultButton.addEventListener("click", () => {
         const teamId = consultButton.getAttribute("data-team-id");
         const sku = consultButton.getAttribute("data-sku");
         if (getStagedServiceConfig(sku)) navigateTo("p13", { teamId, sku });
-        else startDirectConsultation2(teamId, sku);
+        else startDirectConsultation2(teamId, sku, consultButton.getAttribute("data-plan-id"));
       });
     }
   };
