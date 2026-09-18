@@ -1883,7 +1883,6 @@
     "scale": "11-50\u4EBA",
     "city": "\u5317\u4EAC",
     "district": "\u6D77\u6DC0\u533A",
-    "mobile": "138 0000 8899",
     "avatar": "\u5F20"
   };
 
@@ -2917,7 +2916,6 @@
         { label: "\u9700\u6C42\u8BF4\u660E", value: consultation.summary || "\u5F85\u8865\u5145" },
         { label: "\u9884\u7B97\u8303\u56F4", value: consultation.selectedPackage?.priceText || "\u6C9F\u901A\u540E\u786E\u8BA4" },
         { label: "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", value: consultation.urgency || "\u53CC\u65B9\u6C9F\u901A\u540E\u786E\u8BA4" },
-        { label: "\u8054\u7CFB\u65B9\u5F0F", value: consultation.contact || userData.mobile },
         ...consultation.attachment ? [{ label: "\u76F8\u5173\u6750\u6599", value: consultation.attachment }] : [],
         { label: "\u5B9E\u9645\u529E\u516C\u57CE\u5E02", value: `${userData.city}\xB7${userData.district}` }
       ],
@@ -4743,14 +4741,9 @@
   }
 
   // src/components/directConsultationSheet.js
-  function maskedMobile(value) {
-    const digits = String(value || "").replace(/\s/g, "");
-    if (digits.length < 7) return digits;
-    return digits.slice(0, 3) + "****" + digits.slice(-4);
-  }
-  function openDirectConsultationSheet({ team, sku, selectedPackage, user: user2, onSubmit }) {
+  function openDirectConsultationSheet({ team, sku, selectedPackage, onSubmit }) {
     const packageLine = selectedPackage ? "<div><span>\u670D\u52A1\u6863\u4F4D</span><strong>" + escapeHTML(selectedPackage.name + " \xB7 " + selectedPackage.priceText) + "</strong></div>" : "";
-    const body = '<div class="direct-consultation"><div class="direct-consultation-context"><span>' + icon("file-text", 19) + "</span><div><small>\u672C\u6B21\u54A8\u8BE2</small><strong>" + escapeHTML(sku) + "</strong><em>" + escapeHTML(team.name + " \xB7 " + team.orgShort) + '</em></div></div><div class="direct-consultation-summary">' + packageLine + '<div><span>\u6C9F\u901A\u65B9\u5F0F</span><strong>\u5E73\u53F0\u52A9\u624B\u786E\u8BA4\u4FE1\u606F\uFF0C\u6DF1\u5165\u6C9F\u901A\u7531\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4</strong></div></div><label><span>\u8BF7\u7B80\u5355\u8BF4\u660E\u4F60\u73B0\u5728\u9047\u5230\u7684\u95EE\u9898 <b>\u5FC5\u586B</b></span><textarea id="directConsultationSummary" rows="4" maxlength="300" placeholder="\u4F8B\u5982\uFF1A\u51C6\u5907\u5F15\u5165\u4E00\u4F4D\u8054\u5408\u521B\u59CB\u4EBA\uFF0C\u9700\u8981\u91CD\u65B0\u8BBE\u8BA1\u80A1\u6743\u6BD4\u4F8B\u548C\u63A7\u5236\u6743\u5B89\u6392\u3002"></textarea></label><div class="direct-consultation-grid"><label><span>\u5E0C\u671B\u4EC0\u4E48\u65F6\u5019\u5B8C\u6210</span><select id="directConsultationUrgency"><option>1\u5468\u5185</option><option selected>2\u20144\u5468</option><option>1\u20142\u4E2A\u6708</option><option>\u6682\u4E0D\u786E\u5B9A</option></select></label><label><span>\u8054\u7CFB\u65B9\u5F0F\u786E\u8BA4</span><input id="directConsultationContact" value="' + escapeHTML(maskedMobile(user2.mobile)) + '"></label></div><label class="direct-consultation-file"><span>' + icon("upload", 17) + '<strong id="directConsultationFileName">\u4E0A\u4F20\u76F8\u5173\u6750\u6599\uFF08\u9009\u586B\uFF09</strong></span><input id="directConsultationFile" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label><p class="direct-consultation-note">\u63D0\u4EA4\u540E\u5C06\u751F\u6210\u670D\u52A1\u9700\u6C42\u5355\u3002\u670D\u52A1\u56E2\u961F\u786E\u8BA4\u8303\u56F4\u5E76\u63A8\u9001\u65B9\u6848\u540E\uFF0C\u4F60\u518D\u51B3\u5B9A\u662F\u5426\u7B7E\u7EA6\u3002</p><button class="btn btn-primary btn-block" id="directConsultationSubmit" type="button">\u63D0\u4EA4\u54A8\u8BE2</button></div>';
+    const body = '<div class="direct-consultation"><div class="direct-consultation-context"><span>' + icon("file-text", 19) + "</span><div><small>\u672C\u6B21\u54A8\u8BE2</small><strong>" + escapeHTML(sku) + "</strong><em>" + escapeHTML(team.name + " \xB7 " + team.orgShort) + '</em></div></div><div class="direct-consultation-summary">' + packageLine + '<div><span>\u6C9F\u901A\u65B9\u5F0F</span><strong>\u5E73\u53F0\u52A9\u624B\u786E\u8BA4\u4FE1\u606F\uFF0C\u6DF1\u5165\u6C9F\u901A\u7531\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4</strong></div></div><label><span>\u8BF7\u7B80\u5355\u8BF4\u660E\u4F60\u73B0\u5728\u9047\u5230\u7684\u95EE\u9898 <b>\u5FC5\u586B</b></span><textarea id="directConsultationSummary" rows="4" maxlength="300" placeholder="\u4F8B\u5982\uFF1A\u51C6\u5907\u5F15\u5165\u4E00\u4F4D\u8054\u5408\u521B\u59CB\u4EBA\uFF0C\u9700\u8981\u91CD\u65B0\u8BBE\u8BA1\u80A1\u6743\u6BD4\u4F8B\u548C\u63A7\u5236\u6743\u5B89\u6392\u3002"></textarea></label><label><span>\u5E0C\u671B\u4EC0\u4E48\u65F6\u5019\u5B8C\u6210</span><select id="directConsultationUrgency"><option>1\u5468\u5185</option><option selected>2\u20144\u5468</option><option>1\u20142\u4E2A\u6708</option><option>\u6682\u4E0D\u786E\u5B9A</option></select></label><label class="direct-consultation-file"><span>' + icon("upload", 17) + '<strong id="directConsultationFileName">\u4E0A\u4F20\u76F8\u5173\u6750\u6599\uFF08\u9009\u586B\uFF09</strong></span><input id="directConsultationFile" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label><div class="direct-consultation-privacy"><span>' + icon("shield", 18) + '</span><div><strong>\u8054\u7CFB\u4FE1\u606F\u7531\u5E73\u53F0\u4FDD\u62A4</strong><small>\u56E2\u961F\u4EC5\u4F1A\u6536\u5230\u672C\u6B21\u9700\u6C42\u5185\u5BB9\uFF1B\u540E\u7EED\u5EFA\u8054\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u3002</small></div></div><p class="direct-consultation-note">\u63D0\u4EA4\u540E\u5C06\u751F\u6210\u670D\u52A1\u9700\u6C42\u5355\u3002\u670D\u52A1\u56E2\u961F\u786E\u8BA4\u8303\u56F4\u5E76\u63A8\u9001\u65B9\u6848\u540E\uFF0C\u4F60\u518D\u51B3\u5B9A\u662F\u5426\u7B7E\u7EA6\u3002</p><button class="btn btn-primary btn-block" id="directConsultationSubmit" type="button">\u63D0\u4EA4\u54A8\u8BE2</button></div>';
     const overlay = showSheet({ title: "\u786E\u8BA4\u54A8\u8BE2\u9700\u6C42", body });
     const summary = overlay.querySelector("#directConsultationSummary");
     const file = overlay.querySelector("#directConsultationFile");
@@ -4769,7 +4762,6 @@
       onSubmit({
         summary: value,
         urgency: overlay.querySelector("#directConsultationUrgency").value,
-        contact: overlay.querySelector("#directConsultationContact").value.trim(),
         attachment: file.files.length ? file.files[0].name : "",
         selectedPackage: selectedPackage || null
       });
@@ -4951,7 +4943,7 @@
   function renderStepThree(page14) {
     const sku = page14.resolveSku();
     const attachment = page14.attachmentName || "\u672A\u4E0A\u4F20";
-    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><h1>\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</h1><p>\u56E2\u961F\u54CD\u5E94\u548C\u540E\u7EED\u8FDB\u5C55\u4F1A\u901A\u8FC7\u4F60\u786E\u8BA4\u7684\u8054\u7CFB\u65B9\u5F0F\u63D0\u9192\u3002</p></header><article class="p5-review-block"><div class="p5-review-head"><strong>\u9700\u6C42\u4FE1\u606F</strong><button type="button" data-p5-edit-demand>\u8FD4\u56DE\u4FEE\u6539</button></div><dl><div><dt>\u670D\u52A1\u65B9\u5411</dt><dd>' + escapeHTML(sku) + "</dd></div><div><dt>\u671F\u671B\u65F6\u95F4</dt><dd>" + escapeHTML(page14.collected.timeline) + "</dd></div><div><dt>\u9884\u7B97\u533A\u95F4</dt><dd>" + escapeHTML(page14.collected.budget) + "</dd></div><div><dt>\u9644\u4EF6\u6750\u6599</dt><dd>" + escapeHTML(attachment) + "</dd></div></dl><p>" + escapeHTML(page14.collected.extra) + '</p></article><div class="p5-contact-block"><div class="p5-contact-title"><strong>\u786E\u8BA4\u8054\u7CFB\u65B9\u5F0F</strong><span>\u5DF2\u4ECE\u8D26\u53F7\u8D44\u6599\u5E26\u5165</span></div><label><span>\u8054\u7CFB\u4EBA</span><input id="p5ContactName" value="' + escapeHTML(page14.contactName) + '" autocomplete="name"></label><label><span>\u624B\u673A\u53F7</span><input id="p5ContactPhone" value="' + escapeHTML(page14.contactPhone) + '" inputmode="tel" autocomplete="tel"></label><label><span>\u4F01\u4E1A</span><input id="p5ContactCompany" value="' + escapeHTML(page14.contactCompany) + '"></label><label><span>\u6240\u5728\u5730\u533A</span><input id="p5ContactCity" value="' + escapeHTML(page14.collected.city) + '"></label></div><div class="p5-submit-note">' + icon("shield", 17) + "<span>\u8054\u7CFB\u65B9\u5F0F\u4EC5\u7528\u4E8E\u672C\u6B21\u670D\u52A1\u901A\u77E5\uFF0C\u4E0D\u4F1A\u76F4\u63A5\u5C55\u793A\u7ED9\u670D\u52A1\u56E2\u961F\u3002\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u534F\u52A9\u5EFA\u8054\u3002</span></div></section>";
+    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><h1>\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</h1><p>\u56E2\u961F\u4EC5\u4F1A\u6536\u5230\u672C\u6B21\u9700\u6C42\u4FE1\u606F\uFF0C\u5339\u914D\u548C\u670D\u52A1\u8FDB\u5C55\u7531\u5E73\u53F0\u7EDF\u4E00\u901A\u77E5\u3002</p></header><article class="p5-review-block"><div class="p5-review-head"><strong>\u9700\u6C42\u4FE1\u606F</strong><button type="button" data-p5-edit-demand>\u8FD4\u56DE\u4FEE\u6539</button></div><dl><div><dt>\u670D\u52A1\u65B9\u5411</dt><dd>' + escapeHTML(sku) + "</dd></div><div><dt>\u671F\u671B\u65F6\u95F4</dt><dd>" + escapeHTML(page14.collected.timeline) + "</dd></div><div><dt>\u9884\u7B97\u533A\u95F4</dt><dd>" + escapeHTML(page14.collected.budget) + "</dd></div><div><dt>\u9644\u4EF6\u6750\u6599</dt><dd>" + escapeHTML(attachment) + "</dd></div></dl><p>" + escapeHTML(page14.collected.extra) + '</p></article><div class="p5-notification-block"><span class="p5-notification-icon">' + icon("shield", 20) + "</span><div><strong>\u8D26\u53F7\u901A\u77E5\u4FE1\u606F\u5DF2\u786E\u8BA4</strong><p>\u5339\u914D\u7ED3\u679C\u4E0E\u670D\u52A1\u8FDB\u5C55\u4F1A\u53D1\u9001\u81F3\u7AD9\u5185\u6D88\u606F\u548C\u8D26\u53F7\u5DF2\u7ED1\u5B9A\u7684\u901A\u77E5\u6E20\u9053\u3002</p><ul><li>\u670D\u52A1\u56E2\u961F\u65E0\u6CD5\u67E5\u770B\u4F60\u7684\u624B\u673A\u53F7\u3001\u5FAE\u4FE1\u6216\u90AE\u7BB1</li><li>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u534F\u52A9\u5EFA\u8054</li></ul></div></div></section>";
   }
   function renderFooter(page14) {
     const primary = page14.wizardStep === 3 ? "\u63D0\u4EA4\u5E76\u5F00\u59CB\u5339\u914D" : "\u7EE7\u7EED";
@@ -4982,19 +4974,6 @@
     });
     const attachment = document.getElementById("p5Attachment");
     if (attachment) attachment.addEventListener("change", () => page14.setAttachment(attachment.files && attachment.files[0]));
-    [
-      ["p5ContactName", "contactName"],
-      ["p5ContactPhone", "contactPhone"],
-      ["p5ContactCompany", "contactCompany"],
-      ["p5ContactCity", "city"]
-    ].forEach(([id, key]) => {
-      const input = document.getElementById(id);
-      if (!input) return;
-      input.addEventListener("input", () => {
-        if (key === "city") page14.collected.city = input.value;
-        else page14[key] = input.value;
-      });
-    });
   }
 
   // src/components/matchCard.js
@@ -5235,9 +5214,6 @@
     wizardStep: 1,
     selectedCategoryId: "",
     attachmentName: "",
-    contactName: user.name,
-    contactPhone: user.mobile || "138 0000 8899",
-    contactCompany: user.company,
     collected: {
       issue: "",
       skuSpecific: "",
@@ -5288,9 +5264,6 @@
       this.resubmitTitle = "";
       this.wecomPrompted = false;
       this.attachmentName = "";
-      this.contactName = user.name;
-      this.contactPhone = user.mobile || "138 0000 8899";
-      this.contactCompany = user.company;
       const knownCategoryId = this.inferCategory(this.params.sku);
       if (this.params.sku && knownCategoryId) {
         this.selectedCategoryId = knownCategoryId;
@@ -5434,10 +5407,6 @@
         if (this.selectedCategoryId === "other") this.applyAiGuidance();
         this.wizardStep = 3;
         this.renderWizard();
-        return;
-      }
-      if (!this.contactName.trim() || !this.contactPhone.trim()) {
-        toast("\u8BF7\u786E\u8BA4\u8054\u7CFB\u4EBA\u548C\u624B\u673A\u53F7");
         return;
       }
       this.state = "matching";
@@ -5634,10 +5603,7 @@
           { label: "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", value: value("timeline") || "\u672A\u63D0\u4F9B" },
           { label: "\u5B9E\u9645\u529E\u516C\u57CE\u5E02", value: this.collected.city },
           { label: "\u8865\u5145\u63CF\u8FF0", value: extra || "\u672A\u63D0\u4F9B" },
-          { label: "\u9644\u4EF6\u6750\u6599", value: this.attachmentName || "\u672A\u4E0A\u4F20" },
-          { label: "\u8054\u7CFB\u4EBA", value: this.contactName },
-          { label: "\u8054\u7CFB\u7535\u8BDD", value: this.contactPhone },
-          { label: "\u8054\u7CFB\u4F01\u4E1A", value: this.contactCompany }
+          { label: "\u9644\u4EF6\u6750\u6599", value: this.attachmentName || "\u672A\u4E0A\u4F20" }
         ],
         teamIds: selectedIds,
         resubmitFrom: this.resubmitFrom,
@@ -5796,7 +5762,6 @@
     openDirectConsultationSheet({
       team,
       sku: serviceName,
-      user,
       onSubmit(consultation) {
         const demand = getOrCreateDirectConsultation(teamId, serviceName, { ...domainOptions3(), consultation });
         emitChange();
@@ -7784,7 +7749,6 @@
       team,
       sku: serviceName,
       selectedPackage,
-      user,
       onSubmit(consultation) {
         const demand = getOrCreateDirectConsultation(teamId, serviceName, { ...domainOptions6(), consultation });
         if (selectedPackage) {
