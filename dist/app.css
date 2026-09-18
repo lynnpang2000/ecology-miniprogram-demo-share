@@ -2871,6 +2871,12 @@ button:focus-visible,
   border-radius: 16px;
   background: #fff;
 }
+.p1-offer-list.is-fundraising-feature {
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
 .p1-offer-card {
   width: 100%;
   min-height: 142px;
@@ -2937,6 +2943,14 @@ button:focus-visible,
   font-size: 10px;
   font-weight: 700;
 }
+.p1-category-badge {
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: #F3F4F7;
+  color: #5E6879;
+  font-size: 10px;
+  font-weight: 600;
+}
 .p1-offer-desc {
   display: -webkit-box;
   overflow: hidden;
@@ -2994,6 +3008,184 @@ button:focus-visible,
   color: var(--color-primary);
   font-size: 11px;
   white-space: nowrap;
+}
+.p1-offer-fundraising .p1-offer-aside {
+  justify-content: flex-start;
+}
+.p1-all-services-toggle {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 15px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 16px;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  border-top: 1px solid #EDF0F4;
+  background: #FAFAFC;
+  color: var(--color-primary);
+  text-align: left;
+  cursor: pointer;
+}
+.p1-all-services-toggle span {
+  font-size: var(--font-sm);
+  font-weight: 600;
+}
+.p1-all-services-toggle small {
+  color: #7B8495;
+  font-size: 10px;
+}
+.p1-all-services-toggle .ic {
+  transition: transform .18s ease-out;
+}
+.p1-all-services-toggle[aria-expanded=true] .ic {
+  transform: rotate(180deg);
+}
+.p1-fundraising-feature {
+  padding: 17px;
+  border: 1px solid #DDE6E5;
+  border-radius: 16px;
+  background: #FFFFFF;
+}
+.p1-fundraising-intro {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 12px;
+}
+.p1-fundraising-icon {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background: #E7F7F4;
+  color: #147C72;
+}
+.p1-fundraising-intro > div {
+  min-width: 0;
+}
+.p1-fundraising-intro .p1-offer-title > strong {
+  font-size: 17px;
+}
+.p1-fundraising-intro p {
+  margin-top: 7px;
+  color: #5F6B7B;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.p1-fundraising-intro small {
+  display: block;
+  margin-top: 8px;
+  color: #536171;
+  font-size: 10px;
+}
+.p1-fundraising-action {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 15px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+.p1-fundraising-journey,
+.p1-fundraising-status {
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px solid #EDF0F4;
+}
+.p1-fundraising-journey > strong {
+  color: #2B3445;
+  font-size: var(--font-xs);
+}
+.p1-fundraising-journey ol {
+  margin: 11px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+}
+.p1-fundraising-journey li {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  text-align: center;
+}
+.p1-fundraising-journey li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  right: -25%;
+  width: 50%;
+  height: 1px;
+  background: #D9DDE5;
+}
+.p1-fundraising-journey li > span {
+  position: relative;
+  z-index: 1;
+  width: 23px;
+  height: 23px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #BFC5D1;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #626D7D;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.p1-fundraising-journey li:first-child > span {
+  border-color: #90CFC7;
+  background: #E7F7F4;
+  color: #147C72;
+}
+.p1-fundraising-journey small {
+  max-width: 88px;
+  color: #677284;
+  font-size: 10px;
+  line-height: 1.45;
+}
+.p1-fundraising-status {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+.p1-fundraising-status > span {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.p1-fundraising-status > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+.p1-fundraising-status strong {
+  color: #252A3A;
+  font-size: var(--font-sm);
+}
+.p1-fundraising-status small {
+  color: #697386;
+  font-size: 10px;
+  line-height: 1.5;
 }
 .p1-agent-offer.is-paused {
   background: #FAFAFC;

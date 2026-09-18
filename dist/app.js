@@ -1872,6 +1872,31 @@
       };
     } else fundraisingState.investorConnections = {};
   }
+  function getFundraisingSummary() {
+    const counts = getConnectionCounts();
+    if (!fundraisingState.paused) {
+      if (counts.requested) return { title: `${counts.requested} \u6761\u6295\u8D44\u4EBA\u5EFA\u8054\u7533\u8BF7\u5F85\u5904\u7406`, detail: "\u53EF\u5206\u522B\u540C\u610F\u6216\u6682\u4E0D\u5EFA\u8054", action: "\u53BB\u5904\u7406" };
+      if (counts.entrepreneur_requested) return { title: `${counts.entrepreneur_requested} \u6761\u5BF9\u63A5\u7533\u8BF7\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4`, detail: "\u786E\u8BA4\u7ED3\u679C\u4F1A\u901A\u8FC7\u5DF2\u5F00\u542F\u6E20\u9053\u901A\u77E5\u4F60", action: "\u67E5\u770B\u7533\u8BF7" };
+      if (counts.confirmed) return { title: `${counts.confirmed} \u6761\u5EFA\u8054\u5F85\u7EE7\u7EED`, detail: "\u8BF7\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4", action: "\u7EE7\u7EED\u5EFA\u8054" };
+      if (counts.connecting) return { title: `${counts.connecting} \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054\u4E2D`, detail: "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u521B\u5EFA\u4F01\u4E1A\u5FAE\u4FE1\u7FA4", action: "\u67E5\u770B\u8FDB\u5EA6" };
+      if (counts.connected) return { title: `\u5DF2\u5B8C\u6210 ${counts.connected} \u4F4D\u6295\u8D44\u4EBA\u5EFA\u8054`, detail: "\u672C\u8F6E\u5339\u914D\u4ECD\u4F1A\u7EE7\u7EED", action: "\u67E5\u770B\u8BB0\u5F55" };
+    }
+    const labels = {
+      submitted: { title: "\u6B63\u5728\u5339\u914D\u6295\u8D44\u4EBA", detail: "\u5DF2\u5B8C\u6210\u8D44\u6599\u4E0E\u6388\u6743\u786E\u8BA4", action: "\u67E5\u770B\u878D\u8D44\u8FDB\u5EA6" },
+      matching: { title: "\u6B63\u5728\u5339\u914D\u6295\u8D44\u4EBA", detail: "\u6B63\u6838\u5BF9\u6295\u8D44\u504F\u597D\u4E0E\u9879\u76EE\u6807\u7B7E", action: "\u67E5\u770B\u878D\u8D44\u8FDB\u5EA6" },
+      waiting: { title: "\u878D\u8D44\u5339\u914D\u8FDB\u884C\u4E2D", detail: "\u6709\u65B0\u8FDB\u5C55\u65F6\u4F1A\u901A\u8FC7\u5DF2\u5F00\u542F\u6E20\u9053\u901A\u77E5\u4F60", action: "\u67E5\u770B\u878D\u8D44\u8FDB\u5EA6" },
+      matched: { title: "\u6709\u65B0\u7684\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C", detail: "\u53EF\u67E5\u770B\u672C\u6279\u63A8\u8350\u53CA\u5177\u4F53\u5339\u914D\u4F9D\u636E", action: "\u67E5\u770B\u5339\u914D\u7ED3\u679C" },
+      requested: { title: "\u6295\u8D44\u4EBA\u7533\u8BF7\u5EFA\u8054", detail: "\u8BF7\u786E\u8BA4\u662F\u5426\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054", action: "\u53BB\u5904\u7406" },
+      confirmed: { title: "\u5DF2\u540C\u610F\u6295\u8D44\u4EBA\u5EFA\u8054\u7533\u8BF7", detail: "\u8BF7\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4", action: "\u7EE7\u7EED\u5EFA\u8054" },
+      connecting: { title: "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4", detail: "\u540E\u7EED\u4EA4\u6D41\u5C06\u5728\u4F01\u4E1A\u5FAE\u4FE1\u4E2D\u8FDB\u884C", action: "\u67E5\u770B\u8FDB\u5EA6" },
+      connected: { title: "\u6295\u8D44\u4EBA\u5EFA\u8054\u5DF2\u5B8C\u6210", detail: "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB\uFF0C\u53EF\u67E5\u770B\u5EFA\u8054\u8BB0\u5F55", action: "\u67E5\u770B\u8BB0\u5F55" },
+      declined: { title: "\u5DF2\u6682\u4E0D\u5EFA\u8054", detail: "\u5904\u7406\u7ED3\u679C\u5DF2\u540C\u6B65\u7ED9\u6295\u8D44\u4EBA\u7AEF", action: "\u67E5\u770B\u8BB0\u5F55" },
+      withdrawn: { title: "\u6295\u8D44\u4EBA\u5DF2\u64A4\u56DE\u7533\u8BF7", detail: "\u672C\u6B21\u5EFA\u8054\u7533\u8BF7\u5DF2\u7ECF\u7ED3\u675F", action: "\u67E5\u770B\u8BB0\u5F55" },
+      expired: { title: "\u5EFA\u8054\u7533\u8BF7\u5DF2\u8D85\u65F6", detail: "\u672C\u6B21\u7533\u8BF7\u5DF2\u81EA\u52A8\u5173\u95ED", action: "\u67E5\u770B\u8BB0\u5F55" },
+      paused: { title: "\u878D\u8D44\u5339\u914D\u5DF2\u6682\u505C", detail: "\u6062\u590D\u540E\u5C06\u7EE7\u7EED\u5411\u5408\u9002\u6295\u8D44\u4EBA\u63A8\u8350", action: "\u7BA1\u7406\u672C\u8F6E\u5339\u914D" }
+    };
+    return labels[fundraisingState.paused ? "paused" : fundraisingState.status] || null;
+  }
 
   // src/data/user.js
   var user = {
@@ -3586,6 +3611,13 @@
   // src/data/homeServiceShelf.js
   var homeServiceTabs = Object.freeze([
     {
+      id: "all",
+      label: "\u5168\u90E8\u670D\u52A1",
+      icon: "sparkles",
+      kind: "all",
+      offerings: []
+    },
+    {
       id: "fundraising",
       label: "\u627E\u6295\u878D\u8D44\u670D\u52A1",
       icon: "trending-up",
@@ -4313,18 +4345,59 @@
   function renderProvider(team) {
     return '<span class="p1-offer-provider"><b>' + escapeHTML(team.name) + '</b><i aria-hidden="true"></i><span>' + escapeHTML(team.orgName || team.orgShort) + "</span></span>";
   }
-  function renderServiceOffering(offering, tab) {
+  var categoryLabels = Object.freeze({
+    law: "\u6CD5\u5F8B",
+    business: "\u5DE5\u5546",
+    finance: "\u8D22\u7A0E",
+    ip: "\u77E5\u8BC6\u4EA7\u6743",
+    policy: "\u653F\u7B56\u7533\u62A5",
+    hr: "\u4EBA\u529B\u8D44\u6E90"
+  });
+  function renderServiceOffering(offering, tab, showCategory = false) {
     const team = getTeam(offering.teamId, store.teams);
     if (!team) return "";
     const priceLabel = getServicePriceLabel(team.id, offering.sku, team.priceText);
-    return '<button class="p1-offer-card" type="button" data-offer-kind="service" data-team-id="' + escapeHTML(team.id) + '" data-sku="' + escapeHTML(offering.sku) + '"><span class="p1-offer-icon">' + icon(tab.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(offering.sku) + "</strong>" + renderBadge(team.badge) + '</span><span class="p1-offer-desc">' + escapeHTML(serviceDescription(offering.sku)) + "</span>" + renderProvider(team) + '</span><span class="p1-offer-aside"><strong>' + escapeHTML(priceLabel) + "</strong><span>\u67E5\u770B\u8BE6\u60C5 " + icon("chevron-right", 13) + "</span></span></button>";
+    return '<button class="p1-offer-card" type="button" data-offer-kind="service" data-team-id="' + escapeHTML(team.id) + '" data-sku="' + escapeHTML(offering.sku) + '"><span class="p1-offer-icon">' + icon(tab.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(offering.sku) + "</strong>" + (showCategory ? '<span class="p1-category-badge">' + escapeHTML(categoryLabels[tab.id] || tab.label) + "</span>" : "") + renderBadge(team.badge) + '</span><span class="p1-offer-desc">' + escapeHTML(serviceDescription(offering.sku)) + "</span>" + renderProvider(team) + '</span><span class="p1-offer-aside"><strong>' + escapeHTML(priceLabel) + "</strong><span>\u67E5\u770B\u8BE6\u60C5 " + icon("chevron-right", 13) + "</span></span></button>";
   }
   function renderFundraisingOffering() {
-    return '<button class="p1-offer-card p1-offer-fundraising" type="button" data-offer-kind="fundraising"><span class="p1-offer-icon">' + icon("trending-up", 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>\u878D\u8D44\u5339\u914D\u670D\u52A1</strong><span class="p1-platform-badge">\u5E73\u53F0\u81EA\u8425</span></span><span class="p1-offer-desc">\u63D0\u4EA4\u6216\u66F4\u65B0BP\uFF0C\u5339\u914D\u6B63\u5728\u627E\u9879\u76EE\u4E14\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u4E2A\u4EBA\u6295\u8D44\u4EBA\u3002</span><span class="p1-offer-provider"><b>\u987E\u6668\u56E2\u961F</b><i aria-hidden="true"></i><span>\u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3</span></span></span><span class="p1-offer-aside"><strong>\u4E13\u9879\u5339\u914D</strong><span>\u5F00\u59CB\u5339\u914D ' + icon("chevron-right", 13) + "</span></span></button>";
+    return '<button class="p1-offer-card p1-offer-fundraising" type="button" data-offer-kind="fundraising"><span class="p1-offer-icon">' + icon("trending-up", 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>\u878D\u8D44\u5339\u914D\u670D\u52A1</strong><span class="p1-platform-badge">\u5E73\u53F0\u81EA\u8425</span></span><span class="p1-offer-desc">\u63D0\u4EA4\u6216\u66F4\u65B0BP\uFF0C\u5339\u914D\u6B63\u5728\u627E\u9879\u76EE\u4E14\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u4E2A\u4EBA\u6295\u8D44\u4EBA\u3002</span><span class="p1-offer-provider"><b>\u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3</b></span></span><span class="p1-offer-aside"><span>\u5F00\u59CB\u5339\u914D ' + icon("chevron-right", 13) + "</span></span></button>";
   }
-  function renderAgentOffering(agent) {
+  function renderFundraisingFeature() {
+    const summary = getFundraisingSummary();
+    const action = summary ? summary.action : "\u5F00\u59CB\u878D\u8D44\u5339\u914D";
+    const followUp = summary ? '<div class="p1-fundraising-status"><span>' + icon("clock", 18) + "</span><div><strong>" + escapeHTML(summary.title) + "</strong><small>" + escapeHTML(summary.detail) + "</small></div></div>" : '<div class="p1-fundraising-journey"><strong>\u5339\u914D\u6D41\u7A0B</strong><ol><li><span>1</span><small>\u786E\u8BA4\u6216\u4E0A\u4F20 BP</small></li><li><span>2</span><small>\u7B7E\u7F72\u4FDD\u5BC6\u4E0E\u5339\u914D\u6388\u6743</small></li><li><span>3</span><small>\u67E5\u770B\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C</small></li></ol></div>';
+    return '<section class="p1-fundraising-feature"><div class="p1-fundraising-intro"><span class="p1-fundraising-icon">' + icon("trending-up", 23) + '</span><div><span class="p1-offer-title"><strong>\u878D\u8D44\u5339\u914D\u670D\u52A1</strong><span class="p1-platform-badge">\u5E73\u53F0\u81EA\u8425</span></span><p>\u63D0\u4EA4\u6216\u66F4\u65B0 BP\uFF0C\u5E73\u53F0\u4F1A\u5728\u5F53\u524D\u6B63\u5728\u627E\u9879\u76EE\u4E14\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u4E2A\u4EBA\u6295\u8D44\u4EBA\u4E2D\u8FDB\u884C\u5339\u914D\u3002</p><small>\u670D\u52A1\u65B9\uFF1A\u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3</small></div></div><button class="p1-fundraising-action" type="button" data-offer-kind="fundraising"><span>' + escapeHTML(action) + "</span>" + icon("arrow-right", 16) + "</button>" + followUp + "</section>";
+  }
+  function renderAgentOffering(agent, showCategory = false) {
     const paused = agent.status === "paused";
-    return '<button class="p1-offer-card p1-agent-offer' + (paused ? " is-paused" : "") + '" type="button" data-offer-kind="agent" data-agent-id="' + escapeHTML(agent.id) + '"' + (paused ? " disabled" : "") + '><span class="p1-offer-icon">' + icon(agent.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(agent.name) + "</strong>" + (agent.recommended ? '<span class="p1-platform-badge">\u5E73\u53F0\u63A8\u8350</span>' : "") + '</span><span class="p1-offer-desc">' + escapeHTML(agent.description) + '</span><span class="p1-offer-provider"><b>' + escapeHTML(agent.supplier.name) + '</b><i aria-hidden="true"></i><span>' + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528") + '</span></span></span><span class="p1-offer-aside"><strong>' + escapeHTML(agent.price) + "</strong><span>" + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F00\u59CB\u4F7F\u7528 " + icon("chevron-right", 13)) + "</span></span></button>";
+    return '<button class="p1-offer-card p1-agent-offer' + (paused ? " is-paused" : "") + '" type="button" data-offer-kind="agent" data-agent-id="' + escapeHTML(agent.id) + '"' + (paused ? " disabled" : "") + '><span class="p1-offer-icon">' + icon(agent.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(agent.name) + "</strong>" + (showCategory ? '<span class="p1-category-badge">\u667A\u80FD\u4F53</span>' : "") + (agent.recommended ? '<span class="p1-platform-badge">\u5E73\u53F0\u63A8\u8350</span>' : "") + '</span><span class="p1-offer-desc">' + escapeHTML(agent.description) + '</span><span class="p1-offer-provider"><b>' + escapeHTML(agent.supplier.name) + '</b><i aria-hidden="true"></i><span>' + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528") + '</span></span></span><span class="p1-offer-aside"><strong>' + escapeHTML(agent.price) + "</strong><span>" + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F00\u59CB\u4F7F\u7528 " + icon("chevron-right", 13)) + "</span></span></button>";
+  }
+  function getAllServiceEntries() {
+    const agents2 = getAgentsByCategory("all");
+    const byId = Object.fromEntries(homeServiceTabs.map((tab) => [tab.id, tab]));
+    const prioritized = [
+      { kind: "fundraising", key: "fundraising" },
+      { kind: "service", tab: byId.law, offering: byId.law.offerings[0], key: "law:0" },
+      { kind: "service", tab: byId.business, offering: byId.business.offerings[0], key: "business:0" },
+      { kind: "service", tab: byId.ip, offering: byId.ip.offerings[0], key: "ip:0" },
+      { kind: "service", tab: byId.policy, offering: byId.policy.offerings[0], key: "policy:0" },
+      { kind: "agent", agent: agents2[0], key: agents2[0] ? "agent:" + agents2[0].id : "agent:none" }
+    ].filter((entry) => entry.kind === "fundraising" || entry.offering || entry.agent);
+    const used = new Set(prioritized.map((entry) => entry.key));
+    const remainingServices = homeServiceTabs.filter((tab) => tab.kind === "services").flatMap((tab) => tab.offerings.map((offering, index) => ({ kind: "service", tab, offering, key: tab.id + ":" + index }))).filter((entry) => !used.has(entry.key));
+    const remainingAgents = agents2.map((agent) => ({ kind: "agent", agent, key: "agent:" + agent.id })).filter((entry) => !used.has(entry.key));
+    return [...prioritized, ...remainingServices, ...remainingAgents];
+  }
+  function renderAllServices(expanded) {
+    const entries = getAllServiceEntries();
+    const visible = expanded ? entries : entries.slice(0, 6);
+    const cards = visible.map((entry) => {
+      if (entry.kind === "fundraising") return renderFundraisingOffering();
+      if (entry.kind === "agent") return renderAgentOffering(entry.agent, true);
+      return renderServiceOffering(entry.offering, entry.tab, true);
+    }).join("");
+    const toggle = entries.length > 6 ? '<button class="p1-all-services-toggle" type="button" data-offer-kind="toggle-all" aria-expanded="' + String(Boolean(expanded)) + '"><span>' + (expanded ? "\u6536\u8D77\u90E8\u5206\u670D\u52A1" : "\u5C55\u5F00\u5168\u90E8\u670D\u52A1") + "</span><small>\u5171 " + entries.length + " \u9879</small>" + icon("chevron-down", 15) + "</button>" : "";
+    return cards + toggle;
   }
   function renderEmptyShelf(tab) {
     return '<div class="p1-shelf-empty"><span>' + icon(tab.icon, 25) + '</span><div><strong>\u6682\u672A\u4E0A\u67B6\u53EF\u9009\u670D\u52A1</strong><p>\u5E73\u53F0\u6B63\u5728\u62DB\u52DF\u5E76\u6838\u9A8C\u76F8\u5173\u670D\u52A1\u56E2\u961F\uFF0C\u4F60\u4E5F\u53EF\u4EE5\u5148\u63D0\u4EA4\u5177\u4F53\u9700\u6C42\u3002</p></div><button type="button" data-offer-kind="suggest">\u63D0\u4EA4\u670D\u52A1\u5EFA\u8BAE</button></div>';
@@ -4334,20 +4407,23 @@
       (tab) => '<button type="button" role="tab" aria-selected="' + String(tab.id === activeTabId) + '" class="p1-shelf-tab' + (tab.id === activeTabId ? " active" : "") + '" data-shelf-tab="' + tab.id + '">' + escapeHTML(tab.label) + "</button>"
     ).join("") + "</div>";
   }
-  function renderServiceShelf(activeTabId) {
+  function renderServiceShelf(activeTabId, options = {}) {
     const tab = getHomeServiceTab(activeTabId);
     let cards = "";
-    if (tab.kind === "fundraising") cards = renderFundraisingOffering();
+    if (tab.kind === "all") cards = renderAllServices(Boolean(options.expanded));
+    else if (tab.kind === "fundraising") cards = renderFundraisingFeature();
     else if (tab.kind === "agents") cards = getAgentsByCategory("all").slice(0, 5).map(renderAgentOffering).join("");
     else cards = tab.offerings.map((offering) => renderServiceOffering(offering, tab)).join("");
     if (!cards) cards = renderEmptyShelf(tab);
-    return '<div class="p1-offer-list" id="p1OfferList" role="tabpanel">' + cards + "</div>";
+    const modifier = tab.kind === "fundraising" ? " is-fundraising-feature" : tab.kind === "all" ? " is-all-services" : "";
+    return '<div class="p1-offer-list' + modifier + '" id="p1OfferList" role="tabpanel">' + cards + "</div>";
   }
 
   // src/pages/p1-home/index.js
   var page = {
     searchHistory: ["\u5408\u540C\u5BA1\u67E5", "\u516C\u53F8\u6CE8\u518C"],
-    activeShelfId: "fundraising",
+    activeShelfId: "all",
+    allServicesExpanded: false,
     render(params = {}) {
       this.activeShelfId = getHomeServiceTab(params.shelf || this.activeShelfId).id;
       let html = "";
@@ -4355,7 +4431,7 @@
       html += '<section class="p1-brand-copy"><h1>\u4E13\u4E3A 0-A \u8F6E\u521B\u4E1A\u8005\u6253\u9020\u7684<br>\u751F\u6001\u670D\u52A1\u5E73\u53F0</h1><div class="p1-brand-proof"><span>' + icon("check", 14) + "100%\u8D44\u8D28\u6838\u9A8C</span><span>" + icon("check", 14) + "AI\u667A\u80FD\u5339\u914D</span><span>" + icon("check", 14) + "\u5168\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
       html += '<button class="p1-match-card" id="p1HeroCard" type="button"><span class="p1-match-icon">' + icon("sparkles", 22) + '</span><span class="p1-match-copy"><strong>\u4E0D\u786E\u5B9A\u9700\u8981\u4EC0\u4E48\u670D\u52A1\uFF1F</strong><small>\u5148\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\uFF0CAI \u5E2E\u4F60\u5339\u914D</small></span><span class="p1-match-action">\u5F00\u59CB\u5339\u914D ' + icon("arrow-right", 14) + "</span></button></div>";
       html += '<section class="p1-marketplace">';
-      html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId);
+      html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId, { expanded: this.allServicesExpanded });
       html += '<button class="service-suggestion-link p1-suggestion" type="button" id="p1ServiceSuggestion"><span>\u6CA1\u6709\u4F60\u8981\u627E\u7684\u670D\u52A1\uFF1F</span><strong>\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42 ' + icon("arrow-right", 14) + "</strong></button></section>";
       html += '<div class="mb-4"></div>';
       return html;
@@ -4372,13 +4448,14 @@
       document.querySelectorAll("[data-shelf-tab]").forEach((tab) => {
         tab.addEventListener("click", () => {
           this.activeShelfId = tab.getAttribute("data-shelf-tab");
+          if (this.activeShelfId !== "all") this.allServicesExpanded = false;
           document.querySelectorAll("[data-shelf-tab]").forEach((item) => {
             const selected = item.getAttribute("data-shelf-tab") === this.activeShelfId;
             item.classList.toggle("active", selected);
             item.setAttribute("aria-selected", String(selected));
           });
           const list = document.getElementById("p1OfferList");
-          list.outerHTML = renderServiceShelf(this.activeShelfId);
+          list.outerHTML = renderServiceShelf(this.activeShelfId, { expanded: this.allServicesExpanded });
           const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           document.querySelector('[data-shelf-tab="' + this.activeShelfId + '"]').scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest", inline: "center" });
           this.bindOfferingActions();
@@ -4394,6 +4471,11 @@
           else if (kind === "service") navigateTo("p10", { teamId: card.getAttribute("data-team-id"), sku: card.getAttribute("data-sku") });
           else if (kind === "agent") navigateTo("p11", { agentId: card.getAttribute("data-agent-id") });
           else if (kind === "suggest") openServiceSuggestion("");
+          else if (kind === "toggle-all") {
+            this.allServicesExpanded = !this.allServicesExpanded;
+            document.getElementById("p1OfferList").outerHTML = renderServiceShelf("all", { expanded: this.allServicesExpanded });
+            this.bindOfferingActions();
+          }
         });
       });
     }
