@@ -3625,8 +3625,15 @@
       offerings: []
     },
     {
+      id: "agents",
+      label: "\u627E\u667A\u80FD\u4F53\u670D\u52A1",
+      icon: "bot",
+      kind: "agents",
+      offerings: []
+    },
+    {
       id: "law",
-      label: "\u627E\u5F8B\u5E08\u56E2\u961F",
+      label: "\u627E\u6CD5\u5F8B\u670D\u52A1",
       icon: "scale",
       kind: "services",
       categoryId: "law",
@@ -3640,7 +3647,7 @@
     },
     {
       id: "business",
-      label: "\u627E\u5DE5\u5546\u56E2\u961F",
+      label: "\u627E\u5DE5\u5546\u670D\u52A1",
       icon: "briefcase",
       kind: "services",
       categoryId: "business",
@@ -3652,7 +3659,7 @@
     },
     {
       id: "finance",
-      label: "\u627E\u8D22\u7A0E\u56E2\u961F",
+      label: "\u627E\u8D22\u7A0E\u670D\u52A1",
       icon: "coins",
       kind: "services",
       categoryId: "finance",
@@ -3660,7 +3667,7 @@
     },
     {
       id: "ip",
-      label: "\u627E\u77E5\u8BC6\u4EA7\u6743\u56E2\u961F",
+      label: "\u627E\u77E5\u8BC6\u4EA7\u6743\u670D\u52A1",
       icon: "shield",
       kind: "services",
       categoryId: "ip",
@@ -3673,7 +3680,7 @@
     },
     {
       id: "policy",
-      label: "\u627E\u653F\u7B56\u7533\u62A5\u56E2\u961F",
+      label: "\u627E\u653F\u7B56\u7533\u62A5\u670D\u52A1",
       icon: "file-text",
       kind: "services",
       categoryId: "policy",
@@ -3685,17 +3692,10 @@
     },
     {
       id: "hr",
-      label: "\u627E\u4EBA\u529B\u8D44\u6E90\u56E2\u961F",
+      label: "\u627E\u4EBA\u529B\u8D44\u6E90\u670D\u52A1",
       icon: "users",
       kind: "services",
       categoryId: "hr",
-      offerings: []
-    },
-    {
-      id: "agents",
-      label: "\u627E\u667A\u80FD\u4F53\u670D\u52A1",
-      icon: "bot",
-      kind: "agents",
       offerings: []
     }
   ]);
@@ -4386,16 +4386,16 @@
     const followUp = summary ? '<div class="p1-fundraising-status"><span>' + icon("clock", 18) + "</span><div><strong>" + escapeHTML(summary.title) + "</strong><small>" + escapeHTML(summary.detail) + "</small></div></div>" : '<div class="p1-fundraising-journey"><strong>\u5339\u914D\u6D41\u7A0B</strong><ol><li><span>1</span><small>\u786E\u8BA4\u6216\u4E0A\u4F20 BP</small></li><li><span>2</span><small>\u7B7E\u7F72\u4FDD\u5BC6\u4E0E\u5339\u914D\u6388\u6743</small></li><li><span>3</span><small>\u67E5\u770B\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C</small></li></ol></div>';
     return '<section class="p1-fundraising-feature"><div class="p1-fundraising-intro"><span class="p1-fundraising-icon">' + icon("trending-up", 23) + '</span><div><span class="p1-offer-title"><strong>\u878D\u8D44\u5339\u914D\u670D\u52A1</strong><span class="p1-platform-badge">\u5E73\u53F0\u81EA\u8425</span></span><p>\u63D0\u4EA4\u6216\u66F4\u65B0 BP\uFF0C\u5E73\u53F0\u4F1A\u5728\u5F53\u524D\u6B63\u5728\u627E\u9879\u76EE\u4E14\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u4E2A\u4EBA\u6295\u8D44\u4EBA\u4E2D\u8FDB\u884C\u5339\u914D\u3002</p><small>\u670D\u52A1\u65B9\uFF1A\u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3</small></div></div><button class="p1-fundraising-action" type="button" data-offer-kind="fundraising"><span>' + escapeHTML(action) + "</span>" + icon("arrow-right", 16) + "</button>" + followUp + "</section>";
   }
-  function renderAgentOffering(agent, showCategory = false) {
+  function renderAgentOffering(agent) {
     const paused = agent.status === "paused";
-    return '<button class="p1-offer-card p1-agent-offer' + (paused ? " is-paused" : "") + '" type="button" data-offer-kind="agent" data-agent-id="' + escapeHTML(agent.id) + '"' + (paused ? " disabled" : "") + '><span class="p1-offer-icon">' + icon(agent.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(agent.name) + "</strong>" + (showCategory ? '<span class="p1-category-badge">\u667A\u80FD\u4F53</span>' : "") + (agent.recommended ? '<span class="p1-platform-badge">\u5E73\u53F0\u63A8\u8350</span>' : "") + '</span><span class="p1-offer-desc">' + escapeHTML(agent.description) + '</span><span class="p1-offer-provider"><b>' + escapeHTML(agent.supplier.name) + '</b><i aria-hidden="true"></i><span>' + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528") + '</span></span></span><span class="p1-offer-aside"><strong>' + escapeHTML(agent.price) + "</strong><span>" + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F00\u59CB\u4F7F\u7528 " + icon("chevron-right", 13)) + "</span></span></button>";
+    return '<button class="p1-offer-card p1-agent-offer' + (paused ? " is-paused" : "") + '" type="button" data-offer-kind="agent" data-agent-id="' + escapeHTML(agent.id) + '"' + (paused ? " disabled" : "") + '><span class="p1-offer-icon">' + icon(agent.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(agent.name) + '</strong><span class="p1-agent-type-badge">' + icon("bot", 11) + "\u667A\u80FD\u4F53\u670D\u52A1</span>" + (agent.recommended ? '<span class="p1-platform-badge">\u5E73\u53F0\u63A8\u8350</span>' : "") + '</span><span class="p1-offer-desc">' + escapeHTML(agent.description) + '</span><span class="p1-offer-provider"><b>' + escapeHTML(agent.supplier.name) + '</b><i aria-hidden="true"></i><span>' + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528") + '</span></span></span><span class="p1-offer-aside"><strong>' + escapeHTML(agent.price) + "</strong><span>" + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F00\u59CB\u4F7F\u7528 " + icon("chevron-right", 13)) + "</span></span></button>";
   }
   function renderAllServices() {
     const entries = getMarketplaceEntries();
     const visible = entries.slice(0, 6);
     const cards = visible.map((entry) => {
       if (entry.kind === "fundraising") return renderFundraisingOffering();
-      if (entry.kind === "agent") return renderAgentOffering(entry.agent, true);
+      if (entry.kind === "agent") return renderAgentOffering(entry.agent);
       return renderServiceOffering(entry.offering, entry.tab, true);
     }).join("");
     const viewAll = entries.length > 6 ? '<button class="p1-all-services-link" type="button" data-offer-kind="view-all"><span><strong>\u67E5\u770B\u5168\u90E8\u670D\u52A1</strong><small>\u8FDB\u5165\u670D\u52A1\u5217\u8868\uFF0C\u53EF\u6309\u5206\u7C7B\u548C\u6761\u4EF6\u7B5B\u9009</small></span><b>\u5171 ' + entries.length + " \u9879 " + icon("chevron-right", 15) + "</b></button>" : "";
@@ -8718,7 +8718,7 @@
       { key: "all", label: "\u4E0D\u9650" },
       { key: "human", label: "\u771F\u4EBA\u56E2\u961F" },
       { key: "platform", label: "\u5E73\u53F0\u81EA\u8425" },
-      { key: "agent", label: "\u667A\u80FD\u4F53" }
+      { key: "agent", label: "\u667A\u80FD\u4F53\u670D\u52A1" }
     ]) : "") + renderGroup(filters, "\u6240\u5728\u57CE\u5E02", "city", [
       { key: "all", label: "\u4E0D\u9650" },
       { key: "\u5317\u4EAC", label: "\u5317\u4EAC" },
@@ -8762,11 +8762,11 @@
   var serviceCategoryTabs = Object.freeze([
     { id: "all", label: "\u5168\u90E8" },
     { id: "fundraising", label: "\u6295\u878D\u8D44" },
+    { id: "agents", label: "\u667A\u80FD\u4F53\u670D\u52A1" },
     { id: "law", label: "\u6CD5\u5F8B" },
     { id: "business", label: "\u5DE5\u5546" },
     { id: "ip", label: "\u77E5\u8BC6\u4EA7\u6743" },
-    { id: "policy", label: "\u653F\u7B56\u7533\u62A5" },
-    { id: "agents", label: "\u667A\u80FD\u4F53" }
+    { id: "policy", label: "\u653F\u7B56\u7533\u62A5" }
   ]);
   var teamCategoryTabs = Object.freeze(serviceCategoryTabs.filter((tab) => !["fundraising", "agents"].includes(tab.id)));
   var categoryLabels2 = Object.freeze({
@@ -8777,7 +8777,7 @@
     ip: "\u77E5\u8BC6\u4EA7\u6743",
     policy: "\u653F\u7B56\u7533\u62A5",
     hr: "\u4EBA\u529B\u8D44\u6E90",
-    agents: "\u667A\u80FD\u4F53"
+    agents: "\u667A\u80FD\u4F53\u670D\u52A1"
   });
   var serviceSortOptions = Object.freeze([
     { id: "recommended", label: "\u7EFC\u5408\u63A8\u8350" },
@@ -8878,8 +8878,9 @@
     const disabled = entry.kind === "agent" && entry.agent.status === "paused";
     const iconName = entry.kind === "fundraising" ? "trending-up" : entry.kind === "agent" ? entry.agent.icon : entry.tab.icon;
     const badge = entry.kind === "fundraising" ? '<span class="p14-platform-badge">\u5E73\u53F0\u81EA\u8425</span>' : entry.kind === "agent" && entry.agent.recommended ? '<span class="p14-recommend-badge">\u5E73\u53F0\u63A8\u8350</span>' : entry.kind === "service" ? renderBadge(entry.team.badge) : "";
+    const categoryBadge = entry.kind === "agent" ? '<span class="p14-agent-type-badge">' + icon("bot", 11) + "\u667A\u80FD\u4F53\u670D\u52A1</span>" : '<span class="p14-category-label">' + escapeHTML(categoryLabels2[entry.categoryId]) + "</span>";
     const data = entry.kind === "service" ? ' data-p14-kind="service" data-team-id="' + escapeHTML(entry.team.id) + '" data-sku="' + escapeHTML(entry.title) + '"' : entry.kind === "agent" ? ' data-p14-kind="agent" data-agent-id="' + escapeHTML(entry.agent.id) + '"' : ' data-p14-kind="fundraising"';
-    return '<button type="button" class="p14-service-card p14-' + entry.kind + (disabled ? " is-paused" : "") + '"' + data + (disabled ? " disabled" : "") + '><span class="p14-card-icon">' + icon(iconName, 21) + '</span><span class="p14-card-body"><span class="p14-card-title"><strong>' + escapeHTML(entry.title) + '</strong><span class="p14-category-label">' + escapeHTML(categoryLabels2[entry.categoryId]) + "</span>" + badge + '</span><span class="p14-card-desc">' + escapeHTML(entry.description) + '</span><span class="p14-provider"><b>' + escapeHTML(entry.provider) + '</b><i aria-hidden="true"></i><span>' + escapeHTML(entry.organization) + '</span></span><span class="p14-card-foot"><span class="p14-meta">' + renderMeta(entry) + "</span><strong>" + escapeHTML(entry.priceLabel) + '</strong></span></span><span class="p14-card-arrow">' + icon("chevron-right", 16) + "</span></button>";
+    return '<button type="button" class="p14-service-card p14-' + entry.kind + (disabled ? " is-paused" : "") + '"' + data + (disabled ? " disabled" : "") + '><span class="p14-card-icon">' + icon(iconName, 21) + '</span><span class="p14-card-body"><span class="p14-card-title"><strong>' + escapeHTML(entry.title) + "</strong>" + categoryBadge + badge + '</span><span class="p14-card-desc">' + escapeHTML(entry.description) + '</span><span class="p14-provider"><b>' + escapeHTML(entry.provider) + '</b><i aria-hidden="true"></i><span>' + escapeHTML(entry.organization) + '</span></span><span class="p14-card-foot"><span class="p14-meta">' + renderMeta(entry) + "</span><strong>" + escapeHTML(entry.priceLabel) + '</strong></span></span><span class="p14-card-arrow">' + icon("chevron-right", 16) + "</span></button>";
   }
   var page14 = {
     state: {

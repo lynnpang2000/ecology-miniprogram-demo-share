@@ -2951,6 +2951,18 @@ button:focus-visible,
   font-size: 10px;
   font-weight: 600;
 }
+.p1-agent-type-badge {
+  padding: 4px 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 6px;
+  background: #5551C8;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+}
 .p1-offer-desc {
   display: -webkit-box;
   overflow: hidden;
@@ -11821,7 +11833,8 @@ button.p12-manage-record {
 }
 .p14-category-label,
 .p14-platform-badge,
-.p14-recommend-badge {
+.p14-recommend-badge,
+.p14-agent-type-badge {
   padding: 3px 6px;
   border-radius: 6px;
   font-size: 10px;
@@ -11839,6 +11852,14 @@ button.p12-manage-record {
 .p14-recommend-badge {
   background: #FFF3E8;
   color: #B85B13;
+}
+.p14-agent-type-badge {
+  padding: 4px 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #5551C8;
+  color: #FFFFFF;
 }
 .p14-card-desc {
   display: -webkit-box;
