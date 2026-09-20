@@ -1657,13 +1657,13 @@
 
   // src/core/registry.js
   var pages = /* @__PURE__ */ new Map();
-  function register(pageId, page14) {
+  function register(pageId, page15) {
     if (!pageId) throw new Error("pageId is required");
-    if (!page14 || typeof page14.render !== "function") {
+    if (!page15 || typeof page15.render !== "function") {
       throw new TypeError(`Page "${pageId}" must provide render(params)`);
     }
-    pages.set(pageId, page14);
-    return page14;
+    pages.set(pageId, page15);
+    return page15;
   }
   function get(pageId) {
     return pages.get(pageId);
@@ -1714,15 +1714,15 @@
     }
   }
   function renderPage(pageId, params) {
-    const page14 = get(pageId);
-    if (page14 && typeof page14.render === "function") {
-      const html = page14.render(params);
+    const page15 = get(pageId);
+    if (page15 && typeof page15.render === "function") {
+      const html = page15.render(params);
       const container = this.setPageContent(html, pageId);
       container.classList.add("page-enter");
       setTimeout(() => {
         container.classList.remove("page-enter");
       }, 300);
-      if (typeof page14.init === "function") page14.init(params);
+      if (typeof page15.init === "function") page15.init(params);
     } else {
       this.setPageContent(
         `<div class="empty-state"><div class="empty-icon">${this.icon("wrench", 48)}</div><div class="empty-title">\u9875\u9762\u5F00\u53D1\u4E2D</div><div class="empty-desc">\u9875\u9762 ${pageId} \u5373\u5C06\u4E0A\u7EBF</div></div>`,
@@ -1752,8 +1752,8 @@
     const outerScroll = container.scrollTop;
     const inner = document.getElementById("p6-tab-content") || document.getElementById("p9-list");
     const innerScroll = inner ? inner.scrollTop : 0;
-    const page14 = get(pageId);
-    if (page14 && typeof page14.onRefresh === "function") page14.onRefresh();
+    const page15 = get(pageId);
+    if (page15 && typeof page15.onRefresh === "function") page15.onRefresh();
     this.renderPage(pageId, top.params);
     container.scrollTop = outerScroll;
     const refreshedInner = document.getElementById("p6-tab-content") || document.getElementById("p9-list");
@@ -2683,8 +2683,8 @@
       if (specificSku && !direct) return;
       if (categoryRequest && !sameCategory) return;
       if (!specificSku && !categoryRequest && team.id !== targetTeamId) return;
-      const responseHours = Number.parseInt(team.avgResponse, 10) || 24;
-      let score = (direct ? 58 : 36) + Math.round((team.rating || 0) * 5) + Math.min(10, Math.round((team.volume || 0) / 8)) + Math.max(0, 6 - Math.min(responseHours, 6));
+      const responseHours2 = Number.parseInt(team.avgResponse, 10) || 24;
+      let score = (direct ? 58 : 36) + Math.round((team.rating || 0) * 5) + Math.min(10, Math.round((team.volume || 0) / 8)) + Math.max(0, 6 - Math.min(responseHours2, 6));
       if (team.tags && team.tags.includes("verified")) score += 4;
       if (team.id === targetTeamId) score += 6;
       score = Math.min(99, score);
@@ -4338,6 +4338,24 @@
     return config ? config.rangeText : fallback;
   }
 
+  // src/services/marketplaceCatalog.js
+  function getMarketplaceEntries() {
+    const agents2 = getAgentsByCategory("all");
+    const byId = Object.fromEntries(homeServiceTabs.map((tab) => [tab.id, tab]));
+    const prioritized = [
+      { kind: "fundraising", key: "fundraising" },
+      { kind: "service", tab: byId.law, offering: byId.law.offerings[0], key: "law:0" },
+      { kind: "service", tab: byId.business, offering: byId.business.offerings[0], key: "business:0" },
+      { kind: "service", tab: byId.ip, offering: byId.ip.offerings[0], key: "ip:0" },
+      { kind: "service", tab: byId.policy, offering: byId.policy.offerings[0], key: "policy:0" },
+      { kind: "agent", agent: agents2[0], key: agents2[0] ? "agent:" + agents2[0].id : "agent:none" }
+    ].filter((entry) => entry.kind === "fundraising" || entry.offering || entry.agent);
+    const used = new Set(prioritized.map((entry) => entry.key));
+    const remainingServices = homeServiceTabs.filter((tab) => tab.kind === "services").flatMap((tab) => tab.offerings.map((offering, index) => ({ kind: "service", tab, offering, key: tab.id + ":" + index }))).filter((entry) => !used.has(entry.key));
+    const remainingAgents = agents2.map((agent) => ({ kind: "agent", agent, key: "agent:" + agent.id })).filter((entry) => !used.has(entry.key));
+    return [...prioritized, ...remainingServices, ...remainingAgents];
+  }
+
   // src/pages/p1-home/ServiceShelf.js
   function serviceDescription(sku) {
     return (serviceBlueprints[sku] || defaultServiceBlueprint).intro;
@@ -4372,32 +4390,16 @@
     const paused = agent.status === "paused";
     return '<button class="p1-offer-card p1-agent-offer' + (paused ? " is-paused" : "") + '" type="button" data-offer-kind="agent" data-agent-id="' + escapeHTML(agent.id) + '"' + (paused ? " disabled" : "") + '><span class="p1-offer-icon">' + icon(agent.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(agent.name) + "</strong>" + (showCategory ? '<span class="p1-category-badge">\u667A\u80FD\u4F53</span>' : "") + (agent.recommended ? '<span class="p1-platform-badge">\u5E73\u53F0\u63A8\u8350</span>' : "") + '</span><span class="p1-offer-desc">' + escapeHTML(agent.description) + '</span><span class="p1-offer-provider"><b>' + escapeHTML(agent.supplier.name) + '</b><i aria-hidden="true"></i><span>' + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528") + '</span></span></span><span class="p1-offer-aside"><strong>' + escapeHTML(agent.price) + "</strong><span>" + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F00\u59CB\u4F7F\u7528 " + icon("chevron-right", 13)) + "</span></span></button>";
   }
-  function getAllServiceEntries() {
-    const agents2 = getAgentsByCategory("all");
-    const byId = Object.fromEntries(homeServiceTabs.map((tab) => [tab.id, tab]));
-    const prioritized = [
-      { kind: "fundraising", key: "fundraising" },
-      { kind: "service", tab: byId.law, offering: byId.law.offerings[0], key: "law:0" },
-      { kind: "service", tab: byId.business, offering: byId.business.offerings[0], key: "business:0" },
-      { kind: "service", tab: byId.ip, offering: byId.ip.offerings[0], key: "ip:0" },
-      { kind: "service", tab: byId.policy, offering: byId.policy.offerings[0], key: "policy:0" },
-      { kind: "agent", agent: agents2[0], key: agents2[0] ? "agent:" + agents2[0].id : "agent:none" }
-    ].filter((entry) => entry.kind === "fundraising" || entry.offering || entry.agent);
-    const used = new Set(prioritized.map((entry) => entry.key));
-    const remainingServices = homeServiceTabs.filter((tab) => tab.kind === "services").flatMap((tab) => tab.offerings.map((offering, index) => ({ kind: "service", tab, offering, key: tab.id + ":" + index }))).filter((entry) => !used.has(entry.key));
-    const remainingAgents = agents2.map((agent) => ({ kind: "agent", agent, key: "agent:" + agent.id })).filter((entry) => !used.has(entry.key));
-    return [...prioritized, ...remainingServices, ...remainingAgents];
-  }
-  function renderAllServices(expanded) {
-    const entries = getAllServiceEntries();
-    const visible = expanded ? entries : entries.slice(0, 6);
+  function renderAllServices() {
+    const entries = getMarketplaceEntries();
+    const visible = entries.slice(0, 6);
     const cards = visible.map((entry) => {
       if (entry.kind === "fundraising") return renderFundraisingOffering();
       if (entry.kind === "agent") return renderAgentOffering(entry.agent, true);
       return renderServiceOffering(entry.offering, entry.tab, true);
     }).join("");
-    const toggle = entries.length > 6 ? '<button class="p1-all-services-toggle" type="button" data-offer-kind="toggle-all" aria-expanded="' + String(Boolean(expanded)) + '"><span>' + (expanded ? "\u6536\u8D77\u90E8\u5206\u670D\u52A1" : "\u5C55\u5F00\u5168\u90E8\u670D\u52A1") + "</span><small>\u5171 " + entries.length + " \u9879</small>" + icon("chevron-down", 15) + "</button>" : "";
-    return cards + toggle;
+    const viewAll = entries.length > 6 ? '<button class="p1-all-services-link" type="button" data-offer-kind="view-all"><span><strong>\u67E5\u770B\u5168\u90E8\u670D\u52A1</strong><small>\u8FDB\u5165\u670D\u52A1\u5217\u8868\uFF0C\u53EF\u6309\u5206\u7C7B\u548C\u6761\u4EF6\u7B5B\u9009</small></span><b>\u5171 ' + entries.length + " \u9879 " + icon("chevron-right", 15) + "</b></button>" : "";
+    return cards + viewAll;
   }
   function renderEmptyShelf(tab) {
     return '<div class="p1-shelf-empty"><span>' + icon(tab.icon, 25) + '</span><div><strong>\u6682\u672A\u4E0A\u67B6\u53EF\u9009\u670D\u52A1</strong><p>\u5E73\u53F0\u6B63\u5728\u62DB\u52DF\u5E76\u6838\u9A8C\u76F8\u5173\u670D\u52A1\u56E2\u961F\uFF0C\u4F60\u4E5F\u53EF\u4EE5\u5148\u63D0\u4EA4\u5177\u4F53\u9700\u6C42\u3002</p></div><button type="button" data-offer-kind="suggest">\u63D0\u4EA4\u670D\u52A1\u5EFA\u8BAE</button></div>';
@@ -4407,10 +4409,10 @@
       (tab) => '<button type="button" role="tab" aria-selected="' + String(tab.id === activeTabId) + '" class="p1-shelf-tab' + (tab.id === activeTabId ? " active" : "") + '" data-shelf-tab="' + tab.id + '">' + escapeHTML(tab.label) + "</button>"
     ).join("") + "</div>";
   }
-  function renderServiceShelf(activeTabId, options = {}) {
+  function renderServiceShelf(activeTabId) {
     const tab = getHomeServiceTab(activeTabId);
     let cards = "";
-    if (tab.kind === "all") cards = renderAllServices(Boolean(options.expanded));
+    if (tab.kind === "all") cards = renderAllServices();
     else if (tab.kind === "fundraising") cards = renderFundraisingFeature();
     else if (tab.kind === "agents") cards = getAgentsByCategory("all").slice(0, 5).map(renderAgentOffering).join("");
     else cards = tab.offerings.map((offering) => renderServiceOffering(offering, tab)).join("");
@@ -4423,7 +4425,6 @@
   var page = {
     searchHistory: ["\u5408\u540C\u5BA1\u67E5", "\u516C\u53F8\u6CE8\u518C"],
     activeShelfId: "all",
-    allServicesExpanded: false,
     render(params = {}) {
       this.activeShelfId = getHomeServiceTab(params.shelf || this.activeShelfId).id;
       let html = "";
@@ -4431,7 +4432,7 @@
       html += '<section class="p1-brand-copy"><h1>\u4E13\u4E3A 0-A \u8F6E\u521B\u4E1A\u8005\u6253\u9020\u7684<br>\u751F\u6001\u670D\u52A1\u5E73\u53F0</h1><div class="p1-brand-proof"><span>' + icon("check", 14) + "100%\u8D44\u8D28\u6838\u9A8C</span><span>" + icon("check", 14) + "AI\u667A\u80FD\u5339\u914D</span><span>" + icon("check", 14) + "\u5168\u6D41\u7A0B\u53EF\u8FFD\u8E2A</span></div></section>";
       html += '<button class="p1-match-card" id="p1HeroCard" type="button"><span class="p1-match-icon">' + icon("sparkles", 22) + '</span><span class="p1-match-copy"><strong>\u4E0D\u786E\u5B9A\u9700\u8981\u4EC0\u4E48\u670D\u52A1\uFF1F</strong><small>\u5148\u8BF4\u8BF4\u4F60\u7684\u60C5\u51B5\uFF0CAI \u5E2E\u4F60\u5339\u914D</small></span><span class="p1-match-action">\u5F00\u59CB\u5339\u914D ' + icon("arrow-right", 14) + "</span></button></div>";
       html += '<section class="p1-marketplace">';
-      html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId, { expanded: this.allServicesExpanded });
+      html += renderServiceTabs(this.activeShelfId) + renderServiceShelf(this.activeShelfId);
       html += '<button class="service-suggestion-link p1-suggestion" type="button" id="p1ServiceSuggestion"><span>\u6CA1\u6709\u4F60\u8981\u627E\u7684\u670D\u52A1\uFF1F</span><strong>\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42 ' + icon("arrow-right", 14) + "</strong></button></section>";
       html += '<div class="mb-4"></div>';
       return html;
@@ -4448,14 +4449,13 @@
       document.querySelectorAll("[data-shelf-tab]").forEach((tab) => {
         tab.addEventListener("click", () => {
           this.activeShelfId = tab.getAttribute("data-shelf-tab");
-          if (this.activeShelfId !== "all") this.allServicesExpanded = false;
           document.querySelectorAll("[data-shelf-tab]").forEach((item) => {
             const selected = item.getAttribute("data-shelf-tab") === this.activeShelfId;
             item.classList.toggle("active", selected);
             item.setAttribute("aria-selected", String(selected));
           });
           const list = document.getElementById("p1OfferList");
-          list.outerHTML = renderServiceShelf(this.activeShelfId, { expanded: this.allServicesExpanded });
+          list.outerHTML = renderServiceShelf(this.activeShelfId);
           const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           document.querySelector('[data-shelf-tab="' + this.activeShelfId + '"]').scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest", inline: "center" });
           this.bindOfferingActions();
@@ -4471,11 +4471,7 @@
           else if (kind === "service") navigateTo("p10", { teamId: card.getAttribute("data-team-id"), sku: card.getAttribute("data-sku") });
           else if (kind === "agent") navigateTo("p11", { agentId: card.getAttribute("data-agent-id") });
           else if (kind === "suggest") openServiceSuggestion("");
-          else if (kind === "toggle-all") {
-            this.allServicesExpanded = !this.allServicesExpanded;
-            document.getElementById("p1OfferList").outerHTML = renderServiceShelf("all", { expanded: this.allServicesExpanded });
-            this.bindOfferingActions();
-          }
+          else if (kind === "view-all") navigateTo("p14");
         });
       });
     }
@@ -4666,9 +4662,9 @@
         if (state2.filters.price === "1000to3000" && (price < 1e3 || price > 3e3)) return false;
         if (state2.filters.price === "over3000" && price <= 3e3) return false;
         if (state2.filters.rating === "4.8" && team.rating < 4.8) return false;
-        const responseHours = Number.parseInt(team.avgResponse, 10) || 99;
-        if (state2.filters.response === "within4" && responseHours > 4) return false;
-        if (state2.filters.response === "within24" && responseHours > 24) return false;
+        const responseHours2 = Number.parseInt(team.avgResponse, 10) || 99;
+        if (state2.filters.response === "within4" && responseHours2 > 4) return false;
+        if (state2.filters.response === "within24" && responseHours2 > 24) return false;
         const specialtyText = [team.desc, ...team.specialties || [], ...team.skus].join("");
         if (state2.filters.specialty === "tech" && !/科技|TMT|互联网|软件|智能/.test(specialtyText)) return false;
         if (state2.filters.specialty === "startup" && !/初创|创业|融资|股权/.test(specialtyText)) return false;
@@ -4953,61 +4949,61 @@
     { number: 2, label: "\u586B\u5199\u9700\u6C42" },
     { number: 3, label: "\u786E\u8BA4\u63D0\u4EA4" }
   ]);
-  function renderHeader(page14) {
-    return '<div class="nav-bar p5-wizard-nav"><button class="nav-back" id="p5Back" type="button" aria-label="\u8FD4\u56DE">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u53D1\u5E03\u670D\u52A1\u9700\u6C42</div><div class="p5-step-count">' + page14.wizardStep + '/3</div></div><ol class="p5-wizard-stepper" aria-label="\u9700\u6C42\u53D1\u5E03\u8FDB\u5EA6">' + wizardSteps.map((step) => {
-      const state2 = step.number < page14.wizardStep ? " done" : step.number === page14.wizardStep ? " active" : "";
-      return '<li class="' + state2.trim() + '"><span>' + (step.number < page14.wizardStep ? icon("check", 12) : step.number) + "</span><small>" + step.label + "</small></li>";
+  function renderHeader(page15) {
+    return '<div class="nav-bar p5-wizard-nav"><button class="nav-back" id="p5Back" type="button" aria-label="\u8FD4\u56DE">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u53D1\u5E03\u670D\u52A1\u9700\u6C42</div><div class="p5-step-count">' + page15.wizardStep + '/3</div></div><ol class="p5-wizard-stepper" aria-label="\u9700\u6C42\u53D1\u5E03\u8FDB\u5EA6">' + wizardSteps.map((step) => {
+      const state2 = step.number < page15.wizardStep ? " done" : step.number === page15.wizardStep ? " active" : "";
+      return '<li class="' + state2.trim() + '"><span>' + (step.number < page15.wizardStep ? icon("check", 12) : step.number) + "</span><small>" + step.label + "</small></li>";
     }).join("") + "</ol>";
   }
   function renderChoiceButton(value, label, selected, iconName, attribute) {
     return '<button class="p5-choice-card' + (selected ? " selected" : "") + '" type="button" ' + attribute + '="' + escapeHTML(value) + '">' + (iconName ? '<span class="p5-choice-icon">' + icon(iconName, 20) + "</span>" : "") + "<span>" + escapeHTML(label) + "</span><i>" + (selected ? icon("check", 12) : "") + "</i></button>";
   }
-  function renderStepOne(page14) {
-    const choices = page14.getCategoryChoices();
-    return '<section class="p5-wizard-section p5-category-step"><header class="p5-wizard-heading"><h1>\u4ECE\u54EA\u7C7B\u670D\u52A1\u5F00\u59CB\uFF1F</h1><p>\u76F4\u63A5\u9009\u62E9\u5206\u7C7B\uFF0C\u6216\u5148\u8BA9 AI \u6839\u636E\u4F60\u7684\u63CF\u8FF0\u5224\u65AD\u3002</p></header><button class="p5-ai-guide' + (page14.selectedCategoryId === "other" ? " selected" : "") + '" id="p5AiGuide" type="button"><span>' + icon("sparkles", 22) + "</span><div><strong>\u6211\u4E0D\u786E\u5B9A\uFF0CAI \u5E2E\u6211\u5224\u65AD</strong><small>\u4E0B\u4E00\u6B65\u8BF4\u6E05\u60C5\u51B5\uFF0C\u5E73\u53F0\u4F1A\u8BC6\u522B\u670D\u52A1\u65B9\u5411</small></div>" + icon("chevron-right", 18) + '</button><div class="p5-category-label">\u76F4\u63A5\u9009\u62E9\u670D\u52A1\u5206\u7C7B</div><div class="p5-category-grid">' + choices.map((choice) => renderChoiceButton(choice.id, choice.name, page14.selectedCategoryId === choice.id, choice.icon, "data-p5-category")).join("") + "</div></section>";
+  function renderStepOne(page15) {
+    const choices = page15.getCategoryChoices();
+    return '<section class="p5-wizard-section p5-category-step"><header class="p5-wizard-heading"><h1>\u4ECE\u54EA\u7C7B\u670D\u52A1\u5F00\u59CB\uFF1F</h1><p>\u76F4\u63A5\u9009\u62E9\u5206\u7C7B\uFF0C\u6216\u5148\u8BA9 AI \u6839\u636E\u4F60\u7684\u63CF\u8FF0\u5224\u65AD\u3002</p></header><button class="p5-ai-guide' + (page15.selectedCategoryId === "other" ? " selected" : "") + '" id="p5AiGuide" type="button"><span>' + icon("sparkles", 22) + "</span><div><strong>\u6211\u4E0D\u786E\u5B9A\uFF0CAI \u5E2E\u6211\u5224\u65AD</strong><small>\u4E0B\u4E00\u6B65\u8BF4\u6E05\u60C5\u51B5\uFF0C\u5E73\u53F0\u4F1A\u8BC6\u522B\u670D\u52A1\u65B9\u5411</small></div>" + icon("chevron-right", 18) + '</button><div class="p5-category-label">\u76F4\u63A5\u9009\u62E9\u670D\u52A1\u5206\u7C7B</div><div class="p5-category-grid">' + choices.map((choice) => renderChoiceButton(choice.id, choice.name, page15.selectedCategoryId === choice.id, choice.icon, "data-p5-category")).join("") + "</div></section>";
   }
   function renderPills(values, current, attribute) {
     return '<div class="p5-option-pills">' + values.map((value) => '<button class="p5-option-pill' + (current === value ? " selected" : "") + '" type="button" ' + attribute + '="' + escapeHTML(value) + '">' + escapeHTML(value) + "</button>").join("") + "</div>";
   }
-  function renderStepTwo(page14) {
-    const serviceOptions = page14.getServiceOptions();
-    const attachment = page14.attachmentName ? '<span class="p5-upload-file">' + icon("check-circle", 16) + "<span><strong>" + escapeHTML(page14.attachmentName) + "</strong><small>\u5DF2\u6DFB\u52A0\uFF0C\u53EF\u91CD\u65B0\u9009\u62E9</small></span></span>" : '<span class="p5-upload-empty">' + icon("upload", 19) + "<span><strong>\u4E0A\u4F20\u76F8\u5173\u6750\u6599</strong><small>\u652F\u6301 PDF\u3001Word\u3001\u56FE\u7247\uFF0C\u9009\u586B</small></span></span>";
-    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><div class="p5-selected-category"><span>' + icon(page14.getSelectedCategoryIcon(), 15) + "</span>" + escapeHTML(page14.getSelectedCategoryName()) + '<button type="button" data-p5-edit-category>\u4FEE\u6539</button></div><h1>\u628A\u9700\u6C42\u8BF4\u5177\u4F53\u4E00\u70B9</h1><p>\u4FE1\u606F\u8D8A\u5B8C\u6574\uFF0C\u63A8\u8350\u56E2\u961F\u548C\u540E\u7EED\u62A5\u4EF7\u4F1A\u8D8A\u51C6\u786E\u3002</p></header>' + (serviceOptions.length ? '<div class="p5-field-group"><div class="p5-field-label"><strong>\u5177\u4F53\u670D\u52A1</strong><small>\u9009\u586B</small></div>' + renderPills(serviceOptions, page14.collected.skuSpecific, "data-p5-sku") + "</div>" : "") + '<label class="p5-field-group p5-textarea-field"><span class="p5-field-label"><strong>\u9700\u6C42\u63CF\u8FF0</strong><small>\u5FC5\u586B</small></span><textarea id="p5NeedDescription" rows="5" maxlength="500" placeholder="\u8BF7\u63CF\u8FF0\u76EE\u524D\u7684\u60C5\u51B5\u3001\u9047\u5230\u7684\u95EE\u9898\uFF0C\u4EE5\u53CA\u5E0C\u671B\u83B7\u5F97\u7684\u7ED3\u679C">' + escapeHTML(page14.collected.extra) + '</textarea><span class="p5-field-hint">\u4F8B\u5982\uFF1A\u5DF2\u6709\u4E00\u4EFD\u5408\u4F5C\u534F\u8BAE\uFF0C\u5E0C\u671B\u5728\u672C\u5468\u5185\u5B8C\u6210\u98CE\u9669\u5BA1\u67E5</span></label><div class="p5-field-group"><div class="p5-field-label"><strong>\u671F\u671B\u65F6\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page14.timelineOptions, page14.collected.timeline, "data-p5-timeline") + '</div><div class="p5-field-group"><div class="p5-field-label"><strong>\u9884\u7B97\u533A\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page14.budgetOptions, page14.collected.budget, "data-p5-budget") + '</div><label class="p5-upload-box">' + attachment + '<input id="p5Attachment" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label></section>';
+  function renderStepTwo(page15) {
+    const serviceOptions = page15.getServiceOptions();
+    const attachment = page15.attachmentName ? '<span class="p5-upload-file">' + icon("check-circle", 16) + "<span><strong>" + escapeHTML(page15.attachmentName) + "</strong><small>\u5DF2\u6DFB\u52A0\uFF0C\u53EF\u91CD\u65B0\u9009\u62E9</small></span></span>" : '<span class="p5-upload-empty">' + icon("upload", 19) + "<span><strong>\u4E0A\u4F20\u76F8\u5173\u6750\u6599</strong><small>\u652F\u6301 PDF\u3001Word\u3001\u56FE\u7247\uFF0C\u9009\u586B</small></span></span>";
+    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><div class="p5-selected-category"><span>' + icon(page15.getSelectedCategoryIcon(), 15) + "</span>" + escapeHTML(page15.getSelectedCategoryName()) + '<button type="button" data-p5-edit-category>\u4FEE\u6539</button></div><h1>\u628A\u9700\u6C42\u8BF4\u5177\u4F53\u4E00\u70B9</h1><p>\u4FE1\u606F\u8D8A\u5B8C\u6574\uFF0C\u63A8\u8350\u56E2\u961F\u548C\u540E\u7EED\u62A5\u4EF7\u4F1A\u8D8A\u51C6\u786E\u3002</p></header>' + (serviceOptions.length ? '<div class="p5-field-group"><div class="p5-field-label"><strong>\u5177\u4F53\u670D\u52A1</strong><small>\u9009\u586B</small></div>' + renderPills(serviceOptions, page15.collected.skuSpecific, "data-p5-sku") + "</div>" : "") + '<label class="p5-field-group p5-textarea-field"><span class="p5-field-label"><strong>\u9700\u6C42\u63CF\u8FF0</strong><small>\u5FC5\u586B</small></span><textarea id="p5NeedDescription" rows="5" maxlength="500" placeholder="\u8BF7\u63CF\u8FF0\u76EE\u524D\u7684\u60C5\u51B5\u3001\u9047\u5230\u7684\u95EE\u9898\uFF0C\u4EE5\u53CA\u5E0C\u671B\u83B7\u5F97\u7684\u7ED3\u679C">' + escapeHTML(page15.collected.extra) + '</textarea><span class="p5-field-hint">\u4F8B\u5982\uFF1A\u5DF2\u6709\u4E00\u4EFD\u5408\u4F5C\u534F\u8BAE\uFF0C\u5E0C\u671B\u5728\u672C\u5468\u5185\u5B8C\u6210\u98CE\u9669\u5BA1\u67E5</span></label><div class="p5-field-group"><div class="p5-field-label"><strong>\u671F\u671B\u65F6\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page15.timelineOptions, page15.collected.timeline, "data-p5-timeline") + '</div><div class="p5-field-group"><div class="p5-field-label"><strong>\u9884\u7B97\u533A\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page15.budgetOptions, page15.collected.budget, "data-p5-budget") + '</div><label class="p5-upload-box">' + attachment + '<input id="p5Attachment" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label></section>';
   }
-  function renderStepThree(page14) {
-    const sku = page14.resolveSku();
-    const attachment = page14.attachmentName || "\u672A\u4E0A\u4F20";
-    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><h1>\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</h1><p>\u56E2\u961F\u4EC5\u4F1A\u6536\u5230\u672C\u6B21\u9700\u6C42\u4FE1\u606F\uFF0C\u5339\u914D\u548C\u670D\u52A1\u8FDB\u5C55\u7531\u5E73\u53F0\u7EDF\u4E00\u901A\u77E5\u3002</p></header><article class="p5-review-block"><div class="p5-review-head"><strong>\u9700\u6C42\u4FE1\u606F</strong><button type="button" data-p5-edit-demand>\u8FD4\u56DE\u4FEE\u6539</button></div><dl><div><dt>\u670D\u52A1\u65B9\u5411</dt><dd>' + escapeHTML(sku) + "</dd></div><div><dt>\u671F\u671B\u65F6\u95F4</dt><dd>" + escapeHTML(page14.collected.timeline) + "</dd></div><div><dt>\u9884\u7B97\u533A\u95F4</dt><dd>" + escapeHTML(page14.collected.budget) + "</dd></div><div><dt>\u9644\u4EF6\u6750\u6599</dt><dd>" + escapeHTML(attachment) + "</dd></div></dl><p>" + escapeHTML(page14.collected.extra) + '</p></article><div class="p5-notification-block"><span class="p5-notification-icon">' + icon("shield", 20) + "</span><div><strong>\u8D26\u53F7\u901A\u77E5\u4FE1\u606F\u5DF2\u786E\u8BA4</strong><p>\u5339\u914D\u7ED3\u679C\u4E0E\u670D\u52A1\u8FDB\u5C55\u4F1A\u53D1\u9001\u81F3\u7AD9\u5185\u6D88\u606F\u548C\u8D26\u53F7\u5DF2\u7ED1\u5B9A\u7684\u901A\u77E5\u6E20\u9053\u3002</p><ul><li>\u670D\u52A1\u56E2\u961F\u65E0\u6CD5\u67E5\u770B\u4F60\u7684\u624B\u673A\u53F7\u3001\u5FAE\u4FE1\u6216\u90AE\u7BB1</li><li>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u534F\u52A9\u5EFA\u8054</li></ul></div></div></section>";
+  function renderStepThree(page15) {
+    const sku = page15.resolveSku();
+    const attachment = page15.attachmentName || "\u672A\u4E0A\u4F20";
+    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><h1>\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</h1><p>\u56E2\u961F\u4EC5\u4F1A\u6536\u5230\u672C\u6B21\u9700\u6C42\u4FE1\u606F\uFF0C\u5339\u914D\u548C\u670D\u52A1\u8FDB\u5C55\u7531\u5E73\u53F0\u7EDF\u4E00\u901A\u77E5\u3002</p></header><article class="p5-review-block"><div class="p5-review-head"><strong>\u9700\u6C42\u4FE1\u606F</strong><button type="button" data-p5-edit-demand>\u8FD4\u56DE\u4FEE\u6539</button></div><dl><div><dt>\u670D\u52A1\u65B9\u5411</dt><dd>' + escapeHTML(sku) + "</dd></div><div><dt>\u671F\u671B\u65F6\u95F4</dt><dd>" + escapeHTML(page15.collected.timeline) + "</dd></div><div><dt>\u9884\u7B97\u533A\u95F4</dt><dd>" + escapeHTML(page15.collected.budget) + "</dd></div><div><dt>\u9644\u4EF6\u6750\u6599</dt><dd>" + escapeHTML(attachment) + "</dd></div></dl><p>" + escapeHTML(page15.collected.extra) + '</p></article><div class="p5-notification-block"><span class="p5-notification-icon">' + icon("shield", 20) + "</span><div><strong>\u8D26\u53F7\u901A\u77E5\u4FE1\u606F\u5DF2\u786E\u8BA4</strong><p>\u5339\u914D\u7ED3\u679C\u4E0E\u670D\u52A1\u8FDB\u5C55\u4F1A\u53D1\u9001\u81F3\u7AD9\u5185\u6D88\u606F\u548C\u8D26\u53F7\u5DF2\u7ED1\u5B9A\u7684\u901A\u77E5\u6E20\u9053\u3002</p><ul><li>\u670D\u52A1\u56E2\u961F\u65E0\u6CD5\u67E5\u770B\u4F60\u7684\u624B\u673A\u53F7\u3001\u5FAE\u4FE1\u6216\u90AE\u7BB1</li><li>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u534F\u52A9\u5EFA\u8054</li></ul></div></div></section>";
   }
-  function renderFooter(page14) {
-    const primary = page14.wizardStep === 3 ? "\u63D0\u4EA4\u5E76\u5F00\u59CB\u5339\u914D" : "\u7EE7\u7EED";
-    return '<div class="bottom-bar p5-wizard-footer">' + (page14.wizardStep > 1 ? '<button class="btn btn-outline" id="p5WizardPrevious" type="button">\u4E0A\u4E00\u6B65</button>' : "") + '<button class="btn btn-primary" id="p5WizardNext" type="button">' + primary + "</button></div>";
+  function renderFooter(page15) {
+    const primary = page15.wizardStep === 3 ? "\u63D0\u4EA4\u5E76\u5F00\u59CB\u5339\u914D" : "\u7EE7\u7EED";
+    return '<div class="bottom-bar p5-wizard-footer">' + (page15.wizardStep > 1 ? '<button class="btn btn-outline" id="p5WizardPrevious" type="button">\u4E0A\u4E00\u6B65</button>' : "") + '<button class="btn btn-primary" id="p5WizardNext" type="button">' + primary + "</button></div>";
   }
-  function renderDemandWizard(page14) {
-    const body = page14.wizardStep === 1 ? renderStepOne(page14) : page14.wizardStep === 2 ? renderStepTwo(page14) : renderStepThree(page14);
-    return '<div class="p5-wizard">' + renderHeader(page14) + '<main class="p5-wizard-main">' + body + "</main>" + renderFooter(page14) + "</div>";
+  function renderDemandWizard(page15) {
+    const body = page15.wizardStep === 1 ? renderStepOne(page15) : page15.wizardStep === 2 ? renderStepTwo(page15) : renderStepThree(page15);
+    return '<div class="p5-wizard">' + renderHeader(page15) + '<main class="p5-wizard-main">' + body + "</main>" + renderFooter(page15) + "</div>";
   }
-  function bindDemandWizard(page14) {
+  function bindDemandWizard(page15) {
     const back = document.getElementById("p5Back");
-    if (back) back.addEventListener("click", () => page14.goWizardBack());
+    if (back) back.addEventListener("click", () => page15.goWizardBack());
     const previous = document.getElementById("p5WizardPrevious");
-    if (previous) previous.addEventListener("click", () => page14.goWizardBack());
+    if (previous) previous.addEventListener("click", () => page15.goWizardBack());
     const next = document.getElementById("p5WizardNext");
-    if (next) next.addEventListener("click", () => page14.goWizardNext());
+    if (next) next.addEventListener("click", () => page15.goWizardNext());
     const aiGuide = document.getElementById("p5AiGuide");
-    if (aiGuide) aiGuide.addEventListener("click", () => page14.chooseAiGuide());
-    document.querySelectorAll("[data-p5-category]").forEach((button) => button.addEventListener("click", () => page14.selectCategory(button.getAttribute("data-p5-category"))));
-    document.querySelectorAll("[data-p5-edit-category]").forEach((button) => button.addEventListener("click", () => page14.goToWizardStep(1)));
-    document.querySelectorAll("[data-p5-edit-demand]").forEach((button) => button.addEventListener("click", () => page14.goToWizardStep(2)));
-    document.querySelectorAll("[data-p5-sku]").forEach((button) => button.addEventListener("click", () => page14.selectWizardValue("skuSpecific", button.getAttribute("data-p5-sku"))));
-    document.querySelectorAll("[data-p5-timeline]").forEach((button) => button.addEventListener("click", () => page14.selectWizardValue("timeline", button.getAttribute("data-p5-timeline"))));
-    document.querySelectorAll("[data-p5-budget]").forEach((button) => button.addEventListener("click", () => page14.selectWizardValue("budget", button.getAttribute("data-p5-budget"))));
+    if (aiGuide) aiGuide.addEventListener("click", () => page15.chooseAiGuide());
+    document.querySelectorAll("[data-p5-category]").forEach((button) => button.addEventListener("click", () => page15.selectCategory(button.getAttribute("data-p5-category"))));
+    document.querySelectorAll("[data-p5-edit-category]").forEach((button) => button.addEventListener("click", () => page15.goToWizardStep(1)));
+    document.querySelectorAll("[data-p5-edit-demand]").forEach((button) => button.addEventListener("click", () => page15.goToWizardStep(2)));
+    document.querySelectorAll("[data-p5-sku]").forEach((button) => button.addEventListener("click", () => page15.selectWizardValue("skuSpecific", button.getAttribute("data-p5-sku"))));
+    document.querySelectorAll("[data-p5-timeline]").forEach((button) => button.addEventListener("click", () => page15.selectWizardValue("timeline", button.getAttribute("data-p5-timeline"))));
+    document.querySelectorAll("[data-p5-budget]").forEach((button) => button.addEventListener("click", () => page15.selectWizardValue("budget", button.getAttribute("data-p5-budget"))));
     const description = document.getElementById("p5NeedDescription");
     if (description) description.addEventListener("input", () => {
-      page14.collected.extra = description.value;
+      page15.collected.extra = description.value;
     });
     const attachment = document.getElementById("p5Attachment");
-    if (attachment) attachment.addEventListener("change", () => page14.setAttachment(attachment.files && attachment.files[0]));
+    if (attachment) attachment.addEventListener("change", () => page15.setAttachment(attachment.files && attachment.files[0]));
   }
 
   // src/components/matchCard.js
@@ -5059,8 +5055,8 @@
   }
 
   // src/pages/p5-dialog/MatchResults.js
-  function renderMatchResults(page14, results, findTeam) {
-    const conditions = [page14.resolveSku(), page14.collected.city, page14.collected.budget].filter((item) => item && item !== "\u672A\u63D0\u4F9B");
+  function renderMatchResults(page15, results, findTeam) {
+    const conditions = [page15.resolveSku(), page15.collected.city, page15.collected.budget].filter((item) => item && item !== "\u672A\u63D0\u4F9B");
     let html = '<div class="p5-match-results">';
     html += '<section class="p5-match-summary">';
     html += '<div class="p5-match-summary-head"><span><strong>\u4E3A\u4F60\u63A8\u8350' + results.length + "\u5BB6\u670D\u52A1\u56E2\u961F</strong><small>\u7EFC\u5408\u9700\u6C42\u5951\u5408\u5EA6\u4E0E\u56E2\u961F\u670D\u52A1\u8868\u73B0\u6392\u5E8F</small></span>";
@@ -5081,8 +5077,8 @@
       if (!team) return;
       html += renderMatchCard(result, team, {
         best: index === 0,
-        checked: Boolean(page14.checkedTeams[result.teamId]),
-        sku: page14.resolveSku()
+        checked: Boolean(page15.checkedTeams[result.teamId]),
+        sku: page15.resolveSku()
       });
     });
     html += '<div class="p5-match-alternatives">';
@@ -5090,45 +5086,45 @@
     html += '<button class="p5-category-link" type="button" data-p5-match-action="category">\u90FD\u4E0D\u5408\u9002\uFF1F\u6309\u7C7B\u76EE\u67E5\u627E ' + icon("chevron-right", 13) + "</button>";
     html += "</div>";
     html += "</div>";
-    const checkedCount = Object.keys(page14.checkedTeams).filter((teamId) => page14.checkedTeams[teamId]).length;
+    const checkedCount = Object.keys(page15.checkedTeams).filter((teamId) => page15.checkedTeams[teamId]).length;
     html += '<div class="bottom-bar">';
     html += results.length ? '<button class="btn btn-primary btn-block" type="button" data-p5-match-action="submit">\u5411' + checkedCount + "\u5BB6\u56E2\u961F\u53D1\u9001\u9700\u6C42</button>" : '<button class="btn btn-outline btn-block" type="button" data-p5-match-action="summary">\u8FD4\u56DE\u8C03\u6574\u9700\u6C42</button>';
     html += "</div>";
     return html;
   }
-  function bindMatchResults(page14) {
+  function bindMatchResults(page15) {
     document.querySelectorAll(".p5-match-card").forEach((card) => {
       card.addEventListener("click", (event) => {
         if (event.target.closest("[data-p5-match-action]")) return;
-        page14.toggleCheck(card.getAttribute("data-team"));
+        page15.toggleCheck(card.getAttribute("data-team"));
       });
     });
     document.querySelectorAll('[data-p5-match-action="reason"]').forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-        page14.toggleReason(button);
+        page15.toggleReason(button);
       });
     });
     document.querySelectorAll('[data-p5-match-action="team-detail"]').forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-        page14.openMatchTeamDetail(button.closest(".p5-match-card").getAttribute("data-team"));
+        page15.openMatchTeamDetail(button.closest(".p5-match-card").getAttribute("data-team"));
       });
     });
     document.querySelectorAll('[data-p5-match-action="service-detail"]').forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-        page14.openMatchServiceDetail(button.closest(".p5-match-card").getAttribute("data-team"));
+        page15.openMatchServiceDetail(button.closest(".p5-match-card").getAttribute("data-team"));
       });
     });
     const batchButton = document.querySelector('[data-p5-match-action="batch"]');
-    if (batchButton) batchButton.addEventListener("click", () => page14.changeBatch());
+    if (batchButton) batchButton.addEventListener("click", () => page15.changeBatch());
     const categoryButton = document.querySelector('[data-p5-match-action="category"]');
-    if (categoryButton) categoryButton.addEventListener("click", () => navigateTo("p2", { categoryId: page14.params.categoryId || "law" }));
+    if (categoryButton) categoryButton.addEventListener("click", () => navigateTo("p2", { categoryId: page15.params.categoryId || "law" }));
     const summaryButton = document.querySelector('[data-p5-match-action="summary"]');
-    if (summaryButton) summaryButton.addEventListener("click", () => page14.returnToSummary());
+    if (summaryButton) summaryButton.addEventListener("click", () => page15.returnToSummary());
     const submitButton = document.querySelector('[data-p5-match-action="submit"]');
-    if (submitButton) submitButton.addEventListener("click", () => page14.showSuccess());
+    if (submitButton) submitButton.addEventListener("click", () => page15.showSuccess());
   }
 
   // src/pages/p5-dialog/MatchingProgress.js
@@ -5137,22 +5133,22 @@
     "\u7B5B\u9009\u53EF\u627F\u63A5\u7684\u670D\u52A1\u56E2\u961F",
     "\u6838\u5BF9\u76F8\u5173\u6848\u4F8B\u4E0E\u670D\u52A1\u8868\u73B0"
   ];
-  function conditionItems(page14) {
+  function conditionItems(page15) {
     const items = [
-      ["\u5339\u914D\u670D\u52A1", page14.resolveSku()],
-      ["\u6240\u5728\u5730\u533A", page14.collected.city],
-      ["\u9884\u7B97\u8303\u56F4", page14.collected.budget]
+      ["\u5339\u914D\u670D\u52A1", page15.resolveSku()],
+      ["\u6240\u5728\u5730\u533A", page15.collected.city],
+      ["\u9884\u7B97\u8303\u56F4", page15.collected.budget]
     ];
     return items.filter((item) => item[1] && item[1] !== "\u672A\u63D0\u4F9B");
   }
-  function renderMatchingProgress(page14, activeStep = 0) {
+  function renderMatchingProgress(page15, activeStep = 0) {
     let html = '<main class="p5-matching" role="status" aria-live="polite">';
     html += '<div class="p5-matching-submitted">\u9700\u6C42\u4FE1\u606F\u5DF2\u63D0\u4EA4</div>';
     html += '<div class="p5-matching-orbit" aria-hidden="true"><span></span><span></span><span></span></div>';
     html += "<h1>\u6B63\u5728\u4E3A\u4F60\u7CBE\u51C6\u5339\u914D</h1>";
     html += '<p class="p5-matching-lead">\u7EFC\u5408\u9700\u6C42\u5951\u5408\u5EA6\u3001\u7528\u6237\u8BC4\u4EF7\u548C\u5E73\u53F0\u670D\u52A1\u8BB0\u5F55\uFF0C\u4E3A\u4F60\u7B5B\u9009\u5408\u9002\u7684\u670D\u52A1\u56E2\u961F\u3002</p>';
     html += '<div class="p5-matching-conditions">';
-    conditionItems(page14).forEach((item) => {
+    conditionItems(page15).forEach((item) => {
       html += "<span><small>" + escapeHTML(item[0]) + "</small><strong>" + escapeHTML(item[1]) + "</strong></span>";
     });
     html += "</div>";
@@ -6117,7 +6113,7 @@
     "enter-chat": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam }),
     "add-service": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam, open: "change-order" }),
     "anon-call": ({ teamId, demand }) => anonymousCall(getTeam(teamId || demand.chosenTeam, store.teams)),
-    "confirm-acceptance": ({ demand, page: page14, options }) => showModal({
+    "confirm-acceptance": ({ demand, page: page15, options }) => showModal({
       title: "\u786E\u8BA4\u9A8C\u6536\u901A\u8FC7\uFF1F",
       body: "\u8BF7\u786E\u8BA4\u4EA4\u4ED8\u6210\u679C\u7B26\u5408\u5DF2\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u3002\u9A8C\u6536\u540E\u672C\u6B21\u670D\u52A1\u5C06\u5B8C\u6210\uFF0C\u5E76\u5F00\u653E\u8BC4\u4EF7\u5165\u53E3\u3002",
       cancelText: "\u7EE7\u7EED\u68C0\u67E5",
@@ -6125,15 +6121,15 @@
       onConfirm() {
         changed(confirmAcceptance(demand, options));
         toast("\u9A8C\u6536\u5B8C\u6210\uFF0C\u53EF\u4EE5\u8BC4\u4EF7\u4E86");
-        page14.refreshPage(demand);
+        page15.refreshPage(demand);
         updateBadge();
       }
     }),
     "go-review": ({ demand }) => navigateTo("p8", { demandId: demand.id }),
     "view-review": ({ demand }) => navigateTo("p8", { demandId: demand.id, readonly: true }),
-    "continue-cooperation": ({ demand, page: page14 }) => page14.openContinueCooperation(demand),
-    "after-sale": ({ demand, page: page14 }) => page14.openAfterSale(demand),
-    withdraw: ({ demand, page: page14, options }) => showModal({
+    "continue-cooperation": ({ demand, page: page15 }) => page15.openContinueCooperation(demand),
+    "after-sale": ({ demand, page: page15 }) => page15.openAfterSale(demand),
+    withdraw: ({ demand, page: page15, options }) => showModal({
       title: "\u786E\u8BA4\u64A4\u56DE\u9700\u6C42\uFF1F",
       body: "\u64A4\u56DE\u540E\uFF0C\u5DF2\u54CD\u5E94\u7684\u56E2\u961F\u5C06\u6536\u5230\u901A\u77E5\u3002",
       confirmText: "\u786E\u8BA4\u64A4\u56DE",
@@ -6145,7 +6141,7 @@
         addTimelineEvent(demand, "cancel", "\u9700\u6C42\u5DF2\u64A4\u56DE", "\u4F60\u4E3B\u52A8\u64A4\u56DE\u4E86\u672C\u6B21\u9700\u6C42\uFF0C\u53EF\u4FEE\u6539\u540E\u91CD\u65B0\u63D0\u4EA4", options.nowLabel);
         emitChange();
         toast("\u5DF2\u64A4\u56DE");
-        page14.refreshPage(demand);
+        page15.refreshPage(demand);
         updateBadge();
       }
     }),
@@ -6157,17 +6153,17 @@
       const tab = document.querySelector('[data-p6-tab="progress"]');
       if (tab) tab.click();
     },
-    "upload-materials": ({ demand, page: page14 }) => page14.openMaterialUpload(demand),
+    "upload-materials": ({ demand, page: page15 }) => page15.openMaterialUpload(demand),
     "open-agreement": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam, open: "agreement" }),
     "open-payment": ({ teamId, demand }) => navigateTo("p7", { demandId: demand.id, teamId: teamId || demand.chosenTeam, open: "payment" }),
-    "replace-batch": ({ demand, page: page14, options }) => {
+    "replace-batch": ({ demand, page: page15, options }) => {
       const nextTeams = changed(replaceDemandTeamBatch(demand, options));
       toast(nextTeams.length ? "\u539F\u9700\u6C42\u5DF2\u53D1\u9001\u7ED9\u65B0\u7684\u4E00\u6279\u56E2\u961F" : "\u6682\u65F6\u6CA1\u6709\u66F4\u591A\u7B26\u5408\u6761\u4EF6\u7684\u56E2\u961F");
-      page14.refreshPage(demand);
+      page15.refreshPage(demand);
       if (nextTeams.length) {
         simulateResponses(demand.id, (updated) => {
           emitChange();
-          page14.refreshPage(updated);
+          page15.refreshPage(updated);
           updateBadge();
         }, options);
       }
@@ -6359,15 +6355,15 @@
     html += "</div>";
     return html;
   }
-  function renderProgressTab(demand, page14) {
+  function renderProgressTab(demand, page15) {
     let html = '<div class="p6-progress-wrap">';
-    if (["pending", "choosing", "communicating", "plan_pending"].includes(demand.status)) html += page14.renderResponseRoundSummary(demand);
+    if (["pending", "choosing", "communicating", "plan_pending"].includes(demand.status)) html += page15.renderResponseRoundSummary(demand);
     html += '<div class="p6-progress-summary">' + (demand.progress || "") + "</div>";
     html += renderDemandTimeline(demand);
-    if (demand.servicePlan && ["plan_pending", "contract_pending", "payment_pending", "payment_confirming", "active"].includes(demand.status)) html += page14.renderPlanTab(demand);
-    if (demand.agreement && ["contract_pending", "payment_pending", "payment_confirming"].includes(demand.status)) html += page14.renderAgreementSummary(demand);
-    if (demand.payment && ["payment_pending", "payment_confirming", "active"].includes(demand.status)) html += page14.renderPaymentSummary(demand);
-    if (demand.delivery && ["acceptance", "done"].includes(demand.status)) html += page14.renderDeliveryTab(demand);
+    if (demand.servicePlan && ["plan_pending", "contract_pending", "payment_pending", "payment_confirming", "active"].includes(demand.status)) html += page15.renderPlanTab(demand);
+    if (demand.agreement && ["contract_pending", "payment_pending", "payment_confirming"].includes(demand.status)) html += page15.renderAgreementSummary(demand);
+    if (demand.payment && ["payment_pending", "payment_confirming", "active"].includes(demand.status)) html += page15.renderPaymentSummary(demand);
+    if (demand.delivery && ["acceptance", "done"].includes(demand.status)) html += page15.renderDeliveryTab(demand);
     html += renderAfterSaleSummary(demand);
     html += "</div>";
     return html;
@@ -6489,13 +6485,13 @@
     html += "</div></div>";
     return html;
   }
-  function renderTeamsTab(demand, page14) {
-    if (["contract_pending", "active", "acceptance", "done"].includes(demand.status)) return page14.renderTeamTab(demand);
+  function renderTeamsTab(demand, page15) {
+    if (["contract_pending", "active", "acceptance", "done"].includes(demand.status)) return page15.renderTeamTab(demand);
     const blocks = [];
-    if ((demand.accepted || []).length) blocks.push('<section class="p6-team-group"><h3>\u5DF2\u54CD\u5E94 ' + demand.accepted.length + "</h3>" + page14.renderAcceptedTab(demand) + "</section>");
-    if ((demand.pending || []).length) blocks.push('<section class="p6-team-group"><h3>\u7B49\u5F85\u54CD\u5E94 ' + demand.pending.length + "</h3>" + page14.renderPendingTab(demand) + "</section>");
-    if ((demand.timedOut || []).length) blocks.push('<section class="p6-team-group"><h3>\u672A\u5728\u65F6\u9650\u5185\u54CD\u5E94 ' + demand.timedOut.length + "</h3>" + page14.renderTimedOutTab(demand) + "</section>");
-    if ((demand.rejected || []).length) blocks.push('<section class="p6-team-group"><h3>\u6682\u672A\u627F\u63A5 ' + demand.rejected.length + "</h3>" + page14.renderRejectedTab(demand) + "</section>");
+    if ((demand.accepted || []).length) blocks.push('<section class="p6-team-group"><h3>\u5DF2\u54CD\u5E94 ' + demand.accepted.length + "</h3>" + page15.renderAcceptedTab(demand) + "</section>");
+    if ((demand.pending || []).length) blocks.push('<section class="p6-team-group"><h3>\u7B49\u5F85\u54CD\u5E94 ' + demand.pending.length + "</h3>" + page15.renderPendingTab(demand) + "</section>");
+    if ((demand.timedOut || []).length) blocks.push('<section class="p6-team-group"><h3>\u672A\u5728\u65F6\u9650\u5185\u54CD\u5E94 ' + demand.timedOut.length + "</h3>" + page15.renderTimedOutTab(demand) + "</section>");
+    if ((demand.rejected || []).length) blocks.push('<section class="p6-team-group"><h3>\u6682\u672A\u627F\u63A5 ' + demand.rejected.length + "</h3>" + page15.renderRejectedTab(demand) + "</section>");
     if (!blocks.length) return '<div class="empty-state"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">\u6682\u65E0\u56E2\u961F\u8BB0\u5F55</div></div>';
     return '<div class="p6-teams-overview">' + blocks.join("") + "</div>";
   }
@@ -7261,22 +7257,22 @@
     html += "</div>";
     return html;
   }
-  function bindDimensionStars(page14) {
+  function bindDimensionStars(page15) {
     document.querySelectorAll(".p8-dimension-stars").forEach((group) => {
       const key = group.getAttribute("data-dimension");
       const starSpans = group.querySelectorAll("[data-star]");
       starSpans.forEach((span) => {
         span.addEventListener("click", function() {
           const star = parseInt(this.getAttribute("data-star"), 10);
-          page14.state.ratings[key] = star;
+          page15.state.ratings[key] = star;
           starSpans.forEach((item) => {
             item.classList.toggle("active", parseInt(item.getAttribute("data-star"), 10) <= star);
           });
           group.parentNode.querySelector(".p8-dimension-score").textContent = star.toFixed(1);
-          const overall = page14.getOverallRating(page14.state.ratings);
-          const complete = Object.keys(page14.state.ratings).length === page14.dimensionKeys.length;
+          const overall = page15.getOverallRating(page15.state.ratings);
+          const complete = Object.keys(page15.state.ratings).length === page15.dimensionKeys.length;
           document.getElementById("p8OverallScore").textContent = complete ? overall.toFixed(1) : "\u2014";
-          document.getElementById("p8OverallLabel").textContent = complete ? page14.getRatingLabel(overall) : "\u5F85\u8BC4\u5206";
+          document.getElementById("p8OverallLabel").textContent = complete ? page15.getRatingLabel(overall) : "\u5F85\u8BC4\u5206";
           document.getElementById("p8LowRatingHelp").classList.toggle("visible", complete && overall <= 2);
           const submitButton = document.getElementById("p8-submit");
           if (submitButton) submitButton.disabled = !complete;
@@ -7294,20 +7290,20 @@
     if (readonly) return "";
     return '<div class="p8-review-tags" id="p8ReviewTags">' + QUICK_TAGS.map((tag) => '<button type="button" data-review-tag="' + tag + '">' + tag + "</button>").join("") + '</div><label class="p8-anonymous"><input id="p8Anonymous" type="checkbox" checked><span>' + icon("shield", 16) + "</span><strong>\u533F\u540D\u8BC4\u4EF7</strong><small>\u9ED8\u8BA4\u9690\u85CF\u4F01\u4E1A\u540D\u79F0</small></label>";
   }
-  function bindTagPicker(page14) {
+  function bindTagPicker(page15) {
     document.querySelectorAll("[data-review-tag]").forEach((button) => {
       button.addEventListener("click", function() {
         const tag = this.getAttribute("data-review-tag");
-        const index = page14.state.tags.indexOf(tag);
-        if (index >= 0) page14.state.tags.splice(index, 1);
-        else page14.state.tags.push(tag);
+        const index = page15.state.tags.indexOf(tag);
+        if (index >= 0) page15.state.tags.splice(index, 1);
+        else page15.state.tags.push(tag);
         this.classList.toggle("active", index < 0);
       });
     });
     const anonymous = document.getElementById("p8Anonymous");
     if (anonymous) {
       anonymous.addEventListener("change", function() {
-        page14.state.anonymous = this.checked;
+        page15.state.anonymous = this.checked;
       });
     }
   }
@@ -8695,6 +8691,324 @@
     }
   };
   register("p13", page13);
+
+  // src/pages/p14-market/FilterSheet.js
+  var DEFAULT_MARKET_FILTERS = Object.freeze({
+    type: "all",
+    city: "all",
+    price: "all",
+    rating: "all",
+    response: "all"
+  });
+  function createMarketplaceFilters() {
+    return { ...DEFAULT_MARKET_FILTERS };
+  }
+  function countMarketplaceFilters(filters) {
+    return Object.keys(DEFAULT_MARKET_FILTERS).filter((key) => filters[key] !== "all").length;
+  }
+  function renderGroup(filters, title, key, options) {
+    return '<section class="p14-filter-group"><h3>' + title + "</h3><div>" + options.map(
+      (option) => '<button type="button" class="p14-filter-option' + (filters[key] === option.key ? " selected" : "") + '" data-p14-filter-key="' + key + '" data-p14-filter-value="' + option.key + '">' + option.label + "</button>"
+    ).join("") + "</div></section>";
+  }
+  function openMarketplaceFilters(state2, onApply) {
+    const filters = state2.filters;
+    const body = '<div class="p14-filter-sheet">' + renderGroup(filters, "\u670D\u52A1\u5F62\u6001", "type", [
+      { key: "all", label: "\u4E0D\u9650" },
+      { key: "human", label: "\u771F\u4EBA\u56E2\u961F" },
+      { key: "platform", label: "\u5E73\u53F0\u81EA\u8425" },
+      { key: "agent", label: "\u667A\u80FD\u4F53" }
+    ]) + renderGroup(filters, "\u6240\u5728\u57CE\u5E02", "city", [
+      { key: "all", label: "\u4E0D\u9650" },
+      { key: "\u5317\u4EAC", label: "\u5317\u4EAC" },
+      { key: "\u4E0A\u6D77", label: "\u4E0A\u6D77" }
+    ]) + renderGroup(filters, "\u670D\u52A1\u4EF7\u683C", "price", [
+      { key: "all", label: "\u4E0D\u9650" },
+      { key: "under1000", label: "1000\u5143\u4EE5\u4E0B" },
+      { key: "1000to5000", label: "1000\u20145000\u5143" },
+      { key: "over5000", label: "5000\u5143\u4EE5\u4E0A" }
+    ]) + renderGroup(filters, "\u7528\u6237\u8BC4\u5206", "rating", [
+      { key: "all", label: "\u4E0D\u9650" },
+      { key: "4.8", label: "4.8\u5206\u4EE5\u4E0A" }
+    ]) + renderGroup(filters, "\u54CD\u5E94\u901F\u5EA6", "response", [
+      { key: "all", label: "\u4E0D\u9650" },
+      { key: "within4", label: "4\u5C0F\u65F6\u5185" },
+      { key: "within24", label: "24\u5C0F\u65F6\u5185" }
+    ]) + '<div class="p14-filter-actions"><button type="button" class="btn btn-outline" id="p14FilterReset">\u91CD\u7F6E</button><button type="button" class="btn btn-primary" id="p14FilterApply">\u5E94\u7528\u7B5B\u9009</button></div></div>';
+    showSheet({ title: "\u7B5B\u9009\u670D\u52A1", body });
+    document.querySelectorAll("[data-p14-filter-key]").forEach((option) => {
+      option.addEventListener("click", function() {
+        const key = this.getAttribute("data-p14-filter-key");
+        document.querySelectorAll('[data-p14-filter-key="' + key + '"]').forEach((item) => item.classList.remove("selected"));
+        this.classList.add("selected");
+      });
+    });
+    document.getElementById("p14FilterReset").addEventListener("click", () => {
+      state2.filters = createMarketplaceFilters();
+      closeAllModals();
+      onApply();
+    });
+    document.getElementById("p14FilterApply").addEventListener("click", () => {
+      document.querySelectorAll(".p14-filter-option.selected").forEach((option) => {
+        state2.filters[option.getAttribute("data-p14-filter-key")] = option.getAttribute("data-p14-filter-value");
+      });
+      closeAllModals();
+      onApply();
+    });
+  }
+
+  // src/pages/p14-market/index.js
+  var categoryTabs = Object.freeze([
+    { id: "all", label: "\u5168\u90E8" },
+    { id: "fundraising", label: "\u6295\u878D\u8D44" },
+    { id: "law", label: "\u6CD5\u5F8B" },
+    { id: "business", label: "\u5DE5\u5546" },
+    { id: "ip", label: "\u77E5\u8BC6\u4EA7\u6743" },
+    { id: "policy", label: "\u653F\u7B56\u7533\u62A5" },
+    { id: "agents", label: "\u667A\u80FD\u4F53" }
+  ]);
+  var categoryLabels2 = Object.freeze({
+    fundraising: "\u6295\u878D\u8D44",
+    law: "\u6CD5\u5F8B",
+    business: "\u5DE5\u5546",
+    finance: "\u8D22\u7A0E",
+    ip: "\u77E5\u8BC6\u4EA7\u6743",
+    policy: "\u653F\u7B56\u7533\u62A5",
+    hr: "\u4EBA\u529B\u8D44\u6E90",
+    agents: "\u667A\u80FD\u4F53"
+  });
+  var sortOptions = Object.freeze([
+    { id: "recommended", label: "\u7EFC\u5408\u63A8\u8350" },
+    { id: "price", label: "\u4EF7\u683C\u4ECE\u4F4E\u5230\u9AD8" },
+    { id: "rating", label: "\u8BC4\u5206\u4F18\u5148" },
+    { id: "response", label: "\u54CD\u5E94\u66F4\u5FEB" }
+  ]);
+  function serviceDescription2(sku) {
+    return (serviceBlueprints[sku] || defaultServiceBlueprint).intro;
+  }
+  function parseStartPrice(teamId, sku, fallback) {
+    const config = getServicePackageConfig(teamId, sku);
+    if (config) return config.plans[0].price;
+    const match = String(fallback || "").replaceAll(",", "").match(/\d+/);
+    return match ? Number(match[0]) : null;
+  }
+  function responseHours(value, fallback = 99) {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+  function normalizeEntry(entry, index) {
+    if (entry.kind === "fundraising") {
+      return {
+        ...entry,
+        originalIndex: index,
+        categoryId: "fundraising",
+        type: "platform",
+        title: "\u878D\u8D44\u5339\u914D\u670D\u52A1",
+        description: "\u63D0\u4EA4\u6216\u66F4\u65B0 BP\uFF0C\u5339\u914D\u6B63\u5728\u627E\u9879\u76EE\u4E14\u6295\u8D44\u504F\u597D\u5951\u5408\u7684\u4E2A\u4EBA\u6295\u8D44\u4EBA\u3002",
+        provider: "\u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3",
+        organization: "\u5E73\u53F0\u81EA\u8425",
+        city: "",
+        priceValue: null,
+        priceLabel: "\u5F00\u59CB\u5339\u914D",
+        rating: 5,
+        responseHours: 24,
+        searchText: "\u878D\u8D44\u5339\u914D \u6295\u8D44\u4EBA BP \u5E73\u53F0\u6295\u878D\u8D44\u670D\u52A1\u4E2D\u5FC3"
+      };
+    }
+    if (entry.kind === "agent") {
+      const agent = entry.agent;
+      return {
+        ...entry,
+        originalIndex: index,
+        categoryId: "agents",
+        type: "agent",
+        title: agent.name,
+        description: agent.description,
+        provider: agent.supplier.name,
+        organization: agent.status === "paused" ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528",
+        city: "",
+        priceValue: null,
+        priceLabel: agent.price,
+        rating: agent.rating,
+        responseHours: 0,
+        searchText: [agent.name, agent.description, agent.supplier.name, ...agent.tags || []].join(" ")
+      };
+    }
+    const team = getTeam(entry.offering.teamId, store.teams);
+    if (!team) return null;
+    const sku = entry.offering.sku;
+    return {
+      ...entry,
+      originalIndex: index,
+      categoryId: entry.tab.id,
+      type: "human",
+      team,
+      title: sku,
+      description: serviceDescription2(sku),
+      provider: team.name,
+      organization: team.orgName || team.orgShort,
+      city: team.city,
+      priceValue: parseStartPrice(team.id, sku, team.priceText),
+      priceLabel: getServicePriceLabel(team.id, sku, team.priceText),
+      rating: team.rating,
+      responseHours: responseHours(team.avgResponse),
+      searchText: [sku, serviceDescription2(sku), team.name, team.orgName, team.orgShort, team.city].join(" ")
+    };
+  }
+  function renderCategoryTabs(activeId) {
+    return '<div class="p14-categories" role="tablist" aria-label="\u670D\u52A1\u5206\u7C7B">' + categoryTabs.map(
+      (tab) => '<button type="button" role="tab" aria-selected="' + String(tab.id === activeId) + '" class="p14-category' + (tab.id === activeId ? " active" : "") + '" data-p14-category="' + tab.id + '">' + tab.label + "</button>"
+    ).join("") + "</div>";
+  }
+  function renderMeta(entry) {
+    if (entry.kind === "fundraising") return "<span>" + icon("shield", 13) + "\u5E73\u53F0\u7EDF\u4E00\u5339\u914D</span><span>" + icon("clock", 13) + "\u8FDB\u5EA6\u6301\u7EED\u66F4\u65B0</span>";
+    if (entry.kind === "agent") return '<span class="p14-rating">' + icon("star", 12) + entry.rating + "</span><span>" + (entry.agent.status === "paused" ? "\u6682\u505C\u670D\u52A1" : "\u5373\u65F6\u54CD\u5E94") + "</span>";
+    return '<span class="p14-rating">' + icon("star", 12) + entry.rating + "</span><span>" + icon("map-pin", 12) + escapeHTML(entry.city) + "</span><span>" + icon("clock", 12) + escapeHTML(entry.team.avgResponse || "\u54CD\u5E94\u65F6\u95F4\u5F85\u786E\u8BA4") + "\u5185\u54CD\u5E94</span>";
+  }
+  function renderEntry(entry) {
+    const disabled = entry.kind === "agent" && entry.agent.status === "paused";
+    const iconName = entry.kind === "fundraising" ? "trending-up" : entry.kind === "agent" ? entry.agent.icon : entry.tab.icon;
+    const badge = entry.kind === "fundraising" ? '<span class="p14-platform-badge">\u5E73\u53F0\u81EA\u8425</span>' : entry.kind === "agent" && entry.agent.recommended ? '<span class="p14-recommend-badge">\u5E73\u53F0\u63A8\u8350</span>' : entry.kind === "service" ? renderBadge(entry.team.badge) : "";
+    const data = entry.kind === "service" ? ' data-p14-kind="service" data-team-id="' + escapeHTML(entry.team.id) + '" data-sku="' + escapeHTML(entry.title) + '"' : entry.kind === "agent" ? ' data-p14-kind="agent" data-agent-id="' + escapeHTML(entry.agent.id) + '"' : ' data-p14-kind="fundraising"';
+    return '<button type="button" class="p14-service-card p14-' + entry.kind + (disabled ? " is-paused" : "") + '"' + data + (disabled ? " disabled" : "") + '><span class="p14-card-icon">' + icon(iconName, 21) + '</span><span class="p14-card-body"><span class="p14-card-title"><strong>' + escapeHTML(entry.title) + '</strong><span class="p14-category-label">' + escapeHTML(categoryLabels2[entry.categoryId]) + "</span>" + badge + '</span><span class="p14-card-desc">' + escapeHTML(entry.description) + '</span><span class="p14-provider"><b>' + escapeHTML(entry.provider) + '</b><i aria-hidden="true"></i><span>' + escapeHTML(entry.organization) + '</span></span><span class="p14-card-foot"><span class="p14-meta">' + renderMeta(entry) + "</span><strong>" + escapeHTML(entry.priceLabel) + '</strong></span></span><span class="p14-card-arrow">' + icon("chevron-right", 16) + "</span></button>";
+  }
+  var page14 = {
+    state: {
+      categoryId: "all",
+      query: "",
+      sort: "recommended",
+      filters: createMarketplaceFilters()
+    },
+    reset(params = {}) {
+      this.state = {
+        categoryId: categoryTabs.some((tab) => tab.id === params.categoryId) ? params.categoryId : "all",
+        query: params.query || "",
+        sort: "recommended",
+        filters: createMarketplaceFilters()
+      };
+    },
+    getVisibleEntries() {
+      const state2 = this.state;
+      let entries = getMarketplaceEntries().map(normalizeEntry).filter(Boolean);
+      if (state2.categoryId !== "all") entries = entries.filter((entry) => entry.categoryId === state2.categoryId);
+      if (state2.query) {
+        const query = state2.query.toLowerCase();
+        entries = entries.filter((entry) => entry.searchText.toLowerCase().includes(query));
+      }
+      entries = entries.filter((entry) => {
+        const filters = state2.filters;
+        if (filters.type !== "all" && entry.type !== filters.type) return false;
+        if (filters.city !== "all" && entry.city !== filters.city) return false;
+        if (filters.price !== "all") {
+          if (!Number.isFinite(entry.priceValue)) return false;
+          if (filters.price === "under1000" && entry.priceValue >= 1e3) return false;
+          if (filters.price === "1000to5000" && (entry.priceValue < 1e3 || entry.priceValue > 5e3)) return false;
+          if (filters.price === "over5000" && entry.priceValue <= 5e3) return false;
+        }
+        if (filters.rating === "4.8" && entry.rating < 4.8) return false;
+        if (filters.response === "within4" && entry.responseHours > 4) return false;
+        if (filters.response === "within24" && entry.responseHours > 24) return false;
+        return true;
+      });
+      const sorters = {
+        recommended: (a, b) => a.originalIndex - b.originalIndex,
+        price: (a, b) => (a.priceValue ?? Number.MAX_SAFE_INTEGER) - (b.priceValue ?? Number.MAX_SAFE_INTEGER),
+        rating: (a, b) => b.rating - a.rating || a.originalIndex - b.originalIndex,
+        response: (a, b) => a.responseHours - b.responseHours || a.originalIndex - b.originalIndex
+      };
+      return entries.sort(sorters[state2.sort]);
+    },
+    render(params = {}) {
+      this.reset(params);
+      const entries = this.getVisibleEntries();
+      return '<div class="p14-page"><div class="nav-bar"><button class="nav-back" id="p14Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u5168\u90E8\u670D\u52A1</div><div class="nav-action"></div></div><section class="p14-discovery"><label class="search-bar p14-search"><span class="search-icon">' + icon("search", 16) + '</span><input id="p14Search" type="search" value="' + escapeHTML(this.state.query) + '" placeholder="\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784" autocomplete="off"></label>' + renderCategoryTabs(this.state.categoryId) + '</section><section class="p14-results"><div class="p14-toolbar"><div><strong>\u670D\u52A1\u5217\u8868</strong><small id="p14Count">\u5171 ' + entries.length + ' \u9879</small></div><span><button type="button" class="filter-chip" id="p14Sort">\u7EFC\u5408\u63A8\u8350 ' + icon("chevron-down", 12) + '</button><button type="button" class="filter-chip" id="p14Filter">\u7B5B\u9009 ' + icon("chevron-down", 12) + '</button></span></div><div class="p14-list" id="p14List">' + this.renderList(entries) + "</div></section></div>";
+    },
+    renderList(entries) {
+      if (entries.length) {
+        return entries.map(renderEntry).join("") + '<p class="p14-list-note">\u540C\u4E00\u670D\u52A1\u7531\u4E0D\u540C\u56E2\u961F\u5206\u522B\u5C55\u793A\uFF0C\u670D\u52A1\u8303\u56F4\u548C\u4EF7\u683C\u4EE5\u5BF9\u5E94\u8BE6\u60C5\u4E3A\u51C6\u3002</p>';
+      }
+      return '<div class="p14-empty"><span>' + icon("search", 34) + '</span><strong>\u6CA1\u6709\u627E\u5230\u7B26\u5408\u6761\u4EF6\u7684\u670D\u52A1</strong><p>\u53EF\u4EE5\u8C03\u6574\u7B5B\u9009\u6761\u4EF6\uFF0C\u6216\u544A\u8BC9\u6211\u4EEC\u4F60\u6B63\u5728\u89E3\u51B3\u4EC0\u4E48\u95EE\u9898\u3002</p><button type="button" class="btn btn-outline" id="p14Clear">\u6E05\u9664\u7B5B\u9009</button><button type="button" class="btn btn-primary" id="p14Suggest">\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42</button></div>';
+    },
+    refreshList() {
+      const entries = this.getVisibleEntries();
+      document.getElementById("p14Count").textContent = "\u5171 " + entries.length + " \u9879";
+      document.getElementById("p14List").innerHTML = this.renderList(entries);
+      this.updateControls();
+      this.bindEntryActions();
+      this.bindEmptyActions();
+    },
+    updateControls() {
+      const activeFilters = countMarketplaceFilters(this.state.filters);
+      const filter = document.getElementById("p14Filter");
+      const sort = document.getElementById("p14Sort");
+      if (filter) filter.innerHTML = (activeFilters ? "\u7B5B\u9009 " + activeFilters : "\u7B5B\u9009") + " " + icon("chevron-down", 12);
+      if (sort) sort.innerHTML = escapeHTML(sortOptions.find((option) => option.id === this.state.sort).label) + " " + icon("chevron-down", 12);
+    },
+    bindEntryActions() {
+      document.querySelectorAll("[data-p14-kind]").forEach((card) => {
+        card.addEventListener("click", () => {
+          const kind = card.getAttribute("data-p14-kind");
+          if (kind === "fundraising") navigateTo("p12");
+          else if (kind === "agent") navigateTo("p11", { agentId: card.getAttribute("data-agent-id") });
+          else navigateTo("p10", { teamId: card.getAttribute("data-team-id"), sku: card.getAttribute("data-sku") });
+        });
+      });
+    },
+    bindEmptyActions() {
+      const clear = document.getElementById("p14Clear");
+      if (clear) clear.addEventListener("click", () => {
+        this.state.query = "";
+        this.state.categoryId = "all";
+        this.state.filters = createMarketplaceFilters();
+        document.getElementById("p14Search").value = "";
+        document.querySelectorAll("[data-p14-category]").forEach((tab) => {
+          const active = tab.getAttribute("data-p14-category") === "all";
+          tab.classList.toggle("active", active);
+          tab.setAttribute("aria-selected", String(active));
+        });
+        this.refreshList();
+      });
+      const suggest = document.getElementById("p14Suggest");
+      if (suggest) suggest.addEventListener("click", () => openServiceSuggestion(this.state.query));
+    },
+    openSortSheet() {
+      const body = '<div class="p14-sort-sheet">' + sortOptions.map(
+        (option) => '<button type="button" class="p14-sort-option' + (this.state.sort === option.id ? " selected" : "") + '" data-p14-sort="' + option.id + '"><span>' + option.label + "</span>" + (this.state.sort === option.id ? icon("check", 17) : "") + "</button>"
+      ).join("") + "</div>";
+      showSheet({ title: "\u6392\u5E8F\u65B9\u5F0F", body });
+      document.querySelectorAll("[data-p14-sort]").forEach((option) => {
+        option.addEventListener("click", () => {
+          this.state.sort = option.getAttribute("data-p14-sort");
+          document.querySelector(".modal-overlay")?.remove();
+          this.refreshList();
+        });
+      });
+    },
+    init() {
+      showTabBar(false);
+      document.getElementById("p14Back").addEventListener("click", goBackToPrevious);
+      document.getElementById("p14Search").addEventListener("input", function() {
+        page14.state.query = this.value.trim();
+        page14.refreshList();
+      });
+      document.querySelectorAll("[data-p14-category]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          this.state.categoryId = tab.getAttribute("data-p14-category");
+          document.querySelectorAll("[data-p14-category]").forEach((item) => {
+            const active = item === tab;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-selected", String(active));
+          });
+          this.refreshList();
+        });
+      });
+      document.getElementById("p14Filter").addEventListener("click", () => openMarketplaceFilters(this.state, () => this.refreshList()));
+      document.getElementById("p14Sort").addEventListener("click", () => this.openSortSheet());
+      this.bindEntryActions();
+      this.bindEmptyActions();
+    }
+  };
+  register("p14", page14);
 
   // src/main.js
   var app = {
