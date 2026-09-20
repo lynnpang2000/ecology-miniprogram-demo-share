@@ -1,63 +1,169 @@
 (() => {
-  // src/services/storage.js
-  var STORAGE_KEYS = Object.freeze({
-    suggestions: "ecologyServiceSuggestions",
-    favorites: "ecologyFavoriteTeams",
-    questions: "ecologyTeamQuestions",
-    wecomAdded: "ecologyWecomAdded"
-  });
-  function getStorage() {
-    try {
-      return globalThis.localStorage || null;
-    } catch (error) {
-      return null;
-    }
-  }
-  function readText(key, fallback = null) {
-    try {
-      const storage = getStorage();
-      if (!storage) return fallback;
-      const value = storage.getItem(key);
-      return value === null ? fallback : value;
-    } catch (error) {
-      return fallback;
-    }
-  }
-  function writeText(key, value) {
-    try {
-      const storage = getStorage();
-      if (!storage) return false;
-      storage.setItem(key, value);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-  function readJSON(key, fallback) {
-    const value = readText(key, null);
-    if (value === null) return fallback;
-    try {
-      return JSON.parse(value);
-    } catch (error) {
-      return fallback;
-    }
-  }
-  function writeJSON(key, value) {
-    try {
-      return writeText(key, JSON.stringify(value));
-    } catch (error) {
-      return false;
-    }
+  // src/ui/icons.js
+  var iconPaths = {
+    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+    "chevron-left": '<path d="m15 18-6-6 6-6"/>',
+    "chevron-down": '<path d="m6 9 6 6 6-6"/>',
+    "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+    send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    "check-circle": '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    "x-circle": '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
+    ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+    zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+    "trending-up": '<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
+    star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    "star-outline": '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    award: '<circle cx="12" cy="8" r="6"/><path d="M15.5 12.9 17 22l-5-3-5 3 1.5-9.1"/>',
+    lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+    phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+    message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    "file-text": '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+    home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+    calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+    bot: '<path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>',
+    refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+    alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+    "map-pin": '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+    navigation: '<polygon points="3 11 22 2 13 21 11 13 3 11"/>',
+    "price-tag": '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
+    building: '<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>',
+    scale: '<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+    briefcase: '<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
+    shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+    coins: '<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+    wrench: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    bulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+    sparkles: '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/>',
+    help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+    flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>',
+    edit: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
+    upload: '<path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/>',
+    "eye-off": '<path d="m3 3 18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 4.2A10.5 10.5 0 0 1 12 4c7 0 10 8 10 8a15.5 15.5 0 0 1-2.2 3.3"/><path d="M6.6 6.6C3.7 8.5 2 12 2 12s3 8 10 8a9.8 9.8 0 0 0 4.2-.9"/>',
+    pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
+    play: '<path d="m7 4 13 8-13 8Z"/>'
+  };
+  var iconFilled = { star: true };
+  function icon(name, size) {
+    const iconSize = size || 16;
+    const paths = this?.iconPaths || iconPaths;
+    const filled = this?.iconFilled || iconFilled;
+    const body = paths[name] || paths.help;
+    const attributes = filled[name] ? 'fill="currentColor" stroke="none"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+    return '<svg class="ic" width="' + iconSize + '" height="' + iconSize + '" viewBox="0 0 24 24" ' + attributes + ">" + body + "</svg>";
   }
 
-  // src/services/wecom.js
-  function isWecomAdded() {
-    return readText(STORAGE_KEYS.wecomAdded, null) === "1";
+  // src/ui/feedback.js
+  function toast(message, duration) {
+    const visibleDuration = duration || 2e3;
+    const existing = document.querySelector(".toast");
+    if (existing) existing.remove();
+    const element = document.createElement("div");
+    element.className = "toast";
+    element.textContent = message;
+    document.querySelector(".phone-screen").appendChild(element);
+    setTimeout(() => {
+      element.remove();
+    }, visibleDuration);
   }
-  function addWecomConsultant() {
-    writeText(STORAGE_KEYS.wecomAdded, "1");
-    return true;
+  function showModal(options) {
+    const overlay = document.createElement("div");
+    overlay.className = "modal-center";
+    overlay.innerHTML = '<div class="modal-dialog"><div class="modal-dialog-header"><div class="modal-dialog-title">' + (options.title || "\u63D0\u793A") + "</div></div>" + (options.body ? '<div class="modal-dialog-body">' + options.body + "</div>" : "") + '<div class="modal-dialog-actions"><button class="btn-cancel">' + (options.cancelText || "\u53D6\u6D88") + '</button><button class="' + (options.danger ? "btn-danger" : "btn-confirm") + '">' + (options.confirmText || "\u786E\u8BA4") + "</button></div></div>";
+    document.querySelector(".phone-screen").appendChild(overlay);
+    overlay.querySelector(".btn-cancel").addEventListener("click", () => {
+      overlay.remove();
+      if (options.onCancel) options.onCancel();
+    });
+    overlay.querySelector("." + (options.danger ? "btn-danger" : "btn-confirm")).addEventListener("click", () => {
+      overlay.remove();
+      if (options.onConfirm) options.onConfirm();
+    });
   }
+  function showSheet(options) {
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    let html = '<div class="modal-sheet">';
+    html += '<div class="modal-sheet-handle"></div>';
+    if (options.title) {
+      html += '<div class="modal-sheet-header"><div class="modal-sheet-title">' + options.title + '</div><button class="modal-sheet-close">' + icon("x", 18) + "</button></div>";
+    }
+    html += '<div class="modal-sheet-body">' + (options.body || "") + "</div>";
+    html += "</div>";
+    overlay.innerHTML = html;
+    document.querySelector(".phone-screen").appendChild(overlay);
+    const close = () => {
+      overlay.remove();
+      if (options.onClose) options.onClose();
+    };
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) close();
+    });
+    const closeButton = overlay.querySelector(".modal-sheet-close");
+    if (closeButton) closeButton.addEventListener("click", close);
+    return overlay;
+  }
+  function closeAllModals() {
+    document.querySelectorAll(".modal-overlay, .modal-center, .p1-onboarding-overlay").forEach((element) => element.remove());
+  }
+
+  // src/components/wecomGuide.js
+  var ui = {
+    iconPaths,
+    iconFilled,
+    icon(name, size) {
+      return icon.call(ui, name, size);
+    }
+  };
+  function renderWecomCard() {
+    return '<span class="p5-wecom-status-icon">' + ui.icon("message", 19) + '</span><span class="p5-wecom-copy"><strong>\u67E5\u770B\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1</strong><small>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u62C9\u7FA4</small></span>' + ui.icon("chevron-right", 17);
+  }
+  function openWecomGuide(source, onAdded) {
+    const fundraisingConnection = source === "fundraisingConnection";
+    const serviceConnection = source === "serviceConnection" || source === "afterConfirm";
+    const connectionMode = fundraisingConnection || serviceConnection;
+    const beforePublish = source === "beforePublish";
+    const title = fundraisingConnection ? "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u5EFA\u8054" : serviceConnection ? "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4" : beforePublish ? "\u67E5\u770B\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1" : "\u67E5\u770B\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1";
+    const description = fundraisingConnection ? "\u6DFB\u52A0\u540E\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u5DF2\u786E\u8BA4\u7684\u6295\u8D44\u4EBA\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002\u540E\u7EED\u4EA4\u6D41\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\u3002" : serviceConnection ? "\u6DFB\u52A0\u540E\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u670D\u52A1\u56E2\u961F\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002\u9700\u6C42\u7EC6\u8282\u548C\u540E\u7EED\u534F\u4F5C\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\u3002" : beforePublish ? "\u9700\u6C42\u8FDB\u5C55\u4F1A\u4FDD\u7559\u5728\u7AD9\u5185\uFF1B\u9700\u8981\u8FDB\u4E00\u6B65\u6C9F\u901A\u65F6\uFF0C\u53EF\u626B\u7801\u8054\u7CFB\u5E73\u53F0\u987E\u95EE\u3002" : "\u5C0F\u7A0B\u5E8F\u65E0\u6CD5\u8BFB\u53D6\u4F60\u7684\u4F01\u4E1A\u5FAE\u4FE1\u6DFB\u52A0\u72B6\u6001\u3002\u8BF7\u6309\u9700\u626B\u7801\uFF0C\u91CD\u8981\u8FDB\u5C55\u4ECD\u4F1A\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u548C\u77ED\u4FE1\u901A\u77E5\u3002";
+    const body = '<div class="p5-wecom-sheet"><h3>' + title + "</h3><p>" + description + '</p><div class="p5-demo-qr" aria-label="\u6F14\u793A\u4E8C\u7EF4\u7801"><span class="finder one"></span><span class="finder two"></span><span class="finder three"></span><span class="p5-qr-center">' + ui.icon("message", 21) + '</span></div><div class="p5-demo-label">\u5E73\u53F0\u670D\u52A1\u987E\u95EE \xB7 \u6F14\u793A\u4E8C\u7EF4\u7801</div>' + (connectionMode ? '<button class="btn btn-primary btn-block" id="p5AddWecom">\u6211\u5DF2\u626B\u7801\uFF0C\u901A\u77E5\u5E73\u53F0\u987E\u95EE</button>' : "") + '<button class="btn ' + (connectionMode ? "btn-text" : "btn-primary") + ' btn-block" id="p5SkipWecom">\u5173\u95ED</button></div>';
+    showSheet.call(ui, { title: "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1", body });
+    const confirm = document.getElementById("p5AddWecom");
+    if (confirm) confirm.addEventListener("click", () => {
+      closeAllModals();
+      if (typeof onAdded === "function") onAdded();
+      toast("\u5DF2\u901A\u77E5\u5E73\u53F0\u987E\u95EE\u5904\u7406\u62C9\u7FA4");
+    });
+    document.getElementById("p5SkipWecom").addEventListener("click", closeAllModals);
+  }
+
+  // src/data/onboarding.js
+  var ecologyOnboarding = {
+    "version": "v1",
+    "storageKey": "ecologyOnboardingSeen:v1",
+    "imageUrl": "",
+    "title": "\u4F01\u4E1A\u670D\u52A1\uFF0C\u4ECE\u9700\u6C42\u5F00\u59CB",
+    "visualSubtitle": "\u8BF4\u6E05\u4F60\u7684\u60C5\u51B5\uFF0C\u5E73\u53F0\u5E2E\u4F60\u627E\u5230\u5408\u9002\u56E2\u961F",
+    "serviceLabels": [
+      "\u6CD5\u5F8B\u670D\u52A1",
+      "\u5DE5\u5546\u670D\u52A1",
+      "\u77E5\u8BC6\u4EA7\u6743"
+    ],
+    "description": "\u6CD5\u5F8B\u3001\u5DE5\u5546\u3001\u77E5\u8BC6\u4EA7\u6743\u7B49\u4E13\u4E1A\u56E2\u961F\uFF0C\u5E73\u53F0\u4F1A\u6839\u636E\u4F60\u7684\u60C5\u51B5\u63A8\u8350\u5408\u9002\u7684\u670D\u52A1\u56E2\u961F\u3002",
+    "steps": [
+      "\u63CF\u8FF0\u9700\u6C42",
+      "\u5339\u914D\u56E2\u961F",
+      "\u6C9F\u901A\u786E\u8BA4"
+    ],
+    "primaryText": "\u53D1\u5E03\u7B2C\u4E00\u6761\u9700\u6C42",
+    "secondaryText": "\u5148\u901B\u901B"
+  };
 
   // src/data/chatMessages.js
   var chatMessages = {
@@ -625,6 +731,10 @@
       "district": "\u671D\u9633\u533A",
       "avgResponse": "2\u5C0F\u65F6",
       "skus": [
+        "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE",
+        "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305",
+        "\u6CBB\u7406\u4F53\u68C0",
+        "\u9690\u79C1\u5408\u89C4\u5305",
         "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1",
         "\u878D\u8D44\u4EA4\u6613",
         "\u5408\u540C\u5BA1\u67E5",
@@ -773,6 +883,10 @@
       "district": "\u6D77\u6DC0\u533A",
       "avgResponse": "4\u5C0F\u65F6",
       "skus": [
+        "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE",
+        "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305",
+        "\u6CBB\u7406\u4F53\u68C0",
+        "\u9690\u79C1\u5408\u89C4\u5305",
         "\u5408\u540C\u5BA1\u67E5",
         "\u52B3\u52A8\u5408\u89C4",
         "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1"
@@ -957,6 +1071,9 @@
       "district": "\u6D66\u4E1C\u65B0\u533A",
       "avgResponse": "1\u5C0F\u65F6",
       "skus": [
+        "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE",
+        "\u6CBB\u7406\u4F53\u68C0",
+        "\u9690\u79C1\u5408\u89C4\u5305",
         "\u878D\u8D44\u4EA4\u6613",
         "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1",
         "\u5408\u540C\u5BA1\u67E5",
@@ -1234,6 +1351,8 @@
       "district": "\u4E1C\u57CE\u533A",
       "avgResponse": "2\u5C0F\u65F6",
       "skus": [
+        "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305",
+        "\u6CBB\u7406\u4F53\u68C0",
         "\u878D\u8D44\u4EA4\u6613",
         "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1",
         "\u80A1\u6743\u6FC0\u52B1"
@@ -1477,183 +1596,6 @@
   function emitChange(change = { type: "update" }) {
     listeners.forEach((listener) => listener(change));
   }
-
-  // src/ui/icons.js
-  var iconPaths = {
-    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-    "chevron-right": '<path d="m9 18 6-6-6-6"/>',
-    "chevron-left": '<path d="m15 18-6-6 6-6"/>',
-    "chevron-down": '<path d="m6 9 6 6 6-6"/>',
-    "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
-    send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
-    check: '<path d="M20 6 9 17l-5-5"/>',
-    "check-circle": '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
-    x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
-    "x-circle": '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
-    ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
-    zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
-    "trending-up": '<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
-    star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-    "star-outline": '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-    award: '<circle cx="12" cy="8" r="6"/><path d="M15.5 12.9 17 22l-5-3-5 3 1.5-9.1"/>',
-    lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
-    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
-    phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
-    message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-    "file-text": '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
-    home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
-    calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
-    bot: '<path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>',
-    refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
-    alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
-    "map-pin": '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
-    navigation: '<polygon points="3 11 22 2 13 21 11 13 3 11"/>',
-    "price-tag": '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
-    building: '<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>',
-    scale: '<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
-    briefcase: '<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
-    shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
-    coins: '<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>',
-    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-    user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-    inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
-    wrench: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
-    bulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
-    sparkles: '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/>',
-    help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
-    clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
-    flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>',
-    edit: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
-    upload: '<path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/>',
-    "eye-off": '<path d="m3 3 18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 4.2A10.5 10.5 0 0 1 12 4c7 0 10 8 10 8a15.5 15.5 0 0 1-2.2 3.3"/><path d="M6.6 6.6C3.7 8.5 2 12 2 12s3 8 10 8a9.8 9.8 0 0 0 4.2-.9"/>',
-    pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
-    play: '<path d="m7 4 13 8-13 8Z"/>'
-  };
-  var iconFilled = { star: true };
-  function icon(name, size) {
-    const iconSize = size || 16;
-    const paths = this?.iconPaths || iconPaths;
-    const filled = this?.iconFilled || iconFilled;
-    const body = paths[name] || paths.help;
-    const attributes = filled[name] ? 'fill="currentColor" stroke="none"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
-    return '<svg class="ic" width="' + iconSize + '" height="' + iconSize + '" viewBox="0 0 24 24" ' + attributes + ">" + body + "</svg>";
-  }
-
-  // src/ui/feedback.js
-  function toast(message, duration) {
-    const visibleDuration = duration || 2e3;
-    const existing = document.querySelector(".toast");
-    if (existing) existing.remove();
-    const element = document.createElement("div");
-    element.className = "toast";
-    element.textContent = message;
-    document.querySelector(".phone-screen").appendChild(element);
-    setTimeout(() => {
-      element.remove();
-    }, visibleDuration);
-  }
-  function showModal(options) {
-    const overlay = document.createElement("div");
-    overlay.className = "modal-center";
-    overlay.innerHTML = '<div class="modal-dialog"><div class="modal-dialog-header"><div class="modal-dialog-title">' + (options.title || "\u63D0\u793A") + "</div></div>" + (options.body ? '<div class="modal-dialog-body">' + options.body + "</div>" : "") + '<div class="modal-dialog-actions"><button class="btn-cancel">' + (options.cancelText || "\u53D6\u6D88") + '</button><button class="' + (options.danger ? "btn-danger" : "btn-confirm") + '">' + (options.confirmText || "\u786E\u8BA4") + "</button></div></div>";
-    document.querySelector(".phone-screen").appendChild(overlay);
-    overlay.querySelector(".btn-cancel").addEventListener("click", () => {
-      overlay.remove();
-      if (options.onCancel) options.onCancel();
-    });
-    overlay.querySelector("." + (options.danger ? "btn-danger" : "btn-confirm")).addEventListener("click", () => {
-      overlay.remove();
-      if (options.onConfirm) options.onConfirm();
-    });
-  }
-  function showSheet(options) {
-    const overlay = document.createElement("div");
-    overlay.className = "modal-overlay";
-    let html = '<div class="modal-sheet">';
-    html += '<div class="modal-sheet-handle"></div>';
-    if (options.title) {
-      html += '<div class="modal-sheet-header"><div class="modal-sheet-title">' + options.title + '</div><button class="modal-sheet-close">' + icon("x", 18) + "</button></div>";
-    }
-    html += '<div class="modal-sheet-body">' + (options.body || "") + "</div>";
-    html += "</div>";
-    overlay.innerHTML = html;
-    document.querySelector(".phone-screen").appendChild(overlay);
-    const close = () => {
-      overlay.remove();
-      if (options.onClose) options.onClose();
-    };
-    overlay.addEventListener("click", (event) => {
-      if (event.target === overlay) close();
-    });
-    const closeButton = overlay.querySelector(".modal-sheet-close");
-    if (closeButton) closeButton.addEventListener("click", close);
-    return overlay;
-  }
-  function closeAllModals() {
-    document.querySelectorAll(".modal-overlay, .modal-center, .p1-onboarding-overlay").forEach((element) => element.remove());
-  }
-
-  // src/components/wecomGuide.js
-  var ui = {
-    iconPaths,
-    iconFilled,
-    icon(name, size) {
-      return icon.call(ui, name, size);
-    }
-  };
-  function renderWecomCard() {
-    if (isWecomAdded()) {
-      return '<span class="p5-wecom-status-icon is-added">' + ui.icon("check-circle", 19) + '</span><span class="p5-wecom-copy"><strong>\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u5DF2\u5F00\u542F</strong><small>\u56E2\u961F\u54CD\u5E94\u548C\u670D\u52A1\u8FDB\u5EA6\u4F1A\u53CA\u65F6\u901A\u77E5\u4F60</small></span>';
-    }
-    return '<span class="p5-wecom-status-icon">' + ui.icon("bell", 19) + '</span><span class="p5-wecom-copy"><strong>\u6DFB\u52A0\u4F01\u4E1A\u5FAE\u4FE1\u63A5\u6536\u901A\u77E5</strong><small>\u53CA\u65F6\u63A5\u6536\u56E2\u961F\u54CD\u5E94\u548C\u670D\u52A1\u8FDB\u5EA6</small></span>' + ui.icon("chevron-right", 17);
-  }
-  function openWecomGuide(source, onAdded) {
-    const fundraisingConnection = source === "fundraisingConnection";
-    const serviceConnection = source === "serviceConnection" || source === "afterConfirm";
-    const connectionMode = fundraisingConnection || serviceConnection;
-    if (isWecomAdded()) {
-      if (typeof onAdded === "function") onAdded();
-      toast(connectionMode ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u5EA6\u901A\u77E5\u5DF2\u5F00\u542F");
-      return;
-    }
-    const beforePublish = source === "beforePublish";
-    const title = fundraisingConnection ? "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u5EFA\u8054" : serviceConnection ? "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4" : beforePublish ? "\u6DFB\u52A0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u53D1\u5E03\u540E\u53CA\u65F6\u6536\u5230\u8FDB\u5C55" : "\u6DFB\u52A0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u53CA\u65F6\u63A5\u6536\u56E2\u961F\u54CD\u5E94\u548C\u670D\u52A1\u8FDB\u5EA6";
-    const description = fundraisingConnection ? "\u6DFB\u52A0\u540E\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u5DF2\u786E\u8BA4\u7684\u6295\u8D44\u4EBA\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002\u540E\u7EED\u4EA4\u6D41\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\u3002" : serviceConnection ? "\u6DFB\u52A0\u540E\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u670D\u52A1\u56E2\u961F\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002\u9700\u6C42\u7EC6\u8282\u548C\u540E\u7EED\u534F\u4F5C\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\u3002" : beforePublish ? "\u9700\u6C42\u53D1\u5E03\u540E\uFF0C\u56E2\u961F\u54CD\u5E94\u548C\u65B9\u6848\u8FDB\u5C55\u4F1A\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u53CA\u65F6\u901A\u77E5\u4F60\u3002" : "\u626B\u7801\u6DFB\u52A0\u540E\uFF0C\u91CD\u8981\u8FDB\u5C55\u4F1A\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u4F60\u3002";
-    const body = '<div class="p5-wecom-sheet"><h3>' + title + "</h3><p>" + description + '</p><div class="p5-demo-qr" aria-label="\u6F14\u793A\u4E8C\u7EF4\u7801"><span class="finder one"></span><span class="finder two"></span><span class="finder three"></span><span class="p5-qr-center">' + ui.icon("message", 21) + '</span></div><div class="p5-demo-label">\u6F14\u793A\u4E8C\u7EF4\u7801</div><button class="btn btn-primary btn-block" id="p5AddWecom">\u6211\u5DF2\u6DFB\u52A0</button><button class="btn btn-text btn-block" id="p5SkipWecom">\u7A0D\u540E\u6DFB\u52A0</button></div>';
-    showSheet.call(ui, { title: "\u6DFB\u52A0\u4F01\u4E1A\u5FAE\u4FE1", body });
-    document.getElementById("p5AddWecom").addEventListener("click", () => {
-      addWecomConsultant();
-      emitChange();
-      closeAllModals();
-      const card = document.getElementById("p5WecomCard");
-      if (card) card.innerHTML = renderWecomCard();
-      if (typeof onAdded === "function") onAdded();
-      toast(connectionMode ? "\u5DF2\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1" : "\u5DF2\u5F00\u542F\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u5EA6\u901A\u77E5");
-    });
-    document.getElementById("p5SkipWecom").addEventListener("click", closeAllModals);
-  }
-
-  // src/data/onboarding.js
-  var ecologyOnboarding = {
-    "version": "v1",
-    "storageKey": "ecologyOnboardingSeen:v1",
-    "imageUrl": "",
-    "title": "\u4F01\u4E1A\u670D\u52A1\uFF0C\u4ECE\u9700\u6C42\u5F00\u59CB",
-    "visualSubtitle": "\u8BF4\u6E05\u4F60\u7684\u60C5\u51B5\uFF0C\u5E73\u53F0\u5E2E\u4F60\u627E\u5230\u5408\u9002\u56E2\u961F",
-    "serviceLabels": [
-      "\u6CD5\u5F8B\u670D\u52A1",
-      "\u5DE5\u5546\u670D\u52A1",
-      "\u77E5\u8BC6\u4EA7\u6743"
-    ],
-    "description": "\u6CD5\u5F8B\u3001\u5DE5\u5546\u3001\u77E5\u8BC6\u4EA7\u6743\u7B49\u4E13\u4E1A\u56E2\u961F\uFF0C\u5E73\u53F0\u4F1A\u6839\u636E\u4F60\u7684\u60C5\u51B5\u63A8\u8350\u5408\u9002\u7684\u670D\u52A1\u56E2\u961F\u3002",
-    "steps": [
-      "\u63CF\u8FF0\u9700\u6C42",
-      "\u5339\u914D\u56E2\u961F",
-      "\u6C9F\u901A\u786E\u8BA4"
-    ],
-    "primaryText": "\u53D1\u5E03\u7B2C\u4E00\u6761\u9700\u6C42",
-    "secondaryText": "\u5148\u901B\u901B"
-  };
 
   // src/core/registry.js
   var pages = /* @__PURE__ */ new Map();
@@ -1919,6 +1861,11 @@
       "icon": "scale",
       "desc": "\u5408\u540C\xB7\u80A1\u6743\xB7\u878D\u8D44",
       "skus": [
+        "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE",
+        "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305",
+        "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305",
+        "\u6CBB\u7406\u4F53\u68C0",
+        "\u9690\u79C1\u5408\u89C4\u5305",
         "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1",
         "\u5408\u540C\u5BA1\u67E5",
         "\u878D\u8D44\u4EA4\u6613",
@@ -2237,7 +2184,10 @@
       deliverables: (DELIVERABLES[demand.sku] || ["\u670D\u52A1\u65B9\u6848", "\u7EA6\u5B9A\u6210\u679C\u6587\u4EF6"]).slice(),
       exclusions: ["\u9700\u6C42\u8303\u56F4\u5916\u7684\u65B0\u589E\u4E8B\u9879", "\u7B2C\u4E09\u65B9\u673A\u6784\u6536\u53D6\u7684\u884C\u653F\u6216\u9274\u5B9A\u8D39\u7528"],
       costItems: [{ label: "\u57FA\u7840\u670D\u52A1\u8D39", amount: quote }],
-      paymentMilestones: ["\u4ED8\u6B3E\u65B9\u5F0F\u7531\u5BA2\u6237\u4E0E\u670D\u52A1\u5546\u5728\u534F\u8BAE\u4E2D\u7EA6\u5B9A", "\u5E73\u53F0\u6682\u4E0D\u63D0\u4F9B\u8D44\u91D1\u6258\u7BA1"],
+      collectionModel: "\u524D\u7F6E\u6536\u6B3E",
+      paymentConfirmDays: 2,
+      invoiceRule: "\u8C01\u6536\u6B3E\u8C01\u5F00\u7968\uFF0C\u5408\u540C\u3001\u8D44\u91D1\u4E0E\u53D1\u7968\u4FE1\u606F\u4FDD\u6301\u4E00\u81F4",
+      paymentMilestones: ["\u534F\u8BAE\u751F\u6548\u540E\u6309\u5DF2\u786E\u8BA4\u65B9\u6848\u4ED8\u6B3E", "\u8D44\u91D1\u76F4\u63A5\u652F\u4ED8\u7ED9\u670D\u52A1\u5546\uFF0C\u5E73\u53F0\u4E0D\u4EE3\u6536\u3001\u4E0D\u6258\u7BA1"],
       validity: "\u62A5\u4EF7\u53D1\u51FA\u540E7\u5929\u5185\u6709\u6548",
       attachment: "\u670D\u52A1\u65B9\u6848\u8BF4\u660E.pdf",
       materials: (record.needMaterials || materials[demand.sku] || materials.default).slice(),
@@ -2362,6 +2312,12 @@
         status: "pending",
         amount: demand.agreement?.amount || demand.servicePlan?.finalQuote || demand.budget || "\u4EE5\u534F\u8BAE\u4E3A\u51C6",
         method: "\u7EBF\u4E0B\u5BF9\u516C\u8F6C\u8D26",
+        collectionModel: demand.servicePlan?.collectionModel || "\u524D\u7F6E\u6536\u6B3E",
+        invoiceRule: demand.servicePlan?.invoiceRule || "\u8C01\u6536\u6B3E\u8C01\u5F00\u7968\uFF0C\u5408\u540C\u3001\u8D44\u91D1\u4E0E\u53D1\u7968\u4FE1\u606F\u4FDD\u6301\u4E00\u81F4",
+        confirmSlaWorkingDays: demand.servicePlan?.paymentConfirmDays || 2,
+        payee: demand.agreement?.provider || "\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53",
+        bankName: "\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C",
+        bankAccount: "6222000000006628",
         receipt: "",
         submittedAt: "",
         confirmedAt: ""
@@ -2379,8 +2335,8 @@
     payment.receipt = fileName || "\u4ED8\u6B3E\u51ED\u8BC1.pdf";
     payment.submittedAt = getTime();
     demand.status = "payment_confirming";
-    demand.progress = "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26";
-    appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u6B63\u5728\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\u3002" }, messages);
+    demand.progress = `\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u670D\u52A1\u5546\u5C06\u5728 ${payment.confirmSlaWorkingDays} \u4E2A\u5DE5\u4F5C\u65E5\u5185\u786E\u8BA4\u5230\u8D26`;
+    appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: `\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u670D\u52A1\u5546\u5C06\u5728 ${payment.confirmSlaWorkingDays} \u4E2A\u5DE5\u4F5C\u65E5\u5185\u786E\u8BA4\u5230\u8D26\u3002` }, messages);
     addTimelineEvent(demand, "file", "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4", payment.receipt, getTime);
     return true;
   }
@@ -2397,6 +2353,78 @@
     return true;
   }
 
+  // src/data/stagedServices.js
+  var intellectualPropertySkus = /* @__PURE__ */ new Set([
+    "\u5546\u6807\u6CE8\u518C",
+    "\u4E13\u5229\u7533\u8BF7",
+    "\u8457\u4F5C\u6743\u767B\u8BB0",
+    "\u5546\u6807\u9A73\u56DE\u590D\u5BA1",
+    "\u4E13\u5229\u4FB5\u6743\u5206\u6790"
+  ]);
+  var policySkus = /* @__PURE__ */ new Set([
+    "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A",
+    "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5",
+    "\u79D1\u6280\u9879\u76EE\u7533\u62A5"
+  ]);
+  var CONFIGS = {
+    ip: {
+      categoryName: "\u77E5\u8BC6\u4EA7\u6743",
+      total: "\xA512,000",
+      firstAmount: "\xA56,000",
+      secondAmount: "\xA56,000",
+      firstRatio: 50,
+      secondRatio: 50,
+      paymentMode: "\u5206\u9636\u6BB5\u6536\u6B3E",
+      paymentReceivers: ["\u670D\u52A1\u5546\uFF1A\u4E13\u4E1A\u670D\u52A1\u8D39", "\u5E73\u53F0\uFF1A\u5E73\u53F0\u670D\u52A1\u8D39"],
+      invoiceRule: "\u5404\u6536\u6B3E\u65B9\u5206\u522B\u6309\u5B9E\u6536\u91D1\u989D\u5F00\u5177\u53D1\u7968",
+      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
+      intakeLabel: "\u8BF7\u8BF4\u660E\u7533\u8BF7\u5BF9\u8C61\u3001\u6570\u91CF\u53CA\u5F53\u524D\u6750\u6599\u60C5\u51B5",
+      intakeExample: "\u8BA1\u5212\u7533\u8BF7 2 \u4EF6\u5546\u6807\uFF0C\u5DF2\u6709\u5546\u6807\u56FE\u6837\u548C\u8425\u4E1A\u6267\u7167\uFF0C\u5E0C\u671B\u5148\u5B8C\u6210\u8FD1\u4F3C\u68C0\u7D22\u3002",
+      firstWork: ["\u5B8C\u6210\u57FA\u7840\u68C0\u7D22\u4E0E\u98CE\u9669\u5206\u6790", "\u5F62\u6210\u7533\u8BF7\u7B56\u7565\u53CA\u7C7B\u522B\u5EFA\u8BAE", "\u51C6\u5907\u5E76\u5B9A\u7A3F\u7533\u8BF7\u6587\u4EF6"],
+      milestoneTitle: "\u68C0\u7D22\u5206\u6790\u4E0E\u7533\u8BF7\u6587\u4EF6\u5DF2\u5B8C\u6210",
+      milestoneDetail: "\u5BA2\u6237\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6\u540E\uFF0C\u8FDB\u5165\u6B63\u5F0F\u63D0\u4EA4\u4E0E\u5BA1\u67E5\u8DDF\u8FDB\u9636\u6BB5\u3002",
+      secondTrigger: "\u7533\u8BF7\u6587\u4EF6\u5B9A\u7A3F\u5E76\u7ECF\u5BA2\u6237\u786E\u8BA4\uFF0C\u6B63\u5F0F\u63D0\u4EA4\u524D\u652F\u4ED8",
+      secondWork: ["\u5411\u4E3B\u7BA1\u673A\u6784\u6B63\u5F0F\u63D0\u4EA4\u7533\u8BF7", "\u8DDF\u8FDB\u53D7\u7406\u53CA\u5BA1\u67E5\u8FDB\u5EA6", "\u6309\u7EA6\u5904\u7406\u4E00\u6B21\u8865\u6B63\u6216\u5BA1\u67E5\u610F\u89C1"],
+      resultTitle: "\u672C\u6B21\u7533\u8BF7\u672A\u83B7\u6838\u51C6",
+      resultDetail: "\u4E3B\u7BA1\u673A\u6784\u5DF2\u51FA\u5177\u7ED3\u679C\uFF0C\u670D\u52A1\u56E2\u961F\u5B8C\u6210\u4E86\u534F\u8BAE\u7EA6\u5B9A\u7684\u68C0\u7D22\u3001\u6750\u6599\u51C6\u5907\u3001\u63D0\u4EA4\u53CA\u8DDF\u8FDB\u5DE5\u4F5C\u3002",
+      resultFile: "\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u7ED3\u679C\u901A\u77E5.pdf"
+    },
+    policy: {
+      categoryName: "\u653F\u7B56\u7533\u62A5",
+      total: "\xA520,000",
+      firstAmount: "\xA510,000",
+      secondAmount: "\xA510,000",
+      firstRatio: 50,
+      secondRatio: 50,
+      paymentMode: "\u5206\u9636\u6BB5\u6536\u6B3E",
+      paymentReceivers: ["\u670D\u52A1\u5546\uFF1A\u7533\u62A5\u670D\u52A1\u8D39", "\u5E73\u53F0\uFF1A\u5E73\u53F0\u670D\u52A1\u8D39"],
+      invoiceRule: "\u5404\u6536\u6B3E\u65B9\u5206\u522B\u6309\u5B9E\u6536\u91D1\u989D\u5F00\u5177\u53D1\u7968",
+      period: "\u9884\u8BA1 2\u20144 \u4E2A\u6708\uFF0C\u4EE5\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
+      intakeLabel: "\u8BF7\u8BF4\u660E\u4F01\u4E1A\u8D44\u8D28\u3001\u6240\u5728\u5730\u533A\u548C\u610F\u5411\u7533\u62A5\u9879\u76EE",
+      intakeExample: "\u5317\u4EAC\u79D1\u6280\u4F01\u4E1A\uFF0C\u6210\u7ACB\u6EE1 2 \u5E74\uFF0C\u8BA1\u5212\u7533\u62A5\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A\uFF0C\u5DF2\u6709\u7814\u53D1\u548C\u8D22\u52A1\u8D44\u6599\u3002",
+      firstWork: ["\u5B8C\u6210\u7533\u62A5\u8D44\u683C\u4E0E\u5DEE\u8DDD\u8BC4\u4F30", "\u5F62\u6210\u7533\u62A5\u89C4\u5212\u53CA\u6750\u6599\u6E05\u5355", "\u6574\u7406\u5E76\u5B9A\u7A3F\u7533\u62A5\u6750\u6599"],
+      milestoneTitle: "\u8D44\u683C\u8BC4\u4F30\u4E0E\u7533\u62A5\u6750\u6599\u5DF2\u5B8C\u6210",
+      milestoneDetail: "\u5BA2\u6237\u786E\u8BA4\u7533\u62A5\u6750\u6599\u540E\uFF0C\u8FDB\u5165\u6B63\u5F0F\u7533\u62A5\u4E0E\u8BC4\u5BA1\u8DDF\u8FDB\u9636\u6BB5\u3002",
+      secondTrigger: "\u7533\u62A5\u6750\u6599\u5B9A\u7A3F\u5E76\u7ECF\u5BA2\u6237\u786E\u8BA4\uFF0C\u6B63\u5F0F\u7533\u62A5\u524D\u652F\u4ED8",
+      secondWork: ["\u5728\u7533\u62A5\u7A97\u53E3\u5185\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5F62\u5F0F\u5BA1\u67E5\u53CA\u8865\u5145\u6750\u6599", "\u540C\u6B65\u8BC4\u5BA1\u8FDB\u5EA6\u4E0E\u6700\u7EC8\u7ED3\u679C"],
+      resultTitle: "\u672C\u6B21\u7533\u62A5\u672A\u901A\u8FC7\u8BC4\u5BA1",
+      resultDetail: "\u4E3B\u7BA1\u673A\u6784\u5DF2\u53D1\u5E03\u8BC4\u5BA1\u7ED3\u679C\uFF0C\u670D\u52A1\u56E2\u961F\u5B8C\u6210\u4E86\u534F\u8BAE\u7EA6\u5B9A\u7684\u8BC4\u4F30\u3001\u6750\u6599\u51C6\u5907\u3001\u7533\u62A5\u53CA\u8DDF\u8FDB\u5DE5\u4F5C\u3002",
+      resultFile: "\u9879\u76EE\u8BC4\u5BA1\u7ED3\u679C\u901A\u77E5.pdf"
+    }
+  };
+  function getStagedServiceConfig(sku) {
+    if (intellectualPropertySkus.has(sku)) return { ...CONFIGS.ip, kind: "ip", sku };
+    if (policySkus.has(sku)) return { ...CONFIGS.policy, kind: "policy", sku };
+    return null;
+  }
+  function isStagedService(sku) {
+    return Boolean(getStagedServiceConfig(sku));
+  }
+  var stagedServiceSkus = Object.freeze({
+    ip: Array.from(intellectualPropertySkus),
+    policy: Array.from(policySkus)
+  });
+
   // src/domain/agreement.js
   function createAgreementForDemand(demand, teamId, options = {}) {
     const teamList = options.teams || teams;
@@ -2405,6 +2433,7 @@
     const getTime = options.nowLabel || nowLabel;
     const team = getTeam(teamId, teamList);
     const plan = getServicePlan(demand, teamId, options);
+    const tripartite = Boolean(getStagedServiceConfig(demand.sku));
     demand.agreement = {
       id: `AG-${demand.id.toUpperCase()}`,
       title: `${demand.sku}\u670D\u52A1\u534F\u8BAE`,
@@ -2416,6 +2445,12 @@
       period: plan.period,
       template: `${demand.sku}\u6807\u51C6\u670D\u52A1\u534F\u8BAE.pdf`,
       status: "customer_action",
+      workflow: "final_file_confirmation",
+      agreementType: tripartite ? "tripartite" : "bilateral",
+      version: 1,
+      finalFile: "",
+      confirmations: { provider: false, customer: false, platform: !tripartite },
+      parties: tripartite ? [userData.company, team ? team.orgName : "\u670D\u52A1\u673A\u6784", "\u5E73\u53F0\u8FD0\u8425\u4E3B\u4F53"] : [userData.company, team ? team.orgName : "\u670D\u52A1\u673A\u6784"],
       submittedAt: getTime(),
       customerFile: "",
       providerFile: ""
@@ -2427,12 +2462,14 @@
     if (!demand || !demand.agreement || demand.agreement.status !== "customer_action") return false;
     const messages = options.chatMessages || chatMessages;
     const getTime = options.nowLabel || nowLabel;
-    demand.agreement.customerFile = fileName || "\u5BA2\u6237\u5DF2\u7528\u5370\u534F\u8BAE.pdf";
-    demand.agreement.customerUploadedAt = getTime();
+    demand.agreement.finalFile = fileName || "\u5DF2\u534F\u5546\u786E\u8BA4\u5E76\u7528\u5370\u7684\u670D\u52A1\u534F\u8BAE.pdf";
+    demand.agreement.providerFile = demand.agreement.finalFile;
+    demand.agreement.providerUploadedAt = getTime();
+    demand.agreement.confirmations.provider = true;
     demand.agreement.status = "provider_signing";
-    demand.progress = "\u5BA2\u6237\u5DF2\u4E0A\u4F20\u7528\u5370\u534F\u8BAE\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370";
-    appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u4F60\u5DF2\u4E0A\u4F20\u7528\u5370\u534F\u8BAE\uFF0C\u6B63\u5728\u7B49\u5F85\u670D\u52A1\u5546\u5B8C\u6210\u7528\u5370\u3002" }, messages);
-    addTimelineEvent(demand, "file", "\u5BA2\u6237\u5DF2\u4E0A\u4F20\u7528\u5370\u534F\u8BAE", demand.agreement.customerFile, getTime);
+    demand.progress = "\u670D\u52A1\u5546\u5DF2\u4E0A\u4F20\u6700\u7EC8\u7528\u5370\u534F\u8BAE\uFF0C\u7B49\u5F85\u5BA2\u6237\u786E\u8BA4";
+    appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u670D\u52A1\u5546\u5DF2\u4E0A\u4F20\u5404\u65B9\u534F\u5546\u786E\u8BA4\u7684\u6700\u7EC8\u534F\u8BAE\uFF0C\u8BF7\u5728\u5E73\u53F0\u6838\u5BF9\u5E76\u786E\u8BA4\u3002" }, messages);
+    addTimelineEvent(demand, "file", "\u670D\u52A1\u5546\u5DF2\u4E0A\u4F20\u6700\u7EC8\u534F\u8BAE", demand.agreement.finalFile, getTime);
     return true;
   }
   function setAgreementStatus(demand, status, options = {}) {
@@ -2443,12 +2480,12 @@
     if (status === "provider_signing") {
       demand.progress = "\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370\u5E76\u4E0A\u4F20\u534F\u8BAE";
     } else if (status === "auditing") {
-      demand.agreement.providerFile = "\u53CC\u65B9\u7528\u5370\u670D\u52A1\u534F\u8BAE.pdf";
-      demand.agreement.providerUploadedAt = getTime();
-      demand.progress = "\u53CC\u65B9\u5DF2\u5B8C\u6210\u7528\u5370\uFF0C\u5E73\u53F0\u5BA1\u6838\u4E2D";
-      appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u670D\u52A1\u5546\u5DF2\u4E0A\u4F20\u53CC\u65B9\u7528\u5370\u534F\u8BAE\uFF0C\u5E73\u53F0\u6B63\u5728\u5BA1\u6838\u3002" }, messages);
-      addTimelineEvent(demand, "file", "\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u63D0\u4EA4\u5E73\u53F0\u5BA1\u6838", getTime);
+      demand.agreement.confirmations.customer = true;
+      demand.progress = demand.agreement.agreementType === "tripartite" ? "\u5BA2\u6237\u4E0E\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\uFF0C\u7B49\u5F85\u5E73\u53F0\u786E\u8BA4" : "\u53CC\u65B9\u5DF2\u786E\u8BA4\u6700\u7EC8\u534F\u8BAE\uFF0C\u5E73\u53F0\u5BA1\u6838\u4E2D";
+      appendChatMessage(demand.id, demand.chosenTeam, { type: "system", text: "\u5BA2\u6237\u5DF2\u786E\u8BA4\u6700\u7EC8\u534F\u8BAE\uFF0C\u5E73\u53F0\u6B63\u5728\u5B8C\u6210\u8981\u7D20\u5BA1\u6838\u4E0E\u5F52\u6863\u3002" }, messages);
+      addTimelineEvent(demand, "check", "\u5BA2\u6237\u5DF2\u786E\u8BA4\u6700\u7EC8\u534F\u8BAE", "\u534F\u8BAE\u8FDB\u5165\u5E73\u53F0\u5BA1\u6838\u4E0E\u5F52\u6863", getTime);
     } else if (status === "approved") {
+      demand.agreement.confirmations.platform = true;
       demand.agreement.approvedAt = getTime();
       ensurePayment(demand, options);
       demand.status = "payment_pending";
@@ -2796,6 +2833,8 @@
       teamId,
       time: "\u521A\u521A",
       quote: deriveQuote(team, demand),
+      period: demand.sku === "\u5408\u540C\u5BA1\u67E5" ? "3\u20145 \u4E2A\u5DE5\u4F5C\u65E5" : demand.sku === "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE" ? "1 \u5E74\u670D\u52A1\u671F" : "\u56E2\u961F\u786E\u8BA4\u6750\u6599\u540E\u7ED9\u51FA\u6392\u671F",
+      matchReason: team && team.skus.includes(demand.sku) ? `\u670D\u52A1\u8303\u56F4\u8986\u76D6\u201C${demand.sku}\u201D\uFF0C${team.rating ? `\u5E73\u53F0\u8BC4\u5206 ${Number(team.rating).toFixed(1)} \u5206` : "\u5177\u5907\u76F8\u5173\u5C65\u7EA6\u8BB0\u5F55"}` : "\u670D\u52A1\u65B9\u5411\u4E0E\u9700\u6C42\u76F8\u5173\uFF0C\u5177\u4F53\u8303\u56F4\u9700\u8FDB\u4E00\u6B65\u786E\u8BA4",
       feedback: pick(feedbacks, value),
       needMaterials: requiredMaterials.slice(0, 3)
     };
@@ -3016,12 +3055,11 @@
   function closeResponseRound(demand, options = {}) {
     if (!demand || demand.responseClosed || ["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(demand.status)) return;
     const getTime = options.nowLabel || nowLabel;
-    const wecomStatus = options.isWecomAdded || isWecomAdded;
     demand.responseClosed = true;
     if (demand.notificationSent) return;
     demand.notificationSent = true;
     const count = (demand.accepted || []).length;
-    const channel = wecomStatus() ? "\u4F01\u4E1A\u5FAE\u4FE1" : "\u77ED\u4FE1\u548C\u9700\u6C42\u52A8\u6001";
+    const channel = "\u7AD9\u5185\u6D88\u606F\u548C\u77ED\u4FE1";
     const desc = count > 0 ? `\u5DF2\u6709 ${count} \u5BB6\u56E2\u961F\u54CD\u5E94\uFF0C\u8BF7\u9009\u62E9\u5408\u9002\u7684\u56E2\u961F\u7EE7\u7EED\u786E\u8BA4\u670D\u52A1\u4FE1\u606F` : "\u6682\u672A\u6536\u5230\u56E2\u961F\u54CD\u5E94\uFF0C\u53EF\u4EE5\u5728\u9700\u6C42\u8BE6\u60C5\u4E2D\u66F4\u6362\u4E00\u6279\u56E2\u961F";
     addTimelineEvent(demand, "bell", `\u5DF2\u901A\u8FC7${channel}\u53D1\u9001\u8FDB\u5EA6\u901A\u77E5`, desc, getTime);
   }
@@ -3376,6 +3414,57 @@
     this.toast(scene ? `\u5DF2\u5207\u6362\u81F3\u201C${scenarioLabels[scene]}\u201D\u573A\u666F` : "\u5DF2\u6062\u590D\u9ED8\u8BA4\u6570\u636E");
   }
 
+  // src/services/storage.js
+  var STORAGE_KEYS = Object.freeze({
+    suggestions: "ecologyServiceSuggestions",
+    favorites: "ecologyFavoriteTeams",
+    questions: "ecologyTeamQuestions",
+    wecomAdded: "ecologyWecomAdded"
+  });
+  function getStorage() {
+    try {
+      return globalThis.localStorage || null;
+    } catch (error) {
+      return null;
+    }
+  }
+  function readText(key, fallback = null) {
+    try {
+      const storage = getStorage();
+      if (!storage) return fallback;
+      const value = storage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  }
+  function writeText(key, value) {
+    try {
+      const storage = getStorage();
+      if (!storage) return false;
+      storage.setItem(key, value);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  function readJSON(key, fallback) {
+    const value = readText(key, null);
+    if (value === null) return fallback;
+    try {
+      return JSON.parse(value);
+    } catch (error) {
+      return fallback;
+    }
+  }
+  function writeJSON(key, value) {
+    try {
+      return writeText(key, JSON.stringify(value));
+    } catch (error) {
+      return false;
+    }
+  }
+
   // src/services/favorites.js
   function getFavoriteTeamIds() {
     return readJSON(STORAGE_KEYS.favorites, []);
@@ -3508,11 +3597,11 @@
     const totalDemands = store.demands.length;
     const orderStatuses = ["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"];
     const orders = store.demands.filter((demand) => orderStatuses.includes(demand.status));
-    const afterSaleCount = orders.filter((demand) => demand.afterSale && demand.afterSale.status !== "closed").length;
+    const afterSaleCount = orders.reduce((sum, demand) => sum + (demand.afterSaleCases || (demand.afterSale ? [demand.afterSale] : [])).filter((item) => item.status !== "closed").length, 0);
     const favoriteCount = getFavoriteTeams(store.teams).length;
     const paymentCount = orders.filter((demand) => ["payment_pending", "payment_confirming"].includes(demand.status)).length;
-    const supportStatus = isWecomAdded() ? "\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4F01\u4E1A\u5FAE\u4FE1\u5F85\u6DFB\u52A0";
-    const html = '<main class="mine-page"><header class="mine-profile"><div class="mine-profile-main"><div class="mine-avatar">' + user.avatar + '</div><div class="mine-identity"><div><h1>' + user.name + "</h1><span>\u521B\u4E1A\u8005</span></div><p>" + user.companyType + " \xB7 " + user.stage + '</p></div><button class="mine-notice" id="mineSupportTop" type="button" aria-label="\u67E5\u770B\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE">' + this.icon("bell", 20) + (pendingCount ? "<i>" + pendingCount + "</i>" : "") + '</button></div><button class="mine-company-summary" id="mineCompanyEntry" type="button"><span>' + this.icon("building", 18) + "</span><div><strong>" + user.company + "</strong><small>" + user.industry + " \xB7 " + user.city + "</small></div><em>\u4F01\u4E1A\u8D44\u6599</em>" + this.icon("chevron-right", 15) + '</button></header><section class="mine-service-hub" aria-labelledby="mineServiceTitle"><div class="mine-section-head"><div><h2 id="mineServiceTitle">\u6211\u7684\u670D\u52A1</h2><p>\u9700\u6C42\u3001\u8BA2\u5355\u548C\u552E\u540E\u96C6\u4E2D\u7BA1\u7406</p></div><span>' + (pendingCount ? pendingCount + " \u9879\u5F85\u5904\u7406" : "\u6682\u65E0\u5F85\u529E") + '</span></div><div class="mine-primary-actions"><button id="mineDemandEntry" type="button"><span class="mine-primary-icon">' + this.icon("file-text", 21) + "</span><div><strong>\u670D\u52A1\u9700\u6C42</strong><small>" + totalDemands + " \u6761\u8BB0\u5F55</small></div>" + this.icon("chevron-right", 15) + '</button><button id="mineOrderEntry" type="button"><span class="mine-primary-icon order">' + this.icon("briefcase", 21) + "</span><div><strong>\u670D\u52A1\u8BA2\u5355</strong><small>" + orders.length + " \u4E2A\u8BA2\u5355</small></div>" + this.icon("chevron-right", 15) + '</button></div><div class="mine-quick-actions"><button id="minePendingEntry" type="button"><strong>' + pendingCount + '</strong><small>\u5F85\u6211\u5904\u7406</small></button><button id="minePaymentEntry" type="button"><strong>' + paymentCount + '</strong><small>\u4ED8\u6B3E\u4E8B\u9879</small></button><button id="mineAfterSaleEntry" type="button"><strong>' + afterSaleCount + '</strong><small>\u552E\u540E\u534F\u52A9</small></button><button id="mineFavoritesEntry" type="button"><strong>' + favoriteCount + '</strong><small>\u6211\u7684\u6536\u85CF</small></button></div></section><button class="mine-support-entry" id="mineSupportEntry" type="button"><span>' + this.icon("message", 20) + "</span><div><strong>\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE</strong><small>\u67E5\u770B\u670D\u52A1\u8FDB\u5C55\uFF0C\u8054\u7CFB\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1</small></div><em>" + supportStatus + "</em>" + this.icon("chevron-right", 16) + '</button><section class="mine-utility-section"><div class="mine-section-title"><h2>\u5E73\u53F0\u6743\u76CA</h2></div><div class="mine-benefit-links"><button type="button" data-mine-unavailable data-mine-message="\u62A5\u544A\u4E2D\u5FC3\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("file-text", 20) + "</span><div><strong>\u6211\u7684\u62A5\u544A</strong><small>\u67E5\u770B\u4F01\u4E1A\u5206\u6790\u4E0E\u8BCA\u65AD\u62A5\u544A</small></div>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u80FD\u91CF\u4E0E\u5151\u6362\u529F\u80FD\u5F00\u53D1\u4E2D"><span class="energy">' + this.icon("zap", 20) + "</span><div><strong>\u80FD\u91CF\u4E0E\u5151\u6362</strong><small>\u67E5\u770B\u4F59\u989D\u53CA\u53EF\u5151\u6362\u6743\u76CA</small></div>" + this.icon("chevron-right", 15) + '</button></div></section><section class="mine-utility-section"><div class="mine-section-title"><h2>\u5E38\u7528\u5DE5\u5177</h2></div><div class="mine-tool-links"><button type="button" data-mine-unavailable data-mine-message="\u53D1\u7968\u4E2D\u5FC3\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("file-text", 19) + "</span><strong>\u53D1\u7968\u4E2D\u5FC3</strong>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u610F\u89C1\u53CD\u9988\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("message", 19) + "</span><strong>\u610F\u89C1\u53CD\u9988</strong>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u534F\u8BAE\u4E0E\u89C4\u5219\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("shield", 19) + "</span><strong>\u534F\u8BAE\u4E0E\u89C4\u5219</strong>" + this.icon("chevron-right", 15) + '</button></div></section><div class="mine-version">\u751F\u6001\u670D\u52A1\u5E73\u53F0 v1.0 \xB7 Demo</div></main>';
+    const supportStatus = "\u67E5\u770B\u8054\u7EDC\u65B9\u5F0F";
+    const html = '<main class="mine-page"><header class="mine-profile"><div class="mine-profile-main"><div class="mine-avatar">' + user.avatar + '</div><div class="mine-identity"><div><h1>' + user.name + "</h1><span>\u521B\u4E1A\u8005</span></div><p>" + user.companyType + " \xB7 " + user.stage + '</p></div><button class="mine-notice" id="mineSupportTop" type="button" aria-label="\u67E5\u770B\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE">' + this.icon("bell", 20) + (pendingCount ? "<i>" + pendingCount + "</i>" : "") + '</button></div><button class="mine-company-summary" id="mineCompanyEntry" type="button"><span>' + this.icon("building", 18) + "</span><div><strong>" + user.company + "</strong><small>" + user.industry + " \xB7 " + user.city + "</small></div><em>\u4F01\u4E1A\u8D44\u6599</em>" + this.icon("chevron-right", 15) + '</button></header><section class="mine-service-hub" aria-labelledby="mineServiceTitle"><div class="mine-section-head"><div><h2 id="mineServiceTitle">\u6211\u7684\u670D\u52A1</h2><p>\u9700\u6C42\u3001\u8BA2\u5355\u548C\u552E\u540E\u96C6\u4E2D\u7BA1\u7406</p></div><span>' + (pendingCount ? pendingCount + " \u9879\u5F85\u5904\u7406" : "\u6682\u65E0\u5F85\u529E") + '</span></div><div class="mine-primary-actions"><button id="mineDemandEntry" type="button"><span class="mine-primary-icon">' + this.icon("file-text", 21) + "</span><div><strong>\u670D\u52A1\u9700\u6C42</strong><small>" + totalDemands + " \u6761\u8BB0\u5F55</small></div>" + this.icon("chevron-right", 15) + '</button><button id="mineOrderEntry" type="button"><span class="mine-primary-icon order">' + this.icon("briefcase", 21) + "</span><div><strong>\u670D\u52A1\u8BA2\u5355</strong><small>" + orders.length + " \u4E2A\u8BA2\u5355</small></div>" + this.icon("chevron-right", 15) + '</button></div><div class="mine-quick-actions"><button id="minePendingEntry" type="button"><strong>' + pendingCount + '</strong><small>\u5F85\u6211\u5904\u7406</small></button><button id="minePaymentEntry" type="button"><strong>' + paymentCount + '</strong><small>\u4ED8\u6B3E\u4E8B\u9879</small></button><button id="mineAfterSaleEntry" type="button"><strong>' + afterSaleCount + '</strong><small>\u6295\u8BC9\u4E0E\u552E\u540E</small></button><button id="mineFavoritesEntry" type="button"><strong>' + favoriteCount + '</strong><small>\u6211\u7684\u6536\u85CF</small></button></div></section><button class="mine-support-entry" id="mineSupportEntry" type="button"><span>' + this.icon("message", 20) + "</span><div><strong>\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE</strong><small>\u67E5\u770B\u670D\u52A1\u8FDB\u5C55\uFF0C\u8054\u7CFB\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1</small></div><em>" + supportStatus + "</em>" + this.icon("chevron-right", 16) + '</button><section class="mine-utility-section"><div class="mine-section-title"><h2>\u5E73\u53F0\u6743\u76CA</h2></div><div class="mine-benefit-links"><button type="button" data-mine-unavailable data-mine-message="\u62A5\u544A\u4E2D\u5FC3\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("file-text", 20) + "</span><div><strong>\u6211\u7684\u62A5\u544A</strong><small>\u67E5\u770B\u4F01\u4E1A\u5206\u6790\u4E0E\u8BCA\u65AD\u62A5\u544A</small></div>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u80FD\u91CF\u4E0E\u5151\u6362\u529F\u80FD\u5F00\u53D1\u4E2D"><span class="energy">' + this.icon("zap", 20) + "</span><div><strong>\u80FD\u91CF\u4E0E\u5151\u6362</strong><small>\u67E5\u770B\u4F59\u989D\u53CA\u53EF\u5151\u6362\u6743\u76CA</small></div>" + this.icon("chevron-right", 15) + '</button></div></section><section class="mine-utility-section"><div class="mine-section-title"><h2>\u5E38\u7528\u5DE5\u5177</h2></div><div class="mine-tool-links"><button type="button" data-mine-unavailable data-mine-message="\u53D1\u7968\u4E2D\u5FC3\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("file-text", 19) + "</span><strong>\u53D1\u7968\u4E2D\u5FC3</strong>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u610F\u89C1\u53CD\u9988\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("message", 19) + "</span><strong>\u610F\u89C1\u53CD\u9988</strong>" + this.icon("chevron-right", 15) + '</button><button type="button" data-mine-unavailable data-mine-message="\u534F\u8BAE\u4E0E\u89C4\u5219\u529F\u80FD\u5F00\u53D1\u4E2D"><span>' + this.icon("shield", 19) + "</span><strong>\u534F\u8BAE\u4E0E\u89C4\u5219</strong>" + this.icon("chevron-right", 15) + '</button></div></section><div class="mine-version">\u751F\u6001\u670D\u52A1\u5E73\u53F0 v1.0 \xB7 Demo</div></main>';
     this.setPageContent(html, "mine");
     document.getElementById("mineDemandEntry").addEventListener("click", () => navigateTo("p9", {}));
     document.getElementById("mineOrderEntry").addEventListener("click", () => navigateTo("p9", { mode: "orders" }));
@@ -3525,7 +3614,7 @@
       overlay.querySelector("#mineCompanyEdit").addEventListener("click", () => this.toast("\u4F01\u4E1A\u4FE1\u606F\u7F16\u8F91\u529F\u80FD\u5F00\u53D1\u4E2D"));
     });
     const openSupportCenter = () => {
-      const overlay = showSheet({ title: "\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE", body: '<div class="mine-message-list"><div><span>' + this.icon("bell", 18) + "</span><p><strong>\u670D\u52A1\u8FDB\u5C55\u901A\u77E5</strong><small>\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u3001\u4EA4\u4ED8\u548C\u552E\u540E\u8FDB\u5C55\u96C6\u4E2D\u663E\u793A\u5728\u8FD9\u91CC\u3002</small></p></div><div><span>" + this.icon("message", 18) + '</span><p><strong>\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1</strong><small>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u6216\u5EFA\u8054\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u62C9\u7FA4\u3002</small></p></div><button class="btn btn-primary btn-block" id="mineOpenWecom" type="button">' + (isWecomAdded() ? "\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u670D\u52A1" : "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + "</button></div>" });
+      const overlay = showSheet({ title: "\u6D88\u606F\u4E0E\u670D\u52A1\u987E\u95EE", body: '<div class="mine-message-list"><div><span>' + this.icon("bell", 18) + "</span><p><strong>\u670D\u52A1\u8FDB\u5C55\u901A\u77E5</strong><small>\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u3001\u4EA4\u4ED8\u548C\u552E\u540E\u8FDB\u5C55\u96C6\u4E2D\u663E\u793A\u5728\u8FD9\u91CC\u3002</small></p></div><div><span>" + this.icon("message", 18) + '</span><p><strong>\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1</strong><small>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u6216\u5EFA\u8054\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u62C9\u7FA4\u3002\u5C0F\u7A0B\u5E8F\u4E0D\u8BFB\u53D6\u4F01\u4E1A\u5FAE\u4FE1\u6DFB\u52A0\u72B6\u6001\u3002</small></p></div><button class="btn btn-primary btn-block" id="mineOpenWecom" type="button">\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801</button></div>' });
       overlay.querySelector("#mineOpenWecom").addEventListener("click", () => {
         overlay.remove();
         openWecomGuide();
@@ -3638,6 +3727,11 @@
       kind: "services",
       categoryId: "law",
       offerings: [
+        { teamId: "t001", sku: "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE" },
+        { teamId: "t001", sku: "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305" },
+        { teamId: "t002", sku: "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305" },
+        { teamId: "t004", sku: "\u6CBB\u7406\u4F53\u68C0" },
+        { teamId: "t002", sku: "\u9690\u79C1\u5408\u89C4\u5305" },
         { teamId: "t001", sku: "\u5408\u540C\u5BA1\u67E5" },
         { teamId: "t002", sku: "\u5408\u540C\u5BA1\u67E5" },
         { teamId: "t001", sku: "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1" },
@@ -3803,8 +3897,9 @@
       tabs.classList.remove("is-hidden");
       controls.classList.remove("is-hidden");
       const items = [];
-      const aliases = { "\u80A1\u6743\u8BBE\u8BA1": "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1", "\u878D\u8D44\u534F\u8BAE": "\u878D\u8D44\u4EA4\u6613", "\u80A1\u4E1C\u534F\u8BAE": "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1", "\u77E5\u8BC6\u4EA7\u6743": "\u77E5\u8BC6\u4EA7\u6743\u4FDD\u62A4" };
-      const normalizedQuery = aliases[query] || query;
+      const aliases = { "\u80A1\u6743\u8BBE\u8BA1": "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1", "\u878D\u8D44\u534F\u8BAE": "\u878D\u8D44\u4EA4\u6613", "\u80A1\u4E1C\u534F\u8BAE": "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305", "\u5408\u4F19\u4EBA\u534F\u8BAE": "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305", "\u6CD5\u5F8B\u987E\u95EE": "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE", "\u52B3\u52A8\u5408\u540C": "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305", "\u878D\u8D44\u524D\u6392\u96F7": "\u6CBB\u7406\u4F53\u68C0", "app\u9690\u79C1\u653F\u7B56": "\u9690\u79C1\u5408\u89C4\u5305", "\u77E5\u8BC6\u4EA7\u6743": "\u77E5\u8BC6\u4EA7\u6743\u4FDD\u62A4" };
+      const alias = Object.entries(aliases).find(([key]) => query.includes(key));
+      const normalizedQuery = alias ? alias[1] : query;
       if (activeType === "all" || activeType === "sku") {
         if ("\u6295\u878D\u8D44\u670D\u52A1\u5BFB\u627E\u5339\u914D\u6295\u8D44\u4EBA\u5546\u4E1A\u8BA1\u5212\u4E66bp".includes(query)) {
           items.push({ type: "fundraising", id: "fundraising", title: "\u6295\u878D\u8D44\u670D\u52A1", meta: "\u63D0\u4EA4 BP\uFF0C\u5BFB\u627E\u504F\u597D\u5951\u5408\u7684\u6295\u8D44\u4EBA", icon: "trending-up" });
@@ -4152,6 +4247,56 @@
       materials: ["\u5F85\u5BA1\u5408\u540C\u5B8C\u6574\u7248\u672C", "\u4EA4\u6613\u80CC\u666F\u548C\u5408\u4F5C\u65B9\u5F0F", "\u6700\u5173\u6CE8\u7684\u6761\u6B3E\u6216\u98CE\u9669"],
       exclusions: ["\u5408\u540C\u4EE3\u7B7E\u6216\u5546\u52A1\u8C08\u5224\u4EE3\u7406", "\u8BC9\u8BBC\u4EF2\u88C1\u670D\u52A1", "\u5927\u6279\u91CF\u5408\u540C\u7684\u6301\u7EED\u5BA1\u67E5"]
     },
+    "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE": {
+      intro: "\u4E3A\u521B\u4E1A\u56E2\u961F\u63D0\u4F9B\u6301\u7EED\u53EF\u7528\u7684\u65E5\u5E38\u6CD5\u5F8B\u652F\u6301\uFF0C\u8986\u76D6\u5408\u540C\u3001\u7528\u5DE5\u3001\u6CBB\u7406\u548C\u7ECF\u8425\u51B3\u7B56\u4E2D\u7684\u9AD8\u9891\u95EE\u9898\u3002",
+      suitableFor: "\u9002\u5408\u6CA1\u6709\u4E13\u804C\u6CD5\u52A1\u3001\u5E0C\u671B\u968F\u65F6\u83B7\u5F97\u4E13\u4E1A\u7B54\u590D\u5E76\u9010\u6B65\u5B8C\u5584\u6CD5\u5F8B\u57FA\u7840\u7684\u521D\u521B\u4F01\u4E1A\u3002",
+      scope: ["\u5EFA\u7ACB\u4F01\u4E1A\u6CD5\u5F8B\u4E8B\u9879\u6E05\u5355\u548C\u4F18\u5148\u7EA7", "\u6309\u7EA6\u5B9A\u989D\u5EA6\u63D0\u4F9B\u65E5\u5E38\u6CD5\u5F8B\u54A8\u8BE2", "\u5BA1\u9605\u5E38\u89C4\u7ECF\u8425\u5408\u540C\u548C\u5BF9\u5916\u6587\u4EF6", "\u5B9A\u671F\u63D0\u793A\u6CBB\u7406\u3001\u7528\u5DE5\u548C\u5408\u89C4\u98CE\u9669"],
+      deliverables: ["\u5E74\u5EA6\u6CD5\u5F8B\u670D\u52A1\u8BA1\u5212", "\u65E5\u5E38\u54A8\u8BE2\u7B54\u590D\u4E0E\u7559\u75D5", "\u7EA6\u5B9A\u4EFD\u6570\u7684\u5408\u540C\u5BA1\u9605", "\u5B63\u5EA6\u98CE\u9669\u63D0\u793A\u6216\u590D\u76D8"],
+      process: ["\u5B8C\u6210\u4F01\u4E1A\u57FA\u7840\u4F53\u68C0", "\u786E\u8BA4\u5E74\u5EA6\u670D\u52A1\u8303\u56F4", "\u6309\u9700\u63D0\u4EA4\u54A8\u8BE2\u4E8B\u9879", "\u5B9A\u671F\u590D\u76D8\u4E0E\u66F4\u65B0"],
+      period: "\u901A\u5E38\u6309 12 \u4E2A\u6708\u670D\u52A1",
+      materials: ["\u516C\u53F8\u53CA\u80A1\u4E1C\u57FA\u672C\u4FE1\u606F", "\u73B0\u6709\u5408\u540C\u548C\u5236\u5EA6\u76EE\u5F55", "\u5F53\u524D\u91CD\u70B9\u4E1A\u52A1\u4E0E\u98CE\u9669\u4E8B\u9879"],
+      exclusions: ["\u8BC9\u8BBC\u4EF2\u88C1\u4EE3\u7406", "\u4E13\u9879\u878D\u8D44\u6216\u5E76\u8D2D\u4EA4\u6613", "\u8D85\u51FA\u7EA6\u5B9A\u989D\u5EA6\u7684\u6587\u4EF6\u8D77\u8349\u548C\u8C08\u5224"]
+    },
+    "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305": {
+      intro: "\u56F4\u7ED5\u521B\u59CB\u4EBA\u5206\u5DE5\u3001\u80A1\u6743\u5F52\u5C5E\u3001\u51B3\u7B56\u673A\u5236\u548C\u9000\u51FA\u5B89\u6392\uFF0C\u5F62\u6210\u53EF\u7B7E\u7F72\u7684\u521B\u4E1A\u5408\u4F19\u6587\u4EF6\u3002",
+      suitableFor: "\u9002\u5408\u6B63\u5728\u7EC4\u5EFA\u521B\u59CB\u56E2\u961F\u3001\u5C1A\u672A\u660E\u786E\u5408\u4F5C\u89C4\u5219\uFF0C\u6216\u5E0C\u671B\u8865\u9F50\u65E2\u6709\u53E3\u5934\u7EA6\u5B9A\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u68B3\u7406\u521B\u59CB\u4EBA\u51FA\u8D44\u3001\u80FD\u529B\u548C\u5206\u5DE5", "\u8BBE\u8BA1\u80A1\u6743\u5151\u73B0\u3001\u79BB\u804C\u548C\u56DE\u8D2D\u673A\u5236", "\u660E\u786E\u8868\u51B3\u6743\u3001\u4FDD\u7559\u4E8B\u9879\u548C\u50F5\u5C40\u5904\u7406", "\u8D77\u8349\u5E76\u8BB2\u89E3\u521B\u59CB\u4EBA\u534F\u8BAE\u53CA\u914D\u5957\u6587\u4EF6"],
+      deliverables: ["\u521B\u59CB\u4EBA\u5408\u4F5C\u89C4\u5219\u6E05\u5355", "\u521B\u59CB\u4EBA\u534F\u8BAE", "\u4FDD\u5BC6\u53CA\u77E5\u8BC6\u4EA7\u6743\u5F52\u5C5E\u6761\u6B3E", "\u7B7E\u7F72\u8BF4\u660E\u4E0E\u4E00\u8F6E\u4FEE\u6539"],
+      process: ["\u63D0\u4EA4\u56E2\u961F\u4FE1\u606F", "\u521B\u59CB\u4EBA\u8BBF\u8C08", "\u5F62\u6210\u6761\u6B3E\u65B9\u6848", "\u6587\u4EF6\u5B9A\u7A3F\u4E0E\u7B7E\u7F72\u8BF4\u660E"],
+      period: "\u901A\u5E38 5\u201410 \u4E2A\u5DE5\u4F5C\u65E5",
+      materials: ["\u521B\u59CB\u4EBA\u540D\u5355\u4E0E\u5206\u5DE5", "\u51FA\u8D44\u53CA\u5386\u53F2\u6295\u5165\u8BF4\u660E", "\u73B0\u6709\u80A1\u6743\u5B89\u6392", "\u5DF2\u5F62\u6210\u7684\u53E3\u5934\u6216\u4E66\u9762\u7EA6\u5B9A"],
+      exclusions: ["\u5DE5\u5546\u80A1\u6743\u53D8\u66F4", "\u7A0E\u52A1\u7B79\u5212", "\u5386\u53F2\u4E89\u8BAE\u5904\u7406\u6216\u8BC9\u8BBC"]
+    },
+    "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305": {
+      intro: "\u4E3A\u521B\u4E1A\u56E2\u961F\u4E00\u6B21\u6027\u8865\u9F50\u62DB\u8058\u3001\u5165\u804C\u3001\u5728\u804C\u7BA1\u7406\u548C\u79BB\u804C\u73AF\u8282\u7684\u6838\u5FC3\u7528\u5DE5\u6587\u4EF6\u3002",
+      suitableFor: "\u9002\u5408\u51C6\u5907\u62DB\u8058\u9996\u6279\u5458\u5DE5\u3001\u56E2\u961F\u5FEB\u901F\u6269\u5F20\u6216\u73B0\u6709\u52B3\u52A8\u6587\u4EF6\u4E0D\u5B8C\u6574\u7684\u4F01\u4E1A\u3002",
+      scope: ["\u68B3\u7406\u5C97\u4F4D\u548C\u7528\u5DE5\u6A21\u5F0F", "\u8D77\u8349\u52B3\u52A8\u5408\u540C\u53CA\u5E38\u7528\u9644\u4EF6", "\u8865\u9F50\u4FDD\u5BC6\u3001\u77E5\u8BC6\u4EA7\u6743\u548C\u7ADE\u4E1A\u6761\u6B3E", "\u63D0\u4F9B\u5165\u8F6C\u8C03\u79BB\u5173\u952E\u6D41\u7A0B\u6587\u4EF6"],
+      deliverables: ["\u52B3\u52A8\u5408\u540C\u6A21\u677F", "\u4FDD\u5BC6\u4E0E\u77E5\u8BC6\u4EA7\u6743\u534F\u8BAE", "\u5165\u804C\u4FE1\u606F\u53CA\u786E\u8BA4\u6587\u4EF6", "\u79BB\u804C\u4EA4\u63A5\u4E0E\u8BC1\u660E\u6A21\u677F"],
+      process: ["\u786E\u8BA4\u4EBA\u5458\u4E0E\u5C97\u4F4D\u60C5\u51B5", "\u9009\u62E9\u9002\u7528\u6587\u4EF6\u6A21\u5757", "\u8D77\u8349\u5E76\u8BB2\u89E3\u6587\u4EF6", "\u4FEE\u6539\u5B9A\u7A3F\u5E76\u4EA4\u4ED8"],
+      period: "\u901A\u5E38 3\u20147 \u4E2A\u5DE5\u4F5C\u65E5",
+      materials: ["\u516C\u53F8\u4E3B\u4F53\u4FE1\u606F", "\u5C97\u4F4D\u53CA\u85AA\u916C\u7ED3\u6784", "\u73B0\u6709\u52B3\u52A8\u5408\u540C\u6216\u5236\u5EA6", "\u7279\u6B8A\u7528\u5DE5\u5B89\u6392\u8BF4\u660E"],
+      exclusions: ["\u52B3\u52A8\u4EF2\u88C1\u8BC9\u8BBC", "\u5927\u89C4\u6A21\u88C1\u5458\u65B9\u6848", "\u85AA\u7A0E\u548C\u793E\u4FDD\u4EE3\u529E"]
+    },
+    "\u6CBB\u7406\u4F53\u68C0": {
+      intro: "\u4ECE\u80A1\u6743\u3001\u51B3\u7B56\u3001\u5386\u53F2\u6587\u4EF6\u548C\u6838\u5FC3\u7ECF\u8425\u98CE\u9669\u51FA\u53D1\uFF0C\u63D0\u524D\u53D1\u73B0\u878D\u8D44\u524D\u53EF\u80FD\u5F71\u54CD\u5C3D\u8C03\u7684\u95EE\u9898\u3002",
+      suitableFor: "\u9002\u5408\u51C6\u5907\u878D\u8D44\u3001\u5F15\u5165\u65B0\u80A1\u4E1C\uFF0C\u6216\u5E0C\u671B\u7CFB\u7EDF\u68B3\u7406\u516C\u53F8\u6CBB\u7406\u98CE\u9669\u7684\u521B\u4E1A\u4F01\u4E1A\u3002",
+      scope: ["\u6838\u67E5\u80A1\u6743\u6CBF\u9769\u4E0E\u51FA\u8D44\u6587\u4EF6", "\u68C0\u67E5\u7AE0\u7A0B\u3001\u51B3\u8BAE\u548C\u6388\u6743\u673A\u5236", "\u62BD\u67E5\u6838\u5FC3\u5408\u540C\u3001\u7528\u5DE5\u548C\u77E5\u8BC6\u4EA7\u6743", "\u6309\u98CE\u9669\u7B49\u7EA7\u5F62\u6210\u6574\u6539\u8DEF\u5F84"],
+      deliverables: ["\u6CBB\u7406\u4F53\u68C0\u6E05\u5355", "\u5206\u7EA7\u98CE\u9669\u62A5\u544A", "\u878D\u8D44\u5C3D\u8C03\u51C6\u5907\u5EFA\u8BAE", "\u91CD\u70B9\u95EE\u9898\u6574\u6539\u8DEF\u7EBF\u56FE"],
+      process: ["\u786E\u5B9A\u4F53\u68C0\u8303\u56F4", "\u4E0A\u4F20\u5E76\u6838\u67E5\u6750\u6599", "\u8BBF\u8C08\u8865\u5145\u4FE1\u606F", "\u51FA\u5177\u62A5\u544A\u5E76\u8BB2\u89E3"],
+      period: "\u901A\u5E38 7\u201415 \u4E2A\u5DE5\u4F5C\u65E5",
+      materials: ["\u5DE5\u5546\u6863\u6848\u4E0E\u516C\u53F8\u7AE0\u7A0B", "\u80A1\u4E1C\u4F1A\u53CA\u8463\u4E8B\u4F1A\u6587\u4EF6", "\u6838\u5FC3\u5408\u540C\u4E0E\u7528\u5DE5\u8D44\u6599", "\u77E5\u8BC6\u4EA7\u6743\u6743\u5C5E\u6750\u6599"],
+      exclusions: ["\u5B8C\u6574\u6CD5\u5F8B\u5C3D\u8C03\u62A5\u544A", "\u4E13\u9879\u7A0E\u52A1\u6216\u8D22\u52A1\u5BA1\u8BA1", "\u6574\u6539\u6587\u4EF6\u4EE3\u529E\u548C\u4E89\u8BAE\u89E3\u51B3"]
+    },
+    "\u9690\u79C1\u5408\u89C4\u5305": {
+      intro: "\u7ED3\u5408\u4EA7\u54C1\u7684\u6570\u636E\u5904\u7406\u573A\u666F\uFF0C\u5B8C\u6210\u9690\u79C1\u653F\u7B56\u3001\u7528\u6237\u534F\u8BAE\u548C\u57FA\u7840\u6570\u636E\u5408\u89C4\u6587\u4EF6\u3002",
+      suitableFor: "\u9002\u5408\u51C6\u5907\u4E0A\u7EBF App\u3001\u5C0F\u7A0B\u5E8F\u6216\u7F51\u7AD9\uFF0C\u9700\u8981\u6536\u96C6\u7528\u6237\u4FE1\u606F\u7684\u4E92\u8054\u7F51\u4EA7\u54C1\u3002",
+      scope: ["\u68B3\u7406\u4E2A\u4EBA\u4FE1\u606F\u6536\u96C6\u548C\u4F7F\u7528\u573A\u666F", "\u6838\u5BF9\u7B2C\u4E09\u65B9 SDK \u4E0E\u6743\u9650\u8C03\u7528", "\u8D77\u8349\u9690\u79C1\u653F\u7B56\u548C\u7528\u6237\u534F\u8BAE", "\u63D0\u793A\u6388\u6743\u3001\u6CE8\u9500\u548C\u672A\u6210\u5E74\u4EBA\u4FDD\u62A4\u8981\u6C42"],
+      deliverables: ["\u9690\u79C1\u653F\u7B56", "\u7528\u6237\u670D\u52A1\u534F\u8BAE", "\u4E2A\u4EBA\u4FE1\u606F\u6536\u96C6\u6E05\u5355", "\u4EA7\u54C1\u7AEF\u5408\u89C4\u6539\u9020\u5EFA\u8BAE"],
+      process: ["\u586B\u5199\u4EA7\u54C1\u4FE1\u606F\u8868", "\u6838\u67E5\u6570\u636E\u5904\u7406\u573A\u666F", "\u6587\u4EF6\u8D77\u8349\u4E0E\u4EA7\u54C1\u6838\u5BF9", "\u4FEE\u6539\u5B9A\u7A3F\u5E76\u4EA4\u4ED8"],
+      period: "\u901A\u5E38 5\u201410 \u4E2A\u5DE5\u4F5C\u65E5",
+      materials: ["\u4EA7\u54C1\u529F\u80FD\u8BF4\u660E", "\u4E2A\u4EBA\u4FE1\u606F\u53CA\u6743\u9650\u6E05\u5355", "\u7B2C\u4E09\u65B9 SDK \u6E05\u5355", "\u73B0\u6709\u534F\u8BAE\u6216\u9875\u9762\u622A\u56FE"],
+      exclusions: ["\u7F51\u7EDC\u5B89\u5168\u7B49\u7EA7\u4FDD\u62A4", "\u5883\u5916\u6570\u636E\u5408\u89C4\u4E13\u9879", "\u76D1\u7BA1\u68C0\u67E5\u6216\u4E89\u8BAE\u5904\u7406"]
+    },
     "\u80A1\u6743\u6FC0\u52B1": {
       intro: "\u7ED3\u5408\u4EBA\u5458\u8303\u56F4\u3001\u6FC0\u52B1\u76EE\u6807\u548C\u516C\u53F8\u9636\u6BB5\uFF0C\u8BBE\u8BA1\u517C\u987E\u6FC0\u52B1\u6548\u679C\u4E0E\u63A7\u5236\u6743\u7684\u5B9E\u65BD\u65B9\u6848\u3002",
       suitableFor: "\u9002\u5408\u5E0C\u671B\u957F\u671F\u7559\u4F4F\u6838\u5FC3\u6210\u5458\u3001\u5EFA\u7ACB\u671F\u6743\u6C60\u6216\u89C4\u8303\u65E2\u6709\u6FC0\u52B1\u5B89\u6392\u7684\u4F01\u4E1A\u3002",
@@ -4235,6 +4380,51 @@
         { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u7ED3\u5408\u4EA4\u6613\u80CC\u666F\u5B8C\u6210\u5BA1\u67E5\uFF0C\u5E76\u652F\u6301\u4E00\u8F6E\u6761\u6B3E\u534F\u5546\u3002", suitableFor: "\u4EA4\u6613\u7ED3\u6784\u590D\u6742\u3001\u5B58\u5728\u591A\u65B9\u4E3B\u4F53\u6216\u91CD\u8981\u5C65\u7EA6\u5B89\u6392", period: "3\u20145 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u6B21\u4FEE\u6539\u590D\u6838", includes: ["\u4EA4\u6613\u80CC\u666F\u4E0E\u5C65\u7EA6\u8DEF\u5F84\u68B3\u7406", "\u5168\u91CF\u98CE\u9669\u5BA1\u67E5\u53CA\u4FEE\u6539\u7A3F", "\u4E00\u8F6E\u5BF9\u5916\u6761\u6B3E\u6C9F\u901A\u652F\u6301", "\u7B7E\u7F72\u7248\u672C\u590D\u6838"], boundary: "\u5355\u4EFD\u5408\u540C\uFF0C50 \u9875\u4EE5\u5185\uFF1B\u4E0D\u542B\u4E13\u9879\u5C3D\u8C03\u3002" }
       ]
     },
+    "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E 20 \u4EBA\u4EE5\u5185\u3001\u4E1A\u52A1\u548C\u80A1\u6743\u7ED3\u6784\u76F8\u5BF9\u7B80\u5355\u7684\u5883\u5185\u521D\u521B\u4F01\u4E1A\uFF0C\u6309\u5E74\u5EA6\u63D0\u4F9B\u7EA6\u5B9A\u989D\u5EA6\u7684\u65E5\u5E38\u6CD5\u5F8B\u652F\u6301\u3002",
+      prices: [9800, 19800, 39800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u8986\u76D6\u521B\u4E1A\u56E2\u961F\u6700\u5E38\u89C1\u7684\u65E5\u5E38\u6CD5\u5F8B\u95EE\u9898\u3002", suitableFor: "\u54A8\u8BE2\u9891\u7387\u8F83\u4F4E\u3001\u5E0C\u671B\u5148\u8865\u9F50\u6CD5\u5F8B\u57FA\u7840\u7684\u65E9\u671F\u56E2\u961F", period: "12 \u4E2A\u6708", revision: "\u6BCF\u6708 2 \u6B21\u54A8\u8BE2\u3001\u6BCF\u5B63 2 \u4EFD\u5408\u540C", includes: ["\u4F01\u4E1A\u6CD5\u5F8B\u4E8B\u9879\u521D\u68C0", "\u65E5\u5E38\u6CD5\u5F8B\u54A8\u8BE2", "\u5E38\u89C4\u5408\u540C\u5BA1\u9605", "\u5B63\u5EA6\u98CE\u9669\u63D0\u793A"], boundary: "20 \u4EBA\u4EE5\u5185\uFF1B\u4E0D\u542B\u4E13\u9879\u4EA4\u6613\u3001\u8BC9\u8BBC\u53CA\u73B0\u573A\u670D\u52A1\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u4E3A\u6301\u7EED\u7ECF\u8425\u548C\u56E2\u961F\u6269\u5F20\u63D0\u4F9B\u7A33\u5B9A\u6CD5\u52A1\u652F\u6301\u3002", suitableFor: "\u5408\u540C\u548C\u7528\u5DE5\u4E8B\u9879\u8F83\u591A\u3001\u6B63\u5728\u878D\u8D44\u6216\u6269\u5F20\u7684\u56E2\u961F", period: "12 \u4E2A\u6708", revision: "\u6BCF\u6708 6 \u6B21\u54A8\u8BE2\u3001\u6BCF\u6708 3 \u4EFD\u5408\u540C", includes: ["\u57FA\u7840\u7248\u5168\u90E8\u5185\u5BB9", "\u5E38\u7528\u5236\u5EA6\u4E0E\u6A21\u677F\u7EF4\u62A4", "\u6708\u5EA6\u91CD\u70B9\u4E8B\u9879\u590D\u76D8", "\u878D\u8D44\u524D\u57FA\u7840\u6750\u6599\u68C0\u67E5"], boundary: "50 \u4EBA\u4EE5\u5185\uFF1B\u4E13\u9879\u878D\u8D44\u6587\u4EF6\u53E6\u884C\u786E\u8BA4\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u63D0\u4F9B\u63A5\u8FD1\u5916\u90E8\u6CD5\u52A1\u8D1F\u8D23\u4EBA\u7684\u6301\u7EED\u652F\u6301\u3002", suitableFor: "\u4E1A\u52A1\u590D\u6742\u3001\u5408\u540C\u548C\u6CBB\u7406\u4E8B\u9879\u8F83\u591A\u7684\u6210\u957F\u4F01\u4E1A", period: "12 \u4E2A\u6708", revision: "\u6309\u6708\u5EA6\u5DE5\u65F6\u5305\u670D\u52A1", includes: ["\u6708\u5EA6\u6CD5\u52A1\u5DE5\u4F5C\u8BA1\u5212", "\u590D\u6742\u5408\u540C\u8D77\u8349\u4E0E\u5BA1\u9605", "\u6CBB\u7406\u4E0E\u7528\u5DE5\u4E13\u9879\u652F\u6301", "\u7BA1\u7406\u5C42\u5B63\u5EA6\u5408\u89C4\u6C47\u62A5"], boundary: "\u4E0D\u542B\u8BC9\u8BBC\u4EF2\u88C1\u3001\u5883\u5916\u4E13\u9879\u548C\u5927\u578B\u4EA4\u6613\u3002" }
+      ]
+    },
+    "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E 3 \u4F4D\u4EE5\u5185\u521B\u59CB\u4EBA\u3001\u65E0\u4EE3\u6301\u548C\u5386\u53F2\u4E89\u8BAE\uFF0C\u4E14\u5DF2\u57FA\u672C\u786E\u5B9A\u51FA\u8D44\u4E0E\u5206\u5DE5\u7684\u56E2\u961F\u3002",
+      prices: [2800, 5800, 9800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u628A\u5206\u5DE5\u3001\u80A1\u6743\u548C\u9000\u51FA\u89C4\u5219\u5199\u8FDB\u4E00\u4EFD\u6838\u5FC3\u534F\u8BAE\u3002", suitableFor: "\u521A\u5F00\u59CB\u5408\u4F5C\u3001\u56E2\u961F\u5173\u7CFB\u548C\u7ED3\u6784\u8F83\u7B80\u5355", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u4FEE\u6539", includes: ["\u4E00\u6B21\u521B\u59CB\u4EBA\u8BBF\u8C08", "\u521B\u59CB\u4EBA\u534F\u8BAE", "\u4FDD\u5BC6\u4E0E\u77E5\u8BC6\u4EA7\u6743\u6761\u6B3E", "\u7B7E\u7F72\u8BF4\u660E"], boundary: "3 \u4F4D\u4EE5\u5185\u521B\u59CB\u4EBA\uFF0C\u4E0D\u542B\u80A1\u6743\u6D4B\u7B97\u548C\u5DE5\u5546\u529E\u7406\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u540C\u65F6\u89E3\u51B3\u63A7\u5236\u6743\u3001\u5151\u73B0\u548C\u79BB\u804C\u56DE\u8D2D\u95EE\u9898\u3002", suitableFor: "\u5DF2\u6295\u5165\u7ECF\u8425\u3001\u51C6\u5907\u878D\u8D44\u6216\u5F15\u5165\u6838\u5FC3\u6210\u5458", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u4FEE\u6539", includes: ["\u591A\u65B9\u9700\u6C42\u8BBF\u8C08", "\u80A1\u6743\u5151\u73B0\u4E0E\u56DE\u8D2D\u673A\u5236", "\u51B3\u7B56\u53CA\u50F5\u5C40\u6761\u6B3E", "\u5B8C\u6574\u534F\u8BAE\u4E0E\u914D\u5957\u627F\u8BFA"], boundary: "5 \u4F4D\u4EE5\u5185\u521B\u59CB\u4EBA\uFF0C\u65E0\u5386\u53F2\u80A1\u6743\u4E89\u8BAE\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u5904\u7406\u5386\u53F2\u6295\u5165\u3001\u4EE3\u6301\u6216\u591A\u5C42\u5408\u4F5C\u5B89\u6392\u3002", suitableFor: "\u5408\u4F5C\u7ED3\u6784\u590D\u6742\u3001\u5DF2\u6709\u5386\u53F2\u6587\u4EF6\u6216\u7279\u6B8A\u6743\u5229\u5B89\u6392", period: "2\u20143 \u5468", revision: "3 \u8F6E\u4FEE\u6539", includes: ["\u5386\u53F2\u5B89\u6392\u6838\u67E5", "\u591A\u65B9\u6848\u6761\u6B3E\u5BF9\u6BD4", "\u5168\u5957\u521B\u59CB\u4EBA\u6587\u4EF6", "\u7B7E\u7F72\u4E0E\u843D\u5730\u8F85\u5BFC"], boundary: "\u4E89\u8BAE\u8C08\u5224\u3001\u7A0E\u52A1\u53CA\u5DE5\u5546\u670D\u52A1\u53E6\u884C\u62A5\u4EF7\u3002" }
+      ]
+    },
+    "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E 20 \u4EBA\u4EE5\u5185\u56E2\u961F\u7684\u6807\u51C6\u5168\u65E5\u5236\u7528\u5DE5\uFF0C\u4E0D\u542B\u52B3\u52A1\u6D3E\u9063\u3001\u8DE8\u5883\u7528\u5DE5\u548C\u5B58\u91CF\u4E89\u8BAE\u3002",
+      prices: [1800, 3800, 6800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u4E00\u6B21\u8865\u9F50\u5458\u5DE5\u5165\u804C\u6240\u9700\u6838\u5FC3\u6587\u4EF6\u3002", suitableFor: "\u51C6\u5907\u62DB\u8058\u9996\u6279\u5458\u5DE5\u7684\u65E9\u671F\u521B\u4E1A\u56E2\u961F", period: "3 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u4FEE\u6539", includes: ["\u52B3\u52A8\u5408\u540C\u6A21\u677F", "\u4FDD\u5BC6\u53CA\u77E5\u8BC6\u4EA7\u6743\u534F\u8BAE", "\u5165\u804C\u4FE1\u606F\u8868", "\u79BB\u804C\u4EA4\u63A5\u6E05\u5355"], boundary: "20 \u4EBA\u4EE5\u5185\u3001\u5355\u4E00\u7528\u5DE5\u6A21\u5F0F\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u8986\u76D6\u5458\u5DE5\u4ECE\u5165\u804C\u5230\u79BB\u804C\u7684\u5E38\u7528\u6587\u4EF6\u3002", suitableFor: "\u56E2\u961F\u6B63\u5728\u6269\u5F20\uFF0C\u9700\u8981\u5F62\u6210\u57FA\u672C\u7528\u5DE5\u6D41\u7A0B", period: "5\u20147 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u4FEE\u6539", includes: ["\u57FA\u7840\u7248\u5168\u90E8\u6587\u4EF6", "\u8BD5\u7528\u671F\u4E0E\u7EE9\u6548\u6587\u4EF6", "\u5C97\u4F4D\u8C03\u6574\u53CA\u7EED\u7B7E\u6587\u4EF6", "\u57FA\u7840\u5458\u5DE5\u624B\u518C\u6761\u6B3E"], boundary: "50 \u4EBA\u4EE5\u5185\uFF0C\u4E0D\u542B\u590D\u6742\u88C1\u5458\u548C\u4E89\u8BAE\u5904\u7406\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u7ED3\u5408\u73B0\u6709\u4EBA\u5458\u60C5\u51B5\u8FDB\u884C\u6587\u4EF6\u4F53\u7CFB\u6574\u6539\u3002", suitableFor: "\u5DF2\u6709\u5458\u5DE5\u3001\u5386\u53F2\u6587\u4EF6\u4E0D\u7EDF\u4E00\u6216\u5B58\u5728\u591A\u79CD\u7528\u5DE5\u65B9\u5F0F", period: "10\u201415 \u4E2A\u5DE5\u4F5C\u65E5", revision: "3 \u8F6E\u4FEE\u6539", includes: ["\u73B0\u6709\u6587\u4EF6\u62BD\u67E5", "\u5B8C\u6574\u5165\u8F6C\u8C03\u79BB\u6587\u4EF6\u5305", "\u5458\u5DE5\u624B\u518C\u6838\u5FC3\u5236\u5EA6", "\u7BA1\u7406\u4EBA\u5458\u7528\u5DE5\u57F9\u8BAD"], boundary: "\u4EF2\u88C1\u8BC9\u8BBC\u548C\u4E13\u9879\u88C1\u5458\u53E6\u884C\u62A5\u4EF7\u3002" }
+      ]
+    },
+    "\u6CBB\u7406\u4F53\u68C0": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u5355\u4E00\u5883\u5185\u4E3B\u4F53\u30015 \u4F4D\u4EE5\u5185\u80A1\u4E1C\u4E14\u516C\u53F8\u5386\u53F2\u53D8\u66F4\u8F83\u5C11\u7684\u521D\u521B\u4F01\u4E1A\u3002",
+      prices: [3800, 7800, 12800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5FEB\u901F\u8BC6\u522B\u80A1\u6743\u548C\u516C\u53F8\u6CBB\u7406\u4E2D\u7684\u660E\u663E\u98CE\u9669\u3002", suitableFor: "\u51C6\u5907\u878D\u8D44\u524D\u81EA\u67E5\u6216\u5E0C\u671B\u4E86\u89E3\u5F53\u524D\u6CBB\u7406\u57FA\u7840", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u62A5\u544A\u8BB2\u89E3", includes: ["\u80A1\u6743\u4E0E\u7AE0\u7A0B\u68C0\u67E5", "\u51B3\u8BAE\u6587\u4EF6\u62BD\u67E5", "\u91CD\u70B9\u98CE\u9669\u6E05\u5355", "\u6574\u6539\u4F18\u5148\u7EA7\u5EFA\u8BAE"], boundary: "\u5355\u4E00\u4E3B\u4F53\uFF0C\u4E0D\u542B\u5B8C\u6574\u6CD5\u5F8B\u5C3D\u8C03\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u8986\u76D6\u878D\u8D44\u5C3D\u8C03\u5E38\u89C1\u7684\u56DB\u7C7B\u6838\u5FC3\u98CE\u9669\u3002", suitableFor: "\u8BA1\u5212\u5728 3\u20146 \u4E2A\u6708\u5185\u542F\u52A8\u878D\u8D44\u7684\u4F01\u4E1A", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u62A5\u544A\u8865\u5145", includes: ["\u80A1\u6743\u4E0E\u6CBB\u7406\u6838\u67E5", "\u6838\u5FC3\u5408\u540C\u53CA\u7528\u5DE5\u62BD\u67E5", "\u77E5\u8BC6\u4EA7\u6743\u6743\u5C5E\u6838\u67E5", "\u878D\u8D44\u524D\u6574\u6539\u8DEF\u7EBF\u56FE"], boundary: "\u5355\u4E00\u5883\u5185\u96C6\u56E2\uFF0C\u62BD\u67E5\u8303\u56F4\u6309\u6E05\u5355\u7EA6\u5B9A\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u6309\u6A21\u62DF\u5C3D\u8C03\u65B9\u5F0F\u5F62\u6210\u7CFB\u7EDF\u6574\u6539\u65B9\u6848\u3002", suitableFor: "\u5386\u53F2\u53D8\u66F4\u8F83\u591A\u3001\u5DF2\u6709\u5916\u90E8\u80A1\u4E1C\u6216\u51C6\u5907 A \u8F6E\u878D\u8D44", period: "2\u20143 \u5468", revision: "2 \u8F6E\u62A5\u544A\u8865\u5145", includes: ["\u591A\u6A21\u5757\u6DF1\u5EA6\u6838\u67E5", "\u7BA1\u7406\u5C42\u8BBF\u8C08", "\u5206\u7EA7\u98CE\u9669\u62A5\u544A", "\u91CD\u70B9\u6574\u6539\u6587\u4EF6\u5EFA\u8BAE"], boundary: "\u4E0D\u542B\u8D22\u7A0E\u5BA1\u8BA1\u3001\u4E89\u8BAE\u89E3\u51B3\u548C\u6574\u6539\u4EE3\u529E\u3002" }
+      ]
+    },
+    "\u9690\u79C1\u5408\u89C4\u5305": {
+      basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E\u5355\u4E00\u4E2D\u6587 App\u3001\u5C0F\u7A0B\u5E8F\u6216\u7F51\u7AD9\uFF0C\u6570\u636E\u5904\u7406\u573A\u666F\u8F83\u5C11\u4E14\u4E0D\u6D89\u53CA\u654F\u611F\u4E2A\u4EBA\u4FE1\u606F\u3002",
+      prices: [2800, 6800, 12800],
+      plans: [
+        { id: "basic", name: "\u57FA\u7840\u7248", intro: "\u5B8C\u6210\u4E0A\u7EBF\u6240\u9700\u7684\u9690\u79C1\u653F\u7B56\u548C\u7528\u6237\u534F\u8BAE\u3002", suitableFor: "\u529F\u80FD\u7B80\u5355\u3001\u51C6\u5907\u9996\u6B21\u4E0A\u7EBF\u7684\u4E92\u8054\u7F51\u4EA7\u54C1", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u4FEE\u6539", includes: ["\u9690\u79C1\u653F\u7B56", "\u7528\u6237\u670D\u52A1\u534F\u8BAE", "\u4FE1\u606F\u6536\u96C6\u6E05\u5355", "\u57FA\u7840\u5408\u89C4\u63D0\u793A"], boundary: "\u5355\u4E00\u4EA7\u54C1\u7AEF\uFF0C\u4E0D\u542B SDK \u626B\u63CF\u548C\u8DE8\u5883\u573A\u666F\u3002" },
+        { id: "standard", name: "\u6807\u51C6\u7248", recommended: true, intro: "\u7ED3\u5408\u4EA7\u54C1\u6D41\u7A0B\u5B8C\u6210\u6587\u4EF6\u548C\u9875\u9762\u6539\u9020\u5EFA\u8BAE\u3002", suitableFor: "\u5DF2\u63A5\u5165\u7B2C\u4E09\u65B9 SDK\u3001\u652F\u4ED8\u6216\u8D26\u53F7\u4F53\u7CFB\u7684\u4EA7\u54C1", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u4FEE\u6539", includes: ["\u57FA\u7840\u7248\u5168\u90E8\u5185\u5BB9", "SDK \u4E0E\u6743\u9650\u6E05\u5355\u6838\u5BF9", "\u6388\u6743\u548C\u6CE8\u9500\u6D41\u7A0B\u5EFA\u8BAE", "\u4EA7\u54C1\u9875\u9762\u6574\u6539\u6E05\u5355"], boundary: "\u5355\u4E00\u4E1A\u52A1\u7EBF\uFF0C\u4E0D\u542B\u7B49\u4FDD\u548C\u6570\u636E\u51FA\u5883\u3002" },
+        { id: "deep", name: "\u6DF1\u5EA6\u7248", intro: "\u5BF9\u590D\u6742\u6570\u636E\u5904\u7406\u573A\u666F\u5F00\u5C55\u4E13\u9879\u5408\u89C4\u68B3\u7406\u3002", suitableFor: "\u6D89\u53CA\u654F\u611F\u4FE1\u606F\u3001\u591A\u4E2A\u4EA7\u54C1\u7AEF\u6216\u8F83\u591A\u5408\u4F5C\u65B9", period: "2\u20143 \u5468", revision: "3 \u8F6E\u4FEE\u6539", includes: ["\u6570\u636E\u5904\u7406\u573A\u666F\u8BBF\u8C08", "\u591A\u7AEF\u534F\u8BAE\u4F53\u7CFB", "\u5408\u4F5C\u65B9\u6570\u636E\u6761\u6B3E", "\u4E13\u9879\u6574\u6539\u8BF4\u660E\u4F1A"], boundary: "\u7B49\u4FDD\u3001\u6570\u636E\u51FA\u5883\u7533\u62A5\u53CA\u76D1\u7BA1\u5E94\u5BF9\u53E6\u884C\u62A5\u4EF7\u3002" }
+      ]
+    },
     "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": {
       basis: "\u57FA\u7840\u7248\u9002\u7528\u4E8E 2 \u4F4D\u4EE5\u5185\u521B\u59CB\u80A1\u4E1C\u3001\u65E0\u4EE3\u6301\u53CA\u5386\u53F2\u80A1\u6743\u4E89\u8BAE\u7684\u521D\u521B\u4F01\u4E1A\u3002",
       prices: [3e3, 5800, 8800],
@@ -4309,6 +4499,11 @@
     }
   };
   var teamPriceOverrides = {
+    "t002:\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE": [8800, 16800, 32800],
+    "t002:\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305": [1600, 3500, 6500],
+    "t004:\u6CBB\u7406\u4F53\u68C0": [5800, 9800, 16800],
+    "t004:\u9690\u79C1\u5408\u89C4\u5305": [3800, 7800, 13800],
+    "t007:\u521B\u59CB\u4EBA\u534F\u8BAE\u5305": [3200, 6800, 10800],
     "t002:\u5408\u540C\u5BA1\u67E5": [1200, 2600, 5200],
     "t002:\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": [3800, 6800, 9800],
     "t002:\u52B3\u52A8\u5408\u89C4": [1500, 3200, 6800],
@@ -4568,7 +4763,7 @@
       return icon.call(ui4, name, size);
     }
   };
-  var DEFAULT_FILTERS = Object.freeze({ city: "all", price: "all", rating: "all", response: "all", specialty: "all" });
+  var DEFAULT_FILTERS = Object.freeze({ city: "all", price: "all", rating: "all", response: "all", specialty: "all", fundingStage: "all" });
   function createDefaultFilters() {
     return { ...DEFAULT_FILTERS };
   }
@@ -4577,7 +4772,7 @@
     const group = (title, key, options) => '<div class="p2-filter-group"><div class="p2-filter-title">' + title + '</div><div class="p2-filter-options">' + options.map(
       (item) => '<button class="p2-filter-option' + (filters[key] === item.key ? " selected" : "") + '" data-filter-key="' + key + '" data-filter-value="' + item.key + '">' + item.label + "</button>"
     ).join("") + "</div></div>";
-    const body = '<div class="p2-filter-sheet">' + group("\u6240\u5728\u57CE\u5E02", "city", [{ key: "all", label: "\u4E0D\u9650" }, { key: "\u5317\u4EAC", label: "\u5317\u4EAC" }, { key: "\u4E0A\u6D77", label: "\u4E0A\u6D77" }]) + group("\u8D77\u6B65\u4EF7\u683C", "price", [{ key: "all", label: "\u4E0D\u9650" }, { key: "under1000", label: "1000\u5143\u4EE5\u4E0B" }, { key: "1000to3000", label: "1000-3000\u5143" }, { key: "over3000", label: "3000\u5143\u4EE5\u4E0A" }]) + group("\u56E2\u961F\u8BC4\u5206", "rating", [{ key: "all", label: "\u4E0D\u9650" }, { key: "4.8", label: "4.8\u5206\u4EE5\u4E0A" }]) + group("\u54CD\u5E94\u65F6\u95F4", "response", [{ key: "all", label: "\u4E0D\u9650" }, { key: "within4", label: "4\u5C0F\u65F6\u5185" }, { key: "within24", label: "24\u5C0F\u65F6\u5185" }]) + group("\u884C\u4E1A\u4E13\u957F", "specialty", [{ key: "all", label: "\u4E0D\u9650" }, { key: "tech", label: "\u79D1\u6280\u4E0ETMT" }, { key: "startup", label: "\u521D\u521B\u4F01\u4E1A" }, { key: "compliance", label: "\u5408\u89C4\u6CBB\u7406" }]) + '<div class="p2-filter-actions"><button class="btn btn-outline" id="p2FilterReset">\u91CD\u7F6E</button><button class="btn btn-primary" id="p2FilterApply">\u5E94\u7528\u7B5B\u9009</button></div></div>';
+    const body = '<div class="p2-filter-sheet">' + group("\u6240\u5728\u57CE\u5E02", "city", [{ key: "all", label: "\u4E0D\u9650" }, { key: "\u5317\u4EAC", label: "\u5317\u4EAC" }, { key: "\u4E0A\u6D77", label: "\u4E0A\u6D77" }]) + group("\u8D77\u6B65\u4EF7\u683C", "price", [{ key: "all", label: "\u4E0D\u9650" }, { key: "under1000", label: "1000\u5143\u4EE5\u4E0B" }, { key: "1000to3000", label: "1000-3000\u5143" }, { key: "over3000", label: "3000\u5143\u4EE5\u4E0A" }]) + group("\u56E2\u961F\u8BC4\u5206", "rating", [{ key: "all", label: "\u4E0D\u9650" }, { key: "4.8", label: "4.8\u5206\u4EE5\u4E0A" }]) + group("\u54CD\u5E94\u65F6\u95F4", "response", [{ key: "all", label: "\u4E0D\u9650" }, { key: "within4", label: "4\u5C0F\u65F6\u5185" }, { key: "within24", label: "24\u5C0F\u65F6\u5185" }]) + group("\u884C\u4E1A\u7ECF\u9A8C", "specialty", [{ key: "all", label: "\u4E0D\u9650" }, { key: "tech", label: "\u79D1\u6280\u4E0ETMT" }, { key: "consumer", label: "\u6D88\u8D39\u4E0E\u7535\u5546" }, { key: "health", label: "\u533B\u7597\u5065\u5EB7" }, { key: "manufacturing", label: "\u5148\u8FDB\u5236\u9020" }]) + group("\u878D\u8D44\u9636\u6BB5\u7ECF\u9A8C", "fundingStage", [{ key: "all", label: "\u4E0D\u9650" }, { key: "seed", label: "\u79CD\u5B50 / \u5929\u4F7F\u8F6E" }, { key: "prea", label: "Pre-A" }, { key: "a", label: "A \u8F6E" }, { key: "growth", label: "\u6210\u957F\u671F" }]) + '<div class="p2-filter-actions"><button class="btn btn-outline" id="p2FilterReset">\u91CD\u7F6E</button><button class="btn btn-primary" id="p2FilterApply">\u5E94\u7528\u7B5B\u9009</button></div></div>';
     showSheet.call(ui4, { title: "\u7B5B\u9009\u56E2\u961F", body });
     document.querySelectorAll(".p2-filter-option").forEach((option) => {
       option.addEventListener("click", function() {
@@ -4675,8 +4870,11 @@
         if (state2.filters.response === "within24" && responseHours2 > 24) return false;
         const specialtyText = [team.desc, ...team.specialties || [], ...team.skus].join("");
         if (state2.filters.specialty === "tech" && !/科技|TMT|互联网|软件|智能/.test(specialtyText)) return false;
-        if (state2.filters.specialty === "startup" && !/初创|创业|融资|股权/.test(specialtyText)) return false;
-        if (state2.filters.specialty === "compliance" && !/合规|治理|劳动|合同/.test(specialtyText)) return false;
+        if (state2.filters.specialty === "consumer" && !/消费|电商|零售|品牌/.test(specialtyText)) return false;
+        if (state2.filters.specialty === "health" && !/医疗|健康|医药|生物/.test(specialtyText)) return false;
+        if (state2.filters.specialty === "manufacturing" && !/制造|工业|硬科技|新能源|芯片/.test(specialtyText)) return false;
+        const stageTeams = { seed: ["t001", "t002", "t007"], prea: ["t001", "t002", "t007"], a: ["t001", "t004", "t007"], growth: ["t004"] };
+        if (state2.filters.fundingStage !== "all" && !stageTeams[state2.filters.fundingStage]?.includes(team.id)) return false;
         if (!state2.query) return true;
         return [team.name, team.orgShort, team.desc, team.skus.join("")].join("").toLowerCase().includes(state2.query.toLowerCase());
       });
@@ -4818,68 +5016,6 @@
     return '<span class="stars">' + html + "</span>";
   }
 
-  // src/data/stagedServices.js
-  var intellectualPropertySkus = /* @__PURE__ */ new Set([
-    "\u5546\u6807\u6CE8\u518C",
-    "\u4E13\u5229\u7533\u8BF7",
-    "\u8457\u4F5C\u6743\u767B\u8BB0",
-    "\u5546\u6807\u9A73\u56DE\u590D\u5BA1",
-    "\u4E13\u5229\u4FB5\u6743\u5206\u6790"
-  ]);
-  var policySkus = /* @__PURE__ */ new Set([
-    "\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A",
-    "\u4E13\u7CBE\u7279\u65B0\u7533\u62A5",
-    "\u79D1\u6280\u9879\u76EE\u7533\u62A5"
-  ]);
-  var CONFIGS = {
-    ip: {
-      categoryName: "\u77E5\u8BC6\u4EA7\u6743",
-      total: "\xA512,000",
-      firstAmount: "\xA56,000",
-      secondAmount: "\xA56,000",
-      period: "\u9884\u8BA1 3\u20146 \u4E2A\u6708\uFF0C\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u65F6\u95F4\u53E6\u8BA1",
-      intakeLabel: "\u8BF7\u8BF4\u660E\u7533\u8BF7\u5BF9\u8C61\u3001\u6570\u91CF\u53CA\u5F53\u524D\u6750\u6599\u60C5\u51B5",
-      intakeExample: "\u8BA1\u5212\u7533\u8BF7 2 \u4EF6\u5546\u6807\uFF0C\u5DF2\u6709\u5546\u6807\u56FE\u6837\u548C\u8425\u4E1A\u6267\u7167\uFF0C\u5E0C\u671B\u5148\u5B8C\u6210\u8FD1\u4F3C\u68C0\u7D22\u3002",
-      firstWork: ["\u5B8C\u6210\u57FA\u7840\u68C0\u7D22\u4E0E\u98CE\u9669\u5206\u6790", "\u5F62\u6210\u7533\u8BF7\u7B56\u7565\u53CA\u7C7B\u522B\u5EFA\u8BAE", "\u51C6\u5907\u5E76\u5B9A\u7A3F\u7533\u8BF7\u6587\u4EF6"],
-      milestoneTitle: "\u68C0\u7D22\u5206\u6790\u4E0E\u7533\u8BF7\u6587\u4EF6\u5DF2\u5B8C\u6210",
-      milestoneDetail: "\u5BA2\u6237\u786E\u8BA4\u7533\u8BF7\u6587\u4EF6\u540E\uFF0C\u8FDB\u5165\u6B63\u5F0F\u63D0\u4EA4\u4E0E\u5BA1\u67E5\u8DDF\u8FDB\u9636\u6BB5\u3002",
-      secondTrigger: "\u7533\u8BF7\u6587\u4EF6\u5B9A\u7A3F\u5E76\u7ECF\u5BA2\u6237\u786E\u8BA4\uFF0C\u6B63\u5F0F\u63D0\u4EA4\u524D\u652F\u4ED8",
-      secondWork: ["\u5411\u4E3B\u7BA1\u673A\u6784\u6B63\u5F0F\u63D0\u4EA4\u7533\u8BF7", "\u8DDF\u8FDB\u53D7\u7406\u53CA\u5BA1\u67E5\u8FDB\u5EA6", "\u6309\u7EA6\u5904\u7406\u4E00\u6B21\u8865\u6B63\u6216\u5BA1\u67E5\u610F\u89C1"],
-      resultTitle: "\u672C\u6B21\u7533\u8BF7\u672A\u83B7\u6838\u51C6",
-      resultDetail: "\u4E3B\u7BA1\u673A\u6784\u5DF2\u51FA\u5177\u7ED3\u679C\uFF0C\u670D\u52A1\u56E2\u961F\u5B8C\u6210\u4E86\u534F\u8BAE\u7EA6\u5B9A\u7684\u68C0\u7D22\u3001\u6750\u6599\u51C6\u5907\u3001\u63D0\u4EA4\u53CA\u8DDF\u8FDB\u5DE5\u4F5C\u3002",
-      resultFile: "\u4E3B\u7BA1\u673A\u6784\u5BA1\u67E5\u7ED3\u679C\u901A\u77E5.pdf"
-    },
-    policy: {
-      categoryName: "\u653F\u7B56\u7533\u62A5",
-      total: "\xA520,000",
-      firstAmount: "\xA510,000",
-      secondAmount: "\xA510,000",
-      period: "\u9884\u8BA1 2\u20144 \u4E2A\u6708\uFF0C\u4EE5\u7533\u62A5\u7A97\u53E3\u548C\u8BC4\u5BA1\u5B89\u6392\u4E3A\u51C6",
-      intakeLabel: "\u8BF7\u8BF4\u660E\u4F01\u4E1A\u8D44\u8D28\u3001\u6240\u5728\u5730\u533A\u548C\u610F\u5411\u7533\u62A5\u9879\u76EE",
-      intakeExample: "\u5317\u4EAC\u79D1\u6280\u4F01\u4E1A\uFF0C\u6210\u7ACB\u6EE1 2 \u5E74\uFF0C\u8BA1\u5212\u7533\u62A5\u9AD8\u65B0\u6280\u672F\u4F01\u4E1A\u8BA4\u5B9A\uFF0C\u5DF2\u6709\u7814\u53D1\u548C\u8D22\u52A1\u8D44\u6599\u3002",
-      firstWork: ["\u5B8C\u6210\u7533\u62A5\u8D44\u683C\u4E0E\u5DEE\u8DDD\u8BC4\u4F30", "\u5F62\u6210\u7533\u62A5\u89C4\u5212\u53CA\u6750\u6599\u6E05\u5355", "\u6574\u7406\u5E76\u5B9A\u7A3F\u7533\u62A5\u6750\u6599"],
-      milestoneTitle: "\u8D44\u683C\u8BC4\u4F30\u4E0E\u7533\u62A5\u6750\u6599\u5DF2\u5B8C\u6210",
-      milestoneDetail: "\u5BA2\u6237\u786E\u8BA4\u7533\u62A5\u6750\u6599\u540E\uFF0C\u8FDB\u5165\u6B63\u5F0F\u7533\u62A5\u4E0E\u8BC4\u5BA1\u8DDF\u8FDB\u9636\u6BB5\u3002",
-      secondTrigger: "\u7533\u62A5\u6750\u6599\u5B9A\u7A3F\u5E76\u7ECF\u5BA2\u6237\u786E\u8BA4\uFF0C\u6B63\u5F0F\u7533\u62A5\u524D\u652F\u4ED8",
-      secondWork: ["\u5728\u7533\u62A5\u7A97\u53E3\u5185\u6B63\u5F0F\u63D0\u4EA4", "\u8DDF\u8FDB\u5F62\u5F0F\u5BA1\u67E5\u53CA\u8865\u5145\u6750\u6599", "\u540C\u6B65\u8BC4\u5BA1\u8FDB\u5EA6\u4E0E\u6700\u7EC8\u7ED3\u679C"],
-      resultTitle: "\u672C\u6B21\u7533\u62A5\u672A\u901A\u8FC7\u8BC4\u5BA1",
-      resultDetail: "\u4E3B\u7BA1\u673A\u6784\u5DF2\u53D1\u5E03\u8BC4\u5BA1\u7ED3\u679C\uFF0C\u670D\u52A1\u56E2\u961F\u5B8C\u6210\u4E86\u534F\u8BAE\u7EA6\u5B9A\u7684\u8BC4\u4F30\u3001\u6750\u6599\u51C6\u5907\u3001\u7533\u62A5\u53CA\u8DDF\u8FDB\u5DE5\u4F5C\u3002",
-      resultFile: "\u9879\u76EE\u8BC4\u5BA1\u7ED3\u679C\u901A\u77E5.pdf"
-    }
-  };
-  function getStagedServiceConfig(sku) {
-    if (intellectualPropertySkus.has(sku)) return { ...CONFIGS.ip, kind: "ip", sku };
-    if (policySkus.has(sku)) return { ...CONFIGS.policy, kind: "policy", sku };
-    return null;
-  }
-  function isStagedService(sku) {
-    return Boolean(getStagedServiceConfig(sku));
-  }
-  var stagedServiceSkus = Object.freeze({
-    ip: Array.from(intellectualPropertySkus),
-    policy: Array.from(policySkus)
-  });
-
   // src/services/questions.js
   function getTeamQuestions(teamId, teamList) {
     const team = getTeam(teamId, teamList);
@@ -4951,10 +5087,59 @@
     return html;
   }
 
+  // src/data/serviceScenes.js
+  var commonQuestions = Object.freeze([
+    { id: "current", prompt: "\u5148\u7B80\u5355\u8BF4\u8BF4\u4F60\u76EE\u524D\u7684\u60C5\u51B5\uFF1F", type: "text", placeholder: "\u4F8B\u5982\uFF1A\u56E2\u961F 8 \u4EBA\uFF0C\u51C6\u5907\u5728\u4E0B\u4E2A\u6708\u5B8C\u6210\u878D\u8D44\u524D\u6574\u6539" },
+    { id: "goal", prompt: "\u8FD9\u6B21\u6700\u5E0C\u671B\u89E3\u51B3\u4EC0\u4E48\u95EE\u9898\uFF1F", type: "text", placeholder: "\u8BF7\u5199\u4E0B\u5E0C\u671B\u83B7\u5F97\u7684\u7ED3\u679C" }
+  ]);
+  var sceneQuestions = Object.freeze({
+    "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE": [
+      { id: "team_size", prompt: "\u76EE\u524D\u56E2\u961F\u5927\u7EA6\u6709\u591A\u5C11\u4EBA\uFF1F", options: ["10 \u4EBA\u4EE5\u5185", "11\u201430 \u4EBA", "31\u201450 \u4EBA", "50 \u4EBA\u4EE5\u4E0A"] },
+      { id: "frequency", prompt: "\u9884\u8BA1\u6BCF\u6708\u4F1A\u6709\u591A\u5C11\u6B21\u6CD5\u5F8B\u54A8\u8BE2\u6216\u5408\u540C\u5BA1\u9605\uFF1F", options: ["1\u20142 \u6B21", "3\u20145 \u6B21", "6\u201410 \u6B21", "10 \u6B21\u4EE5\u4E0A"] },
+      { id: "focus", prompt: "\u6700\u5E0C\u671B\u987E\u95EE\u4F18\u5148\u8986\u76D6\u54EA\u4E9B\u4E8B\u9879\uFF1F", options: ["\u5408\u540C\u4E0E\u5408\u4F5C", "\u52B3\u52A8\u7528\u5DE5", "\u80A1\u6743\u6CBB\u7406", "\u878D\u8D44\u652F\u6301"], multiple: true }
+    ],
+    "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305": [
+      { id: "founders", prompt: "\u76EE\u524D\u6709\u51E0\u4F4D\u521B\u59CB\u4EBA\uFF1F", options: ["2 \u4F4D", "3 \u4F4D", "4\u20145 \u4F4D", "5 \u4F4D\u4EE5\u4E0A"] },
+      { id: "equity", prompt: "\u80A1\u6743\u6BD4\u4F8B\u662F\u5426\u5DF2\u7ECF\u521D\u6B65\u786E\u5B9A\uFF1F", options: ["\u5DF2\u57FA\u672C\u786E\u5B9A", "\u6709\u521D\u6B65\u60F3\u6CD5", "\u5C1A\u672A\u8BA8\u8BBA\u6E05\u695A"] },
+      { id: "history", prompt: "\u76EE\u524D\u662F\u5426\u5B58\u5728\u4EE3\u6301\u3001\u53E3\u5934\u7EA6\u5B9A\u6216\u5386\u53F2\u6295\u5165\uFF1F", options: ["\u6CA1\u6709", "\u6709\u53E3\u5934\u7EA6\u5B9A", "\u5B58\u5728\u4EE3\u6301", "\u60C5\u51B5\u8F83\u590D\u6742"] }
+    ],
+    "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305": [
+      { id: "headcount", prompt: "\u5F53\u524D\u6216\u8BA1\u5212\u62DB\u8058\u591A\u5C11\u540D\u5458\u5DE5\uFF1F", options: ["10 \u4EBA\u4EE5\u5185", "11\u201430 \u4EBA", "31\u201450 \u4EBA", "50 \u4EBA\u4EE5\u4E0A"] },
+      { id: "materials", prompt: "\u76EE\u524D\u5DF2\u7ECF\u6709\u54EA\u4E9B\u7528\u5DE5\u6587\u4EF6\uFF1F", options: ["\u6682\u65E0\u6587\u4EF6", "\u53EA\u6709\u52B3\u52A8\u5408\u540C", "\u5408\u540C\u548C\u57FA\u7840\u5236\u5EA6", "\u6587\u4EF6\u8F83\u5B8C\u6574"], multiple: true },
+      { id: "special", prompt: "\u662F\u5426\u5305\u542B\u7279\u6B8A\u7528\u5DE5\u573A\u666F\uFF1F", options: ["\u6CA1\u6709", "\u5B9E\u4E60\u751F", "\u517C\u804C\u6216\u987E\u95EE", "\u8FDC\u7A0B\u6216\u5F02\u5730\u5458\u5DE5"], multiple: true }
+    ],
+    "\u6CBB\u7406\u4F53\u68C0": [
+      { id: "stage", prompt: "\u516C\u53F8\u76EE\u524D\u5904\u4E8E\u54EA\u4E2A\u878D\u8D44\u9636\u6BB5\uFF1F", options: ["\u5C1A\u672A\u878D\u8D44", "\u79CD\u5B50\uFF0F\u5929\u4F7F\u8F6E", "Pre-A \u8F6E", "A \u8F6E\u53CA\u4EE5\u540E"] },
+      { id: "timing", prompt: "\u9884\u8BA1\u591A\u4E45\u540E\u542F\u52A8\u878D\u8D44\u6216\u5C3D\u8C03\uFF1F", options: ["1 \u4E2A\u6708\u5185", "1\u20143 \u4E2A\u6708", "3\u20146 \u4E2A\u6708", "\u6682\u672A\u786E\u5B9A"] },
+      { id: "risk", prompt: "\u76EE\u524D\u6700\u62C5\u5FC3\u54EA\u7C7B\u5386\u53F2\u95EE\u9898\uFF1F", options: ["\u80A1\u6743\u4E0E\u51FA\u8D44", "\u7AE0\u7A0B\u548C\u51B3\u8BAE", "\u5408\u540C\u4E0E\u7528\u5DE5", "\u77E5\u8BC6\u4EA7\u6743"], multiple: true }
+    ],
+    "\u9690\u79C1\u5408\u89C4\u5305": [
+      { id: "product", prompt: "\u9700\u8981\u5408\u89C4\u652F\u6301\u7684\u662F\u54EA\u7C7B\u4EA7\u54C1\uFF1F", options: ["App", "\u5C0F\u7A0B\u5E8F", "\u7F51\u7AD9", "\u591A\u4E2A\u4EA7\u54C1\u7AEF"], multiple: true },
+      { id: "launch", prompt: "\u4EA7\u54C1\u76EE\u524D\u5904\u4E8E\u4EC0\u4E48\u9636\u6BB5\uFF1F", options: ["\u51C6\u5907\u4E0A\u7EBF", "\u5DF2\u7ECF\u4E0A\u7EBF", "\u6B63\u5728\u6574\u6539", "\u51C6\u5907\u878D\u8D44\u5C3D\u8C03"] },
+      { id: "data", prompt: "\u4EA7\u54C1\u662F\u5426\u5904\u7406\u654F\u611F\u4E2A\u4EBA\u4FE1\u606F\uFF1F", options: ["\u4E0D\u786E\u5B9A", "\u4E0D\u6D89\u53CA", "\u6D89\u53CA\u5B9A\u4F4D\uFF0F\u901A\u8BAF\u5F55", "\u6D89\u53CA\u8EAB\u4EFD\uFF0F\u5065\u5EB7\uFF0F\u91D1\u878D\u4FE1\u606F"], multiple: true }
+    ],
+    "\u5408\u540C\u5BA1\u67E5": [
+      { id: "contract_type", prompt: "\u9700\u8981\u5BA1\u67E5\u54EA\u7C7B\u5408\u540C\uFF1F", options: ["\u5BA2\u6237\u5408\u540C", "\u4F9B\u5E94\u5546\u5408\u540C", "\u5408\u4F5C\u534F\u8BAE", "\u6295\u8D44\u6216\u80A1\u6743\u534F\u8BAE"] },
+      { id: "pages", prompt: "\u5408\u540C\u5927\u7EA6\u6709\u591A\u5C11\u9875\uFF1F", options: ["10 \u9875\u4EE5\u5185", "11\u201430 \u9875", "31\u201450 \u9875", "50 \u9875\u4EE5\u4E0A"] },
+      { id: "deadline", prompt: "\u6700\u665A\u5E0C\u671B\u4EC0\u4E48\u65F6\u5019\u62FF\u5230\u5BA1\u67E5\u7ED3\u679C\uFF1F", options: ["24 \u5C0F\u65F6\u5185", "3 \u4E2A\u5DE5\u4F5C\u65E5\u5185", "\u4E00\u5468\u5185", "\u65F6\u95F4\u53EF\u5546\u8BAE"] }
+    ],
+    "\u878D\u8D44\u4EA4\u6613": [
+      { id: "stage", prompt: "\u672C\u8F6E\u8BA1\u5212\u878D\u8D44\u5230\u54EA\u4E2A\u9636\u6BB5\uFF1F", options: ["\u79CD\u5B50\uFF0F\u5929\u4F7F\u8F6E", "Pre-A \u8F6E", "A \u8F6E", "A \u8F6E\u4EE5\u540E"] },
+      { id: "progress", prompt: "\u76EE\u524D\u548C\u6295\u8D44\u4EBA\u7684\u8FDB\u5C55\u5230\u54EA\u4E00\u6B65\uFF1F", options: ["\u5C1A\u672A\u63A5\u89E6", "\u521D\u6B65\u6C9F\u901A", "\u5DF2\u6709 TS", "\u6B63\u5728\u5C3D\u8C03\u6216\u8C08\u5224"] },
+      { id: "amount", prompt: "\u672C\u8F6E\u9884\u8BA1\u878D\u8D44\u91D1\u989D\u662F\u591A\u5C11\uFF1F", type: "text", placeholder: "\u4F8B\u5982\uFF1A\u4EBA\u6C11\u5E01 2,000 \u4E07\u5143" }
+    ]
+  });
+  function getSceneQuestions(sku) {
+    return (sceneQuestions[sku] || commonQuestions).map((question) => ({ ...question }));
+  }
+  function getSceneVersion() {
+    return "scene-bank-2026.09-v1";
+  }
+
   // src/pages/p5-dialog/DemandWizard.js
   var wizardSteps = Object.freeze([
-    { number: 1, label: "\u9009\u62E9\u670D\u52A1" },
-    { number: 2, label: "\u586B\u5199\u9700\u6C42" },
+    { number: 1, label: "\u9009\u62E9\u573A\u666F" },
+    { number: 2, label: "AI \u91C7\u96C6" },
     { number: 3, label: "\u786E\u8BA4\u63D0\u4EA4" }
   ]);
   function renderHeader(page15) {
@@ -4968,23 +5153,47 @@
   }
   function renderStepOne(page15) {
     const choices = page15.getCategoryChoices();
-    return '<section class="p5-wizard-section p5-category-step"><header class="p5-wizard-heading"><h1>\u4ECE\u54EA\u7C7B\u670D\u52A1\u5F00\u59CB\uFF1F</h1><p>\u76F4\u63A5\u9009\u62E9\u5206\u7C7B\uFF0C\u6216\u5148\u8BA9 AI \u6839\u636E\u4F60\u7684\u63CF\u8FF0\u5224\u65AD\u3002</p></header><button class="p5-ai-guide' + (page15.selectedCategoryId === "other" ? " selected" : "") + '" id="p5AiGuide" type="button"><span>' + icon("sparkles", 22) + "</span><div><strong>\u6211\u4E0D\u786E\u5B9A\uFF0CAI \u5E2E\u6211\u5224\u65AD</strong><small>\u4E0B\u4E00\u6B65\u8BF4\u6E05\u60C5\u51B5\uFF0C\u5E73\u53F0\u4F1A\u8BC6\u522B\u670D\u52A1\u65B9\u5411</small></div>" + icon("chevron-right", 18) + '</button><div class="p5-category-label">\u76F4\u63A5\u9009\u62E9\u670D\u52A1\u5206\u7C7B</div><div class="p5-category-grid">' + choices.map((choice) => renderChoiceButton(choice.id, choice.name, page15.selectedCategoryId === choice.id, choice.icon, "data-p5-category")).join("") + "</div></section>";
+    const serviceOptions = page15.getServiceOptions();
+    return '<section class="p5-wizard-section p5-category-step"><header class="p5-wizard-heading"><h1>\u9009\u62E9\u4F60\u6B63\u5728\u5904\u7406\u7684\u4E8B\u60C5</h1><p>\u5148\u9009\u670D\u52A1\u65B9\u5411\uFF0C\u518D\u8FDB\u5165\u5BF9\u5E94\u573A\u666F\u7684\u95EE\u9898\u91C7\u96C6\u3002</p></header><button class="p5-ai-guide' + (page15.selectedCategoryId === "other" ? " selected" : "") + '" id="p5AiGuide" type="button"><span>' + icon("sparkles", 22) + "</span><div><strong>\u6211\u4E0D\u786E\u5B9A\uFF0CAI \u5E2E\u6211\u5224\u65AD</strong><small>\u4E0B\u4E00\u6B65\u8BF4\u6E05\u60C5\u51B5\uFF0C\u5E73\u53F0\u4F1A\u8BC6\u522B\u670D\u52A1\u65B9\u5411</small></div>" + icon("chevron-right", 18) + '</button><div class="p5-category-label">\u9009\u62E9\u670D\u52A1\u5206\u7C7B</div><div class="p5-category-grid">' + choices.map((choice) => renderChoiceButton(choice.id, choice.name, page15.selectedCategoryId === choice.id, choice.icon, "data-p5-category")).join("") + "</div>" + (page15.selectedCategoryId && page15.selectedCategoryId !== "other" ? '<div class="p5-scene-heading"><strong>\u9009\u62E9\u5177\u4F53\u670D\u52A1\u573A\u666F</strong><small>\u8FDB\u5165\u540E\u7531 AI \u6309\u573A\u666F\u9010\u9879\u786E\u8BA4\u4FE1\u606F</small></div><div class="p5-scene-list">' + (serviceOptions.length ? serviceOptions.map((sku) => '<button type="button" class="p5-scene-option' + (page15.collected.skuSpecific === sku ? " selected" : "") + '" data-p5-sku="' + escapeHTML(sku) + '"><span><strong>' + escapeHTML(sku) + "</strong><small>" + escapeHTML(page15.getSceneHint(sku)) + "</small></span>" + icon(page15.collected.skuSpecific === sku ? "check-circle" : "chevron-right", 17) + "</button>").join("") : '<div class="p5-scene-empty">\u8BE5\u5206\u7C7B\u6682\u672A\u914D\u7F6E\u6807\u51C6\u573A\u666F\uFF0C\u53EF\u8BA9 AI \u5E2E\u4F60\u63CF\u8FF0\u9700\u6C42\u3002</div>') + "</div>" : "") + "</section>";
   }
   function renderPills(values, current, attribute) {
     return '<div class="p5-option-pills">' + values.map((value) => '<button class="p5-option-pill' + (current === value ? " selected" : "") + '" type="button" ' + attribute + '="' + escapeHTML(value) + '">' + escapeHTML(value) + "</button>").join("") + "</div>";
   }
+  function renderSceneCollection(page15) {
+    const questions = page15.getCurrentSceneQuestions();
+    const question = questions[page15.sceneQuestionIndex];
+    if (!question) return "";
+    const current = page15.sceneAnswers[question.id];
+    const progress2 = Math.round((page15.sceneQuestionIndex + 1) / questions.length * 100);
+    let control = "";
+    if (question.options) {
+      const selected = Array.isArray(current) ? current : [current].filter(Boolean);
+      control = '<div class="p5-question-options">' + question.options.map((option) => '<button type="button" class="p5-question-option' + (selected.includes(option) ? " selected" : "") + '" data-p5-question-option="' + escapeHTML(option) + '">' + escapeHTML(option) + (selected.includes(option) ? icon("check", 13) : "") + "</button>").join("") + "</div>";
+    } else {
+      control = '<textarea id="p5SceneAnswer" rows="4" maxlength="300" placeholder="' + escapeHTML(question.placeholder || "\u8BF7\u8865\u5145\u5177\u4F53\u60C5\u51B5") + '">' + escapeHTML(typeof current === "string" ? current : "") + "</textarea>";
+    }
+    return '<section class="p5-wizard-section p5-robot-section"><header class="p5-wizard-heading"><div class="p5-selected-category"><span>' + icon("sparkles", 15) + "</span>AI \u6B63\u5728\u91C7\u96C6\u300C" + escapeHTML(page15.resolveSku()) + '\u300D\u9700\u6C42<button type="button" data-p5-edit-category>\u91CD\u9009\u573A\u666F</button></div><h1>\u56DE\u7B54\u51E0\u4E2A\u5173\u952E\u95EE\u9898</h1><p>\u95EE\u9898\u7531\u8FD0\u8425\u914D\u7F6E\u7684\u573A\u666F\u9898\u5E93\u751F\u6210\uFF0C\u672C\u6B21\u5171 ' + questions.length + ' \u9898\u3002</p></header><div class="p5-question-progress"><span style="width:' + progress2 + '%"></span></div><div class="p5-question-count">\u7B2C ' + (page15.sceneQuestionIndex + 1) + " \u9898\uFF0C\u5171 " + questions.length + ' \u9898</div><article class="p5-robot-question"><span class="p5-robot-avatar">' + icon("bot", 20) + "</span><div><strong>" + escapeHTML(question.prompt) + "</strong>" + (question.multiple ? "<small>\u53EF\u591A\u9009</small>" : "") + "</div></article>" + control + "</section>";
+  }
+  function renderBudgetSlider(page15) {
+    return '<div class="p5-budget-range"><div class="p5-budget-value"><span>\u9884\u7B97\u8303\u56F4</span><strong id="p5BudgetDisplay">' + escapeHTML(page15.formatBudget()) + '</strong></div><div class="p5-range-track"><span id="p5RangeFill"></span><input id="p5BudgetMin" type="range" min="2000" max="200000" step="1000" value="' + page15.budgetMin + '" aria-label="\u6700\u4F4E\u9884\u7B97"><input id="p5BudgetMax" type="range" min="2000" max="200000" step="1000" value="' + page15.budgetMax + '" aria-label="\u6700\u9AD8\u9884\u7B97"></div><div class="p5-budget-inputs"><label><span>\u6700\u4F4E</span><input id="p5BudgetMinNumber" type="number" min="2000" max="199000" step="1000" value="' + page15.budgetMin + '"></label><i>\u2014</i><label><span>\u6700\u9AD8</span><input id="p5BudgetMaxNumber" type="number" min="3000" max="200000" step="1000" value="' + page15.budgetMax + '"></label></div><small>\u62D6\u52A8\u4E24\u7AEF\u6216\u76F4\u63A5\u8F93\u5165\u91D1\u989D\uFF0C\u9884\u7B97\u4EC5\u7528\u4E8E\u5339\u914D\uFF0C\u6700\u7EC8\u62A5\u4EF7\u4EE5\u56E2\u961F\u65B9\u6848\u4E3A\u51C6\u3002</small></div>';
+  }
+  function renderDemandDetails(page15) {
+    const files = page15.attachmentNames.length ? '<span class="p5-upload-file">' + icon("check-circle", 16) + "<span><strong>\u5DF2\u6DFB\u52A0 " + page15.attachmentNames.length + " \u4EFD\u6750\u6599</strong><small>" + escapeHTML(page15.attachmentNames.join("\u3001")) + "</small></span></span>" : '<span class="p5-upload-empty">' + icon("upload", 19) + "<span><strong>\u4E0A\u4F20\u76F8\u5173\u6750\u6599</strong><small>\u652F\u6301 PDF\u3001Word\u3001Excel\u3001\u56FE\u7247\uFF0C\u6700\u591A 10 \u4EFD</small></span></span>";
+    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><div class="p5-selected-category"><span>' + icon(page15.getSelectedCategoryIcon(), 15) + "</span>" + escapeHTML(page15.resolveSku()) + '<button type="button" data-p5-edit-category>\u91CD\u9009\u573A\u666F</button></div><h1>\u8865\u5145\u65F6\u95F4\u3001\u9884\u7B97\u548C\u6750\u6599</h1><p>AI \u5DF2\u5B8C\u6210\u573A\u666F\u4FE1\u606F\u91C7\u96C6\uFF0C\u6700\u540E\u786E\u8BA4\u51E0\u9879\u5339\u914D\u6761\u4EF6\u3002</p></header><label class="p5-field-group p5-textarea-field"><span class="p5-field-label"><strong>\u8865\u5145\u8BF4\u660E</strong><small>\u9009\u586B</small></span><textarea id="p5NeedDescription" rows="4" maxlength="500" placeholder="\u8FD8\u6709\u54EA\u4E9B\u80CC\u666F\u6216\u671F\u671B\u9700\u8981\u544A\u8BC9\u56E2\u961F\uFF1F">' + escapeHTML(page15.collected.extra) + '</textarea></label><div class="p5-field-group"><div class="p5-field-label"><strong>\u671F\u671B\u65F6\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page15.timelineOptions, page15.collected.timeline, "data-p5-timeline") + '</div><div class="p5-field-group">' + renderBudgetSlider(page15) + '</div><label class="p5-upload-box">' + files + '<input id="p5Attachment" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"></label></section>';
+  }
   function renderStepTwo(page15) {
-    const serviceOptions = page15.getServiceOptions();
-    const attachment = page15.attachmentName ? '<span class="p5-upload-file">' + icon("check-circle", 16) + "<span><strong>" + escapeHTML(page15.attachmentName) + "</strong><small>\u5DF2\u6DFB\u52A0\uFF0C\u53EF\u91CD\u65B0\u9009\u62E9</small></span></span>" : '<span class="p5-upload-empty">' + icon("upload", 19) + "<span><strong>\u4E0A\u4F20\u76F8\u5173\u6750\u6599</strong><small>\u652F\u6301 PDF\u3001Word\u3001\u56FE\u7247\uFF0C\u9009\u586B</small></span></span>";
-    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><div class="p5-selected-category"><span>' + icon(page15.getSelectedCategoryIcon(), 15) + "</span>" + escapeHTML(page15.getSelectedCategoryName()) + '<button type="button" data-p5-edit-category>\u4FEE\u6539</button></div><h1>\u628A\u9700\u6C42\u8BF4\u5177\u4F53\u4E00\u70B9</h1><p>\u4FE1\u606F\u8D8A\u5B8C\u6574\uFF0C\u63A8\u8350\u56E2\u961F\u548C\u540E\u7EED\u62A5\u4EF7\u4F1A\u8D8A\u51C6\u786E\u3002</p></header>' + (serviceOptions.length ? '<div class="p5-field-group"><div class="p5-field-label"><strong>\u5177\u4F53\u670D\u52A1</strong><small>\u9009\u586B</small></div>' + renderPills(serviceOptions, page15.collected.skuSpecific, "data-p5-sku") + "</div>" : "") + '<label class="p5-field-group p5-textarea-field"><span class="p5-field-label"><strong>\u9700\u6C42\u63CF\u8FF0</strong><small>\u5FC5\u586B</small></span><textarea id="p5NeedDescription" rows="5" maxlength="500" placeholder="\u8BF7\u63CF\u8FF0\u76EE\u524D\u7684\u60C5\u51B5\u3001\u9047\u5230\u7684\u95EE\u9898\uFF0C\u4EE5\u53CA\u5E0C\u671B\u83B7\u5F97\u7684\u7ED3\u679C">' + escapeHTML(page15.collected.extra) + '</textarea><span class="p5-field-hint">\u4F8B\u5982\uFF1A\u5DF2\u6709\u4E00\u4EFD\u5408\u4F5C\u534F\u8BAE\uFF0C\u5E0C\u671B\u5728\u672C\u5468\u5185\u5B8C\u6210\u98CE\u9669\u5BA1\u67E5</span></label><div class="p5-field-group"><div class="p5-field-label"><strong>\u671F\u671B\u65F6\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page15.timelineOptions, page15.collected.timeline, "data-p5-timeline") + '</div><div class="p5-field-group"><div class="p5-field-label"><strong>\u9884\u7B97\u533A\u95F4</strong><small>\u5FC5\u586B</small></div>' + renderPills(page15.budgetOptions, page15.collected.budget, "data-p5-budget") + '</div><label class="p5-upload-box">' + attachment + '<input id="p5Attachment" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label></section>';
+    if (page15.collectionStage === "questions" && page15.selectedCategoryId !== "other") return renderSceneCollection(page15);
+    return renderDemandDetails(page15);
   }
   function renderStepThree(page15) {
     const sku = page15.resolveSku();
-    const attachment = page15.attachmentName || "\u672A\u4E0A\u4F20";
-    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><h1>\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</h1><p>\u56E2\u961F\u4EC5\u4F1A\u6536\u5230\u672C\u6B21\u9700\u6C42\u4FE1\u606F\uFF0C\u5339\u914D\u548C\u670D\u52A1\u8FDB\u5C55\u7531\u5E73\u53F0\u7EDF\u4E00\u901A\u77E5\u3002</p></header><article class="p5-review-block"><div class="p5-review-head"><strong>\u9700\u6C42\u4FE1\u606F</strong><button type="button" data-p5-edit-demand>\u8FD4\u56DE\u4FEE\u6539</button></div><dl><div><dt>\u670D\u52A1\u65B9\u5411</dt><dd>' + escapeHTML(sku) + "</dd></div><div><dt>\u671F\u671B\u65F6\u95F4</dt><dd>" + escapeHTML(page15.collected.timeline) + "</dd></div><div><dt>\u9884\u7B97\u533A\u95F4</dt><dd>" + escapeHTML(page15.collected.budget) + "</dd></div><div><dt>\u9644\u4EF6\u6750\u6599</dt><dd>" + escapeHTML(attachment) + "</dd></div></dl><p>" + escapeHTML(page15.collected.extra) + '</p></article><div class="p5-notification-block"><span class="p5-notification-icon">' + icon("shield", 20) + "</span><div><strong>\u8D26\u53F7\u901A\u77E5\u4FE1\u606F\u5DF2\u786E\u8BA4</strong><p>\u5339\u914D\u7ED3\u679C\u4E0E\u670D\u52A1\u8FDB\u5C55\u4F1A\u53D1\u9001\u81F3\u7AD9\u5185\u6D88\u606F\u548C\u8D26\u53F7\u5DF2\u7ED1\u5B9A\u7684\u901A\u77E5\u6E20\u9053\u3002</p><ul><li>\u670D\u52A1\u56E2\u961F\u65E0\u6CD5\u67E5\u770B\u4F60\u7684\u624B\u673A\u53F7\u3001\u5FAE\u4FE1\u6216\u90AE\u7BB1</li><li>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u7531\u5E73\u53F0\u987E\u95EE\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u534F\u52A9\u5EFA\u8054</li></ul></div></div></section>";
+    const attachment = page15.attachmentNames.length ? page15.attachmentNames.join("\u3001") : "\u672A\u4E0A\u4F20";
+    const answers = Object.entries(page15.sceneAnswers).map(([key, value]) => "<div><dt>" + escapeHTML(page15.getQuestionLabel(key)) + "</dt><dd>" + escapeHTML(Array.isArray(value) ? value.join("\u3001") : value) + "</dd></div>").join("");
+    return '<section class="p5-wizard-section"><header class="p5-wizard-heading"><h1>\u786E\u8BA4\u540E\u5F00\u59CB\u5339\u914D</h1><p>\u56E2\u961F\u4EC5\u4F1A\u6536\u5230\u672C\u6B21\u9700\u6C42\u4FE1\u606F\uFF0C\u5339\u914D\u548C\u670D\u52A1\u8FDB\u5C55\u7531\u5E73\u53F0\u7EDF\u4E00\u901A\u77E5\u3002</p></header><article class="p5-review-block"><div class="p5-review-head"><strong>\u9700\u6C42\u4FE1\u606F</strong><button type="button" data-p5-edit-demand>\u8FD4\u56DE\u4FEE\u6539</button></div><dl><div><dt>\u670D\u52A1\u65B9\u5411</dt><dd>' + escapeHTML(sku) + "</dd></div><div><dt>\u671F\u671B\u65F6\u95F4</dt><dd>" + escapeHTML(page15.collected.timeline) + "</dd></div><div><dt>\u9884\u7B97\u533A\u95F4</dt><dd>" + escapeHTML(page15.collected.budget) + "</dd></div><div><dt>\u9644\u4EF6\u6750\u6599</dt><dd>" + escapeHTML(attachment) + "</dd></div>" + answers + "</dl>" + (page15.collected.extra ? "<p>" + escapeHTML(page15.collected.extra) + "</p>" : "") + '</article><div class="p5-notification-block"><span class="p5-notification-icon">' + icon("bell", 20) + "</span><div><strong>\u79BB\u5F00\u9875\u9762\u4E5F\u80FD\u6536\u5230\u54CD\u5E94\u63D0\u9192</strong><p>\u63D0\u4EA4\u65F6\u4F1A\u7533\u8BF7\u4E00\u6B21\u670D\u52A1\u901A\u77E5\u6388\u6743\uFF1B\u7AD9\u5185\u6D88\u606F\u6301\u7EED\u7559\u5B58\uFF0C\u5FC5\u8981\u65F6\u7531\u8D26\u53F7\u7ED1\u5B9A\u624B\u673A\u63A5\u6536\u77ED\u4FE1\u63D0\u9192\u3002</p><ul><li>\u670D\u52A1\u56E2\u961F\u65E0\u6CD5\u67E5\u770B\u4F60\u7684\u624B\u673A\u53F7\u3001\u5FAE\u4FE1\u6216\u90AE\u7BB1</li><li>\u6DF1\u5165\u6C9F\u901A\u7531\u5E73\u53F0\u987E\u95EE\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u534F\u52A9\u5EFA\u8054</li></ul></div></div></section>";
   }
   function renderFooter(page15) {
-    const primary = page15.wizardStep === 3 ? "\u63D0\u4EA4\u5E76\u5F00\u59CB\u5339\u914D" : "\u7EE7\u7EED";
+    let primary = page15.wizardStep === 3 ? "\u63D0\u4EA4\u5E76\u5F00\u59CB\u5339\u914D" : "\u7EE7\u7EED";
+    if (page15.wizardStep === 2 && page15.collectionStage === "questions") primary = page15.sceneQuestionIndex === page15.getCurrentSceneQuestions().length - 1 ? "\u5B8C\u6210\u4FE1\u606F\u91C7\u96C6" : "\u4E0B\u4E00\u9898";
     return '<div class="bottom-bar p5-wizard-footer">' + (page15.wizardStep > 1 ? '<button class="btn btn-outline" id="p5WizardPrevious" type="button">\u4E0A\u4E00\u6B65</button>' : "") + '<button class="btn btn-primary" id="p5WizardNext" type="button">' + primary + "</button></div>";
   }
   function renderDemandWizard(page15) {
@@ -5005,13 +5214,16 @@
     document.querySelectorAll("[data-p5-edit-demand]").forEach((button) => button.addEventListener("click", () => page15.goToWizardStep(2)));
     document.querySelectorAll("[data-p5-sku]").forEach((button) => button.addEventListener("click", () => page15.selectWizardValue("skuSpecific", button.getAttribute("data-p5-sku"))));
     document.querySelectorAll("[data-p5-timeline]").forEach((button) => button.addEventListener("click", () => page15.selectWizardValue("timeline", button.getAttribute("data-p5-timeline"))));
-    document.querySelectorAll("[data-p5-budget]").forEach((button) => button.addEventListener("click", () => page15.selectWizardValue("budget", button.getAttribute("data-p5-budget"))));
+    document.querySelectorAll("[data-p5-question-option]").forEach((button) => button.addEventListener("click", () => page15.selectSceneAnswer(button.getAttribute("data-p5-question-option"))));
     const description = document.getElementById("p5NeedDescription");
     if (description) description.addEventListener("input", () => {
       page15.collected.extra = description.value;
     });
+    const sceneAnswer = document.getElementById("p5SceneAnswer");
+    if (sceneAnswer) sceneAnswer.addEventListener("input", () => page15.setSceneText(sceneAnswer.value));
+    page15.bindBudgetInputs();
     const attachment = document.getElementById("p5Attachment");
-    if (attachment) attachment.addEventListener("change", () => page15.setAttachment(attachment.files && attachment.files[0]));
+    if (attachment) attachment.addEventListener("change", () => page15.setAttachments(attachment.files));
   }
 
   // src/components/matchCard.js
@@ -5237,8 +5449,7 @@
       user,
       nowLabel,
       todayLabel,
-      responseDeadlineLabel,
-      isWecomAdded
+      responseDeadlineLabel
     };
   }
   function renderPageContent(html, pageId) {
@@ -5251,7 +5462,13 @@
     state: "wizard",
     wizardStep: 1,
     selectedCategoryId: "",
-    attachmentName: "",
+    attachmentNames: [],
+    collectionStage: "questions",
+    sceneQuestionIndex: 0,
+    sceneAnswers: {},
+    sceneVersion: getSceneVersion(),
+    budgetMin: 5e3,
+    budgetMax: 3e4,
     collected: {
       issue: "",
       skuSpecific: "",
@@ -5301,7 +5518,13 @@
       this.resubmitFrom = null;
       this.resubmitTitle = "";
       this.wecomPrompted = false;
-      this.attachmentName = "";
+      this.attachmentNames = [];
+      this.collectionStage = "questions";
+      this.sceneQuestionIndex = 0;
+      this.sceneAnswers = {};
+      this.sceneVersion = getSceneVersion();
+      this.budgetMin = 5e3;
+      this.budgetMax = 3e4;
       const knownCategoryId = this.inferCategory(this.params.sku);
       if (this.params.sku && knownCategoryId) {
         this.selectedCategoryId = knownCategoryId;
@@ -5334,7 +5557,15 @@
       this.resubmitTitle = demand.title;
       this.selectedCategoryId = demand.categoryId || this.inferCategory(this.collected.issue) || "other";
       const attachment = get2("\u9644\u4EF6\u6750\u6599");
-      this.attachmentName = attachment && attachment !== "\u672A\u4E0A\u4F20" ? attachment : "";
+      this.attachmentNames = attachment && attachment !== "\u672A\u4E0A\u4F20" ? attachment.split("\u3001") : [];
+      const budgetText = String(this.collected.budget || "").replaceAll(",", "");
+      const budgetNumbers = budgetText.match(/\d+(?:\.\d+)?/g);
+      if (budgetNumbers && budgetNumbers.length >= 2) {
+        const unit = budgetText.includes("\u4E07") ? 1e4 : 1;
+        this.budgetMin = Number(budgetNumbers[0]) * unit;
+        this.budgetMax = Number(budgetNumbers[1]) * unit;
+      }
+      this.collectionStage = "details";
     },
     init(params) {
       showTabBar(false);
@@ -5345,7 +5576,6 @@
       bindDemandWizard(this);
     },
     timelineOptions: ["1\u5468\u5185", "2\u5468\u5185", "1\u4E2A\u6708\u5185", "\u65F6\u95F4\u53EF\u5546\u8BAE"],
-    budgetOptions: ["1\u4E07\u4EE5\u4E0B", "1-3\u4E07", "3-5\u4E07", "5\u4E07\u4EE5\u4E0A", "\u5E0C\u671B\u56E2\u961F\u8BC4\u4F30"],
     getCategoryChoices() {
       return [
         { id: "fundraising", name: "\u6295\u878D\u8D44\u670D\u52A1", icon: "trending-up" },
@@ -5369,6 +5599,23 @@
       if (this.selectedCategoryId === "hr") return ["\u62DB\u8058\u670D\u52A1", "\u85AA\u916C\u793E\u4FDD", "\u52B3\u52A8\u7528\u5DE5"];
       return [];
     },
+    getSceneHint(sku) {
+      const hints = {
+        "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE": "\u968F\u65F6\u54A8\u8BE2\u3001\u5408\u540C\u5BA1\u9605\u4E0E\u6301\u7EED\u98CE\u9669\u63D0\u9192",
+        "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305": "\u5206\u5DE5\u3001\u80A1\u6743\u3001\u63A7\u5236\u6743\u4E0E\u9000\u51FA\u89C4\u5219",
+        "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305": "\u62DB\u8058\u524D\u8865\u9F50\u5408\u540C\u548C\u5165\u8F6C\u8C03\u79BB\u6587\u4EF6",
+        "\u6CBB\u7406\u4F53\u68C0": "\u878D\u8D44\u524D\u6392\u67E5\u80A1\u6743\u3001\u6CBB\u7406\u548C\u5386\u53F2\u6587\u4EF6",
+        "\u9690\u79C1\u5408\u89C4\u5305": "App\uFF0F\u5C0F\u7A0B\u5E8F\u9690\u79C1\u653F\u7B56\u4E0E\u7528\u6237\u534F\u8BAE",
+        "\u5408\u540C\u5BA1\u67E5": "\u8BC6\u522B\u98CE\u9669\u6761\u6B3E\u5E76\u63D0\u4F9B\u4FEE\u6539\u7A3F"
+      };
+      return hints[sku] || "AI \u5C06\u6309\u8BE5\u670D\u52A1\u573A\u666F\u91C7\u96C6\u5173\u952E\u4FE1\u606F";
+    },
+    getCurrentSceneQuestions() {
+      return getSceneQuestions(this.resolveSku());
+    },
+    getQuestionLabel(questionId) {
+      return this.getCurrentSceneQuestions().find((item) => item.id === questionId)?.prompt || "\u573A\u666F\u4FE1\u606F";
+    },
     renderWizard() {
       renderPageContent(renderDemandWizard(this), "p5");
       bindDemandWizard(this);
@@ -5386,6 +5633,9 @@
         this.collected.skuSpecific = "";
         this.params.sku = "";
       }
+      this.sceneQuestionIndex = 0;
+      this.sceneAnswers = {};
+      this.collectionStage = "questions";
       this.renderWizard();
     },
     chooseAiGuide() {
@@ -5393,25 +5643,100 @@
       this.params.categoryId = null;
       this.collected.issue = "\u5176\u4ED6";
       this.collected.skuSpecific = "";
+      this.collectionStage = "details";
       this.wizardStep = 2;
       this.renderWizard();
     },
     selectWizardValue(key, value) {
       this.collected[key] = value;
-      if (key === "skuSpecific") this.params.sku = value;
+      if (key === "skuSpecific") {
+        this.params.sku = value;
+        this.sceneQuestionIndex = 0;
+        this.sceneAnswers = {};
+        this.collectionStage = "questions";
+      }
       this.renderWizard();
     },
-    setAttachment(file) {
-      if (!file) return;
-      this.attachmentName = file.name;
+    selectSceneAnswer(value) {
+      const question = this.getCurrentSceneQuestions()[this.sceneQuestionIndex];
+      if (!question) return;
+      if (question.multiple) {
+        const selected = Array.isArray(this.sceneAnswers[question.id]) ? this.sceneAnswers[question.id].slice() : [];
+        const index = selected.indexOf(value);
+        if (index >= 0) selected.splice(index, 1);
+        else selected.push(value);
+        this.sceneAnswers[question.id] = selected;
+      } else {
+        this.sceneAnswers[question.id] = value;
+      }
       this.renderWizard();
-      toast("\u9644\u4EF6\u5DF2\u6DFB\u52A0");
+    },
+    setSceneText(value) {
+      const question = this.getCurrentSceneQuestions()[this.sceneQuestionIndex];
+      if (question) this.sceneAnswers[question.id] = value;
+    },
+    formatBudget() {
+      return "\xA5" + Number(this.budgetMin).toLocaleString("zh-CN") + "\u2014\xA5" + Number(this.budgetMax).toLocaleString("zh-CN");
+    },
+    setBudget(minimum, maximum) {
+      let min = Math.max(2e3, Math.min(199e3, Number(minimum) || 2e3));
+      let max = Math.max(3e3, Math.min(2e5, Number(maximum) || 2e5));
+      if (min >= max) {
+        if (minimum !== void 0) min = Math.max(2e3, max - 1e3);
+        else max = Math.min(2e5, min + 1e3);
+      }
+      this.budgetMin = min;
+      this.budgetMax = max;
+      this.collected.budget = this.formatBudget();
+    },
+    bindBudgetInputs() {
+      const minRange = document.getElementById("p5BudgetMin");
+      const maxRange = document.getElementById("p5BudgetMax");
+      const minNumber = document.getElementById("p5BudgetMinNumber");
+      const maxNumber = document.getElementById("p5BudgetMaxNumber");
+      const display = document.getElementById("p5BudgetDisplay");
+      const fill = document.getElementById("p5RangeFill");
+      if (!minRange || !maxRange) return;
+      const update = (source) => {
+        const min = source === minNumber ? minNumber.value : minRange.value;
+        const max = source === maxNumber ? maxNumber.value : maxRange.value;
+        this.setBudget(min, max);
+        minRange.value = this.budgetMin;
+        maxRange.value = this.budgetMax;
+        minNumber.value = this.budgetMin;
+        maxNumber.value = this.budgetMax;
+        display.textContent = this.formatBudget();
+        const left = (this.budgetMin - 2e3) / 198e3 * 100;
+        const right = 100 - (this.budgetMax - 2e3) / 198e3 * 100;
+        fill.style.left = left + "%";
+        fill.style.right = right + "%";
+      };
+      [minRange, maxRange, minNumber, maxNumber].forEach((input) => input.addEventListener("input", () => update(input)));
+      update();
+    },
+    setAttachments(files) {
+      if (!files || !files.length) return;
+      const selected = Array.from(files).slice(0, 10);
+      this.attachmentNames = selected.map((file) => file.name);
+      this.renderWizard();
+      toast("\u5DF2\u6DFB\u52A0 " + selected.length + " \u4EFD\u6750\u6599");
     },
     goToWizardStep(step) {
       this.wizardStep = step;
       this.renderWizard();
     },
     goWizardBack() {
+      if (this.wizardStep === 2 && this.collectionStage === "details" && this.selectedCategoryId !== "other") {
+        this.collectionStage = "questions";
+        this.sceneQuestionIndex = Math.max(0, this.getCurrentSceneQuestions().length - 1);
+        this.renderWizard();
+        return;
+      }
+      if (this.wizardStep === 2 && this.collectionStage === "questions" && this.sceneQuestionIndex > 0) {
+        this.sceneQuestionIndex -= 1;
+        this.renderWizard();
+        return;
+      }
       if (this.wizardStep > 1) {
         this.wizardStep -= 1;
         this.renderWizard();
@@ -5425,12 +5750,29 @@
           toast("\u8BF7\u5148\u9009\u62E9\u670D\u52A1\u5206\u7C7B\uFF0C\u6216\u8BA9 AI \u5E2E\u4F60\u5224\u65AD");
           return;
         }
+        if (this.selectedCategoryId !== "other" && !this.collected.skuSpecific) {
+          toast("\u8BF7\u9009\u62E9\u4E00\u4E2A\u5177\u4F53\u670D\u52A1\u573A\u666F");
+          return;
+        }
+        this.collectionStage = this.selectedCategoryId === "other" ? "details" : "questions";
         this.wizardStep = 2;
         this.renderWizard();
         return;
       }
       if (this.wizardStep === 2) {
-        if (!this.collected.extra || this.collected.extra.trim().length < 8) {
+        if (this.collectionStage === "questions") {
+          const question = this.getCurrentSceneQuestions()[this.sceneQuestionIndex];
+          const answer = question ? this.sceneAnswers[question.id] : null;
+          if (!answer || Array.isArray(answer) && !answer.length || typeof answer === "string" && answer.trim().length < 2) {
+            toast("\u8BF7\u5148\u56DE\u7B54\u5F53\u524D\u95EE\u9898");
+            return;
+          }
+          if (this.sceneQuestionIndex < this.getCurrentSceneQuestions().length - 1) this.sceneQuestionIndex += 1;
+          else this.collectionStage = "details";
+          this.renderWizard();
+          return;
+        }
+        if (this.selectedCategoryId === "other" && (!this.collected.extra || this.collected.extra.trim().length < 8)) {
           toast("\u8BF7\u518D\u5177\u4F53\u63CF\u8FF0\u4E00\u4E0B\u4F60\u7684\u60C5\u51B5\u548C\u671F\u671B");
           return;
         }
@@ -5438,10 +5780,7 @@
           toast("\u8BF7\u9009\u62E9\u671F\u671B\u65F6\u95F4");
           return;
         }
-        if (!this.collected.budget) {
-          toast("\u8BF7\u9009\u62E9\u9884\u7B97\u533A\u95F4");
-          return;
-        }
+        this.setBudget(this.budgetMin, this.budgetMax);
         if (this.selectedCategoryId === "other") this.applyAiGuidance();
         this.wizardStep = 3;
         this.renderWizard();
@@ -5453,6 +5792,11 @@
     applyAiGuidance() {
       const text = this.collected.extra;
       const rules = [
+        { pattern: /常年|顾问|随时问/, categoryId: "law", sku: "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE" },
+        { pattern: /合伙人|创始人/, categoryId: "law", sku: "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305" },
+        { pattern: /劳动合同|用工文件|员工手册/, categoryId: "law", sku: "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305" },
+        { pattern: /治理|融资前|排雷/, categoryId: "law", sku: "\u6CBB\u7406\u4F53\u68C0" },
+        { pattern: /隐私|用户协议|个人信息/, categoryId: "law", sku: "\u9690\u79C1\u5408\u89C4\u5305" },
         { pattern: /合同|协议/, categoryId: "law", sku: "\u5408\u540C\u5BA1\u67E5" },
         { pattern: /股权|期权/, categoryId: "law", sku: "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1" },
         { pattern: /商标/, categoryId: "ip", sku: "\u5546\u6807\u6CE8\u518C" },
@@ -5614,7 +5958,6 @@
       bindSuccessView(newDemand);
       this.refreshSuccessPrimary(newDemand);
       updateBadge();
-      if (!isWecomAdded()) setTimeout(() => openWecomGuide("afterPublish"), 260);
     },
     renderSuccessResponseSummary,
     refreshSuccessPrimary,
@@ -5627,6 +5970,7 @@
       const categoryId = this.inferCategory(sku) || this.params.categoryId || "law";
       const category = getCategory(categoryId, categories);
       const extra = value("extra");
+      const sceneFields = Object.entries(this.sceneAnswers).map(([key, answer]) => ({ label: this.getQuestionLabel(key), value: Array.isArray(answer) ? answer.join("\u3001") : answer }));
       const demand = createDemand({
         title: this.params.renew ? sku + "\u7EED\u8D39\u9700\u6C42" : this.params.additional ? sku + "\u65B0\u589E\u9700\u6C42" : sku === "\u7EFC\u5408\u670D\u52A1" ? "\u7EFC\u5408\u670D\u52A1\u9700\u6C42" : sku + "\u670D\u52A1\u9700\u6C42",
         categoryId,
@@ -5641,7 +5985,9 @@
           { label: "\u671F\u671B\u5B8C\u6210\u65F6\u95F4", value: value("timeline") || "\u672A\u63D0\u4F9B" },
           { label: "\u5B9E\u9645\u529E\u516C\u57CE\u5E02", value: this.collected.city },
           { label: "\u8865\u5145\u63CF\u8FF0", value: extra || "\u672A\u63D0\u4F9B" },
-          { label: "\u9644\u4EF6\u6750\u6599", value: this.attachmentName || "\u672A\u4E0A\u4F20" }
+          { label: "\u9644\u4EF6\u6750\u6599", value: this.attachmentNames.length ? this.attachmentNames.join("\u3001") : "\u672A\u4E0A\u4F20" },
+          { label: "\u573A\u666F\u9898\u5E93\u7248\u672C", value: this.sceneVersion },
+          ...sceneFields
         ],
         teamIds: selectedIds,
         resubmitFrom: this.resubmitFrom,
@@ -5649,6 +5995,11 @@
         cooperationType: this.params.renew ? "renewal" : this.params.additional ? "additional" : "new",
         targetTeamId: this.params.teamId || null
       }, domainOptions2());
+      demand.materialFiles = this.attachmentNames.slice();
+      demand.sceneAnswers = { ...this.sceneAnswers };
+      demand.sceneVersion = this.sceneVersion;
+      demand.budgetMin = this.budgetMin;
+      demand.budgetMax = this.budgetMax;
       emitChange();
       return demand;
     },
@@ -6060,19 +6411,48 @@
   register("p4", page5);
 
   // src/domain/afterSale.js
-  function createAfterSale(demand, input, options = {}) {
-    if (!demand || demand.afterSale) return null;
+  var AFTER_SALE_STATUS = Object.freeze({
+    submitted: "\u5E73\u53F0\u6838\u9A8C\u4E2D",
+    provider_reply: "\u7B49\u5F85\u670D\u52A1\u5546\u56DE\u590D",
+    customer_supplement: "\u7B49\u5F85\u5BA2\u6237\u8865\u5145\u6750\u6599",
+    processing: "\u534F\u8C03\u5904\u7406\u4E2D",
+    solution_pending: "\u5904\u7406\u65B9\u6848\u5F85\u786E\u8BA4",
+    resolved: "\u5DF2\u89E3\u51B3",
+    closed: "\u5DF2\u5173\u95ED",
+    escalated: "\u5DF2\u5347\u7EA7\u5904\u7406"
+  });
+  function getAfterSaleStatusLabel(status) {
+    return AFTER_SALE_STATUS[status] || "\u5904\u7406\u4E2D";
+  }
+  function buildAfterSaleCase(referenceId, input = {}, options = {}) {
     const getTime = options.nowLabel || nowLabel;
-    demand.afterSale = {
-      id: `AS-${demand.id.toUpperCase()}`,
-      type: input.type,
-      description: input.description,
-      attachment: input.attachment || "",
-      status: "submitted",
-      submittedAt: getTime()
+    const sequence = Number(options.sequence || 1);
+    return {
+      id: `AS-${String(referenceId || "CASE").toUpperCase()}-${String(sequence).padStart(2, "0")}`,
+      source: input.source || "general",
+      type: input.type || "\u670D\u52A1\u95EE\u9898",
+      description: input.description || "",
+      attachments: input.attachments || (input.attachment ? [input.attachment] : []),
+      status: input.status || "submitted",
+      handler: input.handler || "\u5E73\u53F0\u670D\u52A1\u4FDD\u969C\u4E13\u5458",
+      eta: input.eta || "2 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53CD\u9988\u9996\u6B21\u5904\u7406\u8FDB\u5C55",
+      customerEvidence: input.customerEvidence || ["\u95EE\u9898\u8BF4\u660E", "\u76F8\u5173\u6587\u4EF6\u6216\u9875\u9762\u622A\u56FE"],
+      providerEvidence: input.providerEvidence || ["\u5BF9\u5E94\u4EA4\u4ED8\u6210\u679C", "\u5C65\u7EA6\u8FC7\u7A0B\u4E0E\u5904\u7406\u8BF4\u660E"],
+      submittedAt: getTime(),
+      updatedAt: getTime(),
+      history: [
+        { status: "submitted", label: "\u5DE5\u5355\u5DF2\u63D0\u4EA4", detail: "\u5E73\u53F0\u6B63\u5728\u6838\u5BF9\u8BA2\u5355\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u4E0E\u4EA4\u4ED8\u8BB0\u5F55", time: getTime() }
+      ]
     };
-    addTimelineEvent(demand, "shield", "\u5DF2\u7533\u8BF7\u5E73\u53F0\u552E\u540E\u534F\u52A9", input.type, getTime);
-    return demand.afterSale;
+  }
+  function createAfterSale(demand, input, options = {}) {
+    if (!demand) return null;
+    if (!demand.afterSaleCases) demand.afterSaleCases = demand.afterSale ? [demand.afterSale] : [];
+    const afterSale = buildAfterSaleCase(demand.id, input, { ...options, sequence: demand.afterSaleCases.length + 1 });
+    demand.afterSaleCases.push(afterSale);
+    demand.afterSale = afterSale;
+    addTimelineEvent(demand, "shield", input.source === "milestone_dispute" ? "\u5DF2\u63D0\u4EA4\u6210\u679C\u5F02\u8BAE" : "\u5DF2\u751F\u6210\u552E\u540E\u5DE5\u5355", `${afterSale.id} \xB7 ${afterSale.type}`, options.nowLabel || nowLabel);
+    return afterSale;
   }
 
   // src/components/anonymousCall.js
@@ -6137,6 +6517,9 @@
     "view-review": ({ demand }) => navigateTo("p8", { demandId: demand.id, readonly: true }),
     "continue-cooperation": ({ demand, page: page15 }) => page15.openContinueCooperation(demand),
     "after-sale": ({ demand, page: page15 }) => page15.openAfterSale(demand),
+    "delivery-dispute": ({ demand, page: page15 }) => page15.openDeliveryDispute(demand),
+    "provider-unable": ({ demand, page: page15 }) => page15.openPerformanceInterruption(demand),
+    "compare-teams": ({ demand, page: page15 }) => page15.openTeamComparison(demand),
     withdraw: ({ demand, page: page15, options }) => showModal({
       title: "\u786E\u8BA4\u64A4\u56DE\u9700\u6C42\uFF1F",
       body: "\u64A4\u56DE\u540E\uFF0C\u5DF2\u54CD\u5E94\u7684\u56E2\u961F\u5C06\u6536\u5230\u901A\u77E5\u3002",
@@ -6176,6 +6559,12 @@
         }, options);
       }
     },
+    "rematch-interrupted": ({ demand, page: page15, options }) => {
+      const nextTeams = changed(replaceDemandTeamBatch(demand, options));
+      demand.performanceInterruption = { ...demand.performanceInterruption || {}, rematchStarted: true };
+      toast(nextTeams.length ? "\u539F\u9700\u6C42\u5DF2\u4FDD\u7559\uFF0C\u6B63\u5728\u5339\u914D\u65B0\u7684\u670D\u52A1\u56E2\u961F" : "\u6682\u65F6\u6CA1\u6709\u66F4\u591A\u56E2\u961F\uFF0C\u5E73\u53F0\u4F1A\u7EE7\u7EED\u5BFB\u627E");
+      page15.refreshPage(demand);
+    },
     "preview-file": () => toast("\u5DF2\u6253\u5F00\u6210\u679C\u6587\u4EF6\u9884\u89C8"),
     resubmit: ({ demand }) => navigateTo("p5", { demandId: demand.id })
   };
@@ -6210,7 +6599,7 @@
     } else if (status === "payment_pending" || status === "payment_confirming") {
       iconName = status === "payment_pending" ? "coins" : "clock";
       iconColor = status === "payment_pending" ? "var(--color-warning)" : "var(--color-primary)";
-      text = status === "payment_pending" ? "\u534F\u8BAE\u5DF2\u7ECF\u751F\u6548\uFF0C\u8BF7\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u5E76\u4E0A\u4F20\u51ED\u8BC1" : "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26";
+      text = status === "payment_pending" ? "\u534F\u8BAE\u5DF2\u7ECF\u751F\u6548\uFF0C\u8BF7\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u5E76\u4E0A\u4F20\u51ED\u8BC1" : "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u670D\u52A1\u5546\u5C06\u5728 " + (demand.payment?.confirmSlaWorkingDays || 2) + " \u4E2A\u5DE5\u4F5C\u65E5\u5185\u786E\u8BA4\u5230\u8D26";
     } else if (status === "active") {
       iconName = "check-circle";
       iconColor = "var(--color-success)";
@@ -6311,9 +6700,9 @@
     const agreement = demand.agreement;
     if (!agreement) return "";
     const copy = {
-      customer_action: ["\u5F85\u4F60\u7B7E\u7F72", "\u8865\u5145\u534F\u8BAE\u4FE1\u606F\u3001\u7528\u5370\u5E76\u4E0A\u4F20"],
-      provider_signing: ["\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370", "\u4F60\u4E0A\u4F20\u7684\u534F\u8BAE\u5DF2\u540C\u6B65\u7ED9\u670D\u52A1\u5546"],
-      auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E2D", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u63D0\u4EA4\u5E73\u53F0\u5BA1\u6838"]
+      customer_action: ["\u7B49\u5F85\u6700\u7EC8\u534F\u8BAE", "\u670D\u52A1\u5546\u5C06\u4E0A\u4F20\u5404\u65B9\u5DF2\u7ECF\u534F\u5546\u786E\u8BA4\u5E76\u7528\u5370\u7684\u6700\u7EC8\u6587\u4EF6"],
+      provider_signing: ["\u5F85\u4F60\u786E\u8BA4\u6700\u7EC8\u6587\u4EF6", "\u8BF7\u6838\u5BF9\u534F\u8BAE\u7248\u672C\u3001\u7B7E\u7EA6\u4E3B\u4F53\u548C\u91D1\u989D"],
+      auditing: ["\u5E73\u53F0\u786E\u8BA4\u4E2D", "\u5BA2\u6237\u5DF2\u786E\u8BA4\u6700\u7EC8\u6587\u4EF6\uFF0C\u5E73\u53F0\u6B63\u5728\u5B8C\u6210\u6700\u540E\u6838\u9A8C"]
     }[agreement.status] || ["\u534F\u8BAE\u5904\u7406\u4E2D", "\u8BF7\u5728\u670D\u52A1\u8BB0\u5F55\u4E2D\u67E5\u770B\u6700\u65B0\u72B6\u6001"];
     return '<div class="p6-agreement-summary"><span>' + icon("shield", 20) + "</span><div><strong>" + copy[0] + "</strong><small>" + copy[1] + '</small></div><button data-p6-action="open-agreement" data-team-id="' + agreement.teamId + '">\u67E5\u770B\u534F\u8BAE</button></div>';
   }
@@ -6321,15 +6710,22 @@
     const payment = demand.payment;
     if (!payment) return "";
     const confirming = payment.status === "confirming";
-    return '<div class="p6-agreement-summary"><span>' + icon(confirming ? "clock" : payment.status === "paid" ? "check-circle" : "coins", 20) + "</span><div><strong>" + (confirming ? "\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26" : payment.status === "paid" ? "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26" : "\u5F85\u652F\u4ED8\u670D\u52A1\u6B3E") + "</strong><small>" + escapeHTML(payment.amount) + " \xB7 " + escapeHTML(payment.method) + '</small></div><button data-p6-action="open-payment" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u4ED8\u6B3E</button></div>';
+    return '<div class="p6-agreement-summary"><span>' + icon(confirming ? "clock" : payment.status === "paid" ? "check-circle" : "coins", 20) + "</span><div><strong>" + (confirming ? "\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26" : payment.status === "paid" ? "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26" : "\u5F85\u652F\u4ED8\u670D\u52A1\u6B3E") + "</strong><small>" + escapeHTML(payment.amount) + " \xB7 " + (confirming ? "\u5C06\u5728 " + (payment.confirmSlaWorkingDays || 2) + " \u4E2A\u5DE5\u4F5C\u65E5\u5185\u786E\u8BA4" : escapeHTML(payment.method)) + '</small></div><button data-p6-action="open-payment" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u4ED8\u6B3E</button></div>';
   }
   function renderAfterSaleSummary(demand) {
     if (!["active", "acceptance", "done"].includes(demand.status) && !demand.afterSale) return "";
     if (!demand.afterSale) {
       return '<div class="p6-after-sale-entry"><span>' + icon("shield", 19) + '</span><div><strong>\u670D\u52A1\u9047\u5230\u95EE\u9898\uFF1F</strong><small>\u5E73\u53F0\u53EF\u4F9D\u636E\u534F\u8BAE\u3001\u4ED8\u6B3E\u548C\u4EA4\u4ED8\u8BB0\u5F55\u534F\u52A9\u6838\u9A8C</small></div><button data-p6-action="after-sale">\u7533\u8BF7\u552E\u540E</button></div>';
     }
-    const status = { submitted: "\u5E73\u53F0\u6838\u9A8C\u4E2D", supplement: "\u5F85\u8865\u5145\u6750\u6599", processing: "\u534F\u8C03\u5904\u7406\u4E2D", closed: "\u5DF2\u5173\u95ED" }[demand.afterSale.status] || "\u5904\u7406\u4E2D";
-    return '<div class="p6-after-sale-entry active"><span>' + icon("shield", 19) + "</span><div><strong>\u552E\u540E\u534F\u52A9 \xB7 " + status + "</strong><small>" + escapeHTML(demand.afterSale.type) + " \xB7 " + escapeHTML(demand.afterSale.submittedAt) + '</small></div><button data-p6-action="after-sale">\u67E5\u770B</button></div>';
+    const status = getAfterSaleStatusLabel(demand.afterSale.status);
+    return '<div class="p6-after-sale-entry active"><span>' + icon("shield", 19) + "</span><div><strong>\u6295\u8BC9\u4E0E\u552E\u540E \xB7 " + status + "</strong><small>" + escapeHTML(demand.afterSale.id) + " \xB7 " + escapeHTML(demand.afterSale.type) + '</small></div><button data-p6-action="after-sale">\u67E5\u770B\u5904\u7406</button></div>';
+  }
+  function renderPerformanceInterruption(demand) {
+    if (demand.status !== "active" && !demand.performanceInterruption) return "";
+    if (!demand.performanceInterruption) {
+      return '<button class="p6-interruption-entry" type="button" data-p6-action="provider-unable"><span>' + icon("alert", 18) + "</span><span><strong>\u670D\u52A1\u5546\u65E0\u6CD5\u7EE7\u7EED\u5C65\u7EA6</strong><small>\u7533\u62A5\u540E\u53EF\u67E5\u770B\u672C\u8F6E\u5176\u4ED6\u5019\u9009\u6216\u4FDD\u7559\u539F\u9700\u6C42\u91CD\u65B0\u5339\u914D</small></span>" + icon("chevron-right", 15) + "</button>";
+    }
+    return '<section class="p6-interruption-card"><div><span>' + icon("alert", 19) + "</span><p><strong>\u5C65\u7EA6\u4E2D\u65AD\u5904\u7406\u4E2D</strong><small>" + escapeHTML(demand.performanceInterruption.submittedAt) + ' \xB7 \u5E73\u53F0\u6B63\u5728\u6838\u5BF9\u5DF2\u5B8C\u6210\u91CC\u7A0B\u7891</small></p></div><p>\u5DF2\u9A8C\u6536\u91CC\u7A0B\u7891\u6309\u534F\u8BAE\u7ED3\u7B97\uFF0C\u672A\u5C65\u884C\u90E8\u5206\u505C\u6B62\u540E\u7EED\u4ED8\u6B3E\uFF1B\u5DF2\u652F\u4ED8\u7684\u5269\u4F59\u6B3E\u9879\u6309\u534F\u8BAE\u7EA6\u5B9A\u9000\u6B3E\u3002</p><button class="btn btn-outline btn-sm" data-p6-action="provider-unable" type="button">\u67E5\u770B\u66FF\u4EE3\u65B9\u6848</button></section>';
   }
   function renderPlanTab(demand) {
     const plan = demand.servicePlan;
@@ -6359,7 +6755,7 @@
       html += "<div>" + icon("file-text", 15) + "<span>" + file + '</span><button data-p6-action="preview-file">\u67E5\u770B</button></div>';
     });
     html += "</div>";
-    if (demand.status === "acceptance") html += '<div class="p6-delivery-note">\u8BF7\u5148\u6838\u5BF9\u4EA4\u4ED8\u5185\u5BB9\uFF1B\u5982\u6709\u95EE\u9898\uFF0C\u53EF\u5728\u670D\u52A1\u8BB0\u5F55\u4E2D\u63D0\u4EA4\u53CD\u9988\uFF0C\u6DF1\u5165\u6C9F\u901A\u7EE7\u7EED\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u8FDB\u884C\u3002</div>';
+    if (demand.status === "acceptance") html += '<div class="p6-acceptance-deadline"><span>' + icon("clock", 17) + "</span><div><strong>\u8BF7\u4E8E " + escapeHTML(delivery.acceptanceDueAt || "3 \u4E2A\u5DE5\u4F5C\u65E5\u5185") + ' \u5B8C\u6210\u9A8C\u6536</strong><small>\u622A\u6B62\u524D\u5C06\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u8BA2\u9605\u6D88\u606F\u548C\u77ED\u4FE1\u63D0\u9192\uFF1B\u672A\u786E\u8BA4\u65F6\u4E0D\u4F1A\u81EA\u52A8\u901A\u8FC7\u9A8C\u6536\u6216\u89E6\u53D1\u4E0B\u4E00\u7B14\u4ED8\u6B3E\u3002</small></div></div><div class="p6-delivery-note">\u8BF7\u5148\u6838\u5BF9\u4EA4\u4ED8\u5185\u5BB9\uFF1B\u5982\u6709\u5F02\u8BAE\uFF0C\u53EF\u63D0\u4EA4\u5E73\u53F0\u5DE5\u5355\u5E76\u8865\u5145\u8BC1\u636E\uFF0C\u6DF1\u5165\u6C9F\u901A\u7EE7\u7EED\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u8FDB\u884C\u3002</div>';
     html += "</div>";
     return html;
   }
@@ -6372,6 +6768,7 @@
     if (demand.agreement && ["contract_pending", "payment_pending", "payment_confirming"].includes(demand.status)) html += page15.renderAgreementSummary(demand);
     if (demand.payment && ["payment_pending", "payment_confirming", "active"].includes(demand.status)) html += page15.renderPaymentSummary(demand);
     if (demand.delivery && ["acceptance", "done"].includes(demand.status)) html += page15.renderDeliveryTab(demand);
+    html += renderPerformanceInterruption(demand);
     html += renderAfterSaleSummary(demand);
     html += "</div>";
     return html;
@@ -6398,6 +6795,7 @@
       });
       html += "</ul></div>";
     }
+    if (item.matchReason) html += '<div class="p6-resp-block"><div class="p6-resp-block-label">\u5339\u914D\u7406\u7531</div><div class="p6-resp-block-text">' + escapeHTML(item.matchReason) + "</div></div>";
     return html;
   }
   function renderAcceptedTab(demand, findTeam, responseRenderer = renderResponseBlocks) {
@@ -6405,7 +6803,7 @@
       return '<div class="empty-state"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">\u6682\u65E0\u56E2\u961F\u54CD\u5E94</div><div class="empty-desc">\u56E2\u961F\u54CD\u5E94\u540E\u5373\u53EF\u67E5\u770B\u56DE\u590D\u5E76\u8865\u5145\u9700\u6C42</div></div>';
     }
     const canCompare = ["choosing", "communicating", "plan_pending"].includes(demand.status);
-    let html = "";
+    let html = demand.accepted.length >= 2 && canCompare ? '<button class="p6-compare-entry" type="button" data-p6-action="compare-teams"><span>' + icon("scale", 19) + "</span><span><strong>\u5E76\u6392\u5BF9\u6BD4 " + demand.accepted.length + " \u5BB6\u54CD\u5E94\u56E2\u961F</strong><small>\u62A5\u4EF7\u3001\u5468\u671F\u3001\u8BC4\u5206\u3001\u6750\u6599\u4E0E\u5339\u914D\u7406\u7531</small></span>" + icon("chevron-right", 16) + "</button>" : "";
     demand.accepted.forEach((item) => {
       const team = findTeam(item.teamId);
       html += '<div class="p6-resp-card"><div class="p6-resp-header">';
@@ -6416,6 +6814,8 @@
         html += '<span style="color:var(--color-success);display:inline-flex">' + icon("check-circle", 16) + "</span>";
       }
       html += '<span class="p6-resp-time">' + item.time + "</span></div>";
+      if (!item.period) item.period = serviceBlueprints[demand.sku]?.period || "\u6C9F\u901A\u540E\u786E\u8BA4";
+      if (!item.matchReason) item.matchReason = team.specialties?.length ? "\u56E2\u961F\u64C5\u957F" + team.specialties.slice(0, 2).join("\u3001") + "\uFF0C\u4E14\u53EF\u627F\u63A5\u672C\u6B21\u670D\u52A1\u3002" : "\u56E2\u961F\u670D\u52A1\u8303\u56F4\u4E0E\u672C\u6B21\u9700\u6C42\u76F8\u7B26\u3002";
       html += responseRenderer(item);
       html += '<div class="p6-matched-service"><span><small>\u5339\u914D\u670D\u52A1</small><strong>' + demand.sku + '</strong></span><button data-p6-action="service-detail" data-team-id="' + item.teamId + '">\u67E5\u770B\u670D\u52A1\u8BE6\u60C5 ' + icon("chevron-right", 13) + "</button></div>";
       html += '<div class="p6-resp-actions">';
@@ -6516,7 +6916,6 @@
       nowLabel,
       todayLabel,
       responseDeadlineLabel,
-      isWecomAdded,
       startCommunication,
       createAgreementForDemand
     };
@@ -6601,7 +7000,7 @@
         html += '<button class="btn btn-outline" style="flex:1" data-p6-action="add-service" data-team-id="' + demand.chosenTeam + '">\u670D\u52A1\u589E\u9879</button>';
         html += '<button class="btn btn-primary" style="flex:1" data-p6-action="enter-chat" data-team-id="' + demand.chosenTeam + '">\u67E5\u770B\u670D\u52A1\u8BB0\u5F55</button>';
       } else if (status === "acceptance") {
-        html += '<button class="btn btn-outline" style="flex:1" data-p6-action="enter-chat" data-team-id="' + demand.chosenTeam + '">\u53CD\u9988\u9A8C\u6536\u95EE\u9898</button>';
+        html += '<button class="btn btn-outline" style="flex:1" data-p6-action="delivery-dispute" data-team-id="' + demand.chosenTeam + '">\u63D0\u4EA4\u6210\u679C\u5F02\u8BAE</button>';
         html += '<button class="btn btn-primary" style="flex:1" data-p6-action="confirm-acceptance">\u786E\u8BA4\u9A8C\u6536</button>';
       } else if (status === "done") {
         html += '<button class="btn btn-outline" style="flex:1" data-p6-action="continue-cooperation">\u7EE7\u7EED\u5408\u4F5C</button>';
@@ -6721,8 +7120,11 @@
     },
     openAfterSale(demand) {
       if (demand.afterSale) {
-        const status = { submitted: "\u5E73\u53F0\u6838\u9A8C\u4E2D", supplement: "\u5F85\u8865\u5145\u6750\u6599", processing: "\u534F\u8C03\u5904\u7406\u4E2D", closed: "\u5DF2\u5173\u95ED" }[demand.afterSale.status] || "\u5904\u7406\u4E2D";
-        showSheet({ title: "\u552E\u540E\u534F\u52A9\u8BB0\u5F55", body: '<div class="p6-after-sale-sheet"><div class="p6-after-sale-state"><span>' + icon("shield", 22) + "</span><div><strong>" + status + "</strong><small>" + escapeHTML(demand.afterSale.id) + " \xB7 " + escapeHTML(demand.afterSale.submittedAt) + "</small></div></div><dl><div><dt>\u95EE\u9898\u7C7B\u578B</dt><dd>" + escapeHTML(demand.afterSale.type) + "</dd></div><div><dt>\u95EE\u9898\u8BF4\u660E</dt><dd>" + escapeHTML(demand.afterSale.description) + "</dd></div></dl><p>\u5E73\u53F0\u4F1A\u4F9D\u636E\u670D\u52A1\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u548C\u4EA4\u4ED8\u8BB0\u5F55\u534F\u52A9\u53CC\u65B9\u6838\u9A8C\u4E0E\u6C9F\u901A\u3002\u9000\u6B3E\u6216\u8865\u507F\u6309\u7167\u53CC\u65B9\u534F\u8BAE\u6267\u884C\u3002</p></div>" });
+        const item = demand.afterSale;
+        const customerEvidence = (item.customerEvidence || []).map((value) => "<li>" + escapeHTML(value) + "</li>").join("");
+        const providerEvidence = (item.providerEvidence || []).map((value) => "<li>" + escapeHTML(value) + "</li>").join("");
+        const history = (item.history || []).map((event, index) => '<div class="' + (index === (item.history || []).length - 1 ? "active" : "done") + '"><span>' + (index === (item.history || []).length - 1 ? "" : icon("check", 11)) + "</span><p><strong>" + escapeHTML(event.label) + "</strong><small>" + escapeHTML(event.detail || "") + " \xB7 " + escapeHTML(event.time || "") + "</small></p></div>").join("");
+        showSheet({ title: "\u6295\u8BC9\u4E0E\u552E\u540E\u5DE5\u5355", body: '<div class="p6-after-sale-sheet"><div class="p6-after-sale-state"><span>' + icon("shield", 22) + "</span><div><strong>" + getAfterSaleStatusLabel(item.status) + "</strong><small>" + escapeHTML(item.id) + " \xB7 " + escapeHTML(item.submittedAt) + "</small></div></div><dl><div><dt>\u5F53\u524D\u5904\u7406\u4EBA</dt><dd>" + escapeHTML(item.handler || "\u5E73\u53F0\u670D\u52A1\u4FDD\u969C\u4E13\u5458") + "</dd></div><div><dt>\u9884\u8BA1\u65F6\u9650</dt><dd>" + escapeHTML(item.eta || "2 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53CD\u9988\u9996\u6B21\u8FDB\u5C55") + "</dd></div><div><dt>\u95EE\u9898\u7C7B\u578B</dt><dd>" + escapeHTML(item.type) + "</dd></div><div><dt>\u95EE\u9898\u8BF4\u660E</dt><dd>" + escapeHTML(item.description) + '</dd></div></dl><div class="p6-evidence-columns"><section><strong>\u4F60\u9700\u8981\u63D0\u4EA4</strong><ul>' + customerEvidence + "</ul></section><section><strong>\u670D\u52A1\u5546\u9700\u63D0\u4EA4</strong><ul>" + providerEvidence + '</ul></section></div><div class="p6-case-timeline">' + history + "</div><p>\u5E73\u53F0\u4F9D\u636E\u534F\u8BAE\u3001\u4ED8\u6B3E\u548C\u5C65\u7EA6\u7559\u75D5\u534F\u8C03\u5904\u7406\uFF1B\u9000\u6B3E\u6216\u8865\u507F\u6309\u534F\u8BAE\u7EA6\u5B9A\u6267\u884C\u3002</p></div>" });
         return;
       }
       const body = '<div class="p6-after-sale-form"><label><span>\u95EE\u9898\u7C7B\u578B</span><select id="p6AfterSaleType"><option>\u4EA4\u4ED8\u5EF6\u671F</option><option>\u4EA4\u4ED8\u5185\u5BB9\u4E0E\u7EA6\u5B9A\u4E0D\u7B26</option><option>\u670D\u52A1\u5546\u672A\u6309\u65F6\u54CD\u5E94</option><option>\u534F\u8BAE\u6216\u4ED8\u6B3E\u95EE\u9898</option><option>\u53D1\u7968\u95EE\u9898</option><option>\u5176\u4ED6\u95EE\u9898</option></select></label><label><span>\u95EE\u9898\u8BF4\u660E</span><textarea id="p6AfterSaleDesc" rows="4" maxlength="300" placeholder="\u8BF7\u8BF4\u660E\u5B9E\u9645\u60C5\u51B5\u548C\u5E0C\u671B\u5E73\u53F0\u534F\u52A9\u5904\u7406\u7684\u4E8B\u9879"></textarea></label><label class="p6-after-sale-upload"><span>' + icon("upload", 17) + '<strong id="p6AfterSaleFileName">\u4E0A\u4F20\u8BC1\u660E\u6750\u6599\uFF08\u9009\u586B\uFF09</strong></span><input id="p6AfterSaleFile" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><p>\u5E73\u53F0\u8D1F\u8D23\u534F\u52A9\u6838\u9A8C\u4E0E\u6C9F\u901A\uFF0C\u5177\u4F53\u9000\u6B3E\u6216\u8865\u507F\u6309\u7167\u53CC\u65B9\u534F\u8BAE\u6267\u884C\u3002</p><button class="btn btn-primary btn-block" id="p6AfterSaleSubmit">\u63D0\u4EA4\u552E\u540E\u7533\u8BF7</button></div>';
@@ -6734,12 +7136,73 @@
       overlay.querySelector("#p6AfterSaleSubmit").addEventListener("click", () => {
         const description = overlay.querySelector("#p6AfterSaleDesc").value.trim();
         if (!description) return toast("\u8BF7\u586B\u5199\u95EE\u9898\u8BF4\u660E");
-        createAfterSale(demand, { type: overlay.querySelector("#p6AfterSaleType").value, description, attachment: file.files.length ? file.files[0].name : "" }, domainOptions4());
+        createAfterSale(demand, { source: "general", type: overlay.querySelector("#p6AfterSaleType").value, description, attachment: file.files.length ? file.files[0].name : "" }, domainOptions4());
         emitChange();
         overlay.remove();
         toast("\u552E\u540E\u7533\u8BF7\u5DF2\u63D0\u4EA4\uFF0C\u5E73\u53F0\u5C06\u534F\u52A9\u6838\u9A8C");
         this.refreshPage(demand);
       });
+    },
+    openDeliveryDispute(demand) {
+      if (demand.afterSale?.source === "milestone_dispute") {
+        this.openAfterSale(demand);
+        return;
+      }
+      const body = '<div class="p6-after-sale-form"><p>\u5F02\u8BAE\u63D0\u4EA4\u540E\uFF0C\u5BF9\u5E94\u6210\u679C\u4FDD\u6301\u5F85\u9A8C\u6536\uFF0C\u540E\u7EED\u4ED8\u6B3E\u6682\u505C\u89E6\u53D1\u3002\u8BF7\u8BF4\u660E\u672A\u8FBE\u5230\u7EA6\u5B9A\u7684\u5177\u4F53\u5185\u5BB9\u3002</p><label><span>\u6210\u679C\u5F02\u8BAE\u8BF4\u660E</span><textarea id="p6DisputeDesc" rows="5" maxlength="500" placeholder="\u4F8B\u5982\uFF1A\u4EA4\u4ED8\u6587\u4EF6\u7F3A\u5C11\u534F\u8BAE\u7EA6\u5B9A\u7684\u98CE\u9669\u6E05\u5355\uFF0C\u4E14\u7B2C\u4E8C\u7248\u4FEE\u6539\u5C1A\u672A\u5B8C\u6210"></textarea></label><label class="p6-after-sale-upload"><span>' + icon("upload", 17) + '<strong id="p6DisputeFileName">\u4E0A\u4F20\u5BF9\u7167\u6750\u6599\uFF08\u9009\u586B\uFF09</strong></span><input id="p6DisputeFile" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p6DisputeSubmit" type="button">\u63D0\u4EA4\u6210\u679C\u5F02\u8BAE</button></div>';
+      const overlay = showSheet({ title: "\u63D0\u4EA4\u6210\u679C\u5F02\u8BAE", body });
+      const file = overlay.querySelector("#p6DisputeFile");
+      file.addEventListener("change", () => {
+        overlay.querySelector("#p6DisputeFileName").textContent = file.files.length ? "\u5DF2\u9009\u62E9 " + file.files.length + " \u4EFD\u6750\u6599" : "\u4E0A\u4F20\u5BF9\u7167\u6750\u6599\uFF08\u9009\u586B\uFF09";
+      });
+      overlay.querySelector("#p6DisputeSubmit").addEventListener("click", () => {
+        const description = overlay.querySelector("#p6DisputeDesc").value.trim();
+        if (!description) return toast("\u8BF7\u8BF4\u660E\u5177\u4F53\u5F02\u8BAE");
+        createAfterSale(demand, {
+          source: "milestone_dispute",
+          type: "\u6210\u679C\u4E0E\u7EA6\u5B9A\u5B58\u5728\u5F02\u8BAE",
+          description,
+          attachments: Array.from(file.files || []).map((item) => item.name),
+          eta: "1 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u5B8C\u6210\u53D7\u7406\uFF0C3 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53CD\u9988\u534F\u8C03\u8FDB\u5C55",
+          customerEvidence: ["\u5F02\u8BAE\u8BF4\u660E", "\u534F\u8BAE\u6216\u65B9\u6848\u4E2D\u7684\u5BF9\u5E94\u7EA6\u5B9A", "\u6210\u679C\u5BF9\u7167\u6750\u6599"],
+          providerEvidence: ["\u672C\u6B21\u4EA4\u4ED8\u6210\u679C", "\u5C65\u7EA6\u548C\u4FEE\u6539\u8BB0\u5F55", "\u5BF9\u5F02\u8BAE\u4E8B\u9879\u7684\u9010\u9879\u8BF4\u660E"]
+        }, domainOptions4());
+        demand.acceptanceDisputed = true;
+        emitChange();
+        overlay.remove();
+        toast("\u6210\u679C\u5F02\u8BAE\u5DF2\u751F\u6210\u552E\u540E\u5DE5\u5355");
+        this.refreshPage(demand);
+      });
+    },
+    openTeamComparison(demand) {
+      const responses = demand.accepted || [];
+      if (responses.length < 2) return toast("\u81F3\u5C11\u9700\u8981\u4E24\u5BB6\u56E2\u961F\u54CD\u5E94\u540E\u624D\u80FD\u5BF9\u6BD4");
+      const teams2 = responses.map((response) => ({ response, team: getTeam(response.teamId, store.teams) })).filter((item) => item.team);
+      const head = teams2.map(({ team }) => "<th><strong>" + escapeHTML(team.name) + "</strong><small>" + escapeHTML(team.orgShort) + "</small></th>").join("");
+      const row = (label, render) => "<tr><th>" + label + "</th>" + teams2.map(({ response, team }) => "<td>" + render(response, team) + "</td>").join("") + "</tr>";
+      const body = '<div class="p6-compare-scroll"><table class="p6-compare-table"><thead><tr><th>\u5BF9\u6BD4\u9879</th>' + head + "</tr></thead><tbody>" + row("\u62A5\u4EF7", (response) => '<strong class="price">' + escapeHTML(response.quote || "\u5F85\u786E\u8BA4") + "</strong>") + row("\u5468\u671F", (response) => escapeHTML(response.period || "\u6C9F\u901A\u540E\u786E\u8BA4")) + row("\u8BC4\u5206", (_response, team) => icon("star", 12) + " " + Number(team.rating || 0).toFixed(1)) + row("\u9700\u8981\u6750\u6599", (response) => "<ul>" + (response.needMaterials || []).map((item) => "<li>" + escapeHTML(item) + "</li>").join("") + "</ul>") + row("\u5339\u914D\u7406\u7531", (response, team) => escapeHTML(response.matchReason || "\u56E2\u961F\u64C5\u957F" + (team.specialties || []).slice(0, 2).join("\u3001"))) + '</tbody></table></div><p class="p6-compare-note">\u62A5\u4EF7\u4E3A\u56E2\u961F\u672C\u8F6E\u54CD\u5E94\u610F\u5411\uFF0C\u6700\u7EC8\u8303\u56F4\u3001\u4EF7\u683C\u548C\u5468\u671F\u4EE5\u786E\u8BA4\u540E\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002</p>';
+      showSheet({ title: "\u54CD\u5E94\u56E2\u961F\u5BF9\u6BD4", body });
+    },
+    openPerformanceInterruption(demand) {
+      if (!demand.performanceInterruption) {
+        demand.performanceInterruption = { submittedAt: nowLabel(), reason: "\u670D\u52A1\u5546\u53CD\u9988\u5F53\u524D\u65E0\u6CD5\u7EE7\u7EED\u6309\u539F\u8BA1\u5212\u5C65\u7EA6", rematchStarted: false };
+        addTimelineEvent(demand, "alert", "\u670D\u52A1\u5546\u7533\u62A5\u65E0\u6CD5\u7EE7\u7EED\u5C65\u7EA6", "\u5E73\u53F0\u5F00\u59CB\u6838\u5BF9\u5DF2\u9A8C\u6536\u91CC\u7A0B\u7891\u548C\u5269\u4F59\u6B3E\u9879", nowLabel);
+        emitChange();
+      }
+      const candidates = (demand.accepted || []).filter((item) => item.teamId !== demand.chosenTeam).map((item) => {
+        const team = getTeam(item.teamId, store.teams);
+        return team ? '<button class="p6-alternative-team" type="button" data-p6-alt-team="' + escapeHTML(team.id) + '"><span class="avatar avatar-sm" style="background:' + team.avatarColor + "20;color:" + team.avatarColor + '">' + escapeHTML(team.avatar) + "</span><span><strong>" + escapeHTML(team.name) + "</strong><small>" + escapeHTML(item.quote || "\u62A5\u4EF7\u5F85\u786E\u8BA4") + " \xB7 " + escapeHTML(team.avgResponse || "\u54CD\u5E94\u65F6\u95F4\u5F85\u786E\u8BA4") + "</small></span>" + icon("chevron-right", 15) + "</button>" : "";
+      }).join("");
+      const body = '<div class="p6-interruption-sheet"><div class="p6-settlement-note"><strong>\u4E2D\u65AD\u540E\u7684\u7ED3\u7B97\u539F\u5219</strong><p>\u5DF2\u9A8C\u6536\u91CC\u7A0B\u7891\u6309\u534F\u8BAE\u7ED3\u7B97\uFF1B\u672A\u5C65\u884C\u90E8\u5206\u505C\u6B62\u540E\u7EED\u4ED8\u6B3E\uFF0C\u5DF2\u652F\u4ED8\u7684\u5269\u4F59\u6B3E\u9879\u6309\u534F\u8BAE\u7EA6\u5B9A\u9000\u6B3E\u3002</p></div><section><h3>\u65B9\u6848\u4E00\uFF1A\u67E5\u770B\u672C\u8F6E\u5176\u4ED6\u5019\u9009</h3>' + (candidates || '<p class="p6-no-alternative">\u672C\u8F6E\u6682\u65E0\u5176\u4ED6\u5DF2\u54CD\u5E94\u56E2\u961F\uFF0C\u53EF\u76F4\u63A5\u91CD\u65B0\u5339\u914D\u3002</p>') + '</section><section><h3>\u65B9\u6848\u4E8C\uFF1A\u4FDD\u7559\u539F\u9700\u6C42\u91CD\u65B0\u5339\u914D</h3><p>\u573A\u666F\u95EE\u7B54\u3001\u9884\u7B97\u548C\u9644\u4EF6\u4F1A\u7EE7\u7EED\u6CBF\u7528\uFF0C\u65B0\u56E2\u961F\u786E\u8BA4\u540E\u751F\u6210\u72EC\u7ACB\u8BA2\u5355\u3002</p><button class="btn btn-primary btn-block" id="p6RematchInterrupted" type="button">\u91CD\u65B0\u5339\u914D\u670D\u52A1\u56E2\u961F</button></section></div>';
+      const overlay = showSheet({ title: "\u5C65\u7EA6\u4E2D\u65AD\u5904\u7406", body });
+      overlay.querySelectorAll("[data-p6-alt-team]").forEach((button) => button.addEventListener("click", () => {
+        overlay.remove();
+        navigateTo("p3", { teamId: button.getAttribute("data-p6-alt-team"), sku: demand.sku });
+      }));
+      overlay.querySelector("#p6RematchInterrupted").addEventListener("click", () => {
+        overlay.remove();
+        this.handleAction("rematch-interrupted", null, demand);
+      });
+      this.refreshPage(demand);
     },
     refreshPage(demand) {
       renderPageContent2(this.render({ demandId: demand.id }), "p6");
@@ -6808,12 +7271,12 @@
     const agreement = demand.agreement;
     if (!agreement) return "";
     const state2 = {
-      customer_action: ["\u5F85\u4F60\u7B7E\u7F72", "\u8865\u5145\u4FE1\u606F\u3001\u7528\u5370\u5E76\u4E0A\u4F20"],
-      provider_signing: ["\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370", "\u5BA2\u6237\u534F\u8BAE\u5DF2\u4E0A\u4F20"],
-      auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E2D", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u8FD4\u56DE\uFF0C\u53EF\u67E5\u770B\u6587\u4EF6"],
-      approved: ["\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u7B49\u5F85\u4ED8\u6B3E"]
+      customer_action: ["\u7B49\u5F85\u6700\u7EC8\u534F\u8BAE", "\u6761\u6B3E\u5728\u7EBF\u4E0B\u6216\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u534F\u5546\uFF0C\u670D\u52A1\u5546\u4E0A\u4F20\u5DF2\u786E\u8BA4\u7684\u6700\u7EC8\u6587\u4EF6"],
+      provider_signing: ["\u5F85\u4F60\u786E\u8BA4", "\u6700\u7EC8\u7528\u5370\u534F\u8BAE\u5DF2\u4E0A\u4F20\uFF0C\u8BF7\u6838\u5BF9\u7248\u672C\u548C\u7B7E\u7EA6\u4E3B\u4F53"],
+      auditing: ["\u5E73\u53F0\u786E\u8BA4\u4E2D", "\u5BA2\u6237\u5DF2\u786E\u8BA4\u6700\u7EC8\u6587\u4EF6\uFF0C\u5E73\u53F0\u6B63\u5728\u5B8C\u6210\u6700\u540E\u6838\u9A8C"],
+      approved: ["\u534F\u8BAE\u5DF2\u751F\u6548", "\u5404\u65B9\u786E\u8BA4\u5B8C\u6210\uFF0C\u534F\u8BAE\u5DF2\u7ECF\u5F52\u6863"]
     }[agreement.status] || ["\u534F\u8BAE\u5904\u7406\u4E2D", "\u67E5\u770B\u6700\u65B0\u72B6\u6001"];
-    return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-agreement-message' + (agreement.status === "approved" ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("shield", 17) + "</span><div><strong>\u670D\u52A1\u534F\u8BAE</strong><small>" + escapeHTML(agreement.id) + '</small></div><span class="p7-structured-status">' + state2[0] + '</span></div><div class="p7-agreement-parties"><span><small>\u5BA2\u6237</small><strong>' + escapeHTML(agreement.customer) + "</strong></span><span><small>\u670D\u52A1\u65B9</small><strong>" + escapeHTML(agreement.provider) + "</strong></span></div><p>" + state2[1] + '</p><button class="btn ' + (agreement.status === "customer_action" ? "btn-primary" : "btn-outline") + ' btn-block" data-agreement-open type="button">' + (agreement.status === "customer_action" ? "\u586B\u5199\u5E76\u4E0A\u4F20\u534F\u8BAE" : "\u67E5\u770B\u534F\u8BAE\u8FDB\u5EA6") + "</button></article></div>";
+    return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-agreement-message' + (agreement.status === "approved" ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("shield", 17) + "</span><div><strong>\u670D\u52A1\u534F\u8BAE</strong><small>" + escapeHTML(agreement.id) + '</small></div><span class="p7-structured-status">' + state2[0] + '</span></div><div class="p7-agreement-parties"><span><small>\u5BA2\u6237</small><strong>' + escapeHTML(agreement.customer) + "</strong></span><span><small>\u670D\u52A1\u65B9</small><strong>" + escapeHTML(agreement.provider) + "</strong></span></div><p>" + state2[1] + '</p><button class="btn ' + (agreement.status === "provider_signing" ? "btn-primary" : "btn-outline") + ' btn-block" data-agreement-open type="button">' + (agreement.status === "provider_signing" ? "\u6838\u5BF9\u5E76\u786E\u8BA4\u6700\u7EC8\u534F\u8BAE" : "\u67E5\u770B\u534F\u8BAE\u8FDB\u5EA6") + "</button></article></div>";
   }
 
   // src/pages/p7-chat/messageCards/ChangeOrderCard.js
@@ -6842,7 +7305,7 @@
       confirming: ["\u786E\u8BA4\u5230\u8D26\u4E2D", "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4"],
       paid: ["\u5DF2\u5230\u8D26", "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u6536\u6B3E\uFF0C\u670D\u52A1\u6B63\u5F0F\u5F00\u59CB"]
     }[payment.status] || ["\u4ED8\u6B3E\u5904\u7406\u4E2D", "\u67E5\u770B\u4ED8\u6B3E\u8BB0\u5F55"];
-    return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-payment-card' + (payment.status === "paid" ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("coins", 17) + "</span><div><strong>\u670D\u52A1\u4ED8\u6B3E</strong><small>" + escapeHTML(payment.method) + '</small></div><span class="p7-structured-status">' + copy[0] + '</span></div><div class="p7-payment-amount"><small>\u534F\u8BAE\u91D1\u989D</small><strong>' + escapeHTML(payment.amount) + "</strong></div><p>" + copy[1] + '</p><button class="btn ' + (payment.status === "pending" ? "btn-primary" : "btn-outline") + ' btn-block" data-payment-open type="button">' + (payment.status === "pending" ? "\u67E5\u770B\u6536\u6B3E\u4FE1\u606F\u5E76\u4ED8\u6B3E" : "\u67E5\u770B\u4ED8\u6B3E\u8BB0\u5F55") + "</button></article></div>";
+    return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-payment-card' + (payment.status === "paid" ? " confirmed" : "") + '"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("coins", 17) + "</span><div><strong>\u670D\u52A1\u4ED8\u6B3E</strong><small>" + escapeHTML(payment.method) + '</small></div><span class="p7-structured-status">' + copy[0] + '</span></div><div class="p7-payment-amount"><small>' + escapeHTML(payment.collectionModel || "\u534F\u8BAE\u91D1\u989D") + "</small><strong>" + escapeHTML(payment.amount) + "</strong></div><p>" + copy[1] + '</p><button class="btn ' + (payment.status === "pending" ? "btn-primary" : "btn-outline") + ' btn-block" data-payment-open type="button">' + (payment.status === "pending" ? "\u67E5\u770B\u6536\u6B3E\u4FE1\u606F\u5E76\u4ED8\u6B3E" : "\u67E5\u770B\u4ED8\u6B3E\u8BB0\u5F55") + "</button></article></div>";
   }
 
   // src/pages/p7-chat/messageCards/RequirementCard.js
@@ -6858,8 +7321,8 @@
   // src/pages/p7-chat/messageCards/WecomCard.js
   function renderWecomMessage(demand) {
     const readyForConnection = demand.directInquiry ? demand.requirementConfirmed : ["communicating", "plan_pending", "contract_pending", "active", "acceptance"].includes(demand.status);
-    if (!readyForConnection || isWecomAdded()) return "";
-    return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-wecom-message"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("bell", 17) + '</span><div><strong>\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\uFF0C\u7EE7\u7EED\u4E0E\u56E2\u961F\u5EFA\u8054</strong><small>\u5E73\u53F0\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u670D\u52A1\u56E2\u961F\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4</small></div></div><p>\u5C0F\u7A0B\u5E8F\u5185\u7684\u52A9\u624B\u7528\u4E8E\u6536\u96C6\u57FA\u7840\u4FE1\u606F\u548C\u5C55\u793A\u7ED3\u6784\u5316\u5361\u7247\uFF0C\u540E\u7EED\u9700\u6C42\u8BA8\u8BBA\u4E0E\u534F\u4F5C\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\u3002</p><button class="btn btn-primary btn-block" data-wecom-open type="button">\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801</button></article></div>';
+    if (!readyForConnection) return "";
+    return '<div class="p7-structured-wrap"><article class="p7-structured-card p7-wecom-message"><div class="p7-structured-head"><span class="p7-structured-icon">' + icon("bell", 17) + '</span><div><strong>\u9700\u8981\u8BA8\u8BBA\u65B9\u6848\u7EC6\u8282\uFF1F</strong><small>\u5E73\u53F0\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u670D\u52A1\u56E2\u961F\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4</small></div></div><p>\u5C0F\u7A0B\u5E8F\u4FDD\u7559\u9700\u6C42\u3001\u65B9\u6848\u548C\u5C65\u7EA6\u8BB0\u5F55\uFF1B\u62A5\u4EF7\u7EC6\u8282\u3001\u534F\u8BAE\u6761\u6B3E\u4E0E\u540E\u7EED\u534F\u4F5C\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u6C9F\u901A\u3002</p><button class="btn btn-primary btn-block" data-wecom-open type="button">\u67E5\u770B\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801</button></article></div>';
   }
 
   // src/pages/p7-chat/quickReplies.js
@@ -6867,7 +7330,7 @@
     plan_pending: ["\u65B9\u6848\u5177\u4F53\u5305\u542B\u54EA\u4E9B\u670D\u52A1\uFF1F", "\u8FD9\u4E2A\u62A5\u4EF7\u53EF\u4EE5\u8C03\u6574\u5417\uFF1F", "\u6700\u7EC8\u4F1A\u4EA4\u4ED8\u54EA\u4E9B\u6210\u679C\uFF1F"],
     contract_pending: ["\u534F\u8BAE\u9700\u8981\u8865\u5145\u54EA\u4E9B\u4FE1\u606F\uFF1F", "\u4ED8\u6B3E\u65B9\u5F0F\u5199\u5728\u54EA\u91CC\uFF1F", "\u670D\u52A1\u4EC0\u4E48\u65F6\u5019\u5F00\u59CB\uFF1F"],
     service: ["\u5F53\u524D\u8FDB\u5C55\u5230\u54EA\u4E00\u6B65\u4E86\uFF1F", "\u8FD8\u9700\u8981\u6211\u63D0\u4F9B\u4EC0\u4E48\u6750\u6599\uFF1F", "\u9884\u8BA1\u4EC0\u4E48\u65F6\u5019\u80FD\u5B8C\u6210\uFF1F"],
-    default: ["\u80FD\u4ECB\u7ECD\u4E00\u4E0B\u76F8\u5173\u9879\u76EE\u7ECF\u9A8C\u5417\uFF1F", "\u65B9\u6848\u5177\u4F53\u5305\u542B\u54EA\u4E9B\u670D\u52A1\uFF1F", "\u9700\u8981\u6211\u63D0\u4F9B\u4EC0\u4E48\u6750\u6599\uFF1F"]
+    default: ["\u8865\u5145\u671F\u671B\u5B8C\u6210\u65F6\u95F4", "\u8865\u5145\u9884\u7B97\u8303\u56F4", "\u8BF4\u660E\u5DF2\u6709\u6750\u6599"]
   });
   function getQuickReplies(demand) {
     if (demand.status === "plan_pending") return QUICK_REPLIES.plan_pending;
@@ -6888,7 +7351,6 @@
       nowLabel,
       todayLabel,
       responseDeadlineLabel,
-      isWecomAdded,
       startCommunication,
       createAgreementForDemand
     };
@@ -6950,6 +7412,7 @@
       this.state = { demand, team, params: renderParams };
       const messages = getChatMessages(demand.id, team.id, store.chatMessages);
       const quickReplies = this.getQuickReplies(demand);
+      const allowAssistantInput = ["choosing", "communicating"].includes(demand.status) || demand.directInquiry && !demand.requirementConfirmed;
       let renderedAgreement = false;
       const renderedOrders = {};
       const hasTeamMessage = messages.some((item) => item.type === "team" || item.type === "ai");
@@ -6967,9 +7430,9 @@
       if (demand.agreement && !renderedAgreement) html += this.renderAgreementCard(demand);
       html += renderPaymentCard(demand);
       html += this.renderWecomMessage(demand);
-      html += '</div><div class="p7-composer"><div class="p7-quick-replies" aria-label="\u5FEB\u6377\u63D0\u95EE">' + quickReplies.map(
+      html += "</div>" + (allowAssistantInput ? '<div class="p7-composer"><div class="p7-quick-replies" aria-label="\u57FA\u7840\u4FE1\u606F\u5FEB\u6377\u8865\u5145">' + quickReplies.map(
         (text) => '<button type="button" data-quick-reply="' + escapeHTML(text) + '">' + escapeHTML(text) + "</button>"
-      ).join("") + '</div><div class="p7-input-bar"><input type="text" id="p7Input" placeholder="\u8865\u5145\u9700\u6C42\u4FE1\u606F\u2026" aria-label="\u8865\u5145\u9700\u6C42\u4FE1\u606F"><button class="p7-send-btn" id="p7SendBtn" aria-label="\u53D1\u9001\u7ED9\u5E73\u53F0\u52A9\u624B">' + icon("send", 15) + "</button></div></div></div>";
+      ).join("") + '</div><div class="p7-input-bar"><input type="text" id="p7Input" placeholder="\u8865\u5145\u57FA\u7840\u9700\u6C42\u4FE1\u606F\u2026" aria-label="\u8865\u5145\u57FA\u7840\u9700\u6C42\u4FE1\u606F"><button class="p7-send-btn" id="p7SendBtn" aria-label="\u63D0\u4EA4\u7ED9\u5E73\u53F0\u52A9\u624B">' + icon("send", 15) + "</button></div></div>" : '<div class="p7-offline-handoff"><span>' + icon("message", 18) + '</span><div><strong>\u65B9\u6848\u7EC6\u8282\u8BF7\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u6C9F\u901A</strong><small>\u5C0F\u7A0B\u5E8F\u7EE7\u7EED\u5C55\u793A\u786E\u8BA4\u540E\u7684\u65B9\u6848\u3001\u534F\u8BAE\u3001\u4ED8\u6B3E\u548C\u4EA4\u4ED8\u8BB0\u5F55\u3002</small></div><button type="button" data-wecom-open>\u67E5\u770B\u4E8C\u7EF4\u7801</button></div>') + "</div>";
       return html;
     },
     init(params) {
@@ -6989,20 +7452,22 @@
       document.querySelectorAll("[data-agreement-open]").forEach((button) => button.addEventListener("click", () => this.openAgreement()));
       document.querySelectorAll("[data-payment-open]").forEach((button) => button.addEventListener("click", () => this.openPayment()));
       document.querySelectorAll("[data-wecom-open]").forEach((button) => button.addEventListener("click", () => openWecomGuide("serviceConnection")));
-      document.querySelectorAll("[data-change-chat]").forEach((button) => button.addEventListener("click", () => this.fillSuggestion("\u6211\u60F3\u7EE7\u7EED\u786E\u8BA4\u8FD9\u9879\u589E\u9879\u7684\u8303\u56F4\u3001\u8D39\u7528\u548C\u5DE5\u671F\u3002")));
+      document.querySelectorAll("[data-change-chat]").forEach((button) => button.addEventListener("click", () => openWecomGuide("serviceConnection")));
       document.querySelectorAll("[data-change-confirm]").forEach((button) => button.addEventListener("click", () => this.confirmChangeOrder(button.getAttribute("data-change-confirm"))));
       const confirmRequirementButton = document.querySelector("[data-requirement-confirm]");
       if (confirmRequirementButton) confirmRequirementButton.addEventListener("click", () => this.confirmRequirement());
       const input = document.getElementById("p7Input");
-      const draftKey = "ecologyChatDraft:" + demand.id + ":" + team.id;
-      input.value = readText(draftKey, "") || "";
-      input.addEventListener("input", function() {
-        writeText(draftKey, this.value);
-      });
-      input.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") this.sendMessage();
-      });
-      document.getElementById("p7SendBtn").addEventListener("click", () => this.sendMessage());
+      if (input) {
+        const draftKey = "ecologyChatDraft:" + demand.id + ":" + team.id;
+        input.value = readText(draftKey, "") || "";
+        input.addEventListener("input", function() {
+          writeText(draftKey, this.value);
+        });
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") this.sendMessage();
+        });
+        document.getElementById("p7SendBtn").addEventListener("click", () => this.sendMessage());
+      }
       const area = document.getElementById("p7ChatArea");
       if (area) area.scrollTop = area.scrollHeight;
       if (params.open === "plan") setTimeout(() => this.openPlan(), 80);
@@ -7049,7 +7514,6 @@
       changed2(submitServicePlan(demand, team.id, domainOptions5()));
       this.refreshPage();
       toast("\u9700\u6C42\u5DF2\u786E\u8BA4\u5E76\u540C\u6B65\u7ED9\u56E2\u961F");
-      if (!isWecomAdded()) setTimeout(() => openWecomGuide("serviceConnection"), 260);
     },
     openPlan(version) {
       const demand = this.state.demand;
@@ -7096,7 +7560,7 @@
     showAgreementReady() {
       showSheet({
         title: "\u56E2\u961F\u5DF2\u9009\u5B9A",
-        body: '<div class="p7-success-state"><span class="p7-success-icon">' + icon("check", 22) + '</span><strong>\u670D\u52A1\u65B9\u6848\u5DF2\u786E\u8BA4</strong><p>\u4E0B\u4E00\u6B65\u8BF7\u8865\u5145\u534F\u8BAE\u4FE1\u606F\u3001\u5B8C\u6210\u7528\u5370\u5E76\u4E0A\u4F20\u3002\u670D\u52A1\u5546\u7528\u5370\u540E\uFF0C\u5E73\u53F0\u4F1A\u5BA1\u6838\u53CC\u65B9\u534F\u8BAE\u3002</p><div class="p7-success-actions"><button class="btn btn-outline" id="p7ContinueChat">\u7A0D\u540E\u5904\u7406</button><button class="btn btn-primary" id="p7SignAgreement">\u7B7E\u7F72\u534F\u8BAE</button></div></div>'
+        body: '<div class="p7-success-state"><span class="p7-success-icon">' + icon("check", 22) + '</span><strong>\u670D\u52A1\u65B9\u6848\u5DF2\u786E\u8BA4</strong><p>\u6761\u6B3E\u7EE7\u7EED\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u6216\u7EBF\u4E0B\u534F\u5546\u3002\u786E\u8BA4\u4E00\u81F4\u540E\u7531\u670D\u52A1\u5546\u4E0A\u4F20\u6700\u7EC8\u7528\u5370\u534F\u8BAE\uFF0C\u5404\u65B9\u53EA\u5728\u5E73\u53F0\u6838\u5BF9\u548C\u786E\u8BA4\u6700\u7EC8\u7248\u672C\u3002</p><div class="p7-success-actions"><button class="btn btn-outline" id="p7ContinueChat">\u7A0D\u540E\u5904\u7406</button><button class="btn btn-primary" id="p7SignAgreement">\u67E5\u770B\u534F\u8BAE\u8FDB\u5EA6</button></div></div>'
       });
       document.getElementById("p7ContinueChat").addEventListener("click", closeAllModals);
       document.getElementById("p7SignAgreement").addEventListener("click", () => {
@@ -7112,69 +7576,66 @@
         return;
       }
       const stateCopy = {
-        customer_action: ["\u5F85\u4F60\u7B7E\u7F72", "\u8BF7\u4E0B\u8F7D\u670D\u52A1\u5546\u63D0\u4F9B\u7684\u534F\u8BAE\u6A21\u677F\uFF0C\u8865\u5145\u4F01\u4E1A\u4FE1\u606F\u5E76\u5B8C\u6210\u7528\u5370\uFF0C\u518D\u4E0A\u4F20\u626B\u63CF\u4EF6\u3002"],
-        provider_signing: ["\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370", "\u4F60\u4E0A\u4F20\u7684\u534F\u8BAE\u5DF2\u540C\u6B65\u7ED9\u670D\u52A1\u5546\uFF0C\u670D\u52A1\u5546\u7528\u5370\u540E\u4F1A\u63D0\u4EA4\u5E73\u53F0\u5BA1\u6838\u3002"],
-        auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E2D", "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u63D0\u4EA4\u5E73\u53F0\uFF0C\u5BA1\u6838\u901A\u8FC7\u540E\u670D\u52A1\u56E2\u961F\u5F00\u59CB\u4EA4\u4ED8\u3002"],
-        approved: ["\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7", "\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863\uFF0C\u8BF7\u6309\u534F\u8BAE\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u3002"]
+        customer_action: ["\u7B49\u5F85\u670D\u52A1\u5546\u4E0A\u4F20\u6700\u7EC8\u534F\u8BAE", "\u6761\u6B3E\u6C9F\u901A\u5728\u7EBF\u4E0B\u6216\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5B8C\u6210\uFF0C\u670D\u52A1\u5546\u4E0A\u4F20\u5DF2\u7ECF\u534F\u5546\u786E\u8BA4\u5E76\u7528\u5370\u7684\u6700\u7EC8\u7535\u5B50\u6863\u3002"],
+        provider_signing: ["\u6700\u7EC8\u534F\u8BAE\u5F85\u4F60\u786E\u8BA4", "\u8BF7\u6838\u5BF9\u7B7E\u7EA6\u4E3B\u4F53\u3001\u670D\u52A1\u8303\u56F4\u3001\u91D1\u989D\u548C\u4ED8\u6B3E\u8282\u70B9\uFF1B\u5982\u9700\u8C03\u6574\uFF0C\u8BF7\u8054\u7CFB\u670D\u52A1\u5546\u64A4\u56DE\u5E76\u91CD\u65B0\u4E0A\u4F20\u3002"],
+        auditing: ["\u5E73\u53F0\u5BA1\u6838\u4E0E\u5F52\u6863\u4E2D", agreement.agreementType === "tripartite" ? "\u5BA2\u6237\u548C\u670D\u52A1\u5546\u5DF2\u7ECF\u786E\u8BA4\uFF0C\u7B49\u5F85\u5E73\u53F0\u5B8C\u6210\u4E09\u65B9\u786E\u8BA4\u3002" : "\u53CC\u65B9\u5DF2\u7ECF\u786E\u8BA4\uFF0C\u5E73\u53F0\u6B63\u5728\u5B8C\u6210\u8981\u7D20\u5BA1\u6838\u4E0E\u5F52\u6863\u3002"],
+        approved: ["\u534F\u8BAE\u5DF2\u7ECF\u751F\u6548", "\u5404\u65B9\u786E\u8BA4\u8BB0\u5F55\u548C\u6700\u7EC8\u534F\u8BAE\u7248\u672C\u5DF2\u5F52\u6863\uFF0C\u53EF\u4EE5\u8FDB\u5165\u4ED8\u6B3E\u3002"]
       }[agreement.status];
-      let body = '<div class="p7-agreement-detail"><div class="p7-agreement-state"><span>' + icon("shield", 22) + "</span><div><strong>" + stateCopy[0] + "</strong><p>" + stateCopy[1] + "</p></div></div><dl><div><dt>\u534F\u8BAE\u540D\u79F0</dt><dd>" + escapeHTML(agreement.title) + "</dd></div><div><dt>\u5BA2\u6237</dt><dd>" + escapeHTML(agreement.customer) + "</dd></div><div><dt>\u670D\u52A1\u65B9</dt><dd>" + escapeHTML(agreement.provider) + "</dd></div><div><dt>\u670D\u52A1\u9879\u76EE</dt><dd>" + escapeHTML(agreement.service) + "</dd></div><div><dt>\u534F\u8BAE\u91D1\u989D</dt><dd>" + escapeHTML(agreement.amount) + '</dd></div></dl><button class="p7-template-file" id="p7AgreementTemplate" type="button">' + icon("file-text", 17) + "<span><strong>" + escapeHTML(agreement.template) + "</strong><small>\u670D\u52A1\u5546\u63D0\u4F9B\u7684\u6807\u51C6\u534F\u8BAE\u6A21\u677F</small></span>\u67E5\u770B</button>";
-      if (agreement.providerFile) body += '<button class="p7-template-file p7-returned-agreement" id="p7ReturnedAgreement" type="button">' + icon("check-circle", 17) + "<span><strong>" + escapeHTML(agreement.providerFile) + "</strong><small>\u53CC\u65B9\u5DF2\u7528\u5370 \xB7 \u670D\u52A1\u5546\u4E8E " + escapeHTML(agreement.providerUploadedAt || "\u521A\u521A") + " \u56DE\u4F20</small></span>\u67E5\u770B</button>";
-      if (agreement.status === "customer_action") body += '<label class="p7-agreement-upload">' + icon("file-text", 18) + '<span id="p7AgreementUploadName">\u9009\u62E9\u5DF2\u7528\u5370\u7684\u534F\u8BAE\u626B\u63CF\u4EF6</span><input id="p7AgreementInput" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p7AgreementSubmit" type="button">\u4E0A\u4F20\u5E76\u63D0\u4EA4\u7ED9\u670D\u52A1\u5546</button>';
-      else body += '<div class="p7-agreement-progress"><span class="done">\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370</span><span class="' + (["provider_signing", "auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u670D\u52A1\u5546\u7528\u5370</span><span class="' + (["auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u5E73\u53F0\u5BA1\u6838</span><span class="' + (agreement.status === "approved" ? "done" : "") + '">\u534F\u8BAE\u751F\u6548</span></div>';
+      let body = '<div class="p7-agreement-detail"><div class="p7-agreement-state"><span>' + icon("shield", 22) + "</span><div><strong>" + stateCopy[0] + "</strong><p>" + stateCopy[1] + "</p></div></div><dl><div><dt>\u534F\u8BAE\u540D\u79F0</dt><dd>" + escapeHTML(agreement.title) + "</dd></div><div><dt>\u5BA2\u6237</dt><dd>" + escapeHTML(agreement.customer) + "</dd></div><div><dt>\u670D\u52A1\u65B9</dt><dd>" + escapeHTML(agreement.provider) + "</dd></div><div><dt>\u670D\u52A1\u9879\u76EE</dt><dd>" + escapeHTML(agreement.service) + "</dd></div><div><dt>\u534F\u8BAE\u91D1\u989D</dt><dd>" + escapeHTML(agreement.amount) + "</dd></div><div><dt>\u534F\u8BAE\u7C7B\u578B</dt><dd>" + (agreement.agreementType === "tripartite" ? "\u5BA2\u6237\u3001\u670D\u52A1\u5546\u3001\u5E73\u53F0\u4E09\u65B9\u534F\u8BAE" : "\u5BA2\u6237\u4E0E\u670D\u52A1\u5546\u53CC\u8FB9\u534F\u8BAE") + "</dd></div><div><dt>\u5F53\u524D\u7248\u672C</dt><dd>V" + (agreement.version || 1) + "</dd></div></dl>";
+      if (agreement.providerFile) body += '<button class="p7-template-file p7-returned-agreement" id="p7ReturnedAgreement" type="button">' + icon("check-circle", 17) + "<span><strong>" + escapeHTML(agreement.providerFile) + "</strong><small>\u6700\u7EC8\u7528\u5370\u7535\u5B50\u6863 \xB7 \u670D\u52A1\u5546\u4E8E " + escapeHTML(agreement.providerUploadedAt || "\u521A\u521A") + " \u4E0A\u4F20</small></span>\u67E5\u770B</button>";
+      if (agreement.status === "customer_action") body += '<div class="p7-agreement-rule">\u5E73\u53F0\u4EC5\u63A5\u6536\u5404\u65B9\u5DF2\u7ECF\u534F\u5546\u786E\u8BA4\u7684\u6700\u7EC8\u534F\u8BAE\uFF0C\u4E0D\u63D0\u4F9B\u5728\u7EBF\u4FEE\u6539\u3002\u82E5\u6761\u6B3E\u6709\u53D8\u5316\uFF0C\u7531\u670D\u52A1\u5546\u64A4\u56DE\u540E\u91CD\u65B0\u4E0A\u4F20\u3002</div><button class="btn btn-primary btn-block" id="p7AgreementSubmit" type="button">Demo\uFF1A\u6A21\u62DF\u670D\u52A1\u5546\u4E0A\u4F20\u6700\u7EC8\u534F\u8BAE</button>';
+      else body += '<div class="p7-agreement-progress"><span class="done">\u670D\u52A1\u5546\u4E0A\u4F20\u6700\u7EC8\u534F\u8BAE</span><span class="' + (["auditing", "approved"].includes(agreement.status) ? "done" : "") + '">\u5BA2\u6237\u786E\u8BA4</span><span class="' + (agreement.status === "approved" ? "done" : "") + '">' + (agreement.agreementType === "tripartite" ? "\u5E73\u53F0\u786E\u8BA4" : "\u5E73\u53F0\u5BA1\u6838\u5F52\u6863") + '</span><span class="' + (agreement.status === "approved" ? "done" : "") + '">\u534F\u8BAE\u751F\u6548</span></div>';
+      if (agreement.status === "provider_signing") body += '<button class="btn btn-primary btn-block" id="p7AgreementCustomerConfirm" type="button">\u786E\u8BA4\u6700\u7EC8\u534F\u8BAE</button><button class="p7-agreement-withdraw-note" type="button" id="p7AgreementReupload">\u5185\u5BB9\u4ECD\u9700\u8C03\u6574\uFF0C\u8BF7\u670D\u52A1\u5546\u64A4\u56DE\u91CD\u4F20</button>';
       body += "</div>";
       const overlay = showSheet({ title: "\u670D\u52A1\u534F\u8BAE", body });
-      overlay.querySelector("#p7AgreementTemplate").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u534F\u8BAE\u6A21\u677F\u9884\u89C8"));
       const returnedAgreement = overlay.querySelector("#p7ReturnedAgreement");
-      if (returnedAgreement) returnedAgreement.addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u53CC\u65B9\u7528\u5370\u534F\u8BAE"));
-      const input = overlay.querySelector("#p7AgreementInput");
-      if (input) input.addEventListener("change", function() {
-        overlay.querySelector("#p7AgreementUploadName").textContent = this.files.length ? this.files[0].name : "\u9009\u62E9\u5DF2\u7528\u5370\u7684\u534F\u8BAE\u626B\u63CF\u4EF6";
-      });
+      if (returnedAgreement) returnedAgreement.addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u6700\u7EC8\u7528\u5370\u534F\u8BAE"));
       const submit = overlay.querySelector("#p7AgreementSubmit");
       if (submit) submit.addEventListener("click", () => {
-        if (!input.files.length) {
-          toast("\u8BF7\u5148\u9009\u62E9\u5DF2\u7528\u5370\u7684\u534F\u8BAE\u6587\u4EF6");
-          return;
-        }
-        changed2(uploadCustomerAgreement(demand, input.files[0].name, domainOptions5()));
+        changed2(uploadCustomerAgreement(demand, demand.sku + "\u6700\u7EC8\u7528\u5370\u534F\u8BAE-V" + (agreement.version || 1) + ".pdf", domainOptions5()));
         closeAllModals();
         this.refreshPage();
-        toast("\u534F\u8BAE\u5DF2\u4E0A\u4F20\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370");
+        toast("\u670D\u52A1\u5546\u5DF2\u4E0A\u4F20\u6700\u7EC8\u534F\u8BAE\uFF0C\u8BF7\u5B8C\u6210\u786E\u8BA4");
+        this.openAgreement();
+      });
+      const confirm = overlay.querySelector("#p7AgreementCustomerConfirm");
+      if (confirm) confirm.addEventListener("click", () => {
+        changed2(setAgreementStatus(demand, "auditing", domainOptions5()));
+        overlay.remove();
+        this.refreshPage();
+        toast(agreement.agreementType === "tripartite" ? "\u5DF2\u786E\u8BA4\uFF0C\u7B49\u5F85\u5E73\u53F0\u5B8C\u6210\u4E09\u65B9\u786E\u8BA4" : "\u5DF2\u786E\u8BA4\uFF0C\u5E73\u53F0\u6B63\u5728\u5BA1\u6838\u5F52\u6863");
         this.simulateAgreementProgress(demand.id);
+      });
+      const reupload = overlay.querySelector("#p7AgreementReupload");
+      if (reupload) reupload.addEventListener("click", () => {
+        agreement.version = (agreement.version || 1) + 1;
+        agreement.status = "customer_action";
+        agreement.providerFile = "";
+        agreement.finalFile = "";
+        agreement.confirmations = { provider: false, customer: false, platform: agreement.agreementType !== "tripartite" };
+        overlay.remove();
+        this.refreshPage();
+        toast("\u5DF2\u8BB0\u5F55\u64A4\u56DE\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u4E0A\u4F20 V" + agreement.version);
       });
     },
     simulateAgreementProgress(demandId) {
       setTimeout(() => {
         const demand = getDemand(demandId, store.demands);
-        if (!demand || demand.agreement?.status !== "provider_signing") return;
-        changed2(setAgreementStatus(demand, "auditing", domainOptions5()));
+        if (!demand || demand.agreement?.status !== "auditing") return;
+        changed2(setAgreementStatus(demand, "approved", domainOptions5()));
         const visible = document.getElementById("page-container")?.getAttribute("data-page") === "p7" && this.state.demand?.id === demandId;
         if (visible) {
-          this.refreshPage();
-          const overlay = showSheet({
-            title: "\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370",
-            body: '<div class="p7-agreement-returned"><span>' + icon("check-circle", 28) + '</span><strong>\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u8FD4\u56DE</strong><p>\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370\u5E76\u4E0A\u4F20\u534F\u8BAE\uFF0C\u5E73\u53F0\u6B63\u5728\u6838\u5BF9\u7B7E\u7EA6\u4E3B\u4F53\u3001\u91D1\u989D\u548C\u670D\u52A1\u8303\u56F4\u3002</p><button class="p7-template-file" id="p7ReturnedPreview" type="button">' + icon("file-text", 17) + "<span><strong>" + escapeHTML(demand.agreement.providerFile) + '</strong><small>\u53CC\u65B9\u5DF2\u7528\u5370 \xB7 \u5E73\u53F0\u5BA1\u6838\u4E2D</small></span>\u67E5\u770B</button><button class="btn btn-primary btn-block" id="p7ReturnedDone" type="button">\u77E5\u9053\u4E86</button></div>'
-          });
-          overlay.querySelector("#p7ReturnedPreview").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u53CC\u65B9\u7528\u5370\u534F\u8BAE"));
-          overlay.querySelector("#p7ReturnedDone").addEventListener("click", () => overlay.remove());
-        }
-        setTimeout(() => {
-          const current = getDemand(demandId, store.demands);
-          if (!current || current.agreement?.status !== "auditing") return;
-          changed2(setAgreementStatus(current, "approved", domainOptions5()));
-          const stillVisible = document.getElementById("page-container")?.getAttribute("data-page") === "p7" && this.state.demand?.id === demandId;
-          if (!stillVisible) return;
           closeAllModals();
           this.refreshPage();
-          const approved = showSheet({
-            title: "\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7",
-            body: '<div class="p7-agreement-returned approved"><span>' + icon("shield", 28) + '</span><strong>\u53CC\u65B9\u534F\u8BAE\u5DF2\u5F52\u6863</strong><p>\u534F\u8BAE\u5DF2\u901A\u8FC7\u5E73\u53F0\u8981\u7D20\u5BA1\u6838\u3002\u4E0B\u4E00\u6B65\u5411\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53\u4ED8\u6B3E\u5E76\u4E0A\u4F20\u51ED\u8BC1\u3002</p><button class="btn btn-primary btn-block" id="p7AgreementProgress" type="button">\u8FDB\u5165\u4ED8\u6B3E</button></div>'
+          const overlay = showSheet({
+            title: "\u534F\u8BAE\u5DF2\u7ECF\u751F\u6548",
+            body: '<div class="p7-agreement-returned approved"><span>' + icon("shield", 28) + "</span><strong>" + (demand.agreement.agreementType === "tripartite" ? "\u4E09\u65B9\u786E\u8BA4\u5DF2\u5B8C\u6210" : "\u53CC\u65B9\u786E\u8BA4\u5DF2\u5B8C\u6210") + '</strong><p>\u6700\u7EC8\u534F\u8BAE\u548C\u5404\u65B9\u786E\u8BA4\u8BB0\u5F55\u5DF2\u7ECF\u5F52\u6863\uFF0C\u4E0B\u4E00\u6B65\u6309\u534F\u8BAE\u4ED8\u6B3E\u3002</p><button class="btn btn-primary btn-block" id="p7AgreementProgress" type="button">\u8FDB\u5165\u4ED8\u6B3E</button></div>'
           });
-          approved.querySelector("#p7AgreementProgress").addEventListener("click", () => {
-            approved.remove();
+          overlay.querySelector("#p7AgreementProgress").addEventListener("click", () => {
+            overlay.remove();
             this.openPayment();
           });
-        }, 2800);
+        }
       }, 1400);
     },
     openPayment() {
@@ -7183,11 +7644,18 @@
       if (!payment) return toast("\u4ED8\u6B3E\u4FE1\u606F\u5C1A\u672A\u751F\u6210");
       let action = "";
       if (payment.status === "pending") {
-        action = '<div class="p7-payment-account"><div><span>\u6536\u6B3E\u65B9</span><strong>' + escapeHTML(demand.agreement.provider) + '</strong></div><div><span>\u5F00\u6237\u94F6\u884C</span><strong>\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C</strong></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>**** **** **** 6628</strong></div></div><label class="p7-agreement-upload">' + icon("upload", 18) + '<span id="p7PaymentFileName">\u9009\u62E9\u4ED8\u6B3E\u51ED\u8BC1</span><input id="p7PaymentInput" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p7PaymentSubmit" type="button">\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1</button>';
+        action = '<div class="p7-payment-account"><div><span>\u6536\u6B3E\u65B9</span><strong>' + escapeHTML(payment.payee || demand.agreement.provider) + '</strong><button type="button" data-payment-copy="' + escapeHTML(payment.payee || demand.agreement.provider) + '">\u590D\u5236</button></div><div><span>\u5F00\u6237\u94F6\u884C</span><strong>' + escapeHTML(payment.bankName || "\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C") + '</strong><button type="button" data-payment-copy="' + escapeHTML(payment.bankName || "\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C") + '">\u590D\u5236</button></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>' + escapeHTML(payment.bankAccount || "6222000000006628") + '</strong><button type="button" data-payment-copy="' + escapeHTML(payment.bankAccount || "6222000000006628") + '">\u590D\u5236</button></div></div><label class="p7-agreement-upload">' + icon("upload", 18) + '<span id="p7PaymentFileName">\u9009\u62E9\u4ED8\u6B3E\u51ED\u8BC1</span><input id="p7PaymentInput" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p7PaymentSubmit" type="button">\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1</button>';
       } else {
-        action = '<div class="p7-payment-result ' + payment.status + '">' + icon(payment.status === "paid" ? "check-circle" : "clock", 21) + "<span><strong>" + (payment.status === "paid" ? "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26" : "\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26") + "</strong><small>" + escapeHTML(payment.receipt || "\u4ED8\u6B3E\u8BB0\u5F55\u5DF2\u7559\u5B58") + "</small></span></div>";
+        action = '<div class="p7-payment-result ' + payment.status + '">' + icon(payment.status === "paid" ? "check-circle" : "clock", 21) + "<span><strong>" + (payment.status === "paid" ? "\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26" : "\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u786E\u8BA4\u5230\u8D26") + "</strong><small>" + (payment.status === "paid" ? escapeHTML(payment.receipt || "\u4ED8\u6B3E\u8BB0\u5F55\u5DF2\u7559\u5B58") : "\u670D\u52A1\u5546\u5C06\u4E8E " + (payment.confirmSlaWorkingDays || 2) + " \u4E2A\u5DE5\u4F5C\u65E5\u5185\u786E\u8BA4\u5230\u8D26 \xB7 " + escapeHTML(payment.receipt || "\u51ED\u8BC1\u5DF2\u7559\u5B58")) + "</small></span></div>" + (payment.status === "confirming" ? '<button class="btn btn-outline btn-block" id="p7DemoConfirmPayment" type="button">Demo\uFF1A\u6A21\u62DF\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26</button>' : "");
       }
-      const overlay = showSheet({ title: "\u670D\u52A1\u4ED8\u6B3E", body: '<div class="p7-payment-sheet"><div class="p7-payment-total"><small>\u672C\u6B21\u5E94\u4ED8</small><strong>' + escapeHTML(payment.amount) + "</strong><span>\u8D44\u91D1\u76F4\u63A5\u652F\u4ED8\u7ED9\u670D\u52A1\u5546\uFF0C\u5E73\u53F0\u4E0D\u6258\u7BA1</span></div>" + action + "</div>" });
+      const overlay = showSheet({ title: "\u670D\u52A1\u4ED8\u6B3E", body: '<div class="p7-payment-sheet"><div class="p7-payment-total"><small>\u672C\u6B21\u5E94\u4ED8</small><strong>' + escapeHTML(payment.amount) + "</strong><span>" + escapeHTML(payment.collectionModel || "\u524D\u7F6E\u6536\u6B3E") + ' \xB7 \u8D44\u91D1\u76F4\u63A5\u652F\u4ED8\u7ED9\u534F\u8BAE\u7EA6\u5B9A\u7684\u6536\u6B3E\u65B9</span></div><div class="p7-payment-rule"><span>\u5F00\u7968\u89C4\u5219</span><strong>' + escapeHTML(payment.invoiceRule || "\u8C01\u6536\u6B3E\u8C01\u5F00\u7968\uFF0C\u4E09\u6D41\u4E00\u81F4") + '</strong></div><div class="p7-payment-trust">' + icon("shield", 18) + "<span><strong>\u534F\u8BAE\u7ECF\u5E73\u53F0\u5BA1\u6838\uFF0C\u5C65\u7EA6\u8FC7\u7A0B\u5E73\u53F0\u7559\u8BC1</strong><small>\u5E73\u53F0\u8BB0\u5F55\u534F\u8BAE\u7248\u672C\u3001\u4ED8\u6B3E\u51ED\u8BC1\u3001\u5230\u8D26\u786E\u8BA4\u4E0E\u540E\u7EED\u4EA4\u4ED8\u8282\u70B9\uFF1B\u5E73\u53F0\u4E0D\u4EE3\u6536\u3001\u4E0D\u6258\u7BA1\u3002</small></span></div>" + action + "</div>" });
+      overlay.querySelectorAll("[data-payment-copy]").forEach((button) => button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(button.getAttribute("data-payment-copy"));
+        } catch (_error) {
+        }
+        toast("\u5DF2\u590D\u5236");
+      }));
       const input = overlay.querySelector("#p7PaymentInput");
       if (input) input.addEventListener("change", function() {
         overlay.querySelector("#p7PaymentFileName").textContent = this.files.length ? this.files[0].name : "\u9009\u62E9\u4ED8\u6B3E\u51ED\u8BC1";
@@ -7198,16 +7666,15 @@
         changed2(submitPaymentReceipt(demand, input.files[0].name, domainOptions5()));
         overlay.remove();
         this.refreshPage();
-        toast("\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26");
-        setTimeout(() => {
-          const current = getDemand(demand.id, store.demands);
-          if (!current || current.payment?.status !== "confirming") return;
-          changed2(confirmPaymentReceived(current, domainOptions5()));
-          if (document.getElementById("page-container")?.getAttribute("data-page") === "p7") {
-            this.refreshPage();
-            toast("\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26\uFF0C\u670D\u52A1\u6B63\u5F0F\u5F00\u59CB");
-          }
-        }, 1600);
+        toast("\u51ED\u8BC1\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u5728\u65F6\u9650\u5185\u786E\u8BA4");
+        this.openPayment();
+      });
+      const demoConfirm = overlay.querySelector("#p7DemoConfirmPayment");
+      if (demoConfirm) demoConfirm.addEventListener("click", () => {
+        changed2(confirmPaymentReceived(demand, domainOptions5()));
+        overlay.remove();
+        this.refreshPage();
+        toast("\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u5230\u8D26\uFF0C\u670D\u52A1\u6B63\u5F0F\u5F00\u59CB");
       });
     },
     openChangeOrderSheet() {
@@ -7281,7 +7748,7 @@
           const complete = Object.keys(page15.state.ratings).length === page15.dimensionKeys.length;
           document.getElementById("p8OverallScore").textContent = complete ? overall.toFixed(1) : "\u2014";
           document.getElementById("p8OverallLabel").textContent = complete ? page15.getRatingLabel(overall) : "\u5F85\u8BC4\u5206";
-          document.getElementById("p8LowRatingHelp").classList.toggle("visible", complete && overall <= 2);
+          document.getElementById("p8LowRatingHelp").classList.toggle("visible", complete && overall <= 3);
           const submitButton = document.getElementById("p8-submit");
           if (submitButton) submitButton.disabled = !complete;
         });
@@ -7435,12 +7902,19 @@
       const lowRatingHelp = document.getElementById("p8LowRatingHelp");
       if (lowRatingHelp) {
         lowRatingHelp.addEventListener("click", () => {
-          const body = '<div class="p8-support-sheet"><p>\u8BF7\u4FDD\u7559\u670D\u52A1\u65B9\u6848\u3001\u6C9F\u901A\u8BB0\u5F55\u548C\u4EA4\u4ED8\u6587\u4EF6\u3002\u63D0\u4EA4\u540E\u5E73\u53F0\u4F1A\u534F\u52A9\u6838\u5BF9\u53CC\u65B9\u7EA6\u5B9A\u3002</p><button class="btn btn-primary btn-block" id="p8SupportSubmit">\u63D0\u4EA4\u534F\u52A9\u7533\u8BF7</button></div>';
-          showSheet({ title: "\u7533\u8BF7\u5E73\u53F0\u534F\u52A9", body });
-          document.getElementById("p8SupportSubmit").addEventListener("click", () => {
-            closeAllModals();
-            toast("\u534F\u52A9\u7533\u8BF7\u5DF2\u63D0\u4EA4");
-          });
+          const existing = (demand.afterSaleCases || []).find((item) => item.source === "low_rating");
+          const afterSale = existing || createAfterSale(demand, {
+            source: "low_rating",
+            type: "\u4F4E\u5206\u8BC4\u4EF7\u7533\u8BF7\u5E73\u53F0\u534F\u52A9",
+            description: "\u5BA2\u6237\u5728\u8BC4\u4EF7\u9636\u6BB5\u5BF9\u670D\u52A1\u4F53\u9A8C\u4E0D\u6EE1\u610F\uFF0C\u7533\u8BF7\u5E73\u53F0\u6838\u5BF9\u65B9\u6848\u3001\u5C65\u7EA6\u548C\u4EA4\u4ED8\u8BB0\u5F55\u3002",
+            eta: "1 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53D7\u7406\uFF0C2 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53CD\u9988\u9996\u6B21\u8FDB\u5C55",
+            customerEvidence: ["\u4F4E\u5206\u8BC4\u4EF7\u53CA\u8865\u5145\u8BF4\u660E", "\u8BA4\u4E3A\u672A\u8FBE\u5230\u7EA6\u5B9A\u7684\u5177\u4F53\u4E8B\u9879"],
+            providerEvidence: ["\u670D\u52A1\u65B9\u6848\u4E0E\u5C65\u7EA6\u8BB0\u5F55", "\u4EA4\u4ED8\u6210\u679C\u53CA\u95EE\u9898\u5904\u7406\u8BF4\u660E"]
+          }, { nowLabel: todayLabel });
+          emitChange();
+          showSheet({ title: "\u552E\u540E\u5DE5\u5355\u5DF2\u751F\u6210", body: '<div class="p8-support-sheet"><span>' + icon("shield", 28) + "</span><strong>" + afterSale.id + '</strong><p>\u5E73\u53F0\u5DF2\u81EA\u52A8\u5173\u8054\u672C\u8BA2\u5355\u3001\u670D\u52A1\u56E2\u961F\u3001\u4EA4\u4ED8\u8BB0\u5F55\u548C\u5F53\u524D\u8BC4\u4EF7\u3002\u4F60\u53EF\u4EE5\u5728\u201C\u6211\u7684\uFF0D\u6295\u8BC9\u4E0E\u552E\u540E\u201D\u7EE7\u7EED\u67E5\u770B\u5E76\u8865\u5145\u6750\u6599\u3002</p><button class="btn btn-primary btn-block" id="p8SupportDone">\u77E5\u9053\u4E86</button></div>' });
+          document.getElementById("p8SupportDone").addEventListener("click", closeAllModals);
+          toast("\u552E\u540E\u5DE5\u5355\u5DF2\u521B\u5EFA");
         });
       }
       const submitButton = document.getElementById("p8-submit");
@@ -7564,7 +8038,7 @@
     Object.freeze({ key: "all", label: "\u5168\u90E8\u8BA2\u5355" }),
     Object.freeze({ key: "payment", label: "\u5F85\u4ED8\u6B3E" }),
     Object.freeze({ key: "service", label: "\u670D\u52A1\u4E2D" }),
-    Object.freeze({ key: "after_sale", label: "\u552E\u540E" }),
+    Object.freeze({ key: "after_sale", label: "\u6295\u8BC9\u4E0E\u552E\u540E" }),
     Object.freeze({ key: "ended", label: "\u5DF2\u5B8C\u6210" })
   ]);
   function byPriorityThenDate(left, right) {
@@ -7584,7 +8058,7 @@
         const orders = store.demands.filter((demand) => ["contract_pending", "payment_pending", "payment_confirming", "active", "acceptance", "done"].includes(demand.status));
         if (filter === "payment") filtered = orders.filter((demand) => ["payment_pending", "payment_confirming"].includes(demand.status));
         else if (filter === "service") filtered = orders.filter((demand) => ["active", "acceptance"].includes(demand.status));
-        else if (filter === "after_sale") filtered = orders.filter((demand) => Boolean(demand.afterSale));
+        else if (filter === "after_sale") filtered = orders.filter((demand) => Boolean(demand.afterSale) || (demand.afterSaleCases || []).length > 0);
         else if (filter === "ended") filtered = orders.filter((demand) => demand.status === "done");
         else filtered = orders;
         return filtered.slice().sort(byPriorityThenDate);
@@ -7631,9 +8105,7 @@
       this.state.keepFilter = null;
       this.state.activeFilter = initialFilter;
       let html = '<div class="p9-page"><div class="nav-bar"><button class="nav-back" id="p9Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">' + (this.state.mode === "orders" ? "\u6211\u7684\u8BA2\u5355" : "\u6211\u7684\u670D\u52A1\u9700\u6C42") + '</div><div style="min-width:32px"></div></div>';
-      if (!isWecomAdded()) {
-        html += '<button class="p9-wecom-entry" id="p9WecomEntry" type="button"><span class="p9-wecom-icon">' + icon("bell", 18) + "</span><span><strong>\u6DFB\u52A0\u4F01\u4E1A\u5FAE\u4FE1</strong><small>\u53CA\u65F6\u63A5\u6536\u56E2\u961F\u54CD\u5E94\u548C\u670D\u52A1\u8FDB\u5EA6\u901A\u77E5</small></span>" + icon("chevron-right", 17) + "</button>";
-      }
+      html += '<button class="p9-wecom-entry" id="p9WecomEntry" type="button"><span class="p9-wecom-icon">' + icon("message", 18) + "</span><span><strong>\u5E73\u53F0\u670D\u52A1\u987E\u95EE</strong><small>\u9700\u8981\u6DF1\u5165\u6C9F\u901A\u65F6\uFF0C\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801\u5E76\u7531\u987E\u95EE\u534F\u52A9\u62C9\u7FA4</small></span>" + icon("chevron-right", 17) + "</button>";
       html += '<div class="p9-status-tabs">';
       filters.forEach((filter) => {
         html += '<button class="p9-status-tab' + (filter.key === initialFilter ? " active" : "") + '" data-p9-filter="' + filter.key + '">' + filter.label + "</button>";
@@ -7836,7 +8308,7 @@
       html += '<header class="p10-summary"><div class="p10-summary-label">' + escapeHTML(category && category.name || "\u4F01\u4E1A\u670D\u52A1") + "</div><h1>" + safeSku + "</h1><p>" + detail.intro + '</p><div class="p10-summary-meta"><strong>' + (staged ? "\u6309\u9879\u76EE\u8BC4\u4F30\u62A5\u4EF7" : packageConfig ? packageConfig.rangeText : team.priceText) + "</strong><span>" + (packageConfig ? "\u4E09\u6863\u660E\u7801\u6807\u4EF7" : team.priceMode) + "</span><span>" + detail.period + "</span></div>" + (packageConfig ? '<div class="p10-price-basis"><strong>\u57FA\u7840\u7248\u9002\u7528\u524D\u63D0</strong><span>' + escapeHTML(packageConfig.basis) + "</span></div>" : "") + "</header>";
       html += '<button class="p10-team-row" id="p10TeamLink" type="button" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '"><span class="avatar avatar-sm" style="background:' + team.avatarColor + "20;color:" + team.avatarColor + '">' + team.avatar + "</span><span><strong>" + team.name + "</strong><small>" + team.orgShort + " \xB7 " + icon("check-circle", 12) + " \u8D44\u8D28\u5DF2\u6838\u9A8C</small></span>" + icon("chevron-right", 16) + "</button>";
       html += renderPackageSelector(packageConfig, selectedPackage ? selectedPackage.id : "");
-      html += '<main class="p10-content"><section><h2>\u9002\u5408\u8C01</h2><p>' + detail.suitableFor + "</p></section><section><h2>\u670D\u52A1\u5185\u5BB9</h2>" + this.renderList(detail.scope) + "</section><section><h2>\u4EA4\u4ED8\u6210\u679C</h2>" + this.renderList(detail.deliverables) + '</section><section><h2>\u670D\u52A1\u6D41\u7A0B</h2><ol class="p10-process">' + detail.process.map((step, index) => "<li><b>" + (index + 1) + "</b><span>" + step + "</span></li>").join("") + "</ol></section><section><h2>\u9700\u8981\u51C6\u5907</h2>" + this.renderList(detail.materials) + "</section>" + (staged ? '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>\u5206\u9636\u6BB5\u4ED8\u6B3E</h2><p>\u786E\u8BA4\u524D\u4E00\u9636\u6BB5\u6210\u679C\u540E\uFF0C\u518D\u89E6\u53D1\u4E0B\u4E00\u7B14\u670D\u52A1\u6B3E\u3002</p></div><span>\u4E24\u7B14\u5404 50%</span></div><div class="p10-stage-row"><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>' + escapeHTML(staged.secondTrigger) + '</span></div><div class="p10-result-risk">' + icon("alert", 16) + "<p><strong>\u6700\u7EC8\u7ED3\u679C\u4E0D\u627F\u8BFA</strong>\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u5B58\u5728\u4E0D\u786E\u5B9A\u6027\uFF1B\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF0C\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section>" : "") + '<section class="p10-exclusions"><h2>\u8D39\u7528\u901A\u5E38\u4E0D\u5305\u542B</h2>' + this.renderList(detail.exclusions) + "<p>\u6700\u7EC8\u670D\u52A1\u8303\u56F4\u3001\u62A5\u4EF7\u548C\u5468\u671F\uFF0C\u4EE5\u53CC\u65B9\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002</p></section></main>";
+      html += '<main class="p10-content"><section><h2>\u9002\u5408\u8C01</h2><p>' + detail.suitableFor + "</p></section><section><h2>\u670D\u52A1\u5185\u5BB9</h2>" + this.renderList(detail.scope) + "</section><section><h2>\u4EA4\u4ED8\u6210\u679C</h2>" + this.renderList(detail.deliverables) + '</section><section><h2>\u670D\u52A1\u6D41\u7A0B</h2><ol class="p10-process">' + detail.process.map((step, index) => "<li><b>" + (index + 1) + "</b><span>" + step + "</span></li>").join("") + "</ol></section><section><h2>\u9700\u8981\u51C6\u5907</h2>" + this.renderList(detail.materials) + "</section>" + (staged ? '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>' + escapeHTML(staged.paymentMode) + "</h2><p>\u6BCF\u4E2A\u65B9\u6848\u53EF\u5355\u72EC\u914D\u7F6E\u4ED8\u6B3E\u6BD4\u4F8B\uFF0C\u786E\u8BA4\u524D\u4E00\u9636\u6BB5\u6210\u679C\u540E\u518D\u89E6\u53D1\u4E0B\u4E00\u7B14\u670D\u52A1\u6B3E\u3002</p></div><span>" + staged.firstRatio + "% + " + staged.secondRatio + '%</span></div><div class="p10-stage-row"><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>\u4E09\u65B9\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>' + escapeHTML(staged.secondTrigger) + '</span></div><div class="p10-stage-row"><b>\u6536\u6B3E\u4E0E\u5F00\u7968</b><span>\u5206\u522B\u652F\u4ED8\u7ED9\u670D\u52A1\u5546\u548C\u5E73\u53F0\uFF1B\u5404\u6536\u6B3E\u65B9\u6309\u5B9E\u6536\u91D1\u989D\u5F00\u7968</span></div><div class="p10-result-risk">' + icon("alert", 16) + "<p><strong>\u6700\u7EC8\u7ED3\u679C\u4E0D\u627F\u8BFA</strong>\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u5B58\u5728\u4E0D\u786E\u5B9A\u6027\uFF1B\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF0C\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section>" : '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>\u4ED8\u6B3E\u4E0E\u53D1\u7968</h2><p>\u672C\u670D\u52A1\u91C7\u7528\u524D\u7F6E\u6536\u6B3E\uFF0C\u534F\u8BAE\u751F\u6548\u540E\u6309\u786E\u8BA4\u6863\u4F4D\u4ED8\u6B3E\u3002</p></div><span>\u76F4\u63A5\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u6536\u6B3E\u65B9</b><span>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</span></div><div class="p10-stage-row"><b>\u5F00\u7968\u89C4\u5219</b><span>\u8C01\u6536\u6B3E\u8C01\u5F00\u7968\uFF0C\u5408\u540C\u3001\u8D44\u91D1\u4E0E\u53D1\u7968\u4FE1\u606F\u4FDD\u6301\u4E00\u81F4</span></div></section>') + '<section class="p10-exclusions"><h2>\u8D39\u7528\u901A\u5E38\u4E0D\u5305\u542B</h2>' + this.renderList(detail.exclusions) + "<p>\u6700\u7EC8\u670D\u52A1\u8303\u56F4\u3001\u62A5\u4EF7\u548C\u5468\u671F\uFF0C\u4EE5\u53CC\u65B9\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002</p></section></main>";
       html += '<div class="bottom-bar p10-bottom"><div><small class="p10-bottom-plan-name">' + (staged ? "\u62A5\u4EF7\u65B9\u5F0F" : selectedPackage ? selectedPackage.name : "\u53C2\u8003\u4EF7\u683C") + '</small><strong class="p10-bottom-plan-price">' + (staged ? "\u8BC4\u4F30\u540E\u62A5\u4EF7" : selectedPackage ? selectedPackage.priceText : team.priceText) + '</strong></div><button class="btn btn-primary" id="p10Consult" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '" data-plan-id="' + (selectedPackage ? selectedPackage.id : "") + '">' + (staged ? "\u54A8\u8BE2\u5E76\u83B7\u53D6\u65B9\u6848" : selectedPackage ? "\u9009\u62E9" + selectedPackage.name + "\u5E76\u54A8\u8BE2" : "\u7ACB\u5373\u54A8\u8BE2") + "</button></div>";
       return html;
     },
@@ -8246,7 +8718,7 @@
     const counts = getConnectionCounts();
     const hasProgress = state2.status === "matched" || Object.values(counts).some(Boolean);
     const manageState = counts.entrepreneur_requested > 0 ? ["\u7B49\u5F85\u6295\u8D44\u4EBA\u786E\u8BA4", "\u9879\u76EE\u6458\u8981\u5DF2\u53D1\u9001\uFF0C\u786E\u8BA4\u7ED3\u679C\u4F1A\u53CA\u65F6\u901A\u77E5"] : counts.confirmed + counts.connecting > 0 ? ["\u6301\u7EED\u5339\u914D \xB7 \u5EFA\u8054\u5904\u7406\u4E2D", "\u5E73\u53F0\u6309\u6295\u8D44\u4EBA\u5206\u522B\u8BB0\u5F55\u548C\u534F\u52A9\u5EFA\u8054"] : counts.connected > 0 ? ["\u672C\u8F6E\u6301\u7EED\u5339\u914D", "\u5DF2\u6709\u5EFA\u8054\u5B8C\u6210\uFF0C\u4ECD\u53EF\u63A5\u6536\u65B0\u7ED3\u679C"] : state2.paused ? ["\u5DF2\u6682\u505C\u5339\u914D", "\u6062\u590D\u540E\u7EE7\u7EED\u6838\u5BF9\u6295\u8D44\u504F\u597D"] : ["\u6301\u7EED\u5339\u914D\u4E2D", "\u6709\u8FDB\u5C55\u65F6\u5C06\u53CA\u65F6\u901A\u77E5\u4F60"];
-    return '<div class="p12-page">' + header("\u878D\u8D44\u5339\u914D\u8FDB\u5EA6") + '<section class="p12-status-head ' + (hasProgress ? "has-result" : "") + '"><span>' + icon(copy.iconName, 26) + "</span><h1>" + copy.title + "</h1><p>" + copy.desc + "</p>" + (copy.action ? '<button class="btn btn-primary" id="p12ViewResults" type="button">' + copy.action + "</button>" : "") + "</section>" + fundraisingFunnel(state2) + connectionOverview() + '<section class="p12-status-list"><h2>\u672C\u8F6E\u8FDB\u5EA6</h2>' + timelineView(state2) + '</section><section class="p12-notice"><div><h2>\u8FDB\u5C55\u901A\u77E5</h2><button id="p12NoticeInfo" type="button">\u7BA1\u7406</button></div><p><span>' + icon("inbox", 16) + "\u7AD9\u5185\u6D88\u606F\u5DF2\u5F00\u542F</span><span>" + icon("message", 16) + (isWecomAdded() ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4F01\u4E1A\u5FAE\u4FE1\u5F85\u6DFB\u52A0") + '</span></p></section><section class="p12-manage"><h2>\u672C\u8F6E\u5339\u914D\u7BA1\u7406</h2><div class="p12-manage-row"><span class="p12-manage-icon">' + icon("file-text", 17) + '</span><span class="p12-manage-copy"><small>\u5F53\u524D BP</small><strong>' + escapeHTML(state2.bpName || "\u661F\u8FB0\u79D1\u6280\u5546\u4E1A\u8BA1\u5212\u4E66.pdf") + "</strong><em>" + escapeHTML(state2.bpUpdatedAt || "2026-09-03") + ' \u66F4\u65B0</em></span><button id="p12UpdateBp" type="button">\u66F4\u65B0 ' + icon("chevron-right", 14) + '</button></div><div class="p12-manage-row"><span class="p12-manage-icon">' + icon(state2.paused ? "pause" : "refresh", 17) + '</span><span class="p12-manage-copy"><small>\u5339\u914D\u72B6\u6001</small><strong>' + manageState[0] + "</strong><em>" + manageState[1] + '</em></span><button id="p12TogglePause" type="button">' + (state2.paused ? "\u6062\u590D" : "\u6682\u505C") + " " + icon("chevron-right", 14) + '</button></div><button class="p12-manage-row p12-manage-record" id="p12Logs" type="button"><span class="p12-manage-icon">' + icon("shield", 17) + '</span><span class="p12-manage-copy"><small>\u8D44\u6599\u6743\u9650</small><strong>\u6388\u6743\u4E0E\u8BBF\u95EE\u8BB0\u5F55</strong><em>\u6309\u6295\u8D44\u4EBA\u67E5\u770B\u81EA\u52A8\u6838\u9A8C\u4E0E\u8BBF\u95EE\u7559\u75D5</em></span><span class="p12-manage-link">\u67E5\u770B ' + icon("chevron-right", 14) + '</span></button><div class="p12-manage-danger"><button id="p12End" type="button">\u7ED3\u675F\u672C\u8F6E\u5339\u914D</button></div></section></div>';
+    return '<div class="p12-page">' + header("\u878D\u8D44\u5339\u914D\u8FDB\u5EA6") + '<section class="p12-status-head ' + (hasProgress ? "has-result" : "") + '"><span>' + icon(copy.iconName, 26) + "</span><h1>" + copy.title + "</h1><p>" + copy.desc + "</p>" + (copy.action ? '<button class="btn btn-primary" id="p12ViewResults" type="button">' + copy.action + "</button>" : "") + "</section>" + fundraisingFunnel(state2) + connectionOverview() + '<section class="p12-status-list"><h2>\u672C\u8F6E\u8FDB\u5EA6</h2>' + timelineView(state2) + '</section><section class="p12-notice"><div><h2>\u8FDB\u5C55\u901A\u77E5</h2><button id="p12NoticeInfo" type="button">\u7BA1\u7406</button></div><p><span>' + icon("inbox", 16) + "\u7AD9\u5185\u6D88\u606F\u5DF2\u5F00\u542F</span><span>" + icon("message", 16) + '\u4F01\u4E1A\u5FAE\u4FE1\u8054\u7EDC\u65B9\u5F0F\u53EF\u968F\u65F6\u67E5\u770B</span></p></section><section class="p12-manage"><h2>\u672C\u8F6E\u5339\u914D\u7BA1\u7406</h2><div class="p12-manage-row"><span class="p12-manage-icon">' + icon("file-text", 17) + '</span><span class="p12-manage-copy"><small>\u5F53\u524D BP</small><strong>' + escapeHTML(state2.bpName || "\u661F\u8FB0\u79D1\u6280\u5546\u4E1A\u8BA1\u5212\u4E66.pdf") + "</strong><em>" + escapeHTML(state2.bpUpdatedAt || "2026-09-03") + ' \u66F4\u65B0</em></span><button id="p12UpdateBp" type="button">\u66F4\u65B0 ' + icon("chevron-right", 14) + '</button></div><div class="p12-manage-row"><span class="p12-manage-icon">' + icon(state2.paused ? "pause" : "refresh", 17) + '</span><span class="p12-manage-copy"><small>\u5339\u914D\u72B6\u6001</small><strong>' + manageState[0] + "</strong><em>" + manageState[1] + '</em></span><button id="p12TogglePause" type="button">' + (state2.paused ? "\u6062\u590D" : "\u6682\u505C") + " " + icon("chevron-right", 14) + '</button></div><button class="p12-manage-row p12-manage-record" id="p12Logs" type="button"><span class="p12-manage-icon">' + icon("shield", 17) + '</span><span class="p12-manage-copy"><small>\u8D44\u6599\u6743\u9650</small><strong>\u6388\u6743\u4E0E\u8BBF\u95EE\u8BB0\u5F55</strong><em>\u6309\u6295\u8D44\u4EBA\u67E5\u770B\u81EA\u52A8\u6838\u9A8C\u4E0E\u8BBF\u95EE\u7559\u75D5</em></span><span class="p12-manage-link">\u67E5\u770B ' + icon("chevron-right", 14) + '</span></button><div class="p12-manage-danger"><button id="p12End" type="button">\u7ED3\u675F\u672C\u8F6E\u5339\u914D</button></div></section></div>';
   }
   function connectionMeta(investor, state2) {
     const record = state2.investorConnections?.[investor.id];
@@ -8300,10 +8772,10 @@
     const entrepreneurInitiated = record.initiator === "entrepreneur";
     const connecting = record.status === "connecting";
     const connected = record.status === "connected";
-    const added = isWecomAdded() || connecting || connected;
+    const advisorNotified = connecting || connected;
     const title = connected ? "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB" : connecting ? "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4" : "\u7EE7\u7EED\u5B8C\u6210\u5EFA\u8054";
-    const description = connected ? "\u4F60\u548C\u6295\u8D44\u4EBA\u5DF2\u5B8C\u6210\u5EFA\u8054\u3002\u540E\u7EED\u9879\u76EE\u4EA4\u6D41\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\uFF0C\u5C0F\u7A0B\u5E8F\u4FDD\u7559\u5173\u952E\u8FDB\u5C55\u548C\u8D44\u6599\u8BBF\u95EE\u8BB0\u5F55\u3002" : connecting ? "\u5E73\u53F0\u987E\u95EE\u5DF2\u6536\u5230\u53CC\u65B9\u786E\u8BA4\uFF0C\u6B63\u5728\u9080\u8BF7\u4F60\u548C\u6295\u8D44\u4EBA\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002" : "\u53CC\u65B9\u5DF2\u7ECF\u786E\u8BA4\u5BF9\u63A5\u3002\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u540E\uFF0C\u987E\u95EE\u4F1A\u9080\u8BF7\u4F60\u548C\u6295\u8D44\u4EBA\u8FDB\u5165\u540C\u4E00\u4E2A\u7FA4\u3002";
-    return '<div class="p12-page">' + header("\u6295\u8D44\u4EBA\u5EFA\u8054") + '<section class="p12-connect-hero ' + (connected ? "completed" : "") + '"><span>' + icon(connected ? "check-circle" : "message", 28) + "</span><h1>" + title + "</h1><p>" + description + '</p></section><section class="p12-connect-person"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><strong>" + investor.name + "</strong><small>" + investor.role + "</small></div><b>" + (connected ? "\u5DF2\u5EFA\u8054" : connecting ? "\u5EFA\u8054\u4E2D" : "\u5DF2\u786E\u8BA4") + '</b></section><section class="p12-connect-steps"><h2>\u5EFA\u8054\u8FDB\u5EA6</h2><div class="p12-timeline"><div class="done"><span>' + icon("check", 13) + "</span><div><strong>" + (entrepreneurInitiated ? "\u4F60\u5DF2\u7533\u8BF7\u5BF9\u63A5" : "\u6295\u8D44\u4EBA\u53D1\u8D77\u5EFA\u8054\u7533\u8BF7") + "</strong><small>" + (record.requestedAt || investor.requestAt) + '</small></div></div><div class="done"><span>' + icon("check", 13) + "</span><div><strong>" + (entrepreneurInitiated ? "\u6295\u8D44\u4EBA\u5DF2\u540C\u610F\u5BF9\u63A5" : "\u4F60\u5DF2\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054") + "</strong><small>" + (record.confirmedAt || "\u672C\u6B21\u786E\u8BA4\u5DF2\u7559\u75D5") + '</small></div></div><div class="' + (added ? "done" : "active") + '"><span>' + (added ? icon("check", 13) : "") + "</span><div><strong>" + (added ? "\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + '</strong><small>\u540E\u7EED\u7531\u5E73\u53F0\u987E\u95EE\u521B\u5EFA\u4F01\u4E1A\u5FAE\u4FE1\u7FA4</small></div></div><div class="' + (connected ? "done" : connecting ? "active" : "") + '"><span>' + (connected ? icon("check", 13) : "") + "</span><div><strong>" + (connected ? "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB" : connecting ? "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4" : "\u7B49\u5F85\u5E73\u53F0\u987E\u95EE\u62C9\u7FA4") + "</strong><small>" + (connected ? record.groupCreatedAt || "09-03 14:40" : "\u7FA4\u5185\u7EE7\u7EED\u4EA4\u6D41\u9879\u76EE\u548C\u878D\u8D44\u5B89\u6392") + "</small></div></div></div></section>" + (record.status === "confirmed" ? '<section class="p12-wecom-next">' + icon("message", 20) + "<div><strong>" + (isWecomAdded() ? "\u4F01\u4E1A\u5FAE\u4FE1\u5DF2\u6DFB\u52A0" : "\u4E0B\u4E00\u6B65\uFF1A\u6DFB\u52A0\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1") + "</strong><p>" + (isWecomAdded() ? "\u5E73\u53F0\u987E\u95EE\u4F1A\u7EE7\u7EED\u5904\u7406\u62C9\u7FA4\uFF0C\u65E0\u9700\u5728\u5C0F\u7A0B\u5E8F\u5185\u7B49\u5F85\u3002" : "\u5C0F\u7A0B\u5E8F\u4E0D\u63D0\u4F9B\u53CC\u65B9\u5B9E\u65F6\u804A\u5929\u6216\u8054\u7CFB\u65B9\u5F0F\u4EA4\u6362\uFF0C\u6DFB\u52A0\u540E\u7531\u5E73\u53F0\u987E\u95EE\u534F\u52A9\u62C9\u7FA4\u3002") + '</p></div><button class="btn btn-primary" id="p12AddWecom" type="button">' + (isWecomAdded() ? "\u901A\u77E5\u987E\u95EE\u62C9\u7FA4" : "\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801") + "</button></section>" : connecting ? '<section class="p12-connected-note working"><strong>\u5E73\u53F0\u6B63\u5728\u5904\u7406</strong><p>\u65E0\u9700\u505C\u7559\u7B49\u5F85\u3002\u5EFA\u8054\u5B8C\u6210\u540E\u4F1A\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u77ED\u4FE1\u548C\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u4F60\u3002</p></section>' : '<section class="p12-connected-note"><strong>\u5EFA\u8054\u5DF2\u5B8C\u6210</strong><p>\u672C\u8F6E\u5339\u914D\u4ECD\u4F1A\u7EE7\u7EED\u3002\u65B0\u7684\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C\u548C\u5EFA\u8054\u7533\u8BF7\u4F1A\u5355\u72EC\u901A\u77E5\u4F60\u3002</p></section>') + (connecting || connected ? '<div class="p12-connect-actions"><button class="btn btn-outline" id="p12BackResults" type="button">\u67E5\u770B\u5176\u4ED6\u6295\u8D44\u4EBA</button><button class="btn btn-primary" id="p12BackProgress" type="button">\u8FD4\u56DE\u878D\u8D44\u8FDB\u5EA6</button></div>' : "") + "</div>";
+    const description = connected ? "\u4F60\u548C\u6295\u8D44\u4EBA\u5DF2\u5B8C\u6210\u5EFA\u8054\u3002\u540E\u7EED\u9879\u76EE\u4EA4\u6D41\u5728\u4F01\u4E1A\u5FAE\u4FE1\u8FDB\u884C\uFF0C\u5C0F\u7A0B\u5E8F\u4FDD\u7559\u5173\u952E\u8FDB\u5C55\u548C\u8D44\u6599\u8BBF\u95EE\u8BB0\u5F55\u3002" : connecting ? "\u5E73\u53F0\u987E\u95EE\u5DF2\u6536\u5230\u53CC\u65B9\u786E\u8BA4\uFF0C\u6B63\u5728\u9080\u8BF7\u4F60\u548C\u6295\u8D44\u4EBA\u8FDB\u5165\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u3002" : "\u53CC\u65B9\u5DF2\u7ECF\u786E\u8BA4\u5BF9\u63A5\u3002\u67E5\u770B\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801\uFF0C\u626B\u7801\u540E\u901A\u77E5\u987E\u95EE\u5F00\u59CB\u62C9\u7FA4\u3002";
+    return '<div class="p12-page">' + header("\u6295\u8D44\u4EBA\u5EFA\u8054") + '<section class="p12-connect-hero ' + (connected ? "completed" : "") + '"><span>' + icon(connected ? "check-circle" : "message", 28) + "</span><h1>" + title + "</h1><p>" + description + '</p></section><section class="p12-connect-person"><span class="p12-investor-avatar">' + investor.name.slice(0, 1) + "</span><div><strong>" + investor.name + "</strong><small>" + investor.role + "</small></div><b>" + (connected ? "\u5DF2\u5EFA\u8054" : connecting ? "\u5EFA\u8054\u4E2D" : "\u5DF2\u786E\u8BA4") + '</b></section><section class="p12-connect-steps"><h2>\u5EFA\u8054\u8FDB\u5EA6</h2><div class="p12-timeline"><div class="done"><span>' + icon("check", 13) + "</span><div><strong>" + (entrepreneurInitiated ? "\u4F60\u5DF2\u7533\u8BF7\u5BF9\u63A5" : "\u6295\u8D44\u4EBA\u53D1\u8D77\u5EFA\u8054\u7533\u8BF7") + "</strong><small>" + (record.requestedAt || investor.requestAt) + '</small></div></div><div class="done"><span>' + icon("check", 13) + "</span><div><strong>" + (entrepreneurInitiated ? "\u6295\u8D44\u4EBA\u5DF2\u540C\u610F\u5BF9\u63A5" : "\u4F60\u5DF2\u540C\u610F\u5E73\u53F0\u534F\u52A9\u5EFA\u8054") + "</strong><small>" + (record.confirmedAt || "\u672C\u6B21\u786E\u8BA4\u5DF2\u7559\u75D5") + '</small></div></div><div class="' + (advisorNotified ? "done" : "active") + '"><span>' + (advisorNotified ? icon("check", 13) : "") + "</span><div><strong>" + (advisorNotified ? "\u5DF2\u901A\u77E5\u5E73\u53F0\u987E\u95EE" : "\u67E5\u770B\u4E8C\u7EF4\u7801\u5E76\u901A\u77E5\u987E\u95EE") + '</strong><small>\u5C0F\u7A0B\u5E8F\u4E0D\u8BFB\u53D6\u4F01\u4E1A\u5FAE\u4FE1\u6DFB\u52A0\u72B6\u6001</small></div></div><div class="' + (connected ? "done" : connecting ? "active" : "") + '"><span>' + (connected ? icon("check", 13) : "") + "</span><div><strong>" + (connected ? "\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB" : connecting ? "\u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4" : "\u7B49\u5F85\u5E73\u53F0\u987E\u95EE\u62C9\u7FA4") + "</strong><small>" + (connected ? record.groupCreatedAt || "09-03 14:40" : "\u7FA4\u5185\u7EE7\u7EED\u4EA4\u6D41\u9879\u76EE\u548C\u878D\u8D44\u5B89\u6392") + "</small></div></div></div></section>" + (record.status === "confirmed" ? '<section class="p12-wecom-next">' + icon("message", 20) + '<div><strong>\u4E0B\u4E00\u6B65\uFF1A\u67E5\u770B\u5E73\u53F0\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801</strong><p>\u5C0F\u7A0B\u5E8F\u4E0D\u63D0\u4F9B\u53CC\u65B9\u5B9E\u65F6\u804A\u5929\u6216\u8054\u7CFB\u65B9\u5F0F\u4EA4\u6362\u3002\u626B\u7801\u540E\u70B9\u51FB\u786E\u8BA4\uFF0C\u5E73\u53F0\u987E\u95EE\u5C06\u5F00\u59CB\u5904\u7406\u62C9\u7FA4\u3002</p></div><button class="btn btn-primary" id="p12AddWecom" type="button">\u67E5\u770B\u4F01\u4E1A\u5FAE\u4FE1\u4E8C\u7EF4\u7801</button></section>' : connecting ? '<section class="p12-connected-note working"><strong>\u5E73\u53F0\u6B63\u5728\u5904\u7406</strong><p>\u65E0\u9700\u505C\u7559\u7B49\u5F85\u3002\u5EFA\u8054\u5B8C\u6210\u540E\u4F1A\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u548C\u77ED\u4FE1\u901A\u77E5\u4F60\u3002</p></section>' : '<section class="p12-connected-note"><strong>\u5EFA\u8054\u5DF2\u5B8C\u6210</strong><p>\u672C\u8F6E\u5339\u914D\u4ECD\u4F1A\u7EE7\u7EED\u3002\u65B0\u7684\u6295\u8D44\u4EBA\u5339\u914D\u7ED3\u679C\u548C\u5EFA\u8054\u7533\u8BF7\u4F1A\u5355\u72EC\u901A\u77E5\u4F60\u3002</p></section>') + (connecting || connected ? '<div class="p12-connect-actions"><button class="btn btn-outline" id="p12BackResults" type="button">\u67E5\u770B\u5176\u4ED6\u6295\u8D44\u4EBA</button><button class="btn btn-primary" id="p12BackProgress" type="button">\u8FD4\u56DE\u878D\u8D44\u8FDB\u5EA6</button></div>' : "") + "</div>";
   }
   function accessLogSheet() {
     return '<div class="p12-log-list"><div><strong>\u6700\u65B0\u7248 BP \u6388\u6743\u751F\u6548</strong><small>09-03 10:20 \xB7 \u672C\u8F6E\u878D\u8D44\u5339\u914D</small></div><div><strong>\u738B\u5148\u751F\u7533\u8BF7\u5EFA\u8054</strong><small>09-03 13:36 \xB7 \u7B49\u5F85\u521B\u4E1A\u8005\u5904\u7406</small></div><div><strong>\u9648\u5973\u58EB\u8FDB\u5165\u5EFA\u8054\u5904\u7406</strong><small>09-03 12:28 \xB7 \u5E73\u53F0\u987E\u95EE\u6B63\u5728\u62C9\u7FA4</small></div><div><strong>\u5218\u5148\u751F\u5DF2\u5B8C\u6210\u5EFA\u8054</strong><small>09-03 09:18 \xB7 \u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u5DF2\u5EFA\u7ACB</small></div><div><strong>\u5468\u5973\u58EB\u64A4\u56DE\u5EFA\u8054\u7533\u8BF7</strong><small>09-02 18:30 \xB7 \u53CC\u65B9\u7AEF\u540C\u6B65\u7ED3\u675F</small></div><div><strong>\u8D75\u5148\u751F\u5EFA\u8054\u7533\u8BF7\u8D85\u65F6</strong><small>09-02 10:15 \xB7 \u8D85\u8FC7 72 \u5C0F\u65F6\u81EA\u52A8\u5173\u95ED</small></div></div>';
@@ -8467,8 +8939,7 @@
         const addWecom = document.getElementById("p12AddWecom");
         if (addWecom) addWecom.addEventListener("click", () => {
           const investorId = getFundraisingState().connectionInvestorId || "i001";
-          if (isWecomAdded()) beginGroupConnection(investorId);
-          else openWecomGuide("fundraisingConnection", () => beginGroupConnection(investorId));
+          openWecomGuide("fundraisingConnection", () => beginGroupConnection(investorId));
         });
         const backResults = document.getElementById("p12BackResults");
         if (backResults) backResults.addEventListener("click", () => navigateTo("p12", { stage: "results" }));
@@ -8514,7 +8985,7 @@
     return '<section class="p13-hero"><span>' + icon("message", 24) + '</span><h1>\u5148\u5B8C\u6210\u9879\u76EE\u8BC4\u4F30</h1><p>\u5E73\u53F0\u9700\u6C42\u52A9\u624B\u5148\u6536\u96C6\u57FA\u7840\u4FE1\u606F\u5E76\u540C\u6B65\u7ED9\u56E2\u961F\uFF1B\u6D89\u53CA\u4E13\u4E1A\u5224\u65AD\u65F6\uFF0C\u5E73\u53F0\u987E\u95EE\u4F1A\u901A\u8FC7\u4F01\u4E1A\u5FAE\u4FE1\u62C9\u7FA4\u786E\u8BA4\u3002</p></section><section class="p13-panel p13-intake"><h2>\u8865\u5145\u8BC4\u4F30\u4FE1\u606F</h2><label for="p13Intake">' + escapeHTML(config.intakeLabel) + '</label><textarea id="p13Intake" maxlength="500" rows="6" placeholder="' + escapeHTML(config.intakeExample) + '">' + escapeHTML(journey.intake || config.intakeExample) + '</textarea><div><span>\u670D\u52A1\u5546\u8BC4\u4F30\u540E\u63A8\u9001\u670D\u52A1\u8303\u56F4\u3001\u603B\u4EF7\u548C\u4E24\u7B14\u4ED8\u6B3E\u8282\u70B9</span><b id="p13Count">' + String((journey.intake || config.intakeExample).length) + '/500</b></div><button class="btn btn-primary btn-block" id="p13SubmitIntake" type="button">\u63D0\u4EA4\u8BC4\u4F30\u8D44\u6599</button></section>';
   }
   function providerReviewView(team) {
-    return '<section class="p13-stage-head p13-review-head"><span>' + icon("clock", 24) + "</span><div><h1>\u7B49\u5F85\u670D\u52A1\u5546\u8BC4\u4F30</h1><p>\u8D44\u6599\u5DF2\u63D0\u4EA4\u7ED9" + escapeHTML(team.name) + '\uFF0C\u56E2\u961F\u6B63\u5728\u786E\u8BA4\u662F\u5426\u627F\u63A5\u5E76\u6838\u5B9A\u672C\u6848\u62A5\u4EF7\u3002</p></div></section><section class="p13-panel p13-review-panel"><div class="p13-review-status"><span class="p13-review-pulse" aria-hidden="true"></span><div><strong>\u670D\u52A1\u5546\u8BC4\u4F30\u4E2D</strong><small>\u62A5\u4EF7\u786E\u8BA4\u540E\u4F1A\u81EA\u52A8\u66F4\u65B0\uFF0C\u65E0\u9700\u505C\u7559\u5728\u5F53\u524D\u9875\u9762</small></div></div><div class="p13-review-flow"><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u6848\u4EF6\u8D44\u6599\u5DF2\u63D0\u4EA4</strong><small>\u57FA\u7840\u4FE1\u606F\u5DF2\u540C\u6B65\u7ED9\u670D\u52A1\u56E2\u961F</small></p></div><div class="active"><span></span><p><strong>\u8BC4\u4F30\u627F\u63A5\u6761\u4EF6\u4E0E\u5DE5\u4F5C\u91CF</strong><small>\u56E2\u961F\u53EF\u80FD\u901A\u8FC7\u5E73\u53F0\u987E\u95EE\u8054\u7CFB\u4F60\u8865\u5145\u8D44\u6599</small></p></div><div><span></span><p><strong>\u670D\u52A1\u5546\u786E\u8BA4\u627F\u63A5\u5E76\u62A5\u4EF7</strong><small>\u5C06\u63A8\u9001\u670D\u52A1\u8303\u56F4\u3001\u603B\u4EF7\u548C\u4ED8\u6B3E\u8282\u70B9</small></p></div></div></section><section class="p13-review-notice">' + icon("bell", 17) + "<div><strong>\u8FDB\u5C55\u4F1A\u53CA\u65F6\u901A\u77E5\u4F60</strong><p>\u670D\u52A1\u5546\u63D0\u4EA4\u7ED3\u679C\u540E\uFF0C\u5E73\u53F0\u5C06\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u548C\u4F01\u4E1A\u5FAE\u4FE1\u63D0\u9192\u4F60\u3002</p></div></section>";
+    return '<section class="p13-stage-head p13-review-head"><span>' + icon("clock", 24) + "</span><div><h1>\u7B49\u5F85\u670D\u52A1\u5546\u8BC4\u4F30</h1><p>\u8D44\u6599\u5DF2\u63D0\u4EA4\u7ED9" + escapeHTML(team.name) + '\uFF0C\u56E2\u961F\u6B63\u5728\u786E\u8BA4\u662F\u5426\u627F\u63A5\u5E76\u6838\u5B9A\u672C\u6848\u62A5\u4EF7\u3002</p></div></section><section class="p13-panel p13-review-panel"><div class="p13-review-status"><span class="p13-review-pulse" aria-hidden="true"></span><div><strong>\u670D\u52A1\u5546\u8BC4\u4F30\u4E2D</strong><small>\u62A5\u4EF7\u786E\u8BA4\u540E\u4F1A\u81EA\u52A8\u66F4\u65B0\uFF0C\u65E0\u9700\u505C\u7559\u5728\u5F53\u524D\u9875\u9762</small></div></div><div class="p13-review-flow"><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u6848\u4EF6\u8D44\u6599\u5DF2\u63D0\u4EA4</strong><small>\u57FA\u7840\u4FE1\u606F\u5DF2\u540C\u6B65\u7ED9\u670D\u52A1\u56E2\u961F</small></p></div><div class="active"><span></span><p><strong>\u8BC4\u4F30\u627F\u63A5\u6761\u4EF6\u4E0E\u5DE5\u4F5C\u91CF</strong><small>\u56E2\u961F\u53EF\u80FD\u901A\u8FC7\u5E73\u53F0\u987E\u95EE\u8054\u7CFB\u4F60\u8865\u5145\u8D44\u6599</small></p></div><div><span></span><p><strong>\u670D\u52A1\u5546\u786E\u8BA4\u627F\u63A5\u5E76\u62A5\u4EF7</strong><small>\u5C06\u63A8\u9001\u670D\u52A1\u8303\u56F4\u3001\u603B\u4EF7\u548C\u4ED8\u6B3E\u8282\u70B9</small></p></div></div></section><section class="p13-review-notice">' + icon("bell", 17) + "<div><strong>\u8FDB\u5C55\u4F1A\u53CA\u65F6\u901A\u77E5\u4F60</strong><p>\u670D\u52A1\u5546\u63D0\u4EA4\u7ED3\u679C\u540E\uFF0C\u5E73\u53F0\u5C06\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u8BA2\u9605\u6D88\u606F\u548C\u77ED\u4FE1\u63D0\u9192\u4F60\u3002</p></div></section>";
   }
   function quotationReadyView(team, config) {
     return '<section class="p13-stage-head p13-quote-ready-head"><span>' + icon("check-circle", 24) + "</span><div><h1>\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u627F\u63A5</h1><p>" + escapeHTML(team.name) + '\u5DF2\u5B8C\u6210\u672C\u6848\u8BC4\u4F30\uFF0C\u5E76\u63D0\u4EA4\u670D\u52A1\u65B9\u6848\u4E0E\u62A5\u4EF7\u3002</p></div></section><section class="p13-panel p13-quote-ready"><div class="p13-quote-ready-title"><div><small>\u670D\u52A1\u5546\u62A5\u4EF7</small><strong>' + config.total + "</strong></div><span>\u5F85\u4F60\u67E5\u770B</span></div><dl><div><dt>\u62A5\u4EF7\u56E2\u961F</dt><dd>" + escapeHTML(team.name) + "</dd></div><div><dt>\u4ED8\u6B3E\u65B9\u5F0F</dt><dd>\u4E24\u9636\u6BB5\u4ED8\u6B3E\uFF0C\u6BCF\u9636\u6BB5 " + config.firstAmount + "</dd></div><div><dt>\u9884\u8BA1\u5468\u671F</dt><dd>" + escapeHTML(config.period) + '</dd></div></dl><div class="p13-quote-audit">' + icon("shield", 17) + '<span>\u5E73\u53F0\u5DF2\u6838\u9A8C\u670D\u52A1\u8303\u56F4\u3001\u91D1\u989D\u3001\u4ED8\u6B3E\u8282\u70B9\u7B49\u65B9\u6848\u8981\u7D20\u5B8C\u6574\u3002</span></div><button class="btn btn-primary btn-block" id="p13ViewProposal" type="button">\u67E5\u770B\u670D\u52A1\u65B9\u6848\u4E0E\u62A5\u4EF7</button></section>';
@@ -8524,30 +8995,40 @@
   }
   function contractView(config, journey) {
     const status = journey.agreementStatus || "customer_action";
-    const activeStep = { customer_action: 0, provider_signing: 1, auditing: 2, approved: 4 }[status];
-    const stepLabels = ["\u5BA2\u6237\u8865\u5145\u4FE1\u606F\u5E76\u7528\u5370", "\u670D\u52A1\u5546\u7528\u5370", "\u5E73\u53F0\u5BA1\u6838", "\u534F\u8BAE\u751F\u6548"];
+    const activeStep = { customer_action: 0, provider_signing: 1, auditing: 2, approved: 3 }[status];
+    const stepLabels = ["\u7EBF\u4E0B\u534F\u5546", "\u5BA2\u6237\u786E\u8BA4", "\u5E73\u53F0\u786E\u8BA4", "\u534F\u8BAE\u751F\u6548"];
     const steps3 = stepLabels.map((label, index) => '<span class="' + (index < activeStep ? "done" : index === activeStep ? "active" : "") + '">' + label + "</span>").join("");
     let action = "";
     if (status === "customer_action") {
-      action = '<label class="p13-upload">' + icon("upload", 18) + '<span id="p13AgreementFileName">\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6</span><input id="p13AgreementFile" type="file" accept=".pdf,.jpg,.jpeg,.png"></label><button class="btn btn-primary btn-block" id="p13SubmitAgreement" type="button">\u4E0A\u4F20\u5E76\u63D0\u4EA4\u7ED9\u670D\u52A1\u5546</button>';
+      action = '<div class="p13-contract-state waiting"><span>' + icon("message", 22) + '</span><div><strong>\u8BF7\u5148\u5B8C\u6210\u534F\u8BAE\u6C9F\u901A</strong><p>\u5BA2\u6237\u3001\u670D\u52A1\u5546\u4E0E\u5E73\u53F0\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u6216\u7EBF\u4E0B\u786E\u8BA4\u6761\u6B3E\u3002\u5E73\u53F0\u4E0D\u63D0\u4F9B\u5728\u7EBF\u6539\u6761\u6B3E\u529F\u80FD\uFF0C\u786E\u8BA4\u540E\u7531\u670D\u52A1\u5546\u4E0A\u4F20\u4E09\u65B9\u5DF2\u7528\u5370\u6700\u7EC8\u6587\u4EF6\u3002</p></div></div><button class="btn btn-primary btn-block" id="p13DemoProviderUpload" type="button">Demo\uFF1A\u670D\u52A1\u5546\u4E0A\u4F20\u6700\u7EC8\u534F\u8BAE</button>';
     } else if (status === "provider_signing") {
-      action = '<div class="p13-contract-state waiting"><span>' + icon("clock", 22) + "</span><div><strong>\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370</strong><p>\u4F60\u7684\u7528\u5370\u6587\u4EF6\u5DF2\u4E8E\u521A\u521A\u540C\u6B65\u7ED9\u670D\u52A1\u5546\u3002\u670D\u52A1\u5546\u56DE\u4F20\u540E\u4F1A\u81EA\u52A8\u63A8\u9001\u5230\u8FD9\u91CC\u3002</p></div></div>";
+      action = '<div class="p13-contract-state waiting"><span>' + icon("file-text", 22) + '</span><div><strong>\u4E09\u65B9\u6700\u7EC8\u534F\u8BAE\u5F85\u4F60\u786E\u8BA4</strong><p>\u8BF7\u6838\u5BF9\u7B7E\u7EA6\u4E3B\u4F53\u3001\u670D\u52A1\u8303\u56F4\u3001\u9636\u6BB5\u91D1\u989D\u4E0E\u7248\u672C\u3002\u4ECD\u9700\u4FEE\u6539\u65F6\uFF0C\u8BF7\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u534F\u5546\u540E\u8BA9\u670D\u52A1\u5546\u64A4\u56DE\u5E76\u91CD\u65B0\u4E0A\u4F20\u3002</p></div></div><button class="p13-file-row p13-returned-file" id="p13ReturnedAgreement" type="button">' + icon("file-text", 19) + "<span><strong>\u4E09\u65B9\u5DF2\u7528\u5370\u670D\u52A1\u534F\u8BAE-v" + (journey.agreementVersion || 1) + '.pdf</strong><small>\u670D\u52A1\u5546\u4E0A\u4F20 \xB7 \u5F85\u5BA2\u6237\u786E\u8BA4</small></span><b>\u67E5\u770B</b></button><div class="p13-pay-actions"><button class="btn btn-outline" id="p13RequestReupload" type="button">\u8BF7\u670D\u52A1\u5546\u91CD\u4F20</button><button class="btn btn-primary" id="p13ConfirmFinal" type="button">\u786E\u8BA4\u6700\u7EC8\u534F\u8BAE</button></div>';
+    } else if (status === "auditing") {
+      action = '<div class="p13-contract-state waiting"><span>' + icon("shield", 22) + '</span><div><strong>\u5BA2\u6237\u5DF2\u786E\u8BA4\uFF0C\u7B49\u5F85\u5E73\u53F0\u786E\u8BA4</strong><p>\u5E73\u53F0\u4F5C\u4E3A\u534F\u8BAE\u4E00\u65B9\uFF0C\u6B63\u5728\u6838\u5BF9\u4E09\u65B9\u4E3B\u4F53\u3001\u6536\u6B3E\u5B89\u6392\u3001\u4ED8\u6B3E\u8282\u70B9\u4E0E\u670D\u52A1\u8303\u56F4\u3002</p></div></div><button class="p13-file-row p13-returned-file" id="p13ReturnedAgreement" type="button">' + icon("file-text", 19) + "<span><strong>\u4E09\u65B9\u5DF2\u7528\u5370\u670D\u52A1\u534F\u8BAE-v" + (journey.agreementVersion || 1) + '.pdf</strong><small>\u5BA2\u6237\u5DF2\u786E\u8BA4 \xB7 \u5E73\u53F0\u786E\u8BA4\u4E2D</small></span><b>\u67E5\u770B</b></button><button class="btn btn-primary btn-block" id="p13PlatformConfirm" type="button">Demo\uFF1A\u5E73\u53F0\u5B8C\u6210\u786E\u8BA4</button>';
     } else {
-      action = '<div class="p13-contract-state ' + (status === "approved" ? "approved" : "") + '"><span>' + icon(status === "approved" ? "check-circle" : "shield", 22) + "</span><div><strong>" + (status === "approved" ? "\u534F\u8BAE\u5BA1\u6838\u901A\u8FC7" : "\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370") + "</strong><p>" + (status === "approved" ? "\u53CC\u65B9\u534F\u8BAE\u5DF2\u7ECF\u5F52\u6863\uFF0C\u53EF\u4EE5\u8FDB\u5165\u7B2C\u4E00\u9636\u6BB5\u4ED8\u6B3E\u3002" : "\u53CC\u65B9\u7528\u5370\u534F\u8BAE\u5DF2\u8FD4\u56DE\uFF0C\u5E73\u53F0\u6B63\u5728\u6838\u5BF9\u7B7E\u7EA6\u4E3B\u4F53\u3001\u91D1\u989D\u548C\u670D\u52A1\u8303\u56F4\u3002") + '</p></div></div><button class="p13-file-row p13-returned-file" id="p13ReturnedAgreement" type="button">' + icon("file-text", 19) + "<span><strong>\u53CC\u65B9\u7528\u5370\u670D\u52A1\u534F\u8BAE.pdf</strong><small>\u670D\u52A1\u5546\u56DE\u4F20 \xB7 " + (status === "approved" ? "\u5E73\u53F0\u5BA1\u6838\u901A\u8FC7" : "\u5E73\u53F0\u5BA1\u6838\u4E2D") + '</small></span><b>\u67E5\u770B</b></button><button class="btn btn-primary btn-block" id="' + (status === "approved" ? "p13ToFirstPayment" : "p13AuditResult") + '" type="button">' + (status === "approved" ? "\u652F\u4ED8\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E" : "\u5728 Demo \u4E2D\u67E5\u770B\u5BA1\u6838\u7ED3\u679C") + "</button>";
+      action = '<div class="p13-contract-state approved"><span>' + icon("check-circle", 22) + '</span><div><strong>\u4E09\u65B9\u786E\u8BA4\u5B8C\u6210\uFF0C\u534F\u8BAE\u5DF2\u751F\u6548</strong><p>\u6700\u7EC8\u534F\u8BAE\u5DF2\u7ECF\u5F52\u6863\uFF0C\u53EF\u4EE5\u751F\u6210\u7B2C\u4E00\u9636\u6BB5\u4ED8\u6B3E\u5355\u3002</p></div></div><button class="p13-file-row p13-returned-file" id="p13ReturnedAgreement" type="button">' + icon("file-text", 19) + "<span><strong>\u4E09\u65B9\u5DF2\u7528\u5370\u670D\u52A1\u534F\u8BAE-v" + (journey.agreementVersion || 1) + '.pdf</strong><small>\u5BA2\u6237\u3001\u670D\u52A1\u5546\u4E0E\u5E73\u53F0\u5DF2\u786E\u8BA4</small></span><b>\u67E5\u770B</b></button><button class="btn btn-primary btn-block" id="p13ToFirstPayment" type="button">\u751F\u6210\u7B2C\u4E00\u9636\u6BB5\u4ED8\u6B3E\u5355</button>';
     }
-    return '<section class="p13-stage-head"><span>' + icon("shield", 24) + '</span><div><h1>\u7B7E\u7F72\u670D\u52A1\u534F\u8BAE</h1><p>\u534F\u8BAE\u4F1A\u5199\u660E\u4E24\u7B14\u670D\u52A1\u6B3E\u3001\u5BF9\u5E94\u6210\u679C\u3001\u6682\u505C\u6761\u4EF6\u53CA\u9000\u6B3E\u89C4\u5219\u3002</p></div></section><section class="p13-panel"><button class="p13-file-row" id="p13AgreementPreview" type="button">' + icon("file-text", 20) + "<span><strong>" + escapeHTML(config.sku) + '\u5206\u9636\u6BB5\u670D\u52A1\u534F\u8BAE.pdf</strong><small>\u670D\u52A1\u5546\u63D0\u4F9B \xB7 \u5E73\u53F0\u5DF2\u5B8C\u6210\u8981\u7D20\u5BA1\u6838</small></span><b>\u67E5\u770B</b></button><div class="p13-contract-steps">' + steps3 + "</div>" + action + "</section>";
+    return '<section class="p13-stage-head"><span>' + icon("shield", 24) + '</span><div><h1>\u786E\u8BA4\u4E09\u65B9\u670D\u52A1\u534F\u8BAE</h1><p>\u4E13\u9879\u670D\u52A1\u7531\u5BA2\u6237\u3001\u670D\u52A1\u5546\u548C\u5E73\u53F0\u7B7E\u7F72\u4E09\u65B9\u534F\u8BAE\uFF0C\u4E09\u65B9\u786E\u8BA4\u540E\u624D\u751F\u6210\u7B2C\u4E00\u9636\u6BB5\u4ED8\u6B3E\u5355\u3002</p></div></section><section class="p13-panel"><div class="p13-agreement-rule"><strong>\u534F\u8BAE\u6C9F\u901A\u89C4\u5219</strong><p>\u4FEE\u6539\u610F\u89C1\u7EDF\u4E00\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u6216\u7EBF\u4E0B\u534F\u5546\uFF1B\u5E73\u53F0\u53EA\u63A5\u6536\u5DF2\u786E\u5B9A\u5E76\u7528\u5370\u7684\u6700\u7EC8\u7248\u672C\u3002</p></div><div class="p13-contract-steps">' + steps3 + "</div>" + action + "</section>";
   }
   function paymentView(config, second) {
     const amount = second ? config.secondAmount : config.firstAmount;
-    return '<section class="p13-stage-head"><span>' + icon("coins", 24) + "</span><div><h1>\u652F\u4ED8" + (second ? "\u7B2C\u4E8C" : "\u7B2C\u4E00") + "\u9636\u6BB5\u670D\u52A1\u6B3E</h1><p>" + (second ? "\u9636\u6BB5\u6210\u679C\u5DF2\u7ECF\u786E\u8BA4\uFF0C\u4ED8\u6B3E\u5230\u8D26\u540E\u56E2\u961F\u7EE7\u7EED\u6B63\u5F0F\u529E\u7406\u3002" : "\u534F\u8BAE\u5DF2\u7ECF\u53CC\u65B9\u7528\u5370\u5E76\u901A\u8FC7\u5E73\u53F0\u5BA1\u6838\uFF0C\u4ED8\u6B3E\u5230\u8D26\u540E\u56E2\u961F\u5F00\u59CB\u670D\u52A1\u3002") + '</p></div></section><section class="p13-panel p13-pay"><div class="p13-pay-amount"><small>\u672C\u6B21\u5E94\u4ED8</small><strong>' + amount + '</strong><span>\u5360\u670D\u52A1\u603B\u4EF7 50%</span></div><div class="p13-pay-row"><span>\u6536\u6B3E\u65B9</span><strong>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</strong></div><div class="p13-pay-row"><span>\u652F\u4ED8\u65B9\u5F0F</span><strong>\u7EBF\u4E0B\u5BF9\u516C\u8F6C\u8D26</strong></div><div class="p13-pay-row"><span>\u5E73\u53F0\u804C\u8D23</span><strong>\u8BB0\u5F55\u51ED\u8BC1\u53CA\u5230\u8D26\u786E\u8BA4</strong></div><div class="p13-pay-notice">' + icon("shield", 16) + '<span>\u5F53\u524D\u5E73\u53F0\u4E0D\u4EE3\u6536\u6216\u6258\u7BA1\u8D44\u91D1\uFF0C\u8BF7\u6838\u5BF9\u534F\u8BAE\u4E3B\u4F53\u540E\u76F4\u63A5\u5411\u670D\u52A1\u5546\u4ED8\u6B3E\u3002</span></div><div class="p13-pay-actions"><button class="btn btn-outline" id="p13Account" type="button">\u67E5\u770B\u6536\u6B3E\u4FE1\u606F</button><button class="btn btn-primary" id="p13UploadReceipt" type="button">\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1</button></div></section>';
+    return '<section class="p13-stage-head"><span>' + icon("coins", 24) + "</span><div><h1>\u652F\u4ED8" + (second ? "\u7B2C\u4E8C" : "\u7B2C\u4E00") + "\u9636\u6BB5\u670D\u52A1\u6B3E</h1><p>" + (second ? "\u9636\u6BB5\u6210\u679C\u5DF2\u7ECF\u786E\u8BA4\uFF0C\u4ED8\u6B3E\u5230\u8D26\u540E\u56E2\u961F\u7EE7\u7EED\u6B63\u5F0F\u529E\u7406\u3002" : "\u4E09\u65B9\u5DF2\u7528\u5370\u534F\u8BAE\u5B8C\u6210\u786E\u8BA4\uFF0C\u4ED8\u6B3E\u5230\u8D26\u540E\u56E2\u961F\u5F00\u59CB\u670D\u52A1\u3002") + '</p></div></section><section class="p13-panel p13-pay"><div class="p13-pay-amount"><small>\u672C\u6B21\u5E94\u4ED8</small><strong>' + amount + '</strong><span>\u672C\u8282\u70B9\u91D1\u989D\u4E0E\u6BD4\u4F8B\u7531\u672C\u65B9\u6848\u5355\u72EC\u914D\u7F6E</span></div><div class="p13-pay-row"><span>\u4ED8\u6B3E\u7C7B\u578B</span><strong>' + escapeHTML(config.paymentMode) + " \xB7 " + (second ? config.secondRatio : config.firstRatio) + '%</strong></div><div class="p13-pay-row"><span>\u6536\u6B3E\u5B89\u6392</span><strong>\u5206\u522B\u652F\u4ED8\u7ED9\u670D\u52A1\u5546\u4E0E\u5E73\u53F0</strong></div><div class="p13-pay-row"><span>\u53D1\u7968\u89C4\u5219</span><strong>' + escapeHTML(config.invoiceRule) + '</strong></div><div class="p13-pay-row"><span>\u5230\u8D26\u786E\u8BA4</span><strong>\u51ED\u8BC1\u63D0\u4EA4\u540E 2 \u4E2A\u5DE5\u4F5C\u65E5\u5185</strong></div><div class="p13-pay-trust">' + icon("shield", 17) + '<span><strong>\u534F\u8BAE\u7ECF\u5E73\u53F0\u5BA1\u6838\uFF0C\u5C65\u7EA6\u8FC7\u7A0B\u5E73\u53F0\u7559\u8BC1</strong><small>\u8D44\u91D1\u76F4\u63A5\u652F\u4ED8\u7ED9\u4E09\u65B9\u534F\u8BAE\u7EA6\u5B9A\u7684\u6536\u6B3E\u65B9\uFF0C\u5E73\u53F0\u4E0D\u4EE3\u6536\u6216\u6258\u7BA1\u8D44\u91D1\u3002</small></span></div><div class="p13-pay-actions"><button class="btn btn-outline" id="p13Account" type="button">\u67E5\u770B\u5206\u7B14\u6536\u6B3E\u4FE1\u606F</button><button class="btn btn-primary" id="p13UploadReceipt" type="button">\u4E0A\u4F20\u4ED8\u6B3E\u51ED\u8BC1</button></div></section>';
   }
-  function milestoneView(config) {
+  function milestoneView(config, journey) {
+    if (journey.disputeCase) {
+      const item = journey.disputeCase;
+      return '<section class="p13-stage-head"><span>' + icon("shield", 24) + '</span><div><h1>\u6210\u679C\u5F02\u8BAE\u5904\u7406\u4E2D</h1><p>\u7B2C\u4E8C\u9636\u6BB5\u4ED8\u6B3E\u4FDD\u6301\u6682\u505C\uFF0C\u5904\u7406\u8FDB\u5C55\u4F1A\u6301\u7EED\u8BB0\u5F55\u5728\u672C\u5DE5\u5355\u3002</p></div></section><section class="p13-panel p13-case-card"><div class="p13-case-head"><span>' + icon("clock", 19) + "</span><div><strong>" + getAfterSaleStatusLabel(item.status) + "</strong><small>" + escapeHTML(item.id) + " \xB7 " + escapeHTML(item.submittedAt) + "</small></div></div><dl><div><dt>\u5F53\u524D\u5904\u7406\u4EBA</dt><dd>" + escapeHTML(item.handler) + "</dd></div><div><dt>\u9884\u8BA1\u65F6\u9650</dt><dd>" + escapeHTML(item.eta) + '</dd></div></dl><div class="p13-case-evidence"><section><strong>\u5BA2\u6237\u9700\u63D0\u4EA4</strong><ul>' + item.customerEvidence.map((value) => "<li>" + escapeHTML(value) + "</li>").join("") + "</ul></section><section><strong>\u670D\u52A1\u5546\u9700\u63D0\u4EA4</strong><ul>" + item.providerEvidence.map((value) => "<li>" + escapeHTML(value) + "</li>").join("") + '</ul></section></div><p class="p13-case-desc">' + escapeHTML(item.description) + '</p><button class="btn btn-outline btn-block" id="p13CaseDetail" type="button">\u67E5\u770B\u5904\u7406\u65F6\u95F4\u7EBF</button></section>';
+    }
     return '<section class="p13-stage-head"><span>' + icon("check-circle", 24) + '</span><div><h1>\u7B2C\u4E00\u9636\u6BB5\u6210\u679C\u5F85\u786E\u8BA4</h1><p>\u670D\u52A1\u5546\u5DF2\u786E\u8BA4\u7B2C\u4E00\u7B14\u6B3E\u9879\u5230\u8D26\uFF0C\u5E76\u63D0\u4EA4\u7EA6\u5B9A\u7684\u9636\u6BB5\u6210\u679C\u3002</p></div></section><section class="p13-panel p13-milestone"><div class="p13-milestone-title"><div><small>\u9636\u6BB5\u6210\u679C</small><strong>' + escapeHTML(config.milestoneTitle) + "</strong></div><span>\u5F85\u4F60\u786E\u8BA4</span></div>" + renderList(config.firstWork) + '<button class="p13-file-row" id="p13MilestoneFile" type="button">' + icon("file-text", 19) + "<span><strong>\u7B2C\u4E00\u9636\u6BB5\u6210\u679C\u6587\u4EF6.zip</strong><small>\u670D\u52A1\u5546\u63D0\u4EA4 \xB7 \u5DF2\u901A\u8FC7\u5E73\u53F0\u75C5\u6BD2\u626B\u63CF</small></span><b>\u67E5\u770B</b></button><p>" + escapeHTML(config.milestoneDetail) + '</p><div class="p13-pay-actions"><button class="btn btn-outline" id="p13Dispute" type="button">\u6210\u679C\u6709\u5F02\u8BAE</button><button class="btn btn-primary" id="p13ConfirmMilestone" type="button">\u786E\u8BA4\u9636\u6BB5\u6210\u679C</button></div></section>';
   }
   function processingView(config) {
-    return '<section class="p13-stage-head"><span>' + icon("clock", 24) + '</span><div><h1>\u6B63\u5F0F\u529E\u7406\u4E2D</h1><p>\u7B2C\u4E8C\u7B14\u670D\u52A1\u6B3E\u5DF2\u7531\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\uFF0C\u9879\u76EE\u5DF2\u8FDB\u5165\u4E3B\u7BA1\u673A\u6784\u5904\u7406\u9636\u6BB5\u3002</p></div></section><section class="p13-panel"><div class="p13-process-timeline"><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u4E24\u9636\u6BB5\u670D\u52A1\u6B3E\u5DF2\u786E\u8BA4</strong><small>\u4ED8\u6B3E\u51ED\u8BC1\u4E0E\u5230\u8D26\u8BB0\u5F55\u5DF2\u7559\u5B58</small></p></div><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u5DF2\u5411\u4E3B\u7BA1\u673A\u6784\u6B63\u5F0F\u63D0\u4EA4</strong><small>\u63D0\u4EA4\u56DE\u6267\u53EF\u5728\u670D\u52A1\u8BB0\u5F55\u4E2D\u67E5\u770B</small></p></div><div class="active"><span></span><p><strong>\u7B49\u5F85\u5BA1\u67E5\u6216\u8BC4\u5BA1\u7ED3\u679C</strong><small>\u7ED3\u679C\u548C\u8865\u5145\u6750\u6599\u8981\u6C42\u4F1A\u53CA\u65F6\u540C\u6B65</small></p></div></div><div class="p13-processing-note">' + icon("bell", 17) + '<span>\u6709\u8FDB\u5C55\u65F6\u5C06\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u77ED\u4FE1\u548C\u4F01\u4E1A\u5FAE\u4FE1\u901A\u77E5\u4F60\u3002</span></div><button class="btn btn-outline btn-block" id="p13DemoResult" type="button">\u5728 Demo \u4E2D\u67E5\u770B\u7ED3\u679C\u72B6\u6001</button></section>';
+    return '<section class="p13-stage-head"><span>' + icon("clock", 24) + '</span><div><h1>\u6B63\u5F0F\u529E\u7406\u4E2D</h1><p>\u7B2C\u4E8C\u7B14\u670D\u52A1\u6B3E\u5DF2\u7531\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\uFF0C\u9879\u76EE\u5DF2\u8FDB\u5165\u4E3B\u7BA1\u673A\u6784\u5904\u7406\u9636\u6BB5\u3002</p></div></section><section class="p13-panel"><div class="p13-process-timeline"><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u4E24\u9636\u6BB5\u670D\u52A1\u6B3E\u5DF2\u786E\u8BA4</strong><small>\u4ED8\u6B3E\u51ED\u8BC1\u4E0E\u5230\u8D26\u8BB0\u5F55\u5DF2\u7559\u5B58</small></p></div><div class="done"><span>' + icon("check", 12) + '</span><p><strong>\u5DF2\u5411\u4E3B\u7BA1\u673A\u6784\u6B63\u5F0F\u63D0\u4EA4</strong><small>\u63D0\u4EA4\u56DE\u6267\u53EF\u5728\u670D\u52A1\u8BB0\u5F55\u4E2D\u67E5\u770B</small></p></div><div class="active"><span></span><p><strong>\u7B49\u5F85\u5BA1\u67E5\u6216\u8BC4\u5BA1\u7ED3\u679C</strong><small>\u7ED3\u679C\u548C\u8865\u5145\u6750\u6599\u8981\u6C42\u4F1A\u53CA\u65F6\u540C\u6B65</small></p></div></div><div class="p13-processing-note">' + icon("bell", 17) + '<span>\u6709\u8FDB\u5C55\u65F6\u5C06\u901A\u8FC7\u7AD9\u5185\u6D88\u606F\u3001\u8BA2\u9605\u6D88\u606F\u548C\u77ED\u4FE1\u901A\u77E5\u4F60\u3002</span></div><button class="btn btn-outline btn-block" id="p13DemoResult" type="button">\u5728 Demo \u4E2D\u67E5\u770B\u7ED3\u679C\u72B6\u6001</button></section>';
   }
-  function resultView(config) {
+  function resultView(config, journey) {
+    if (journey.supportCase) {
+      const item = journey.supportCase;
+      return '<section class="p13-result-head"><span>' + icon("shield", 26) + "</span><h1>\u5E73\u53F0\u534F\u52A9\u5DE5\u5355\u5DF2\u751F\u6210</h1><p>" + escapeHTML(item.id) + '</p></section><section class="p13-panel p13-case-card"><div class="p13-case-head"><span>' + icon("clock", 19) + "</span><div><strong>" + getAfterSaleStatusLabel(item.status) + "</strong><small>" + escapeHTML(item.handler) + " \xB7 " + escapeHTML(item.eta) + '</small></div></div><div class="p13-case-evidence"><section><strong>\u5BA2\u6237\u9700\u63D0\u4EA4</strong><ul>' + item.customerEvidence.map((value) => "<li>" + escapeHTML(value) + "</li>").join("") + "</ul></section><section><strong>\u670D\u52A1\u5546\u9700\u63D0\u4EA4</strong><ul>" + item.providerEvidence.map((value) => "<li>" + escapeHTML(value) + "</li>").join("") + '</ul></section></div><button class="btn btn-outline btn-block" id="p13Restart" type="button">\u91CD\u65B0\u4F53\u9A8C</button></section>';
+    }
     return '<section class="p13-result-head"><span>' + icon("file-text", 26) + "</span><h1>\u672C\u6B21\u670D\u52A1\u5DE5\u4F5C\u5DF2\u5B8C\u6210</h1><p>" + escapeHTML(config.resultTitle) + '</p></section><section class="p13-panel p13-result"><div class="p13-result-status"><span>\u529E\u7406\u7ED3\u679C</span><strong>\u672A\u83B7\u6279</strong></div><p>' + escapeHTML(config.resultDetail) + '</p><button class="p13-file-row" id="p13ResultFile" type="button">' + icon("file-text", 19) + "<span><strong>" + escapeHTML(config.resultFile) + '</strong><small>\u4E3B\u7BA1\u673A\u6784\u7ED3\u679C\u6587\u4EF6</small></span><b>\u67E5\u770B</b></button><div class="p13-result-rule"><strong>\u8D39\u7528\u7ED3\u7B97\u8BF4\u660E</strong><p>\u4E24\u9636\u6BB5\u5DE5\u4F5C\u5747\u5DF2\u5B8C\u6210\uFF0C\u5DF2\u652F\u4ED8\u670D\u52A1\u8D39\u4E0D\u56E0\u672C\u6B21\u7ED3\u679C\u672A\u83B7\u6279\u9000\u8FD8\u3002\u5982\u8BA4\u4E3A\u670D\u52A1\u5546\u672A\u6309\u534F\u8BAE\u5C65\u7EA6\uFF0C\u53EF\u4EE5\u7533\u8BF7\u5E73\u53F0\u534F\u52A9\u6838\u9A8C\u3002</p></div><div class="p13-result-actions"><button class="btn btn-outline" id="p13Restart" type="button">\u91CD\u65B0\u4F53\u9A8C</button><button class="btn btn-primary" id="p13Support" type="button">\u7533\u8BF7\u5E73\u53F0\u534F\u52A9</button></div></section>';
   }
   var page13 = {
@@ -8567,10 +9048,10 @@
       else if (stage === "proposal") body = proposalView(team, config);
       else if (stage === "contract") body = contractView(config, journey);
       else if (stage === "firstPayment") body = paymentView(config, false);
-      else if (stage === "milestone") body = milestoneView(config);
+      else if (stage === "milestone") body = milestoneView(config, journey);
       else if (stage === "secondPayment") body = paymentView(config, true);
       else if (stage === "processing") body = processingView(config);
-      else body = resultView(config);
+      else body = resultView(config, journey);
       return '<div class="p13-page">' + header2() + stepper(stage) + contextCard(team, config) + body + "</div>";
     },
     setStage(stage) {
@@ -8620,46 +9101,51 @@
           onConfirm: () => this.setStage("contract")
         }));
       } else if (stage === "contract") {
-        document.getElementById("p13AgreementPreview").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u534F\u8BAE\u5B89\u5168\u9884\u89C8"));
-        const file = document.getElementById("p13AgreementFile");
-        if (file) {
-          file.addEventListener("change", () => {
-            document.getElementById("p13AgreementFileName").textContent = file.files.length ? file.files[0].name : "\u9009\u62E9\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6";
-          });
-          document.getElementById("p13SubmitAgreement").addEventListener("click", () => {
-            if (!file.files.length) return toast("\u8BF7\u5148\u4E0A\u4F20\u5DF2\u7528\u5370\u534F\u8BAE\u626B\u63CF\u4EF6");
-            journey.customerAgreementFile = file.files[0].name;
-            journey.agreementStatus = "provider_signing";
-            refreshActivePage();
-            toast("\u534F\u8BAE\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u670D\u52A1\u5546\u7528\u5370");
-          });
-        }
+        const providerUpload = document.getElementById("p13DemoProviderUpload");
+        if (providerUpload) providerUpload.addEventListener("click", () => {
+          journey.agreementVersion = journey.agreementVersion || 1;
+          journey.agreementStatus = "provider_signing";
+          refreshActivePage();
+          toast("\u670D\u52A1\u5546\u5DF2\u4E0A\u4F20\u4E09\u65B9\u6700\u7EC8\u534F\u8BAE");
+        });
         const returned = document.getElementById("p13ReturnedAgreement");
-        if (returned) returned.addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u53CC\u65B9\u7528\u5370\u670D\u52A1\u534F\u8BAE"));
-        const auditResult = document.getElementById("p13AuditResult");
-        if (auditResult) auditResult.addEventListener("click", () => {
+        if (returned) returned.addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u4E09\u65B9\u5DF2\u7528\u5370\u6700\u7EC8\u534F\u8BAE"));
+        const requestReupload = document.getElementById("p13RequestReupload");
+        if (requestReupload) requestReupload.addEventListener("click", () => {
+          journey.agreementVersion = (journey.agreementVersion || 1) + 1;
+          journey.agreementStatus = "customer_action";
+          refreshActivePage();
+          toast("\u5DF2\u8BB0\u5F55\u91CD\u4F20\u8BF7\u6C42\uFF0C\u8BF7\u5148\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u786E\u8BA4\u4FEE\u6539\u5185\u5BB9");
+        });
+        const confirmFinal = document.getElementById("p13ConfirmFinal");
+        if (confirmFinal) confirmFinal.addEventListener("click", () => {
+          journey.agreementStatus = "auditing";
+          refreshActivePage();
+          toast("\u4F60\u5DF2\u786E\u8BA4\u6700\u7EC8\u534F\u8BAE\uFF0C\u7B49\u5F85\u5E73\u53F0\u786E\u8BA4");
+        });
+        const platformConfirm = document.getElementById("p13PlatformConfirm");
+        if (platformConfirm) platformConfirm.addEventListener("click", () => {
           journey.agreementStatus = "approved";
           refreshActivePage();
-          toast("\u534F\u8BAE\u5DF2\u901A\u8FC7\u5E73\u53F0\u5BA1\u6838");
+          toast("\u4E09\u65B9\u786E\u8BA4\u5B8C\u6210\uFF0C\u534F\u8BAE\u5DF2\u751F\u6548");
         });
         const toFirstPayment = document.getElementById("p13ToFirstPayment");
         if (toFirstPayment) toFirstPayment.addEventListener("click", () => this.setStage("firstPayment"));
-        if (journey.agreementStatus === "provider_signing" && !journey.providerProgressScheduled) {
-          journey.providerProgressScheduled = true;
-          setTimeout(() => {
-            if (journey.agreementStatus !== "provider_signing") return;
-            journey.agreementStatus = "auditing";
-            journey.providerProgressScheduled = false;
-            refreshActivePage();
-            toast("\u670D\u52A1\u5546\u5DF2\u5B8C\u6210\u7528\u5370\uFF0C\u53CC\u65B9\u534F\u8BAE\u5DF2\u8FD4\u56DE");
-          }, 1600);
-        }
       } else if (stage === "firstPayment" || stage === "secondPayment") {
         const second = stage === "secondPayment";
-        document.getElementById("p13Account").addEventListener("click", () => showSheet({ title: "\u670D\u52A1\u5546\u6536\u6B3E\u4FE1\u606F", body: '<div class="p13-account"><div><span>\u6536\u6B3E\u6237\u540D</span><strong>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</strong></div><div><span>\u5F00\u6237\u94F6\u884C</span><strong>\u793A\u4F8B\u94F6\u884C\u5317\u4EAC\u5206\u884C</strong></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>**** **** **** 6628</strong></div><p>\u8BF7\u4EE5\u5DF2\u7B7E\u7F72\u534F\u8BAE\u4E2D\u7684\u6B63\u5F0F\u6536\u6B3E\u4FE1\u606F\u4E3A\u51C6\u3002</p></div>' }));
+        document.getElementById("p13Account").addEventListener("click", () => {
+          const overlay = showSheet({ title: "\u4E09\u65B9\u534F\u8BAE\u6536\u6B3E\u4FE1\u606F", body: '<div class="p13-account"><h4>\u670D\u52A1\u5546\u6536\u6B3E</h4><div><span>\u6536\u6B3E\u6237\u540D</span><strong>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</strong><button data-copy-value="\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53" type="button">\u590D\u5236</button></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>6222 0000 0000 6628</strong><button data-copy-value="6222000000006628" type="button">\u590D\u5236</button></div><h4>\u5E73\u53F0\u6536\u6B3E</h4><div><span>\u6536\u6B3E\u6237\u540D</span><strong>\u5E73\u53F0\u7B7E\u7EA6\u4E3B\u4F53</strong><button data-copy-value="\u5E73\u53F0\u7B7E\u7EA6\u4E3B\u4F53" type="button">\u590D\u5236</button></div><div><span>\u94F6\u884C\u8D26\u53F7</span><strong>6222 0000 0000 8826</strong><button data-copy-value="6222000000008826" type="button">\u590D\u5236</button></div><p>\u8BF7\u6309\u534F\u8BAE\u5217\u660E\u91D1\u989D\u5206\u522B\u652F\u4ED8\u3002\u5404\u6536\u6B3E\u65B9\u6309\u5B9E\u6536\u91D1\u989D\u5F00\u5177\u53D1\u7968\uFF0C\u786E\u4FDD\u5408\u540C\u3001\u8D44\u91D1\u548C\u53D1\u7968\u4FE1\u606F\u4E00\u81F4\u3002</p></div>' });
+          overlay.querySelectorAll("[data-copy-value]").forEach((button) => button.addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(button.getAttribute("data-copy-value"));
+            } catch (_error) {
+            }
+            toast("\u5DF2\u590D\u5236");
+          }));
+        });
         document.getElementById("p13UploadReceipt").addEventListener("click", () => showModal({
           title: "\u4ED8\u6B3E\u51ED\u8BC1\u5DF2\u4E0A\u4F20",
-          body: "\u5E73\u53F0\u5DF2\u8BB0\u5F55\u4ED8\u6B3E\u51ED\u8BC1\uFF0C\u670D\u52A1\u5546\u786E\u8BA4\u5230\u8D26\u540E\u4F1A\u8FDB\u5165\u4E0B\u4E00\u9636\u6BB5\u3002Demo \u5C06\u6A21\u62DF\u5B8C\u6210\u5230\u8D26\u786E\u8BA4\u3002",
+          body: "\u5E73\u53F0\u5DF2\u8BB0\u5F55\u4ED8\u6B3E\u51ED\u8BC1\u3002\u670D\u52A1\u5546\u5C06\u4E8E 2 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u786E\u8BA4\u5230\u8D26\uFF1B\u786E\u8BA4\u540E\u8FDB\u5165\u4E0B\u4E00\u9636\u6BB5\u3002Demo \u5C06\u6A21\u62DF\u5B8C\u6210\u5230\u8D26\u786E\u8BA4\u3002",
           cancelText: "\u7A0D\u540E\u67E5\u770B",
           confirmText: "\u67E5\u770B\u786E\u8BA4\u7ED3\u679C",
           onConfirm: () => {
@@ -8669,13 +9155,27 @@
           }
         }));
       } else if (stage === "milestone") {
+        const caseDetail = document.getElementById("p13CaseDetail");
+        if (caseDetail) {
+          caseDetail.addEventListener("click", () => showSheet({ title: "\u5F02\u8BAE\u5904\u7406\u65F6\u95F4\u7EBF", body: '<div class="p13-case-timeline"><div class="active"><span></span><p><strong>\u5E73\u53F0\u6838\u9A8C\u4E2D</strong><small>\u6B63\u5728\u6838\u5BF9\u534F\u8BAE\u3001\u9636\u6BB5\u6210\u679C\u4E0E\u53CC\u65B9\u63D0\u4EA4\u7684\u6750\u6599</small></p></div><div><span></span><p><strong>\u7B49\u5F85\u670D\u52A1\u5546\u56DE\u590D</strong><small>\u670D\u52A1\u5546\u9700\u9010\u9879\u8BF4\u660E\u4EA4\u4ED8\u60C5\u51B5</small></p></div><div><span></span><p><strong>\u534F\u8C03\u5904\u7406\u4E0E\u65B9\u6848\u786E\u8BA4</strong><small>\u7ED3\u8BBA\u548C\u540E\u7EED\u4ED8\u6B3E\u5B89\u6392\u5C06\u5728\u5DE5\u5355\u5185\u786E\u8BA4</small></p></div></div>' }));
+          return;
+        }
         document.getElementById("p13MilestoneFile").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u7B2C\u4E00\u9636\u6BB5\u6210\u679C\u6587\u4EF6"));
         document.getElementById("p13Dispute").addEventListener("click", () => {
           const overlay = showSheet({ title: "\u63D0\u51FA\u6210\u679C\u5F02\u8BAE", body: '<div class="p13-dispute"><p>\u8BF7\u8BF4\u660E\u9700\u8981\u8865\u5145\u6216\u4FEE\u6539\u7684\u5185\u5BB9\uFF0C\u5E73\u53F0\u4F1A\u540C\u6B65\u7ED9\u670D\u52A1\u5546\u5E76\u4FDD\u7559\u8BB0\u5F55\u3002</p><textarea id="p13DisputeText" maxlength="300" rows="4" placeholder="\u8BF4\u660E\u5177\u4F53\u95EE\u9898"></textarea><button class="btn btn-primary btn-block" id="p13DisputeSubmit" type="button">\u63D0\u4EA4\u5F02\u8BAE</button></div>' });
           overlay.querySelector("#p13DisputeSubmit").addEventListener("click", () => {
             if (!overlay.querySelector("#p13DisputeText").value.trim()) return toast("\u8BF7\u586B\u5199\u5177\u4F53\u95EE\u9898");
+            journey.disputeCase = buildAfterSaleCase(stateKey(this.state.params), {
+              source: "milestone_dispute",
+              type: "\u9636\u6BB5\u6210\u679C\u5F02\u8BAE",
+              description: overlay.querySelector("#p13DisputeText").value.trim(),
+              eta: "1 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53D7\u7406\uFF0C3 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53CD\u9988\u534F\u8C03\u8FDB\u5C55",
+              customerEvidence: ["\u5F02\u8BAE\u8BF4\u660E", "\u534F\u8BAE\u5BF9\u5E94\u6761\u6B3E", "\u6210\u679C\u5BF9\u7167\u6750\u6599"],
+              providerEvidence: ["\u9636\u6BB5\u6210\u679C\u6587\u4EF6", "\u5C65\u7EA6\u4E0E\u4FEE\u6539\u8BB0\u5F55", "\u9010\u9879\u56DE\u590D\u8BF4\u660E"]
+            });
             overlay.remove();
-            toast("\u5F02\u8BAE\u5DF2\u63D0\u4EA4\uFF0C\u7B2C\u4E8C\u9636\u6BB5\u4ED8\u6B3E\u6682\u4E0D\u89E6\u53D1");
+            refreshActivePage();
+            toast("\u5F02\u8BAE\u5DE5\u5355\u5DF2\u751F\u6210\uFF0C\u7B2C\u4E8C\u9636\u6BB5\u4ED8\u6B3E\u6682\u4E0D\u89E6\u53D1");
           });
         });
         document.getElementById("p13ConfirmMilestone").addEventListener("click", () => showModal({
@@ -8689,7 +9189,19 @@
         document.getElementById("p13DemoResult").addEventListener("click", () => this.setStage("result"));
       } else if (stage === "result") {
         document.getElementById("p13ResultFile").addEventListener("click", () => toast("\u5DF2\u6253\u5F00\u4E3B\u7BA1\u673A\u6784\u7ED3\u679C\u6587\u4EF6"));
-        document.getElementById("p13Support").addEventListener("click", () => toast("\u5E73\u53F0\u534F\u52A9\u7533\u8BF7\u5DF2\u63D0\u4EA4"));
+        const support = document.getElementById("p13Support");
+        if (support) support.addEventListener("click", () => {
+          journey.supportCase = buildAfterSaleCase(stateKey(this.state.params), {
+            source: "result_assistance",
+            type: "\u529E\u7406\u7ED3\u679C\u5C65\u7EA6\u6838\u9A8C",
+            description: "\u5BA2\u6237\u7533\u8BF7\u5E73\u53F0\u4F9D\u636E\u4E09\u65B9\u534F\u8BAE\u3001\u4ED8\u6B3E\u51ED\u8BC1\u548C\u4EA4\u4ED8\u8BB0\u5F55\u6838\u9A8C\u670D\u52A1\u5546\u5C65\u7EA6\u60C5\u51B5\u3002",
+            eta: "1 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53D7\u7406\uFF0C3 \u4E2A\u5DE5\u4F5C\u65E5\u5185\u53CD\u9988\u9996\u8F6E\u6838\u9A8C\u7ED3\u8BBA",
+            customerEvidence: ["\u5F02\u8BAE\u8BF4\u660E", "\u4E09\u65B9\u534F\u8BAE\u5BF9\u5E94\u6761\u6B3E", "\u4ED8\u6B3E\u51ED\u8BC1"],
+            providerEvidence: ["\u5B8C\u6574\u4EA4\u4ED8\u8BB0\u5F55", "\u4E3B\u7BA1\u673A\u6784\u63D0\u4EA4\u56DE\u6267", "\u5DE5\u4F5C\u8FC7\u7A0B\u8BF4\u660E"]
+          });
+          refreshActivePage();
+          toast("\u5E73\u53F0\u534F\u52A9\u5DE5\u5355\u5DF2\u751F\u6210");
+        });
         document.getElementById("p13Restart").addEventListener("click", () => {
           journeys.set(stateKey(this.state.params), { stage: "intake", intake: "", quoteStatus: "not_submitted", quoteProgressScheduled: false, agreementStatus: "customer_action", customerAgreementFile: "", providerProgressScheduled: false, firstPaid: false, secondPaid: false });
           this.state.journey = journeys.get(stateKey(this.state.params));
@@ -8706,7 +9218,9 @@
     city: "all",
     price: "all",
     rating: "all",
-    response: "all"
+    response: "all",
+    industry: "all",
+    fundingStage: "all"
   });
   function createMarketplaceFilters() {
     return { ...DEFAULT_MARKET_FILTERS };
@@ -8743,6 +9257,18 @@
       { key: "all", label: "\u4E0D\u9650" },
       { key: "within4", label: "4\u5C0F\u65F6\u5185" },
       { key: "within24", label: "24\u5C0F\u65F6\u5185" }
+    ]) + renderGroup(filters, "\u884C\u4E1A\u7ECF\u9A8C", "industry", [
+      { key: "all", label: "\u4E0D\u9650" },
+      { key: "tech", label: "\u79D1\u6280 / TMT" },
+      { key: "consumer", label: "\u6D88\u8D39 / \u7535\u5546" },
+      { key: "health", label: "\u533B\u7597\u5065\u5EB7" },
+      { key: "manufacturing", label: "\u5148\u8FDB\u5236\u9020" }
+    ]) + renderGroup(filters, "\u878D\u8D44\u9636\u6BB5\u7ECF\u9A8C", "fundingStage", [
+      { key: "all", label: "\u4E0D\u9650" },
+      { key: "seed", label: "\u79CD\u5B50 / \u5929\u4F7F\u8F6E" },
+      { key: "prea", label: "Pre-A" },
+      { key: "a", label: "A \u8F6E" },
+      { key: "growth", label: "\u6210\u957F\u671F" }
     ]) + '<div class="p14-filter-actions"><button type="button" class="btn btn-outline" id="p14FilterReset">\u91CD\u7F6E</button><button type="button" class="btn btn-primary" id="p14FilterApply">\u5E94\u7528\u7B5B\u9009</button></div></div>';
     showSheet({ title: "\u7B5B\u9009\u670D\u52A1", body });
     document.querySelectorAll("[data-p14-filter-key]").forEach((option) => {
@@ -8806,6 +9332,28 @@
   function responseHours(value, fallback = 99) {
     const parsed = Number.parseInt(value, 10);
     return Number.isFinite(parsed) ? parsed : fallback;
+  }
+  function matchesIndustry(value, text) {
+    if (value === "all") return true;
+    const patterns = {
+      tech: /科技|TMT|互联网|软件|智能|AI|SaaS/i,
+      consumer: /消费|电商|零售|品牌/i,
+      health: /医疗|健康|医药|生物/i,
+      manufacturing: /制造|工业|硬科技|新能源|芯片/i
+    };
+    return patterns[value]?.test(text) || false;
+  }
+  function matchesFundingStage(value, text, teamId = "") {
+    if (value === "all") return true;
+    const explicit = {
+      seed: /种子|天使|初创|0-A/i,
+      prea: /Pre-A|初创|融资|股权/i,
+      a: /A轮|融资|治理|股权/i,
+      growth: /成长期|并购|上市|治理/i
+    };
+    if (explicit[value]?.test(text)) return true;
+    const defaults = { seed: ["t001", "t002", "t007"], prea: ["t001", "t002", "t007"], a: ["t001", "t004", "t007"], growth: ["t004"] };
+    return defaults[value]?.includes(teamId) || false;
   }
   function normalizeEntry(entry, index) {
     if (entry.kind === "fundraising") {
@@ -8935,6 +9483,8 @@
         if (filters.rating === "4.8" && entry.rating < 4.8) return false;
         if (filters.response === "within4" && entry.responseHours > 4) return false;
         if (filters.response === "within24" && entry.responseHours > 24) return false;
+        if (!matchesIndustry(filters.industry, entry.searchText)) return false;
+        if (!matchesFundingStage(filters.fundingStage, entry.searchText, entry.team?.id)) return false;
         return true;
       });
       const sorters = {
@@ -8964,6 +9514,9 @@
         const hours = responseHours(team.avgResponse);
         if (filters.response === "within4" && hours > 4) return false;
         if (filters.response === "within24" && hours > 24) return false;
+        const experienceText = [team.desc, ...team.specialties || [], ...team.skus || []].join(" ");
+        if (!matchesIndustry(filters.industry, experienceText)) return false;
+        if (!matchesFundingStage(filters.fundingStage, experienceText, team.id)) return false;
         return true;
       });
       const sorters = {
@@ -9094,6 +9647,20 @@
   register("p14", page14);
 
   // src/main.js
+  function openDemoDeepLink(host) {
+    const query = new URLSearchParams(globalThis.location?.search || "");
+    const scene = query.get("scene");
+    if (scene) host.applyDemoScenario(scene);
+    const pageId = query.get("page");
+    if (!/^p(?:[1-9]|1[0-4])$/.test(pageId || "")) return;
+    const allowedParams = ["demandId", "teamId", "categoryId", "sku", "tab", "stage", "agreementStatus", "view", "agentId", "planId"];
+    const params = {};
+    allowedParams.forEach((key) => {
+      const value = query.get(key);
+      if (value) params[key] = value;
+    });
+    navigateTo(pageId, params);
+  }
   var app = {
     pageStack,
     currentTab: "ecology",
@@ -9104,6 +9671,7 @@
       this.bindTabBar();
       if (this.demoBaseline) this.setInitialDemoScenario("new");
       this.switchTab("ecology");
+      openDemoDeepLink(this);
     },
     initDemoControls,
     setInitialDemoScenario,
