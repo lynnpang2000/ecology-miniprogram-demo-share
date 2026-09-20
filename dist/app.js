@@ -4370,7 +4370,7 @@
   };
 
   // src/data/servicePackages.js
-  var commonCustomSteps = Object.freeze([
+  var commonSpecialSteps = Object.freeze([
     { title: "\u63CF\u8FF0\u4F60\u7684\u60C5\u51B5", desc: "\u7EA6 2 \u5206\u949F\uFF0C\u63D0\u4EA4\u7ED9\u672C\u56E2\u961F" },
     { title: "\u56E2\u961F\u8BC4\u4F30\u670D\u52A1\u8303\u56F4", desc: "\u6838\u5BF9\u590D\u6742\u5EA6\u3001\u5DE5\u4F5C\u91CF\u4E0E\u98CE\u9669\u70B9" },
     { title: "\u56E2\u961F\u7ED9\u51FA\u65B9\u6848\u4E0E\u62A5\u4EF7", desc: "\u5217\u660E\u8303\u56F4\u3001\u5468\u671F\u3001\u4EA4\u4ED8\u7269\u548C\u4EF7\u683C" },
@@ -4378,7 +4378,8 @@
   ]);
   var packageCatalog = {
     "\u5408\u540C\u5BA1\u67E5": {
-      type: "standard",
+      template: "standard",
+      pricingMode: "fixed",
       headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u5408\u540C\u9875\u6570",
       selectorHint: "\u6839\u636E\u5F85\u5BA1\u5408\u540C\u9875\u6570\u9009\u62E9\u5BF9\u5E94\u6536\u8D39\u9879",
       note: "\u8D85\u8FC7 50 \u9875\u3001\u82F1\u6587\u5408\u540C\u6216\u590D\u6742\u4EA4\u6613\u4E0D\u5728\u56FA\u5B9A\u4EF7\u8303\u56F4\u5185\uFF0C\u8054\u7CFB\u56E2\u961F\u8BC4\u4F30\u62A5\u4EF7\u3002",
@@ -4391,12 +4392,12 @@
       ]
     },
     "\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u5E74\u8BA2\u9605",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u9009\u62E9\u4E0E\u4F60\u65E5\u5E38\u6CD5\u5F8B\u9700\u6C42\u6700\u63A5\u8FD1\u7684\u670D\u52A1\u8303\u56F4",
       note: "\u670D\u52A1\u671F 12 \u4E2A\u6708\uFF0C\u53EF\u6309\u5269\u4F59\u6708\u4EFD\u8865\u5DEE\u4EF7\u5347\u7EA7\uFF1B\u5BA1\u67E5\u989D\u5EA6\u6309\u56E2\u961F\u786E\u8BA4\u7684\u5355\u4EFD\u6587\u4EF6\u8BA1\u7B97\u3002",
       defaultPlanId: "review",
-      prices: [15e3, 3e4, 6e4],
       plans: [
         { id: "qa", name: "\u95EE\u7B54\u578B", intro: "\u7EBF\u4E0A\u54A8\u8BE2\u4E0D\u9650\u6B21", suitableFor: "\u95EE\u9898\u9891\u7387\u8F83\u9AD8\u3001\u6587\u4EF6\u5BA1\u67E5\u9700\u6C42\u8F83\u5C11\u7684\u65E9\u671F\u56E2\u961F", period: "12 \u4E2A\u6708", revision: "\u5DE5\u4F5C\u65E5\u5185\u54CD\u5E94", includes: ["\u65E5\u5E38\u7ECF\u8425\u6CD5\u5F8B\u54A8\u8BE2", "\u5E38\u89C1\u98CE\u9669\u5373\u65F6\u63D0\u793A", "\u6708\u5EA6\u54A8\u8BE2\u4E8B\u9879\u7559\u75D5"], boundary: "\u4E0D\u542B\u5408\u540C\u5BA1\u67E5\u3001\u8BC9\u8BBC\u4EF2\u88C1\u4E0E\u4E13\u9879\u4EA4\u6613\u3002" },
         { id: "review", name: "\u5BA1\u67E5\u578B", intro: "\u95EE\u7B54 + \u6BCF\u6708\u5BA1\u67E5\u989D\u5EA6", suitableFor: "\u5408\u540C\u4E0E\u7528\u5DE5\u4E8B\u9879\u8F83\u591A\u3001\u6B63\u5728\u878D\u8D44\u6216\u6269\u5F20\u7684\u56E2\u961F", period: "12 \u4E2A\u6708", revision: "\u6BCF\u6708\u7EA6\u5B9A\u5BA1\u67E5\u989D\u5EA6", includes: ["\u65E5\u5E38\u7ECF\u8425\u6CD5\u5F8B\u54A8\u8BE2", "\u5408\u540C\u4E0E\u5236\u5EA6\u6587\u4EF6\u5BA1\u67E5", "\u5B63\u5EA6\u98CE\u9669\u590D\u76D8"], boundary: "\u4E13\u9879\u878D\u8D44\u3001\u8BC9\u8BBC\u4EF2\u88C1\u53CA\u8D85\u989D\u6587\u4EF6\u53E6\u884C\u786E\u8BA4\u3002" },
@@ -4404,12 +4405,12 @@
       ]
     },
     "\u521B\u59CB\u4EBA\u534F\u8BAE\u5305": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u5408\u4F5C\u590D\u6742\u5EA6",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u6839\u636E\u521B\u59CB\u4EBA\u6570\u3001\u5386\u53F2\u5B89\u6392\u548C\u6587\u4EF6\u8303\u56F4\u9009\u62E9",
       note: "\u5B58\u5728\u4EE3\u6301\u3001\u5386\u53F2\u4E89\u8BAE\u6216\u7279\u6B8A\u63A7\u5236\u6743\u5B89\u6392\u65F6\uFF0C\u56E2\u961F\u4F1A\u5148\u6838\u5BF9\u6750\u6599\u518D\u786E\u8BA4\u9002\u7528\u8303\u56F4\u3002",
       defaultPlanId: "governance",
-      prices: [2800, 5800, 9800],
       plans: [
         { id: "core", name: "\u6838\u5FC3\u534F\u8BAE", intro: "\u5206\u5DE5\u3001\u80A1\u6743\u548C\u9000\u51FA\u89C4\u5219", suitableFor: "3 \u4F4D\u4EE5\u5185\u521B\u59CB\u4EBA\uFF0C\u5408\u4F5C\u7ED3\u6784\u8F83\u7B80\u5355", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u4FEE\u6539", includes: ["\u521B\u59CB\u4EBA\u8BBF\u8C08", "\u521B\u59CB\u4EBA\u534F\u8BAE", "\u4FDD\u5BC6\u4E0E\u77E5\u8BC6\u4EA7\u6743\u6761\u6B3E"], boundary: "\u4E0D\u542B\u80A1\u6743\u6D4B\u7B97\u3001\u5DE5\u5546\u529E\u7406\u548C\u5386\u53F2\u4E89\u8BAE\u3002" },
         { id: "governance", name: "\u6CBB\u7406\u52A0\u5F3A", intro: "\u63A7\u5236\u6743\u3001\u5151\u73B0\u4E0E\u79BB\u804C\u56DE\u8D2D", suitableFor: "\u5DF2\u6295\u5165\u7ECF\u8425\u3001\u51C6\u5907\u878D\u8D44\u6216\u5F15\u5165\u6838\u5FC3\u6210\u5458", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u4FEE\u6539", includes: ["\u591A\u65B9\u9700\u6C42\u8BBF\u8C08", "\u80A1\u6743\u5151\u73B0\u4E0E\u56DE\u8D2D\u673A\u5236", "\u51B3\u7B56\u4E0E\u50F5\u5C40\u6761\u6B3E"], boundary: "5 \u4F4D\u4EE5\u5185\u521B\u59CB\u4EBA\uFF0C\u65E0\u5386\u53F2\u80A1\u6743\u4E89\u8BAE\u3002" },
@@ -4417,12 +4418,12 @@
       ]
     },
     "\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u6587\u4EF6\u8303\u56F4",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u6839\u636E\u56E2\u961F\u9636\u6BB5\u548C\u73B0\u6709\u6587\u4EF6\u5B8C\u6574\u5EA6\u9009\u62E9",
       note: "\u52B3\u52A1\u6D3E\u9063\u3001\u8DE8\u5883\u7528\u5DE5\u3001\u88C1\u5458\u548C\u5B58\u91CF\u4E89\u8BAE\u9700\u8981\u56E2\u961F\u53E6\u884C\u8BC4\u4F30\u3002",
       defaultPlanId: "lifecycle",
-      prices: [1800, 3800, 6800],
       plans: [
         { id: "onboarding", name: "\u5165\u804C\u6587\u4EF6\u5305", intro: "\u4E00\u6B21\u8865\u9F50\u9996\u6279\u5458\u5DE5\u5165\u804C\u6587\u4EF6", suitableFor: "\u51C6\u5907\u62DB\u8058\u9996\u6279\u5458\u5DE5\u7684\u65E9\u671F\u521B\u4E1A\u56E2\u961F", period: "3 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u4FEE\u6539", includes: ["\u52B3\u52A8\u5408\u540C\u6A21\u677F", "\u4FDD\u5BC6\u53CA\u77E5\u8BC6\u4EA7\u6743\u534F\u8BAE", "\u5165\u804C\u4FE1\u606F\u8868"], boundary: "20 \u4EBA\u4EE5\u5185\u3001\u5355\u4E00\u7528\u5DE5\u6A21\u5F0F\u3002" },
         { id: "lifecycle", name: "\u5168\u6D41\u7A0B\u6587\u4EF6\u5305", intro: "\u8986\u76D6\u5458\u5DE5\u5165\u8F6C\u8C03\u79BB", suitableFor: "\u56E2\u961F\u6B63\u5728\u6269\u5F20\uFF0C\u9700\u8981\u5EFA\u7ACB\u57FA\u672C\u7528\u5DE5\u6D41\u7A0B", period: "5\u20147 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u4FEE\u6539", includes: ["\u5165\u804C\u6838\u5FC3\u6587\u4EF6", "\u8BD5\u7528\u671F\u4E0E\u7EE9\u6548\u6587\u4EF6", "\u8C03\u5C97\u3001\u7EED\u7B7E\u53CA\u79BB\u804C\u6587\u4EF6"], boundary: "50 \u4EBA\u4EE5\u5185\uFF0C\u4E0D\u542B\u590D\u6742\u88C1\u5458\u548C\u4E89\u8BAE\u5904\u7406\u3002" },
@@ -4430,12 +4431,12 @@
       ]
     },
     "\u6CBB\u7406\u4F53\u68C0": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u6838\u67E5\u8303\u56F4",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u6839\u636E\u878D\u8D44\u9636\u6BB5\u548C\u5E0C\u671B\u6838\u67E5\u7684\u6A21\u5757\u9009\u62E9",
       note: "\u591A\u4E3B\u4F53\u96C6\u56E2\u3001\u5386\u53F2\u53D8\u66F4\u8F83\u591A\u6216\u5B58\u5728\u4E89\u8BAE\u65F6\uFF0C\u9700\u5148\u786E\u8BA4\u62BD\u67E5\u8303\u56F4\u3002",
       defaultPlanId: "fundraising",
-      prices: [3800, 7800, 12800],
       plans: [
         { id: "quick", name: "\u5FEB\u901F\u81EA\u67E5", intro: "\u80A1\u6743\u4E0E\u516C\u53F8\u6CBB\u7406\u91CD\u70B9\u6392\u96F7", suitableFor: "\u878D\u8D44\u524D\u81EA\u67E5\u6216\u4E86\u89E3\u5F53\u524D\u6CBB\u7406\u57FA\u7840", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u62A5\u544A\u8BB2\u89E3", includes: ["\u80A1\u6743\u4E0E\u7AE0\u7A0B\u68C0\u67E5", "\u51B3\u8BAE\u6587\u4EF6\u62BD\u67E5", "\u6574\u6539\u4F18\u5148\u7EA7\u5EFA\u8BAE"], boundary: "\u5355\u4E00\u4E3B\u4F53\uFF0C\u4E0D\u542B\u5B8C\u6574\u6CD5\u5F8B\u5C3D\u8C03\u3002" },
         { id: "fundraising", name: "\u878D\u8D44\u51C6\u5907", intro: "\u8986\u76D6\u878D\u8D44\u5C3D\u8C03\u9AD8\u9891\u98CE\u9669", suitableFor: "\u8BA1\u5212\u5728 3\u20146 \u4E2A\u6708\u5185\u542F\u52A8\u878D\u8D44", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u62A5\u544A\u8865\u5145", includes: ["\u80A1\u6743\u4E0E\u6CBB\u7406\u6838\u67E5", "\u6838\u5FC3\u5408\u540C\u53CA\u7528\u5DE5\u62BD\u67E5", "\u878D\u8D44\u524D\u6574\u6539\u8DEF\u7EBF\u56FE"], boundary: "\u5355\u4E00\u5883\u5185\u96C6\u56E2\uFF0C\u62BD\u67E5\u8303\u56F4\u6309\u6E05\u5355\u7EA6\u5B9A\u3002" },
@@ -4443,12 +4444,12 @@
       ]
     },
     "\u9690\u79C1\u5408\u89C4\u5305": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u4EA7\u54C1\u8303\u56F4",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u6839\u636E\u4EA7\u54C1\u7AEF\u6570\u91CF\u548C\u6570\u636E\u5904\u7406\u590D\u6742\u5EA6\u9009\u62E9",
       note: "\u7B49\u4FDD\u3001\u6570\u636E\u51FA\u5883\u3001\u76D1\u7BA1\u5E94\u5BF9\u53CA\u590D\u6742\u654F\u611F\u4FE1\u606F\u573A\u666F\u9700\u8981\u53E6\u884C\u8BC4\u4F30\u3002",
       defaultPlanId: "product",
-      prices: [2800, 6800, 12800],
       plans: [
         { id: "launch", name: "\u4E0A\u7EBF\u5FC5\u5907", intro: "\u9690\u79C1\u653F\u7B56\u4E0E\u7528\u6237\u534F\u8BAE", suitableFor: "\u529F\u80FD\u7B80\u5355\u3001\u51C6\u5907\u9996\u6B21\u4E0A\u7EBF\u7684\u4EA7\u54C1", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u8F6E\u4FEE\u6539", includes: ["\u9690\u79C1\u653F\u7B56", "\u7528\u6237\u670D\u52A1\u534F\u8BAE", "\u4FE1\u606F\u6536\u96C6\u6E05\u5355"], boundary: "\u5355\u4E00\u4EA7\u54C1\u7AEF\uFF0C\u4E0D\u542B SDK \u626B\u63CF\u548C\u8DE8\u5883\u573A\u666F\u3002" },
         { id: "product", name: "\u4EA7\u54C1\u6574\u6539", intro: "\u6587\u4EF6\u4E0E\u9875\u9762\u6D41\u7A0B\u4E00\u8D77\u6838\u5BF9", suitableFor: "\u5DF2\u63A5\u5165\u7B2C\u4E09\u65B9 SDK\u3001\u652F\u4ED8\u6216\u8D26\u53F7\u4F53\u7CFB", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u4FEE\u6539", includes: ["\u4E0A\u7EBF\u5FC5\u5907\u6587\u4EF6", "SDK \u4E0E\u6743\u9650\u6E05\u5355\u6838\u5BF9", "\u4EA7\u54C1\u9875\u9762\u6574\u6539\u6E05\u5355"], boundary: "\u5355\u4E00\u4E1A\u52A1\u7EBF\uFF0C\u4E0D\u542B\u7B49\u4FDD\u548C\u6570\u636E\u51FA\u5883\u3002" },
@@ -4456,21 +4457,24 @@
       ]
     },
     "\u80A1\u6743\u67B6\u6784\u8BBE\u8BA1": {
-      type: "custom",
+      template: "special",
+      pricingMode: "assessed",
       headline: "\u8BC4\u4F30\u540E\u62A5\u4EF7",
-      customIntro: "\u6BCF\u5BB6\u516C\u53F8\u7684\u7ED3\u6784\u95EE\u9898\u3001\u5386\u53F2\u5B89\u6392\u548C\u6D89\u53CA\u65B9\u4E0D\u540C\uFF0C\u56E2\u961F\u9700\u8981\u5148\u4E86\u89E3\u60C5\u51B5\uFF0C\u518D\u7ED9\u51FA\u670D\u52A1\u8303\u56F4\u4E0E\u62A5\u4EF7\u3002",
-      customReason: "\u8BC4\u4F30\u524D\u65E0\u6CD5\u5224\u65AD\u5DE5\u4F5C\u91CF\u4E0E\u98CE\u9669\u70B9\u3002",
-      assessmentSteps: commonCustomSteps
+      specialIntro: "\u6BCF\u5BB6\u516C\u53F8\u7684\u7ED3\u6784\u95EE\u9898\u3001\u5386\u53F2\u5B89\u6392\u548C\u6D89\u53CA\u65B9\u4E0D\u540C\uFF0C\u56E2\u961F\u9700\u8981\u5148\u4E86\u89E3\u60C5\u51B5\uFF0C\u518D\u7ED9\u51FA\u670D\u52A1\u8303\u56F4\u4E0E\u62A5\u4EF7\u3002",
+      specialReason: "\u8BC4\u4F30\u524D\u65E0\u6CD5\u5224\u65AD\u5DE5\u4F5C\u91CF\u4E0E\u98CE\u9669\u70B9\u3002",
+      assessmentSteps: commonSpecialSteps
     },
     "\u878D\u8D44\u4EA4\u6613": {
-      type: "custom",
+      template: "special",
+      pricingMode: "assessed",
       headline: "\u8BC4\u4F30\u540E\u62A5\u4EF7",
-      customIntro: "\u878D\u8D44\u9636\u6BB5\u3001\u6295\u8D44\u65B9\u6570\u91CF\u3001\u5C3D\u8C03\u8303\u56F4\u548C\u8C08\u5224\u8F6E\u6B21\u90FD\u4F1A\u5F71\u54CD\u670D\u52A1\u8303\u56F4\uFF0C\u56E2\u961F\u4F1A\u5728\u8BC4\u4F30\u540E\u63D0\u4EA4\u5B8C\u6574\u62A5\u4EF7\u65B9\u6848\u3002",
-      customReason: "\u4EA4\u6613\u7ED3\u6784\u548C\u8C08\u5224\u5DE5\u4F5C\u91CF\u9700\u8981\u7ED3\u5408\u672C\u8F6E\u878D\u8D44\u8FDB\u5C55\u786E\u8BA4\u3002",
-      assessmentSteps: commonCustomSteps
+      specialIntro: "\u878D\u8D44\u9636\u6BB5\u3001\u6295\u8D44\u65B9\u6570\u91CF\u3001\u5C3D\u8C03\u8303\u56F4\u548C\u8C08\u5224\u8F6E\u6B21\u90FD\u4F1A\u5F71\u54CD\u670D\u52A1\u8303\u56F4\uFF0C\u56E2\u961F\u4F1A\u5728\u8BC4\u4F30\u540E\u63D0\u4EA4\u5B8C\u6574\u62A5\u4EF7\u65B9\u6848\u3002",
+      specialReason: "\u4EA4\u6613\u7ED3\u6784\u548C\u8C08\u5224\u5DE5\u4F5C\u91CF\u9700\u8981\u7ED3\u5408\u672C\u8F6E\u878D\u8D44\u8FDB\u5C55\u786E\u8BA4\u3002",
+      assessmentSteps: commonSpecialSteps
     },
     "\u80A1\u6743\u6FC0\u52B1": {
-      type: "standard",
+      template: "standard",
+      pricingMode: "fixed",
       headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u6FC0\u52B1\u4EBA\u6570",
       selectorHint: "\u6839\u636E\u672C\u8F6E\u8BA1\u5212\u8986\u76D6\u7684\u6FC0\u52B1\u5BF9\u8C61\u4EBA\u6570\u9009\u62E9",
       note: "\u5468\u671F\u4E0E\u8F6E\u6B21\uFF1A10 \u4EBA\u7EA6 7 \u4E2A\u5DE5\u4F5C\u65E5\uFF1B30 \u4EBA\u7EA6 2\u20143 \u5468\uFF1B\u591A\u5C42\u7EA7\u65B9\u6848\u7EA6 3\u20144 \u5468\u3002",
@@ -4483,12 +4487,12 @@
       ]
     },
     "\u52B3\u52A8\u5408\u89C4": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u6838\u67E5\u8303\u56F4",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u6839\u636E\u56E2\u961F\u89C4\u6A21\u548C\u73B0\u6709\u7528\u5DE5\u95EE\u9898\u9009\u62E9",
       note: "\u590D\u6742\u88C1\u5458\u3001\u5386\u53F2\u4EF2\u88C1\u548C\u591A\u5730\u7279\u6B8A\u7528\u5DE5\u9700\u53E6\u884C\u8BC4\u4F30\u3002",
       defaultPlanId: "system",
-      prices: [1200, 3e3, 6800],
       plans: [
         { id: "check", name: "\u57FA\u7840\u6392\u67E5", intro: "\u52B3\u52A8\u5408\u540C\u4E0E\u9AD8\u9891\u98CE\u9669\u68C0\u67E5", suitableFor: "20 \u4EBA\u4EE5\u5185\u56E2\u961F\u5FEB\u901F\u81EA\u67E5", period: "3 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u7B54\u7591", includes: ["\u52B3\u52A8\u5408\u540C\u6A21\u677F\u5BA1\u67E5", "\u9AD8\u9891\u98CE\u9669\u6E05\u5355", "\u6574\u6539\u5EFA\u8BAE"], boundary: "\u4E0D\u542B\u4E89\u8BAE\u4E2A\u6848\u5904\u7406\u3002" },
         { id: "system", name: "\u5236\u5EA6\u5B8C\u5584", intro: "\u5408\u540C\u3001\u5236\u5EA6\u4E0E\u7BA1\u7406\u6D41\u7A0B", suitableFor: "\u56E2\u961F\u5FEB\u901F\u6269\u5F20\uFF0C\u9700\u8981\u5EFA\u7ACB\u89C4\u8303\u7528\u5DE5\u4F53\u7CFB", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u6587\u4EF6\u4FEE\u6539", includes: ["\u52B3\u52A8\u5408\u540C\u4E0E\u9644\u4EF6\u4FEE\u8BA2", "\u5458\u5DE5\u624B\u518C\u6838\u5FC3\u5236\u5EA6\u5BA1\u67E5", "\u5165\u8F6C\u8C03\u79BB\u6D41\u7A0B\u5EFA\u8BAE"], boundary: "50 \u4EBA\u4EE5\u5185\uFF0C\u8986\u76D6\u5E38\u89C4\u7528\u5DE5\u5236\u5EA6\u3002" },
@@ -4496,7 +4500,8 @@
       ]
     },
     "\u516C\u53F8\u6CE8\u518C": {
-      type: "standard",
+      template: "standard",
+      pricingMode: "fixed",
       headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u529E\u7406\u8303\u56F4",
       selectorHint: "\u6839\u636E\u80A1\u4E1C\u7ED3\u6784\u548C\u5F00\u529E\u4E8B\u9879\u9009\u62E9",
       note: "\u7279\u6B8A\u8BB8\u53EF\u3001\u5B9E\u9645\u5730\u5740\u3001\u94F6\u884C\u6536\u8D39\u53CA\u7B2C\u4E09\u65B9\u8D39\u7528\u4E0D\u542B\u5728\u56FA\u5B9A\u670D\u52A1\u4EF7\u5185\u3002",
@@ -4509,7 +4514,8 @@
       ]
     },
     "\u5DE5\u5546\u53D8\u66F4": {
-      type: "standard",
+      template: "standard",
+      pricingMode: "fixed",
       headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u53D8\u66F4\u4E8B\u9879",
       selectorHint: "\u6309\u672C\u6B21\u9700\u8981\u540C\u6B65\u529E\u7406\u7684\u53D8\u66F4\u6570\u91CF\u9009\u62E9",
       note: "\u5386\u53F2\u767B\u8BB0\u5F02\u5E38\u3001\u7A0E\u52A1\u95EE\u9898\u3001\u8BC4\u4F30\u4E0E\u516C\u8BC1\u8D39\u7528\u53E6\u8BA1\u3002",
@@ -4522,12 +4528,12 @@
       ]
     },
     "\u516C\u53F8\u6CE8\u9500": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u4F01\u4E1A\u72B6\u6001",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u6839\u636E\u7ECF\u8425\u3001\u7A0E\u52A1\u548C\u5F02\u5E38\u60C5\u51B5\u9009\u62E9",
       note: "\u884C\u653F\u7F5A\u6B3E\u3001\u8865\u7A0E\u3001\u7B2C\u4E09\u65B9\u5BA1\u8BA1\u548C\u5386\u53F2\u51ED\u8BC1\u6574\u7406\u8D39\u7528\u53E6\u8BA1\u3002",
       defaultPlanId: "normal",
-      prices: [1500, 3e3, 6e3],
       plans: [
         { id: "simple", name: "\u7B80\u6613\u6CE8\u9500", intro: "\u672A\u7ECF\u8425\u6216\u503A\u6743\u503A\u52A1\u5DF2\u6E05\u7406", suitableFor: "\u7B26\u5408\u7B80\u6613\u6CE8\u9500\u6761\u4EF6\u7684\u4F01\u4E1A", period: "3\u20145 \u5468", revision: "\u6309\u529E\u7406\u8981\u6C42\u8865\u6B63", includes: ["\u6CE8\u9500\u6761\u4EF6\u6838\u9A8C", "\u516C\u793A\u4E0E\u7533\u8BF7\u6750\u6599", "\u5DE5\u5546\u6CE8\u9500\u63D0\u4EA4"], boundary: "\u4E0D\u542B\u7A0E\u52A1\u5F02\u5E38\u5904\u7406\u3002" },
         { id: "normal", name: "\u666E\u901A\u6CE8\u9500", intro: "\u7A0E\u52A1\u6E05\u7B97\u4E0E\u5DE5\u5546\u6CE8\u9500", suitableFor: "\u6B63\u5E38\u7ECF\u8425\u540E\u505C\u6B62\u7684\u4F01\u4E1A", period: "2\u20143 \u4E2A\u6708", revision: "\u6309\u529E\u7406\u8981\u6C42\u8865\u6B63", includes: ["\u6CE8\u9500\u8DEF\u5F84\u68B3\u7406", "\u7A0E\u52A1\u6E05\u7B97\u534F\u52A9", "\u5DE5\u5546\u6CE8\u9500\u4EE3\u529E"], boundary: "\u4E0D\u542B\u5386\u53F2\u6B20\u7A0E\u3001\u7F5A\u6B3E\u53CA\u5BA1\u8BA1\u8D39\u7528\u3002" },
@@ -4535,12 +4541,12 @@
       ]
     },
     "\u77E5\u8BC6\u4EA7\u6743\u4FDD\u62A4": {
-      type: "semi_standard",
-      headline: "\u660E\u7801\u6807\u4EF7 \xB7 \u6309\u4FDD\u62A4\u8303\u56F4",
+      template: "standard",
+      pricingMode: "negotiated",
+      headline: "\u6807\u51C6\u670D\u52A1 \xB7 \u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7",
       selectorHint: "\u6839\u636E\u8D44\u4EA7\u7C7B\u578B\u548C\u98CE\u9669\u6838\u67E5\u6DF1\u5EA6\u9009\u62E9",
       note: "\u7533\u8BF7\u5B98\u8D39\u3001\u4E89\u8BAE\u7A0B\u5E8F\u3001\u8BC9\u8BBC\u53CA\u65E0\u6548\u7A0B\u5E8F\u53E6\u884C\u62A5\u4EF7\u3002",
       defaultPlanId: "planning",
-      prices: [1800, 3800, 7800],
       plans: [
         { id: "inventory", name: "\u8D44\u4EA7\u76D8\u70B9", intro: "\u73B0\u6709\u77E5\u8BC6\u4EA7\u6743\u5FEB\u901F\u68B3\u7406", suitableFor: "\u9996\u6B21\u68B3\u7406\u5546\u6807\u3001\u8457\u4F5C\u6743\u6216\u5546\u4E1A\u79D8\u5BC6", period: "5 \u4E2A\u5DE5\u4F5C\u65E5", revision: "1 \u6B21\u7B54\u7591", includes: ["\u6743\u5229\u6E05\u5355\u76D8\u70B9", "\u57FA\u7840\u98CE\u9669\u8BC6\u522B", "\u4FDD\u62A4\u4F18\u5148\u7EA7\u5EFA\u8BAE"], boundary: "\u5355\u4E00\u4E1A\u52A1\u7EBF\uFF0C\u4E0D\u542B\u7533\u8BF7\u4EE3\u7406\u3002" },
         { id: "planning", name: "\u4FDD\u62A4\u89C4\u5212", intro: "\u54C1\u724C\u4E0E\u6280\u672F\u4FDD\u62A4\u8DEF\u5F84", suitableFor: "\u5DF2\u6709\u4EA7\u54C1\u548C\u54C1\u724C\uFF0C\u9700\u8981\u7CFB\u7EDF\u4FDD\u62A4", period: "7\u201410 \u4E2A\u5DE5\u4F5C\u65E5", revision: "2 \u8F6E\u8C03\u6574", includes: ["\u54C1\u724C\u4E0E\u6280\u672F\u8D44\u4EA7\u76D8\u70B9", "\u6838\u5FC3\u98CE\u9669\u68C0\u7D22", "\u4FDD\u62A4\u4E0E\u7533\u8BF7\u8DEF\u5F84\u8BBE\u8BA1"], boundary: "\u4E0D\u542B\u5B98\u65B9\u8D39\u7528\u53CA\u4E89\u8BAE\u7A0B\u5E8F\u3002" },
@@ -4549,13 +4555,7 @@
     }
   };
   var teamPriceOverrides = {
-    "t002:\u5E38\u5E74\u6CD5\u5F8B\u987E\u95EE": [15e3, 3e4, 6e4],
-    "t002:\u52B3\u52A8\u7528\u5DE5\u6587\u4EF6\u5305": [1600, 3500, 6500],
-    "t004:\u6CBB\u7406\u4F53\u68C0": [5800, 9800, 16800],
-    "t004:\u9690\u79C1\u5408\u89C4\u5305": [3800, 7800, 13800],
-    "t007:\u521B\u59CB\u4EBA\u534F\u8BAE\u5305": [3200, 6800, 10800],
     "t002:\u5408\u540C\u5BA1\u67E5": [1200, 2600, 5200],
-    "t002:\u52B3\u52A8\u5408\u89C4": [1500, 3200, 6800],
     "t004:\u5408\u540C\u5BA1\u67E5": [1e3, 2400, 4800],
     "t007:\u80A1\u6743\u6FC0\u52B1": [6800, 12e3, 2e4]
   };
@@ -4565,12 +4565,17 @@
   function getServicePackageConfig(teamId, sku) {
     const source = packageCatalog[sku];
     if (!source) return null;
-    if (source.type === "custom") {
-      return { ...source, sku, plans: [], rangeText: "\u8BC4\u4F30\u540E\u62A5\u4EF7" };
+    const serviceGroup = source.template === "special" ? "\u4E13\u9879\u670D\u52A1" : "\u6807\u51C6\u670D\u52A1";
+    if (source.template === "special") {
+      return { ...source, sku, serviceGroup, plans: [], rangeText: "\u8BC4\u4F30\u540E\u62A5\u4EF7" };
+    }
+    if (source.pricingMode === "negotiated") {
+      const plans2 = source.plans.map((plan) => ({ ...plan, price: null, priceText: "\u5F85\u786E\u8BA4" }));
+      return { ...source, sku, serviceGroup, plans: plans2, rangeText: "\u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7" };
     }
     const prices = teamPriceOverrides[teamId + ":" + sku] || source.prices;
     const plans = source.plans.map((plan, index) => ({ ...plan, price: prices[index], priceText: formatPrice(prices[index]) }));
-    return { ...source, sku, plans, rangeText: formatPrice(Math.min(...prices)) + "\u2013" + formatPrice(Math.max(...prices)) };
+    return { ...source, sku, serviceGroup, plans, rangeText: formatPrice(Math.min(...prices)) + "\u2013" + formatPrice(Math.max(...prices)) };
   }
   function getServicePriceLabel(teamId, sku, fallback = "\u4EF7\u683C\u5F85\u786E\u8BA4") {
     const config = getServicePackageConfig(teamId, sku);
@@ -4578,9 +4583,9 @@
   }
   function getServicePricingMode(config) {
     if (!config) return "\u4EF7\u683C\u5F85\u786E\u8BA4";
-    if (config.type === "custom") return "\u5148\u8BC4\u4F30\u518D\u62A5\u4EF7";
-    if (config.type === "standard") return "\u6309\u660E\u786E\u8BA1\u4EF7\u5355\u4F4D";
-    return "\u6309\u670D\u52A1\u8303\u56F4\u9009\u62E9";
+    if (config.template === "special") return "\u5148\u8BC4\u4F30\u518D\u62A5\u4EF7";
+    if (config.pricingMode === "fixed") return "\u6309\u660E\u786E\u8BA1\u4EF7\u5355\u4F4D";
+    return "\u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7";
   }
 
   // src/services/marketplaceCatalog.js
@@ -6279,7 +6284,7 @@
       html += renderReviews(team, dimensions);
       html += "</div>";
       const matchSelected = params.source === "match" && Boolean(params.matchSelected);
-      html += '<div class="bottom-bar"><button class="p3-bottom-ai p3-bottom-favorite' + (isFavoriteTeam(team.id) ? " active" : "") + '" id="p3Favorite" type="button" aria-pressed="' + isFavoriteTeam(team.id) + '">' + this.renderFavoriteContent(team.id) + '</button><div class="p3-bottom-price"><div class="p3-bottom-price-label">' + (stagedSelected || selectedPackageConfig?.type === "custom" ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u4EF7\u683C\u8303\u56F4") + '</div><div class="p3-bottom-price-val">' + selectedPriceLabel + "</div></div>";
+      html += '<div class="bottom-bar"><button class="p3-bottom-ai p3-bottom-favorite' + (isFavoriteTeam(team.id) ? " active" : "") + '" id="p3Favorite" type="button" aria-pressed="' + isFavoriteTeam(team.id) + '">' + this.renderFavoriteContent(team.id) + '</button><div class="p3-bottom-price"><div class="p3-bottom-price-label">' + (stagedSelected || selectedPackageConfig?.template === "special" || selectedPackageConfig?.pricingMode === "negotiated" ? "\u62A5\u4EF7\u65B9\u5F0F" : "\u4EF7\u683C\u8303\u56F4") + '</div><div class="p3-bottom-price-val">' + selectedPriceLabel + "</div></div>";
       if (params.source === "match") {
         html += '<button class="btn ' + (matchSelected ? "btn-outline" : "btn-primary") + ' p3-match-select" id="p3MatchSelect" type="button">' + (matchSelected ? "\u53D6\u6D88\u9009\u62E9" : "\u9009\u62E9\u8BE5\u56E2\u961F") + "</button>";
       } else {
@@ -8237,24 +8242,25 @@
     if (!config || !Array.isArray(config.plans) || !config.plans.length) return null;
     return config.plans.find((plan) => plan.id === requestedId) || config.plans.find((plan) => plan.id === config.defaultPlanId) || config.plans[0];
   }
-  function renderCustomPricing(config) {
+  function renderSpecialPricing(config) {
     const steps3 = (config.assessmentSteps || []).map(
       (step, index) => "<li><b>" + (index + 1) + "</b><span><strong>" + escapeHTML(step.title) + "</strong>" + (step.desc ? "<small>" + escapeHTML(step.desc) + "</small>" : "") + "</span></li>"
     ).join("");
-    return '<section class="p10-pricing p10-pricing-custom" aria-labelledby="p10PricingTitle"><h2 id="p10PricingTitle">\u8FD9\u7C7B\u670D\u52A1\u5148\u8BC4\u4F30\u518D\u62A5\u4EF7</h2><p>' + escapeHTML(config.customIntro || "\u56E2\u961F\u9700\u8981\u5148\u4E86\u89E3\u60C5\u51B5\uFF0C\u518D\u786E\u8BA4\u670D\u52A1\u8303\u56F4\u548C\u62A5\u4EF7\u3002") + '</p><ol class="p10-assessment-steps">' + steps3 + '</ol><div class="p10-pricing-note"><strong>\u4E3A\u4EC0\u4E48\u4E0D\u80FD\u76F4\u63A5\u6807\u4EF7\uFF1F</strong><span>' + escapeHTML(config.customReason || "\u8BC4\u4F30\u524D\u65E0\u6CD5\u51C6\u786E\u5224\u65AD\u5DE5\u4F5C\u91CF\u4E0E\u98CE\u9669\u70B9\u3002") + "</span></div></section>";
+    return '<section class="p10-pricing p10-pricing-special" aria-labelledby="p10PricingTitle"><h2 id="p10PricingTitle">\u8FD9\u7C7B\u670D\u52A1\u5148\u8BC4\u4F30\u518D\u62A5\u4EF7</h2><p>' + escapeHTML(config.specialIntro || "\u56E2\u961F\u9700\u8981\u5148\u4E86\u89E3\u60C5\u51B5\uFF0C\u518D\u786E\u8BA4\u670D\u52A1\u8303\u56F4\u548C\u62A5\u4EF7\u3002") + '</p><ol class="p10-assessment-steps">' + steps3 + '</ol><div class="p10-pricing-note"><strong>\u4E3A\u4EC0\u4E48\u4E0D\u80FD\u76F4\u63A5\u6807\u4EF7\uFF1F</strong><span>' + escapeHTML(config.specialReason || "\u8BC4\u4F30\u524D\u65E0\u6CD5\u51C6\u786E\u5224\u65AD\u5DE5\u4F5C\u91CF\u4E0E\u98CE\u9669\u70B9\u3002") + "</span></div></section>";
   }
   function renderPlanRow(plan, selectedId) {
     const selected = plan.id === selectedId;
     return '<button class="p10-price-row' + (selected ? " selected" : "") + '" type="button" data-p10-package="' + escapeHTML(plan.id) + '" aria-pressed="' + selected + '"><span class="p10-price-option"><strong>' + escapeHTML(plan.name) + "</strong><small>" + escapeHTML(plan.intro) + '</small></span><span class="p10-price-current">' + (selected ? "\u4F60\u7684\u60C5\u51B5" : "") + '</span><strong class="p10-price-value">' + escapeHTML(plan.priceText) + "</strong></button>";
   }
-  function renderPricedOptions(config, selectedId) {
-    const isStandard = config.type === "standard";
-    return '<section class="p10-pricing p10-pricing-' + (isStandard ? "standard" : "semi") + '" aria-labelledby="p10PricingTitle"><div class="p10-pricing-heading"><div><h2 id="p10PricingTitle">\u600E\u4E48\u6536\u8D39</h2><p>' + escapeHTML(config.selectorHint) + '</p></div><span>\u672C\u56E2\u961F\u62A5\u4EF7</span></div><div class="p10-price-table">' + config.plans.map((plan) => renderPlanRow(plan, selectedId)).join("") + '</div><div class="p10-pricing-note"><strong>' + (isStandard ? "\u8BA1\u4EF7\u8BF4\u660E" : "\u9009\u62E9\u8BF4\u660E") + "</strong><span>" + escapeHTML(config.note) + "</span></div></section>";
+  function renderStandardOptions(config, selectedId) {
+    const negotiated = config.pricingMode === "negotiated";
+    const note = negotiated ? "\u53CC\u65B9\u5728\u4F01\u4E1A\u5FAE\u4FE1\u7FA4\u786E\u8BA4\u4EF7\u683C\u540E\uFF0C\u670D\u52A1\u5546\u66F4\u65B0\u670D\u52A1\u65B9\u6848\u3001\u670D\u52A1\u8FB9\u754C\u53CA\u62A5\u4EF7\uFF1B\u4F60\u786E\u8BA4\u540E\u518D\u7B7E\u7F72\u534F\u8BAE\u3002" : config.note;
+    return '<section class="p10-pricing p10-pricing-standard p10-pricing-' + (negotiated ? "negotiated" : "fixed") + '" aria-labelledby="p10PricingTitle"><div class="p10-pricing-heading"><div><h2 id="p10PricingTitle">' + (negotiated ? "\u9009\u62E9\u670D\u52A1\u8303\u56F4" : "\u600E\u4E48\u6536\u8D39") + "</h2><p>" + escapeHTML(config.selectorHint) + "</p></div><span>" + (negotiated ? "\u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7" : "\u672C\u56E2\u961F\u62A5\u4EF7") + '</span></div><div class="p10-price-table">' + config.plans.map((plan) => renderPlanRow(plan, selectedId)).join("") + '</div><div class="p10-pricing-note"><strong>' + (negotiated ? "\u786E\u8BA4\u65B9\u5F0F" : "\u8BA1\u4EF7\u8BF4\u660E") + "</strong><span>" + escapeHTML(note) + "</span></div></section>";
   }
   function renderPackageSelector(config, selectedId) {
     if (!config) return "";
-    if (config.type === "custom") return renderCustomPricing(config);
-    return renderPricedOptions(config, selectedId);
+    if (config.template === "special") return renderSpecialPricing(config);
+    return renderStandardOptions(config, selectedId);
   }
   function updatePackageSelection(config, selectedId) {
     const selected = getDefaultPackage(config, selectedId);
@@ -8273,7 +8279,7 @@
     if (price) price.textContent = selected.priceText;
     if (consult) {
       consult.setAttribute("data-plan-id", selected.id);
-      consult.textContent = config.type === "standard" ? "\u4E0B\u5355\u5E76\u54A8\u8BE2" : "\u8BA2\u8D2D\u5E76\u54A8\u8BE2";
+      consult.textContent = config.pricingMode === "negotiated" ? "\u54A8\u8BE2\u5E76\u786E\u8BA4\u65B9\u6848" : "\u4E0B\u5355\u5E76\u54A8\u8BE2";
     }
     return selected;
   }
@@ -8304,10 +8310,12 @@
   function getStagedPricingConfig(staged) {
     if (!staged) return null;
     return {
-      type: "custom",
+      template: "special",
+      pricingMode: "assessed",
+      serviceGroup: "\u4E13\u9879\u670D\u52A1",
       headline: "\u8BC4\u4F30\u540E\u62A5\u4EF7",
-      customIntro: "\u7533\u8BF7\u6570\u91CF\u3001\u6750\u6599\u57FA\u7840\u548C\u4E3B\u7BA1\u673A\u6784\u8981\u6C42\u4F1A\u5F71\u54CD\u5DE5\u4F5C\u8303\u56F4\uFF0C\u56E2\u961F\u9700\u8981\u5148\u8BC4\u4F30\u518D\u63D0\u4EA4\u5206\u9636\u6BB5\u62A5\u4EF7\u65B9\u6848\u3002",
-      customReason: "\u6B63\u5F0F\u8BC4\u4F30\u524D\u65E0\u6CD5\u51C6\u786E\u5224\u65AD\u6750\u6599\u5DE5\u4F5C\u91CF\u3001\u7533\u62A5\u96BE\u5EA6\u548C\u8865\u6B63\u98CE\u9669\u3002",
+      specialIntro: "\u7533\u8BF7\u6570\u91CF\u3001\u6750\u6599\u57FA\u7840\u548C\u4E3B\u7BA1\u673A\u6784\u8981\u6C42\u4F1A\u5F71\u54CD\u5DE5\u4F5C\u8303\u56F4\uFF0C\u56E2\u961F\u9700\u8981\u5148\u8BC4\u4F30\u518D\u63D0\u4EA4\u5206\u9636\u6BB5\u62A5\u4EF7\u65B9\u6848\u3002",
+      specialReason: "\u6B63\u5F0F\u8BC4\u4F30\u524D\u65E0\u6CD5\u51C6\u786E\u5224\u65AD\u6750\u6599\u5DE5\u4F5C\u91CF\u3001\u7533\u62A5\u96BE\u5EA6\u548C\u8865\u6B63\u98CE\u9669\u3002",
       assessmentSteps: [
         { title: "\u63CF\u8FF0\u7533\u8BF7\u60C5\u51B5", desc: "\u63D0\u4EA4\u6570\u91CF\u3001\u5DF2\u6709\u6750\u6599\u548C\u65F6\u95F4\u8981\u6C42" },
         { title: "\u56E2\u961F\u8BC4\u4F30\u53EF\u627F\u63A5\u8303\u56F4", desc: "\u6838\u5BF9\u5DE5\u4F5C\u91CF\u3001\u98CE\u9669\u548C\u7533\u62A5\u6761\u4EF6" },
@@ -8371,7 +8379,8 @@
       const packageConfig = staged ? null : getServicePackageConfig(team.id, sku);
       const pricingConfig = staged ? getStagedPricingConfig(staged) : packageConfig;
       const selectedPackage = getDefaultPackage(pricingConfig, params.planId);
-      const pricingType = pricingConfig && pricingConfig.type || "custom";
+      const pageTemplate = pricingConfig && pricingConfig.template || "special";
+      const pricingMode = pricingConfig && pricingConfig.pricingMode || "assessed";
       this.state = { team, sku, packageConfig: pricingConfig, selectedPackage };
       const category = getCategoryForSku(sku, categories);
       const safeTeamId = escapeHTML(team.id);
@@ -8384,13 +8393,13 @@
       const service = "<section><h2>\u670D\u52A1\u5185\u5BB9</h2>" + this.renderList(detail.scope) + "</section>";
       const deliverables = "<section><h2>\u4EA4\u4ED8\u6210\u679C</h2>" + this.renderList(detail.deliverables) + "</section>";
       const materials = "<section><h2>\u9700\u8981\u51C6\u5907</h2>" + this.renderList(detail.materials) + "</section>";
-      const payment = staged ? '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>' + escapeHTML(staged.paymentMode) + "</h2><p>\u6BCF\u4E2A\u65B9\u6848\u53EF\u5355\u72EC\u914D\u7F6E\u4ED8\u6B3E\u6BD4\u4F8B\uFF0C\u786E\u8BA4\u524D\u4E00\u9636\u6BB5\u6210\u679C\u540E\u518D\u89E6\u53D1\u4E0B\u4E00\u7B14\u670D\u52A1\u6B3E\u3002</p></div><span>" + staged.firstRatio + "% + " + staged.secondRatio + '%</span></div><div class="p10-stage-row"><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>\u4E09\u65B9\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>' + escapeHTML(staged.secondTrigger) + '</span></div><div class="p10-stage-row"><b>\u6536\u6B3E\u4E0E\u5F00\u7968</b><span>\u5206\u522B\u652F\u4ED8\u7ED9\u670D\u52A1\u5546\u548C\u5E73\u53F0\uFF1B\u5404\u6536\u6B3E\u65B9\u6309\u5B9E\u6536\u91D1\u989D\u5F00\u7968</span></div><div class="p10-result-risk">' + icon("alert", 16) + "<p><strong>\u6700\u7EC8\u7ED3\u679C\u4E0D\u627F\u8BFA</strong>\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u5B58\u5728\u4E0D\u786E\u5B9A\u6027\uFF1B\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF0C\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section>" : pricingType === "custom" ? "" : '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>\u4ED8\u6B3E\u4E0E\u53D1\u7968</h2><p>\u534F\u8BAE\u751F\u6548\u540E\u6309\u5DF2\u786E\u8BA4\u7684\u670D\u52A1\u9009\u9879\u4ED8\u6B3E\u3002</p></div><span>\u76F4\u63A5\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u6536\u6B3E\u65B9</b><span>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</span></div><div class="p10-stage-row"><b>\u5F00\u7968\u89C4\u5219</b><span>\u8C01\u6536\u6B3E\u8C01\u5F00\u7968\uFF0C\u5408\u540C\u3001\u8D44\u91D1\u4E0E\u53D1\u7968\u4FE1\u606F\u4FDD\u6301\u4E00\u81F4</span></div></section>';
+      const payment = staged ? '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>' + escapeHTML(staged.paymentMode) + "</h2><p>\u6BCF\u4E2A\u65B9\u6848\u53EF\u5355\u72EC\u914D\u7F6E\u4ED8\u6B3E\u6BD4\u4F8B\uFF0C\u786E\u8BA4\u524D\u4E00\u9636\u6BB5\u6210\u679C\u540E\u518D\u89E6\u53D1\u4E0B\u4E00\u7B14\u670D\u52A1\u6B3E\u3002</p></div><span>" + staged.firstRatio + "% + " + staged.secondRatio + '%</span></div><div class="p10-stage-row"><b>\u7B2C\u4E00\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>\u4E09\u65B9\u534F\u8BAE\u751F\u6548\u540E\u652F\u4ED8</span></div><div class="p10-stage-row"><b>\u7B2C\u4E8C\u9636\u6BB5\u670D\u52A1\u6B3E</b><span>' + escapeHTML(staged.secondTrigger) + '</span></div><div class="p10-stage-row"><b>\u6536\u6B3E\u4E0E\u5F00\u7968</b><span>\u5206\u522B\u652F\u4ED8\u7ED9\u670D\u52A1\u5546\u548C\u5E73\u53F0\uFF1B\u5404\u6536\u6B3E\u65B9\u6309\u5B9E\u6536\u91D1\u989D\u5F00\u7968</span></div><div class="p10-result-risk">' + icon("alert", 16) + "<p><strong>\u6700\u7EC8\u7ED3\u679C\u4E0D\u627F\u8BFA</strong>\u4E3B\u7BA1\u673A\u6784\u7684\u5BA1\u67E5\u6216\u8BC4\u5BA1\u5B58\u5728\u4E0D\u786E\u5B9A\u6027\uFF1B\u5DF2\u5B8C\u6210\u9636\u6BB5\u7684\u670D\u52A1\u8D39\u4E0D\u56E0\u6700\u7EC8\u672A\u83B7\u6279\u800C\u9000\u8FD8\uFF0C\u670D\u52A1\u5546\u672A\u6309\u7EA6\u5C65\u884C\u7684\u9664\u5916\u3002</p></div></section>" : pageTemplate === "special" ? "" : '<section class="p10-staged-payment"><div class="p10-staged-title"><div><h2>\u4ED8\u6B3E\u4E0E\u53D1\u7968</h2><p>' + (pricingMode === "negotiated" ? "\u53CC\u65B9\u786E\u8BA4\u6700\u7EC8\u65B9\u6848\u5E76\u7B7E\u7F72\u534F\u8BAE\u540E\uFF0C\u6309\u534F\u8BAE\u7EA6\u5B9A\u4ED8\u6B3E\u3002" : "\u534F\u8BAE\u751F\u6548\u540E\u6309\u5DF2\u786E\u8BA4\u7684\u670D\u52A1\u9009\u9879\u4ED8\u6B3E\u3002") + "</p></div><span>" + (pricingMode === "negotiated" ? "\u786E\u8BA4\u540E\u4ED8\u6B3E" : "\u76F4\u63A5\u652F\u4ED8") + '</span></div><div class="p10-stage-row"><b>\u65B9\u6848\u786E\u8BA4</b><span>' + (pricingMode === "negotiated" ? "\u4F01\u5FAE\u6C9F\u901A\u540E\u7531\u670D\u52A1\u5546\u66F4\u65B0\u65B9\u6848\u3001\u670D\u52A1\u8FB9\u754C\u53CA\u62A5\u4EF7" : "\u6309\u9875\u9762\u6240\u9009\u670D\u52A1\u8303\u56F4\u786E\u8BA4") + '</span></div><div class="p10-stage-row"><b>\u6536\u6B3E\u65B9</b><span>\u670D\u52A1\u5546\u7B7E\u7EA6\u4E3B\u4F53</span></div><div class="p10-stage-row"><b>\u5F00\u7968\u89C4\u5219</b><span>\u8C01\u6536\u6B3E\u8C01\u5F00\u7968\uFF0C\u5408\u540C\u3001\u8D44\u91D1\u4E0E\u53D1\u7968\u4FE1\u606F\u4FDD\u6301\u4E00\u81F4</span></div></section>';
       const exclusions = '<section class="p10-exclusions"><h2>\u8D39\u7528\u901A\u5E38\u4E0D\u5305\u542B</h2>' + this.renderList(detail.exclusions) + "<p>\u6700\u7EC8\u670D\u52A1\u8303\u56F4\u3001\u62A5\u4EF7\u548C\u5468\u671F\uFF0C\u4EE5\u53CC\u65B9\u786E\u8BA4\u7684\u670D\u52A1\u65B9\u6848\u4E3A\u51C6\u3002</p></section>";
-      const orderedContent = pricingType === "custom" ? service + materials + process + deliverables + payment + exclusions : service + deliverables + process + materials + payment + exclusions;
-      html += '<main class="p10-content p10-content-' + pricingType.replace("_", "-") + '">' + orderedContent + "</main>";
-      const bottomName = pricingType === "custom" ? "\u62A5\u4EF7\u65B9\u5F0F" : selectedPackage.name;
-      const bottomPrice = pricingType === "custom" ? "\u8BC4\u4F30\u540E\u62A5\u4EF7" : selectedPackage.priceText;
-      const actionLabel = pricingType === "custom" ? "\u63CF\u8FF0\u60C5\u51B5\u5E76\u54A8\u8BE2" : pricingType === "standard" ? "\u4E0B\u5355\u5E76\u54A8\u8BE2" : "\u8BA2\u8D2D\u5E76\u54A8\u8BE2";
+      const orderedContent = pageTemplate === "special" ? service + materials + process + deliverables + payment + exclusions : service + deliverables + process + materials + payment + exclusions;
+      html += '<main class="p10-content p10-content-' + pageTemplate + " p10-content-" + pricingMode + '">' + orderedContent + "</main>";
+      const bottomName = pageTemplate === "special" ? "\u62A5\u4EF7\u65B9\u5F0F" : selectedPackage.name;
+      const bottomPrice = pageTemplate === "special" ? "\u8BC4\u4F30\u540E\u62A5\u4EF7" : pricingMode === "negotiated" ? "\u65B9\u6848\u786E\u8BA4\u540E\u62A5\u4EF7" : selectedPackage.priceText;
+      const actionLabel = pageTemplate === "special" ? "\u63CF\u8FF0\u60C5\u51B5\u5E76\u54A8\u8BE2" : pricingMode === "negotiated" ? "\u54A8\u8BE2\u5E76\u786E\u8BA4\u65B9\u6848" : "\u4E0B\u5355\u5E76\u54A8\u8BE2";
       html += '<div class="bottom-bar p10-bottom"><div><small class="p10-bottom-plan-name">' + escapeHTML(bottomName) + '</small><strong class="p10-bottom-plan-price">' + escapeHTML(bottomPrice) + '</strong></div><button class="btn btn-primary" id="p10Consult" data-team-id="' + safeTeamId + '" data-sku="' + safeSku + '" data-plan-id="' + (selectedPackage ? selectedPackage.id : "") + '">' + actionLabel + "</button></div>";
       return html;
     },

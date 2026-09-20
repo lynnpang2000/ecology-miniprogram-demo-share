@@ -8959,8 +8959,15 @@ button:focus-visible,
   flex: 0 0 auto;
   color: var(--color-text-1);
 }
-.p10-pricing-custom {
+.p10-pricing-special {
   background: #fbfcff;
+}
+.p10-pricing-negotiated .p10-price-value {
+  color: var(--color-text-3);
+  font-size: var(--font-xs);
+}
+.p10-pricing-negotiated .p10-price-row.selected .p10-price-value {
+  color: #1f5fd7;
 }
 .p10-assessment-steps {
   margin: 18px 0 0;
