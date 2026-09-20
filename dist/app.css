@@ -11650,6 +11650,30 @@ button.p12-manage-record {
 .p14-search input {
   min-width: 0;
 }
+.p14-view-switch {
+  margin: 0 16px 5px;
+  padding: 3px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  border-radius: 11px;
+  background: #EFF1F5;
+}
+.p14-view-switch button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #667085;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+.p14-view-switch button.active {
+  background: #FFFFFF;
+  color: var(--color-primary);
+  box-shadow: 0 2px 7px rgba(21, 30, 53, .08);
+}
 .p14-categories {
   padding: 0 16px;
   display: flex;
@@ -11889,6 +11913,7 @@ button.p12-manage-record {
 }
 .p14-service-card:focus-visible,
 .p14-category:focus-visible,
+.p14-view-switch button:focus-visible,
 .p14-toolbar .filter-chip:focus-visible,
 .p14-filter-option:focus-visible,
 .p14-sort-option:focus-visible {
@@ -11901,6 +11926,16 @@ button.p12-manage-record {
   font-size: 10px;
   line-height: 1.55;
   text-align: center;
+}
+.p14-team-list {
+  display: grid;
+  gap: 10px;
+}
+.p14-team-list .p2-card {
+  margin-bottom: 0;
+}
+.p14-team-list .p2-card-bottom {
+  justify-content: flex-start;
 }
 .p14-empty {
   min-height: 330px;

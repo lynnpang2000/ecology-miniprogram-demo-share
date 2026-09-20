@@ -4479,7 +4479,7 @@
   register("p1", page);
 
   // src/components/teamCard.js
-  function renderTeamCard(team) {
+  function renderTeamCard(team, options = {}) {
     const favorite = isFavoriteTeam(team.id);
     let html = '<article class="p2-card" data-team="' + team.id + '" role="button" tabindex="0"><span class="p2-card-main">';
     html += '<span class="p2-card-img" style="background:' + team.avatarColor + "18;color:" + team.avatarColor + '">' + team.avatar + "</span>";
@@ -4490,13 +4490,13 @@
     html += '<span class="p2-card-desc">' + (team.desc || "\u56E2\u961F\u4ECB\u7ECD\u5F85\u5B8C\u5584") + '</span><span class="p2-card-tags">';
     for (let index = 0; index < Math.min(team.skus.length, 3); index += 1) html += '<span class="sku-tag">' + team.skus[index] + "</span>";
     if (team.skus.length > 3) html += '<span class="sku-tag p2-more-tag">+' + (team.skus.length - 3) + "</span>";
-    html += '</span><span class="p2-card-bottom"><span class="p2-card-loc">' + team.city + (team.avgResponse ? " \xB7 " + team.avgResponse + "\u5185\u54CD\u5E94" : "") + '</span><span class="p2-card-price">' + team.priceText + "</span></span>";
+    html += '</span><span class="p2-card-bottom"><span class="p2-card-loc">' + team.city + (team.avgResponse ? " \xB7 " + team.avgResponse + "\u5185\u54CD\u5E94" : "") + "</span>" + (options.hidePrice ? "" : '<span class="p2-card-price">' + team.priceText + "</span>") + "</span>";
     html += "</span></span></article>";
     return html;
   }
-  function renderTeamList(teams2) {
+  function renderTeamList(teams2, options = {}) {
     if (!teams2.length) return '<div class="empty-state"><div class="empty-icon">' + icon("inbox", 48) + '</div><div class="empty-title">\u6682\u65E0\u5339\u914D\u56E2\u961F</div><div class="empty-desc">\u53EF\u4EE5\u8C03\u6574\u5173\u952E\u8BCD\u3001\u670D\u52A1\u9879\u76EE\u6216\u7B5B\u9009\u6761\u4EF6</div></div>';
-    return teams2.map(renderTeamCard).join("");
+    return teams2.map((team) => renderTeamCard(team, options)).join("");
   }
   function bindTeamCards() {
     document.querySelectorAll(".p2-card").forEach((card) => {
@@ -8711,23 +8711,24 @@
       (option) => '<button type="button" class="p14-filter-option' + (filters[key] === option.key ? " selected" : "") + '" data-p14-filter-key="' + key + '" data-p14-filter-value="' + option.key + '">' + option.label + "</button>"
     ).join("") + "</div></section>";
   }
-  function openMarketplaceFilters(state2, onApply) {
+  function openMarketplaceFilters(state2, onApply, options = {}) {
     const filters = state2.filters;
-    const body = '<div class="p14-filter-sheet">' + renderGroup(filters, "\u670D\u52A1\u5F62\u6001", "type", [
+    const showServiceOnlyFilters = options.view !== "teams";
+    const body = '<div class="p14-filter-sheet">' + (showServiceOnlyFilters ? renderGroup(filters, "\u670D\u52A1\u5F62\u6001", "type", [
       { key: "all", label: "\u4E0D\u9650" },
       { key: "human", label: "\u771F\u4EBA\u56E2\u961F" },
       { key: "platform", label: "\u5E73\u53F0\u81EA\u8425" },
       { key: "agent", label: "\u667A\u80FD\u4F53" }
-    ]) + renderGroup(filters, "\u6240\u5728\u57CE\u5E02", "city", [
+    ]) : "") + renderGroup(filters, "\u6240\u5728\u57CE\u5E02", "city", [
       { key: "all", label: "\u4E0D\u9650" },
       { key: "\u5317\u4EAC", label: "\u5317\u4EAC" },
       { key: "\u4E0A\u6D77", label: "\u4E0A\u6D77" }
-    ]) + renderGroup(filters, "\u670D\u52A1\u4EF7\u683C", "price", [
+    ]) + (showServiceOnlyFilters ? renderGroup(filters, "\u670D\u52A1\u4EF7\u683C", "price", [
       { key: "all", label: "\u4E0D\u9650" },
       { key: "under1000", label: "1000\u5143\u4EE5\u4E0B" },
       { key: "1000to5000", label: "1000\u20145000\u5143" },
       { key: "over5000", label: "5000\u5143\u4EE5\u4E0A" }
-    ]) + renderGroup(filters, "\u7528\u6237\u8BC4\u5206", "rating", [
+    ]) : "") + renderGroup(filters, "\u7528\u6237\u8BC4\u5206", "rating", [
       { key: "all", label: "\u4E0D\u9650" },
       { key: "4.8", label: "4.8\u5206\u4EE5\u4E0A" }
     ]) + renderGroup(filters, "\u54CD\u5E94\u901F\u5EA6", "response", [
@@ -8758,7 +8759,7 @@
   }
 
   // src/pages/p14-market/index.js
-  var categoryTabs = Object.freeze([
+  var serviceCategoryTabs = Object.freeze([
     { id: "all", label: "\u5168\u90E8" },
     { id: "fundraising", label: "\u6295\u878D\u8D44" },
     { id: "law", label: "\u6CD5\u5F8B" },
@@ -8767,6 +8768,7 @@
     { id: "policy", label: "\u653F\u7B56\u7533\u62A5" },
     { id: "agents", label: "\u667A\u80FD\u4F53" }
   ]);
+  var teamCategoryTabs = Object.freeze(serviceCategoryTabs.filter((tab) => !["fundraising", "agents"].includes(tab.id)));
   var categoryLabels2 = Object.freeze({
     fundraising: "\u6295\u878D\u8D44",
     law: "\u6CD5\u5F8B",
@@ -8777,12 +8779,13 @@
     hr: "\u4EBA\u529B\u8D44\u6E90",
     agents: "\u667A\u80FD\u4F53"
   });
-  var sortOptions = Object.freeze([
+  var serviceSortOptions = Object.freeze([
     { id: "recommended", label: "\u7EFC\u5408\u63A8\u8350" },
     { id: "price", label: "\u4EF7\u683C\u4ECE\u4F4E\u5230\u9AD8" },
     { id: "rating", label: "\u8BC4\u5206\u4F18\u5148" },
     { id: "response", label: "\u54CD\u5E94\u66F4\u5FEB" }
   ]);
+  var teamSortOptions = Object.freeze(serviceSortOptions.filter((option) => option.id !== "price"));
   function serviceDescription2(sku) {
     return (serviceBlueprints[sku] || defaultServiceBlueprint).intro;
   }
@@ -8855,8 +8858,14 @@
       searchText: [sku, serviceDescription2(sku), team.name, team.orgName, team.orgShort, team.city].join(" ")
     };
   }
-  function renderCategoryTabs(activeId) {
-    return '<div class="p14-categories" role="tablist" aria-label="\u670D\u52A1\u5206\u7C7B">' + categoryTabs.map(
+  function getCategoryTabs(view) {
+    return view === "teams" ? teamCategoryTabs : serviceCategoryTabs;
+  }
+  function renderViewSwitch(activeView) {
+    return '<div class="p14-view-switch" id="p14ViewSwitch" role="tablist" aria-label="\u6D4F\u89C8\u65B9\u5F0F"><button type="button" role="tab" aria-selected="' + String(activeView === "services") + '" class="' + (activeView === "services" ? "active" : "") + '" data-p14-view="services">\u6309\u670D\u52A1\u627E</button><button type="button" role="tab" aria-selected="' + String(activeView === "teams") + '" class="' + (activeView === "teams" ? "active" : "") + '" data-p14-view="teams">\u6309\u56E2\u961F\u627E</button></div>';
+  }
+  function renderCategoryTabs(activeId, view) {
+    return '<div class="p14-categories" id="p14Categories" role="tablist" aria-label="\u670D\u52A1\u5206\u7C7B">' + getCategoryTabs(view).map(
       (tab) => '<button type="button" role="tab" aria-selected="' + String(tab.id === activeId) + '" class="p14-category' + (tab.id === activeId ? " active" : "") + '" data-p14-category="' + tab.id + '">' + tab.label + "</button>"
     ).join("") + "</div>";
   }
@@ -8874,18 +8883,25 @@
   }
   var page14 = {
     state: {
+      view: "services",
       categoryId: "all",
       query: "",
       sort: "recommended",
       filters: createMarketplaceFilters()
     },
     reset(params = {}) {
+      const view = params.view === "teams" ? "teams" : "services";
+      const tabs = getCategoryTabs(view);
       this.state = {
-        categoryId: categoryTabs.some((tab) => tab.id === params.categoryId) ? params.categoryId : "all",
+        view,
+        categoryId: tabs.some((tab) => tab.id === params.categoryId) ? params.categoryId : "all",
         query: params.query || "",
         sort: "recommended",
         filters: createMarketplaceFilters()
       };
+    },
+    getSortOptions() {
+      return this.state.view === "teams" ? teamSortOptions : serviceSortOptions;
     },
     getVisibleEntries() {
       const state2 = this.state;
@@ -8918,31 +8934,100 @@
       };
       return entries.sort(sorters[state2.sort]);
     },
+    getVisibleTeams() {
+      const state2 = this.state;
+      const sourceOrder = new Map(store.teams.map((team, index) => [team.id, index]));
+      let teams2 = [...store.teams];
+      if (state2.categoryId !== "all") {
+        const category = categories.find((item) => item.id === state2.categoryId);
+        teams2 = category ? teams2.filter((team) => team.skus.some((sku) => category.skus.includes(sku))) : [];
+      }
+      if (state2.query) {
+        const query = state2.query.toLowerCase();
+        teams2 = teams2.filter((team) => [team.name, team.orgName, team.orgShort, team.desc, ...team.skus || [], ...team.specialties || []].join(" ").toLowerCase().includes(query));
+      }
+      teams2 = teams2.filter((team) => {
+        const filters = state2.filters;
+        if (filters.city !== "all" && team.city !== filters.city) return false;
+        if (filters.rating === "4.8" && team.rating < 4.8) return false;
+        const hours = responseHours(team.avgResponse);
+        if (filters.response === "within4" && hours > 4) return false;
+        if (filters.response === "within24" && hours > 24) return false;
+        return true;
+      });
+      const sorters = {
+        recommended: (a, b) => sourceOrder.get(a.id) - sourceOrder.get(b.id),
+        rating: (a, b) => b.rating - a.rating || sourceOrder.get(a.id) - sourceOrder.get(b.id),
+        response: (a, b) => responseHours(a.avgResponse) - responseHours(b.avgResponse) || sourceOrder.get(a.id) - sourceOrder.get(b.id)
+      };
+      return teams2.sort(sorters[state2.sort]);
+    },
+    getVisibleItems() {
+      return this.state.view === "teams" ? this.getVisibleTeams() : this.getVisibleEntries();
+    },
+    renderToolbar(items) {
+      const noun = this.state.view === "teams" ? "\u56E2\u961F\u5217\u8868" : "\u670D\u52A1\u5217\u8868";
+      const unit = this.state.view === "teams" ? "\u4E2A\u56E2\u961F" : "\u9879";
+      const sortLabel = this.getSortOptions().find((option) => option.id === this.state.sort)?.label || "\u7EFC\u5408\u63A8\u8350";
+      const activeFilters = countMarketplaceFilters(this.state.filters);
+      return '<div class="p14-toolbar" id="p14Toolbar"><div><strong>' + noun + '</strong><small id="p14Count">\u5171 ' + items.length + " " + unit + '</small></div><span><button type="button" class="filter-chip" id="p14Sort">' + escapeHTML(sortLabel) + " " + icon("chevron-down", 12) + '</button><button type="button" class="filter-chip" id="p14Filter">' + (activeFilters ? "\u7B5B\u9009 " + activeFilters : "\u7B5B\u9009") + " " + icon("chevron-down", 12) + "</button></span></div>";
+    },
     render(params = {}) {
       this.reset(params);
-      const entries = this.getVisibleEntries();
-      return '<div class="p14-page"><div class="nav-bar"><button class="nav-back" id="p14Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u5168\u90E8\u670D\u52A1</div><div class="nav-action"></div></div><section class="p14-discovery"><label class="search-bar p14-search"><span class="search-icon">' + icon("search", 16) + '</span><input id="p14Search" type="search" value="' + escapeHTML(this.state.query) + '" placeholder="\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784" autocomplete="off"></label>' + renderCategoryTabs(this.state.categoryId) + '</section><section class="p14-results"><div class="p14-toolbar"><div><strong>\u670D\u52A1\u5217\u8868</strong><small id="p14Count">\u5171 ' + entries.length + ' \u9879</small></div><span><button type="button" class="filter-chip" id="p14Sort">\u7EFC\u5408\u63A8\u8350 ' + icon("chevron-down", 12) + '</button><button type="button" class="filter-chip" id="p14Filter">\u7B5B\u9009 ' + icon("chevron-down", 12) + '</button></span></div><div class="p14-list" id="p14List">' + this.renderList(entries) + "</div></section></div>";
+      const items = this.getVisibleItems();
+      return '<div class="p14-page"><div class="nav-bar"><button class="nav-back" id="p14Back">' + icon("chevron-left", 22) + '</button><div class="nav-title">\u670D\u52A1\u4E0E\u56E2\u961F</div><div class="nav-action"></div></div><section class="p14-discovery"><label class="search-bar p14-search"><span class="search-icon">' + icon("search", 16) + '</span><input id="p14Search" type="search" value="' + escapeHTML(this.state.query) + '" placeholder="\u641C\u7D22\u670D\u52A1\u3001\u56E2\u961F\u6216\u673A\u6784" autocomplete="off"></label>' + renderViewSwitch(this.state.view) + renderCategoryTabs(this.state.categoryId, this.state.view) + '</section><section class="p14-results">' + this.renderToolbar(items) + '<div class="p14-list" id="p14List">' + this.renderList(items) + "</div></section></div>";
     },
-    renderList(entries) {
-      if (entries.length) {
-        return entries.map(renderEntry).join("") + '<p class="p14-list-note">\u540C\u4E00\u670D\u52A1\u7531\u4E0D\u540C\u56E2\u961F\u5206\u522B\u5C55\u793A\uFF0C\u670D\u52A1\u8303\u56F4\u548C\u4EF7\u683C\u4EE5\u5BF9\u5E94\u8BE6\u60C5\u4E3A\u51C6\u3002</p>';
+    renderList(items) {
+      if (items.length) {
+        if (this.state.view === "teams") {
+          return '<div class="p14-team-list">' + renderTeamList(items, { hidePrice: true }) + '</div><p class="p14-list-note">\u56E2\u961F\u5361\u7247\u5C55\u793A\u6838\u5FC3\u670D\u52A1\uFF0C\u8FDB\u5165\u8BE6\u60C5\u540E\u53EF\u67E5\u770B\u6848\u4F8B\u3001\u8D44\u8D28\u548C\u5177\u4F53\u670D\u52A1\u3002</p>';
+        }
+        return items.map(renderEntry).join("") + '<p class="p14-list-note">\u540C\u4E00\u670D\u52A1\u7531\u4E0D\u540C\u56E2\u961F\u5206\u522B\u5C55\u793A\uFF0C\u670D\u52A1\u8303\u56F4\u548C\u4EF7\u683C\u4EE5\u5BF9\u5E94\u8BE6\u60C5\u4E3A\u51C6\u3002</p>';
       }
-      return '<div class="p14-empty"><span>' + icon("search", 34) + '</span><strong>\u6CA1\u6709\u627E\u5230\u7B26\u5408\u6761\u4EF6\u7684\u670D\u52A1</strong><p>\u53EF\u4EE5\u8C03\u6574\u7B5B\u9009\u6761\u4EF6\uFF0C\u6216\u544A\u8BC9\u6211\u4EEC\u4F60\u6B63\u5728\u89E3\u51B3\u4EC0\u4E48\u95EE\u9898\u3002</p><button type="button" class="btn btn-outline" id="p14Clear">\u6E05\u9664\u7B5B\u9009</button><button type="button" class="btn btn-primary" id="p14Suggest">\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42</button></div>';
+      const subject = this.state.view === "teams" ? "\u56E2\u961F" : "\u670D\u52A1";
+      return '<div class="p14-empty"><span>' + icon("search", 34) + "</span><strong>\u6CA1\u6709\u627E\u5230\u7B26\u5408\u6761\u4EF6\u7684" + subject + '</strong><p>\u53EF\u4EE5\u8C03\u6574\u641C\u7D22\u6216\u7B5B\u9009\u6761\u4EF6\uFF0C\u4E5F\u53EF\u4EE5\u544A\u8BC9\u6211\u4EEC\u4F60\u6B63\u5728\u89E3\u51B3\u4EC0\u4E48\u95EE\u9898\u3002</p><button type="button" class="btn btn-outline" id="p14Clear">\u6E05\u9664\u7B5B\u9009</button><button type="button" class="btn btn-primary" id="p14Suggest">\u544A\u8BC9\u6211\u4EEC\u4F60\u7684\u9700\u6C42</button></div>';
     },
-    refreshList() {
-      const entries = this.getVisibleEntries();
-      document.getElementById("p14Count").textContent = "\u5171 " + entries.length + " \u9879";
-      document.getElementById("p14List").innerHTML = this.renderList(entries);
-      this.updateControls();
-      this.bindEntryActions();
+    refreshView() {
+      const items = this.getVisibleItems();
+      document.getElementById("p14Categories").outerHTML = renderCategoryTabs(this.state.categoryId, this.state.view);
+      document.getElementById("p14Toolbar").outerHTML = this.renderToolbar(items);
+      document.getElementById("p14List").innerHTML = this.renderList(items);
+      document.querySelectorAll("[data-p14-view]").forEach((tab) => {
+        const active = tab.getAttribute("data-p14-view") === this.state.view;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", String(active));
+      });
+      this.bindCategoryActions();
+      this.bindToolbarActions();
+      if (this.state.view === "teams") bindTeamCards();
+      else this.bindEntryActions();
       this.bindEmptyActions();
     },
-    updateControls() {
-      const activeFilters = countMarketplaceFilters(this.state.filters);
-      const filter = document.getElementById("p14Filter");
-      const sort = document.getElementById("p14Sort");
-      if (filter) filter.innerHTML = (activeFilters ? "\u7B5B\u9009 " + activeFilters : "\u7B5B\u9009") + " " + icon("chevron-down", 12);
-      if (sort) sort.innerHTML = escapeHTML(sortOptions.find((option) => option.id === this.state.sort).label) + " " + icon("chevron-down", 12);
+    bindViewActions() {
+      document.querySelectorAll("[data-p14-view]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const nextView = tab.getAttribute("data-p14-view");
+          if (nextView === this.state.view) return;
+          this.state.view = nextView;
+          if (!getCategoryTabs(nextView).some((item) => item.id === this.state.categoryId)) this.state.categoryId = "all";
+          this.state.filters.type = "all";
+          this.state.filters.price = "all";
+          if (this.state.sort === "price") this.state.sort = "recommended";
+          this.refreshView();
+        });
+      });
+    },
+    bindCategoryActions() {
+      document.querySelectorAll("[data-p14-category]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          this.state.categoryId = tab.getAttribute("data-p14-category");
+          this.refreshView();
+        });
+      });
+    },
+    bindToolbarActions() {
+      document.getElementById("p14Filter").addEventListener("click", () => openMarketplaceFilters(this.state, () => this.refreshView(), { view: this.state.view }));
+      document.getElementById("p14Sort").addEventListener("click", () => this.openSortSheet());
     },
     bindEntryActions() {
       document.querySelectorAll("[data-p14-kind]").forEach((card) => {
@@ -8961,18 +9046,14 @@
         this.state.categoryId = "all";
         this.state.filters = createMarketplaceFilters();
         document.getElementById("p14Search").value = "";
-        document.querySelectorAll("[data-p14-category]").forEach((tab) => {
-          const active = tab.getAttribute("data-p14-category") === "all";
-          tab.classList.toggle("active", active);
-          tab.setAttribute("aria-selected", String(active));
-        });
-        this.refreshList();
+        this.refreshView();
       });
       const suggest = document.getElementById("p14Suggest");
       if (suggest) suggest.addEventListener("click", () => openServiceSuggestion(this.state.query));
     },
     openSortSheet() {
-      const body = '<div class="p14-sort-sheet">' + sortOptions.map(
+      const options = this.getSortOptions();
+      const body = '<div class="p14-sort-sheet">' + options.map(
         (option) => '<button type="button" class="p14-sort-option' + (this.state.sort === option.id ? " selected" : "") + '" data-p14-sort="' + option.id + '"><span>' + option.label + "</span>" + (this.state.sort === option.id ? icon("check", 17) : "") + "</button>"
       ).join("") + "</div>";
       showSheet({ title: "\u6392\u5E8F\u65B9\u5F0F", body });
@@ -8980,7 +9061,7 @@
         option.addEventListener("click", () => {
           this.state.sort = option.getAttribute("data-p14-sort");
           document.querySelector(".modal-overlay")?.remove();
-          this.refreshList();
+          this.refreshView();
         });
       });
     },
@@ -8989,22 +9070,13 @@
       document.getElementById("p14Back").addEventListener("click", goBackToPrevious);
       document.getElementById("p14Search").addEventListener("input", function() {
         page14.state.query = this.value.trim();
-        page14.refreshList();
+        page14.refreshView();
       });
-      document.querySelectorAll("[data-p14-category]").forEach((tab) => {
-        tab.addEventListener("click", () => {
-          this.state.categoryId = tab.getAttribute("data-p14-category");
-          document.querySelectorAll("[data-p14-category]").forEach((item) => {
-            const active = item === tab;
-            item.classList.toggle("active", active);
-            item.setAttribute("aria-selected", String(active));
-          });
-          this.refreshList();
-        });
-      });
-      document.getElementById("p14Filter").addEventListener("click", () => openMarketplaceFilters(this.state, () => this.refreshList()));
-      document.getElementById("p14Sort").addEventListener("click", () => this.openSortSheet());
-      this.bindEntryActions();
+      this.bindViewActions();
+      this.bindCategoryActions();
+      this.bindToolbarActions();
+      if (this.state.view === "teams") bindTeamCards();
+      else this.bindEntryActions();
       this.bindEmptyActions();
     }
   };
