@@ -4390,6 +4390,14 @@
     const paused = agent.status === "paused";
     return '<button class="p1-offer-card p1-agent-offer' + (paused ? " is-paused" : "") + '" type="button" data-offer-kind="agent" data-agent-id="' + escapeHTML(agent.id) + '"' + (paused ? " disabled" : "") + '><span class="p1-offer-icon">' + icon(agent.icon, 21) + '</span><span class="p1-offer-copy"><span class="p1-offer-title"><strong>' + escapeHTML(agent.name) + '</strong><span class="p1-agent-type-badge">' + icon("bot", 11) + "\u667A\u80FD\u4F53\u670D\u52A1</span>" + (agent.recommended ? '<span class="p1-platform-badge">\u5E73\u53F0\u63A8\u8350</span>' : "") + '</span><span class="p1-offer-desc">' + escapeHTML(agent.description) + '</span><span class="p1-offer-provider"><b>' + escapeHTML(agent.supplier.name) + '</b><i aria-hidden="true"></i><span>' + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F53\u524D\u53EF\u7528") + '</span></span></span><span class="p1-offer-aside"><strong>' + escapeHTML(agent.price) + "</strong><span>" + (paused ? "\u6682\u505C\u670D\u52A1" : "\u5F00\u59CB\u4F7F\u7528 " + icon("chevron-right", 13)) + "</span></span></button>";
   }
+  function renderServiceCategory(tab) {
+    const serviceCards = tab.offerings.map((offering) => renderServiceOffering(offering, tab));
+    const agentCategory = agentCategoryMap[tab.id];
+    const agentCards = agentCategory ? getAgentsByCategory(agentCategory).slice(0, 2).map(renderAgentOffering) : [];
+    if (!agentCards.length) return serviceCards.join("");
+    if (!serviceCards.length) return agentCards.join("");
+    return [...serviceCards.slice(0, 2), ...agentCards, ...serviceCards.slice(2)].join("");
+  }
   function renderAllServices() {
     const entries = getMarketplaceEntries();
     const visible = entries.slice(0, 6);
@@ -4415,7 +4423,7 @@
     if (tab.kind === "all") cards = renderAllServices();
     else if (tab.kind === "fundraising") cards = renderFundraisingFeature();
     else if (tab.kind === "agents") cards = getAgentsByCategory("all").slice(0, 5).map(renderAgentOffering).join("");
-    else cards = tab.offerings.map((offering) => renderServiceOffering(offering, tab)).join("");
+    else cards = renderServiceCategory(tab);
     if (!cards) cards = renderEmptyShelf(tab);
     const modifier = tab.kind === "fundraising" ? " is-fundraising-feature" : tab.kind === "all" ? " is-all-services" : "";
     return '<div class="p1-offer-list' + modifier + '" id="p1OfferList" role="tabpanel">' + cards + "</div>";
@@ -8824,6 +8832,7 @@
         ...entry,
         originalIndex: index,
         categoryId: "agents",
+        domainCategoryId: agent.humanCategoryId,
         type: "agent",
         title: agent.name,
         description: agent.description,
@@ -8907,7 +8916,8 @@
     getVisibleEntries() {
       const state2 = this.state;
       let entries = getMarketplaceEntries().map(normalizeEntry).filter(Boolean);
-      if (state2.categoryId !== "all") entries = entries.filter((entry) => entry.categoryId === state2.categoryId);
+      if (state2.categoryId === "agents") entries = entries.filter((entry) => entry.kind === "agent");
+      else if (state2.categoryId !== "all") entries = entries.filter((entry) => entry.categoryId === state2.categoryId || entry.domainCategoryId === state2.categoryId);
       if (state2.query) {
         const query = state2.query.toLowerCase();
         entries = entries.filter((entry) => entry.searchText.toLowerCase().includes(query));
